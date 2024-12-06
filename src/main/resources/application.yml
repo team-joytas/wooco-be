@@ -1,0 +1,2 @@
+spring.application.name: wooco-be
+spring.profiles.active: ${PROFILE:local}
