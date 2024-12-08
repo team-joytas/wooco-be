@@ -1,0 +1,15 @@
+server.shutdown: graceful
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/wooco-local-database?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: wooco-local-user
+    password: wooco-local-password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging.level.root: info
