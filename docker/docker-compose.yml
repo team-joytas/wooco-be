@@ -1,0 +1,33 @@
+services:
+  mysql:
+    image: mysql:8.1.0
+    container_name: mysql8-local
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: wooco-local-user
+      MYSQL_PASSWORD: wooco-local-password
+      MYSQL_DATABASE: wooco-local-database
+      MYSQL_ROOT_PASSWORD: wooco-local-root-password
+      TZ: 'Asia/Seoul'
+    volumes:
+      - wooco-local-mysql-db:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: redis:7.2.4-alpine
+    container_name: redis7-local
+    command: redis-server --port 6379
+    restart: always
+    hostname: root
+    labels:
+      - "mode:standalone"
+    ports:
+      - "6379:6379"
+    volumes:
+      - wooco-local-redis-data:/data
+
+volumes:
+  wooco-local-mysql-db:
+  wooco-local-redis-data:
