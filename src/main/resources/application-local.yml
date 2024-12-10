@@ -1,9 +1,11 @@
-server.shutdown: graceful
+server:
+  node: ${LOCAL_SERVER_NODE:0}
+  shutdown: graceful
 
 spring:
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: ${LOCAL_DDL_AUTO:update}
     open-in-view: false
 
   datasource:
