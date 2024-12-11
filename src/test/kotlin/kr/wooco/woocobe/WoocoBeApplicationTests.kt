@@ -1,13 +1,11 @@
 package kr.wooco.woocobe
 
+import kr.wooco.woocobe.support.IntegrationTest
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
+@IntegrationTest
 class WoocoBeApplicationTests {
-
     @Test
     fun contextLoads() {
     }
-
 }
