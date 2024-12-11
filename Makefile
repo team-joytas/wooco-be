@@ -14,6 +14,6 @@ setup:
 	@echo "✅  pre-commit 훅 등록 완료."
 
 clean:
-	@echo "훅에 등록된 pre-commit을 제거를 시작합니다..."
+	@echo "pre-commit 훅 제거를 시작합니다..."
 	@rm -f .git/hooks/commit-msg
 	@echo "✅  pre-commit 훅 삭제 완료."
