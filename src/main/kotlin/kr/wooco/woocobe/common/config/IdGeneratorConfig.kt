@@ -6,9 +6,8 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class IdGeneratorConfig(
-    @Value("\${server.node}") private val nodeNumber: Int
+    @Value("\${server.node}") private val nodeNumber: Int,
 ) {
-
     @PostConstruct
     fun init() {
         node = nodeNumber
