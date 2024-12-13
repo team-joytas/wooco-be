@@ -22,4 +22,11 @@ spring:
       repositories:
         enabled: false
 
+app:
+  jwt:
+    signing-key: hong-jun2-eric-erica-jamie-hong-jun2-eric-erica-jamie
+    expiration:
+      access-token: 987654321
+      refresh-token: 987654321
+
 logging.level.root: info
