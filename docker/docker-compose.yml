@@ -8,7 +8,6 @@ services:
     environment:
       MYSQL_USER: wooco-local-user
       MYSQL_PASSWORD: wooco-local-password
-      MYSQL_DATABASE: wooco-local-database
       MYSQL_ROOT_PASSWORD: wooco-local-root-password
       TZ: 'Asia/Seoul'
     volumes:
