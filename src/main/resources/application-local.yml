@@ -22,6 +22,11 @@ spring:
       repositories:
         enabled: false
 
+  security:
+    user:
+      name: local-actuator
+      password: local-actuator
+
 app:
   jwt:
     signing-key: hong-jun2-eric-erica-jamie-hong-jun2-eric-erica-jamie
