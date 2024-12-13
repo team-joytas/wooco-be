@@ -1,9 +1,11 @@
 package kr.wooco.woocobe.common.config
 
 import kr.wooco.woocobe.auth.infrastructure.token.JWTProvider
+import kr.wooco.woocobe.common.security.AuthIgnorePaths
 import kr.wooco.woocobe.common.security.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
+    @Order(1)
     @Bean
     fun jwtFilterChain(
         http: HttpSecurity,
@@ -40,4 +43,15 @@ class SecurityConfig {
                         handlerExceptionResolver.resolveException(request, response, null, e)
                     }
             }.build()
+
+    @Order(0)
+    @Bean
+    fun ignoreFilterChain(http: HttpSecurity): SecurityFilterChain =
+        http
+            .securityMatcher(AuthIgnorePaths.ignoreRequestMatcher)
+            .cors(Customizer.withDefaults())
+            .csrf { it.disable() }
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .authorizeHttpRequests { it.anyRequest().permitAll() }
+            .build()
 }
