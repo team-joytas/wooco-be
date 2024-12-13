@@ -1,7 +1,10 @@
 package kr.wooco.woocobe.common.exception
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.AuthenticationException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -21,6 +24,18 @@ class GlobalExceptionHandler {
     fun handleCustomException(e: CustomException): ResponseEntity<GlobalExceptionResponse> {
         val body = GlobalExceptionResponse(code = e.code, message = e.message)
         return ResponseEntity.status(e.status).body(body)
+    }
+
+    @ExceptionHandler(AuthenticationException::class)
+    fun handleAuthenticationException(e: AuthenticationException): ResponseEntity<GlobalExceptionResponse> {
+        val body = GlobalExceptionResponse(code = SECURITY_ERROR_CODE, message = e.message)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body)
+    }
+
+    @ExceptionHandler(AccessDeniedException::class)
+    fun handleAccessDeniedException(e: AccessDeniedException): ResponseEntity<GlobalExceptionResponse> {
+        val body = GlobalExceptionResponse(code = SECURITY_ERROR_CODE, message = e.message)
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body)
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
@@ -54,6 +69,7 @@ class GlobalExceptionHandler {
     }
 
     companion object {
+        private const val SECURITY_ERROR_CODE = "SECURITY_AUTHENTICATION_FAILED"
         private const val UN_CATCH_LOG_FORMAT =
             "GlobalExceptionHandler::handleUnCatchException\n" +
                 "| >> EXCEPTION_TYPE: %s\n" +
