@@ -3,6 +3,14 @@ server:
   shutdown: graceful
 
 spring:
+  cookie:
+    path: /
+    max-age: 9876543210
+    same-site: Lax
+    domain: localhost
+    secure: false
+    http-only: true
+
   jpa:
     hibernate:
       ddl-auto: ${LOCAL_DDL_AUTO:update}
