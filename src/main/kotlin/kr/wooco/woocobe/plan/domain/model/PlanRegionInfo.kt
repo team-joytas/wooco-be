@@ -1,17 +1,17 @@
 package kr.wooco.woocobe.plan.domain.model
 
 class PlanRegionInfo(
-    val majorRegion: String,
-    val subRegion: String,
+    val primaryRegion: String,
+    val secondaryRegion: String,
 ) {
     companion object {
-        fun register(
-            majorRegion: String,
-            subRegion: String,
+        fun of(
+            primaryRegion: String,
+            secondaryRegion: String,
         ): PlanRegionInfo =
             PlanRegionInfo(
-                majorRegion = majorRegion,
-                subRegion = subRegion,
+                primaryRegion = primaryRegion,
+                secondaryRegion = secondaryRegion,
             )
     }
 }
