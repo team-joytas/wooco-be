@@ -37,6 +37,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.oshai:kotlin-logging-jvm:${property("kotlinLoggingVersion")}")
     implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
+    implementation("io.hypersistence:hypersistence-utils-hibernate-63:${property("tsidVersion")}")
     implementation("io.github.openfeign.querydsl:querydsl-jpa:${property("querydslVersion")}")
     implementation("io.github.openfeign.querydsl:querydsl-core:${property("querydslVersion")}")
     kapt("io.github.openfeign.querydsl:querydsl-apt:${property("querydslVersion")}:jpa")
