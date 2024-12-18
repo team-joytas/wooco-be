@@ -3,7 +3,7 @@ package kr.wooco.woocobe.plan.domain.usecase
 import jakarta.transaction.Transactional
 import kr.wooco.woocobe.common.domain.UseCase
 import kr.wooco.woocobe.plan.domain.gateway.PlanStorageGateway
-import kr.wooco.woocobe.plan.domain.model.PlanRegionInfo
+import kr.wooco.woocobe.plan.domain.model.PlanRegion
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -14,11 +14,7 @@ data class UpdatePlanInput(
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: String,
-) {
-    fun validateAndParseDate(): LocalDate =
-        runCatching { LocalDate.parse(visitDate) }
-            .getOrElse { throw RuntimeException("Invalid visit date format") }
-}
+)
 
 @Service
 class UpdatePlanUseCase(
@@ -26,16 +22,31 @@ class UpdatePlanUseCase(
 ) : UseCase<UpdatePlanInput, Unit> {
     @Transactional
     override fun execute(input: UpdatePlanInput) {
-        val findPlan = planStorageGateway.getById(input.planId)
+        val plan = planStorageGateway.getById(input.planId)
             ?: throw RuntimeException("Not exists plan")
 
-        findPlan.takeIf { it.isWriter(input.userId) }
-            ?: throw RuntimeException("Invalid plan writer")
+        when {
+            plan.isWriter(input.userId).not() -> throw RuntimeException()
+        }
 
-        val updatedPlan = findPlan.withUpdatedValues(
-            PlanRegionInfo.of(input.primaryRegion, input.secondaryRegion),
-            input.validateAndParseDate(),
+        val region = PlanRegion.register(
+            primaryRegion = input.primaryRegion,
+            secondaryRegion = input.secondaryRegion,
         )
-        planStorageGateway.save(updatedPlan)
+
+        plan
+            .update(
+                region = region,
+                visitDate = validateAndParseDate(input.visitDate),
+            ).also(planStorageGateway::save)
     }
+
+    // TODO: 중복시 유틸 클래스로 분리 고민
+    private fun validateAndParseDate(date: String): LocalDate =
+        when {
+            date.isValidDate() -> LocalDate.parse(date)
+            else -> throw RuntimeException()
+        }
+
+    private fun String.isValidDate(): Boolean = runCatching { LocalDate.parse(this) }.isSuccess
 }

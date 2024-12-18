@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional
 import kr.wooco.woocobe.common.domain.UseCase
 import kr.wooco.woocobe.plan.domain.gateway.PlanStorageGateway
 import kr.wooco.woocobe.plan.domain.model.Plan
-import kr.wooco.woocobe.plan.domain.model.PlanRegionInfo
+import kr.wooco.woocobe.plan.domain.model.PlanRegion
 import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -15,11 +15,7 @@ data class AddPlanInput(
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: String,
-) {
-    fun validateAndParseDate(): LocalDate =
-        runCatching { LocalDate.parse(visitDate) }
-            .getOrElse { throw RuntimeException("Invalid visit date format") }
-}
+)
 
 @Service
 class AddPlanUseCase(
@@ -28,12 +24,28 @@ class AddPlanUseCase(
 ) : UseCase<AddPlanInput, Unit> {
     @Transactional
     override fun execute(input: AddPlanInput) {
-        val findUser = userStorageGateway.getByUserId(input.userId)!!
-        val plan = Plan.register(
-            user = findUser,
-            regionInfo = PlanRegionInfo.of(input.primaryRegion, input.secondaryRegion),
-            visitDate = input.validateAndParseDate(),
+        val user = userStorageGateway.getByUserId(input.userId)
+            ?: throw RuntimeException()
+
+        val region = PlanRegion.register(
+            primaryRegion = input.primaryRegion,
+            secondaryRegion = input.secondaryRegion,
         )
-        planStorageGateway.save(plan)
+
+        Plan
+            .register(
+                user = user,
+                region = region,
+                visitDate = validateAndParseDate(input.visitDate),
+            ).also(planStorageGateway::save)
     }
+
+    // TODO: 중복시 유틸 클래스로 분리 고민
+    private fun validateAndParseDate(date: String): LocalDate =
+        when {
+            date.isValidDate() -> LocalDate.parse(date)
+            else -> throw RuntimeException()
+        }
+
+    private fun String.isValidDate(): Boolean = runCatching { LocalDate.parse(this) }.isSuccess
 }
