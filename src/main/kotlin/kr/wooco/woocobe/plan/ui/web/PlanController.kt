@@ -4,15 +4,15 @@ import kr.wooco.woocobe.plan.domain.usecase.AddPlanInput
 import kr.wooco.woocobe.plan.domain.usecase.AddPlanUseCase
 import kr.wooco.woocobe.plan.domain.usecase.DeletePlanInput
 import kr.wooco.woocobe.plan.domain.usecase.DeletePlanUseCase
-import kr.wooco.woocobe.plan.domain.usecase.GetAllPlansInput
-import kr.wooco.woocobe.plan.domain.usecase.GetAllPlansUseCase
+import kr.wooco.woocobe.plan.domain.usecase.GetAllPlanInput
+import kr.wooco.woocobe.plan.domain.usecase.GetAllPlanUseCase
 import kr.wooco.woocobe.plan.domain.usecase.GetPlanInput
 import kr.wooco.woocobe.plan.domain.usecase.GetPlanUseCase
 import kr.wooco.woocobe.plan.domain.usecase.UpdatePlanInput
 import kr.wooco.woocobe.plan.domain.usecase.UpdatePlanUseCase
 import kr.wooco.woocobe.plan.ui.web.dto.request.AddPlanRequest
 import kr.wooco.woocobe.plan.ui.web.dto.request.UpdatePlanRequest
-import kr.wooco.woocobe.plan.ui.web.dto.response.GetAllPlansResponse
+import kr.wooco.woocobe.plan.ui.web.dto.response.GetAllPlanResponse
 import kr.wooco.woocobe.plan.ui.web.dto.response.GetPlanResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/plans")
 class PlanController(
     private val addPlanUseCase: AddPlanUseCase,
-    private val getAllPlansUseCase: GetAllPlansUseCase,
+    private val getAllPlanUseCase: GetAllPlanUseCase,
     private val getPlanUseCase: GetPlanUseCase,
     private val updatePlanUseCase: UpdatePlanUseCase,
     private val deletePlanUseCase: DeletePlanUseCase,
@@ -41,10 +41,10 @@ class PlanController(
     ): ResponseEntity<Unit> {
         addPlanUseCase.execute(
             AddPlanInput(
-                userId,
-                request.primaryRegion,
-                request.secondaryRegion,
-                request.visitDate,
+                userId = userId,
+                primaryRegion = request.primaryRegion,
+                secondaryRegion = request.secondaryRegion,
+                visitDate = request.visitDate,
             ),
         )
         return ResponseEntity.ok().build()
@@ -53,9 +53,9 @@ class PlanController(
     @GetMapping
     fun getAllPlans(
         @AuthenticationPrincipal userId: Long,
-    ): ResponseEntity<GetAllPlansResponse> {
-        val response = GetAllPlansResponse.from(
-            getAllPlansUseCase.execute(GetAllPlansInput(userId)),
+    ): ResponseEntity<GetAllPlanResponse> {
+        val response = GetAllPlanResponse.from(
+            getAllPlanUseCase.execute(GetAllPlanInput(userId)),
         )
         return ResponseEntity.ok(response)
     }
@@ -78,11 +78,11 @@ class PlanController(
     ): ResponseEntity<Unit> {
         updatePlanUseCase.execute(
             UpdatePlanInput(
-                userId,
-                planId,
-                request.primaryRegion,
-                request.secondaryRegion,
-                request.visitDate,
+                userId = userId,
+                planId = planId,
+                primaryRegion = request.primaryRegion,
+                secondaryRegion = request.secondaryRegion,
+                visitDate = request.visitDate,
             ),
         )
         return ResponseEntity.ok().build()
@@ -95,8 +95,8 @@ class PlanController(
     ): ResponseEntity<Unit> {
         deletePlanUseCase.execute(
             DeletePlanInput(
-                userId,
-                planId,
+                userId = userId,
+                planId = planId,
             ),
         )
         return ResponseEntity.ok().build()

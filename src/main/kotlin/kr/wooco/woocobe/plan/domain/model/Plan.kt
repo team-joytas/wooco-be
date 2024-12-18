@@ -7,34 +7,32 @@ import java.time.LocalDate
 // TODO: 장소 정보 추가
 class Plan(
     val id: Long,
-    val writer: User,
-    val regionInfo: PlanRegionInfo,
-    val visitDate: LocalDate,
+    val user: User,
+    var region: PlanRegion,
+    var visitDate: LocalDate,
 ) {
+    fun isWriter(targetId: Long): Boolean = user.id == targetId
+
+    fun update(
+        region: PlanRegion,
+        visitDate: LocalDate,
+    ) = apply {
+        this.region = region
+        this.visitDate = visitDate
+    }
+
+    // FIXME: 아이디 생성 책임을 storage에 위임
     companion object {
         fun register(
             user: User,
-            regionInfo: PlanRegionInfo,
+            region: PlanRegion,
             visitDate: LocalDate,
         ): Plan =
             Plan(
                 id = IdGenerator.generateId(),
-                writer = user,
-                regionInfo = regionInfo,
+                user = user,
+                region = region,
                 visitDate = visitDate,
             )
     }
-
-    fun isWriter(writerId: Long): Boolean = writerId == writer.id
-
-    fun withUpdatedValues(
-        regionInfo: PlanRegionInfo?,
-        visitDate: LocalDate?,
-    ): Plan =
-        Plan(
-            id = this.id,
-            writer = this.writer,
-            regionInfo = regionInfo ?: this.regionInfo,
-            visitDate = visitDate ?: this.visitDate,
-        )
 }
