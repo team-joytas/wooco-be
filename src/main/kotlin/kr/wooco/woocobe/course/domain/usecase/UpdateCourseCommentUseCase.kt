@@ -2,7 +2,6 @@ package kr.wooco.woocobe.course.domain.usecase
 
 import kr.wooco.woocobe.common.domain.UseCase
 import kr.wooco.woocobe.course.domain.gateway.CourseCommentStorageGateway
-import kr.wooco.woocobe.course.domain.model.CourseComment
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,10 +17,12 @@ class UpdateCourseCommentUseCase(
 ) : UseCase<UpdateCourseCommentInput, Unit> {
     @Transactional
     override fun execute(input: UpdateCourseCommentInput) {
-        val courseComment: CourseComment = courseCommentStorageGateway
-            .getByCommentId(input.commentId)
-            ?.takeIf { it.isCommenter(input.userId) }
+        val courseComment = courseCommentStorageGateway.getByCommentId(input.commentId)
             ?: throw RuntimeException()
+
+        when {
+            courseComment.isCommenter(input.userId).not() -> throw RuntimeException()
+        }
 
         courseComment
             .update(contents = input.contents)
