@@ -15,11 +15,7 @@ class CourseComment(
             this.contents = contents
         }
 
-    fun isCommenter(targetId: Long): Boolean =
-        when (targetId == user.id) {
-            true -> true
-            else -> throw RuntimeException()
-        }
+    fun isCommenter(targetId: Long): Boolean = targetId == user.id
 
     companion object {
         fun register(
