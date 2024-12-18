@@ -8,5 +8,5 @@ interface PlanJpaRepository : JpaRepository<PlanEntity, Long> {
     fun findByIdWithUser(id: Long): PlanEntity?
 
     @Query("SELECT p FROM PlanEntity p LEFT JOIN FETCH p.user WHERE p.user.id = :userId")
-    fun findAllByUserId(userId: Long): List<PlanEntity>?
+    fun findAllByUserId(userId: Long): List<PlanEntity>
 }

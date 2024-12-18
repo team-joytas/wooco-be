@@ -7,7 +7,7 @@ interface PlanStorageGateway {
 
     fun getById(id: Long): Plan?
 
-    fun getAllByUserId(userId: Long): List<Plan>?
+    fun getAllByUserId(userId: Long): List<Plan>
 
     fun deleteById(id: Long)
 }

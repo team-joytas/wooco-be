@@ -14,10 +14,10 @@ class JpaPlanStorageGateway(
 
     override fun getById(id: Long): Plan? = planJpaRepository.findByIdWithUser(id)?.toDomain()
 
-    override fun getAllByUserId(userId: Long): List<Plan>? =
+    override fun getAllByUserId(userId: Long): List<Plan> =
         planJpaRepository
             .findAllByUserId(userId)
-            ?.map { it.toDomain() }
+            .map { it.toDomain() }
 
     override fun deleteById(id: Long) = planJpaRepository.deleteById(id)
 }
