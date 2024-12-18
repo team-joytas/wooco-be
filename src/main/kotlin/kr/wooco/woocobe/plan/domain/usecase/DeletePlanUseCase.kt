@@ -16,11 +16,12 @@ class DeletePlanUseCase(
 ) : UseCase<DeletePlanInput, Unit> {
     @Transactional
     override fun execute(input: DeletePlanInput) {
-        val findPlan = planStorageGateway.getById(input.planId)
+        val plan = planStorageGateway.getById(input.planId)
             ?: throw RuntimeException("Not exists plan")
 
-        findPlan.takeIf { it.isWriter(input.userId) }
-            ?: throw RuntimeException("Invalid plan writer")
+        when {
+            plan.isWriter(input.userId).not() -> throw RuntimeException()
+        }
 
         planStorageGateway.deleteById(input.planId)
     }
