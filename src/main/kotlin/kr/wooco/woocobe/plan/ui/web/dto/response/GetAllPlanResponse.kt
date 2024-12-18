@@ -15,7 +15,7 @@ data class GetAllPlanResponse(
                         userName = plan.user.name,
                         primaryRegion = plan.region.primaryRegion,
                         secondaryRegion = plan.region.secondaryRegion,
-                        visitDate = plan.visitDate.toString(),
+                        visitDate = plan.visitDate.date,
                     )
                 },
             )

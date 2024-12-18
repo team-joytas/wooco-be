@@ -2,20 +2,19 @@ package kr.wooco.woocobe.plan.domain.model
 
 import kr.wooco.woocobe.common.domain.IdGenerator
 import kr.wooco.woocobe.user.domain.model.User
-import java.time.LocalDate
 
 // TODO: 장소 정보 추가
 class Plan(
     val id: Long,
     val user: User,
     var region: PlanRegion,
-    var visitDate: LocalDate,
+    var visitDate: PlanDate,
 ) {
     fun isWriter(targetId: Long): Boolean = user.id == targetId
 
     fun update(
         region: PlanRegion,
-        visitDate: LocalDate,
+        visitDate: PlanDate,
     ) = apply {
         this.region = region
         this.visitDate = visitDate
@@ -26,7 +25,7 @@ class Plan(
         fun register(
             user: User,
             region: PlanRegion,
-            visitDate: LocalDate,
+            visitDate: PlanDate,
         ): Plan =
             Plan(
                 id = IdGenerator.generateId(),

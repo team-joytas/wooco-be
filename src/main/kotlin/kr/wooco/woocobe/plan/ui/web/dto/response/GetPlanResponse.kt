@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.plan.ui.web.dto.response
 
 import kr.wooco.woocobe.plan.domain.usecase.GetPlanOutput
+import java.time.LocalDate
 
 // TODO: 장소 데이터 추가
 data class GetPlanResponse(
@@ -9,7 +10,7 @@ data class GetPlanResponse(
     val userName: String,
     val primaryRegion: String,
     val secondaryRegion: String,
-    val visitDate: String,
+    val visitDate: LocalDate,
     // val places: List<Place>
 ) {
     companion object {
@@ -21,7 +22,7 @@ data class GetPlanResponse(
                     userName = user.name,
                     primaryRegion = region.primaryRegion,
                     secondaryRegion = region.secondaryRegion,
-                    visitDate = visitDate.toString(),
+                    visitDate = visitDate.date,
                 )
             }
     }
