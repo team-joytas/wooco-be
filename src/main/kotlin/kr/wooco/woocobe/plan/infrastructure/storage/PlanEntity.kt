@@ -2,22 +2,28 @@ package kr.wooco.woocobe.plan.infrastructure.storage
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import kr.wooco.woocobe.common.storage.BaseTimeEntity
 import kr.wooco.woocobe.plan.domain.model.Plan
-import kr.wooco.woocobe.plan.domain.model.PlanRegionInfo
+import kr.wooco.woocobe.plan.domain.model.PlanDate
+import kr.wooco.woocobe.plan.domain.model.PlanRegion
+import kr.wooco.woocobe.user.infrastructure.storage.UserEntity
 import java.time.LocalDate
 
 @Entity
 @Table(name = "plans")
 class PlanEntity(
-    @Column(name = "user_id")
-    val userId: Long,
-    @Column(name = "major_region")
-    val majorRegion: String,
-    @Column(name = "sub_region")
-    val subRegion: String,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    val user: UserEntity,
+    @Column(name = "primary_region")
+    val primaryRegion: String,
+    @Column(name = "secondary_region")
+    val secondaryRegion: String,
     @Column(name = "visit_date")
     val visitDate: LocalDate,
     @Id
@@ -27,9 +33,12 @@ class PlanEntity(
     fun toDomain(): Plan =
         Plan(
             id = id,
-            userId = userId,
-            regionInfo = PlanRegionInfo.register(majorRegion, subRegion),
-            visitDate = visitDate,
+            user = user.toDomain(),
+            region = PlanRegion.register(
+                primaryRegion = primaryRegion,
+                secondaryRegion = secondaryRegion,
+            ),
+            visitDate = PlanDate.register(visitDate),
         )
 
     companion object {
@@ -37,10 +46,10 @@ class PlanEntity(
             with(plan) {
                 PlanEntity(
                     id = id,
-                    userId = userId,
-                    majorRegion = regionInfo.majorRegion,
-                    subRegion = regionInfo.subRegion,
-                    visitDate = visitDate,
+                    user = UserEntity.from(plan.user),
+                    primaryRegion = region.primaryRegion,
+                    secondaryRegion = region.secondaryRegion,
+                    visitDate = visitDate.date,
                 )
             }
     }
