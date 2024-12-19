@@ -11,8 +11,7 @@ data class GetAllPlanResponse(
                 getAllPlanOutput.plans.map { plan ->
                     GetPlanResponse(
                         planId = plan.id,
-                        userId = plan.user.id,
-                        userName = plan.user.name,
+                        userId = plan.userId,
                         primaryRegion = plan.region.primaryRegion,
                         secondaryRegion = plan.region.secondaryRegion,
                         visitDate = plan.visitDate.date,

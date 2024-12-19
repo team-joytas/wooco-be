@@ -8,7 +8,6 @@ import kr.wooco.woocobe.plan.domain.model.PlanRegion
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
-// TODO: 장소 정보 추가
 data class UpdatePlanInput(
     val userId: Long,
     val planId: Long,

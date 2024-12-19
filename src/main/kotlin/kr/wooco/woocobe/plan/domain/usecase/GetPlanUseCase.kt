@@ -6,10 +6,10 @@ import kr.wooco.woocobe.plan.domain.model.Plan
 import org.springframework.stereotype.Service
 
 data class GetPlanInput(
+    val userId: Long,
     val planId: Long,
 )
 
-// TODO: 장소 정보 추가
 data class GetPlanOutput(
     val plan: Plan,
 )
@@ -22,6 +22,6 @@ class GetPlanUseCase(
         val plan = planStorageGateway.getById(input.planId)
             ?: throw RuntimeException()
 
-        return GetPlanOutput(plan)
+        return GetPlanOutput(plan = plan)
     }
 }

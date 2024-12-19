@@ -7,7 +7,6 @@ import java.time.LocalDate
 data class GetPlanResponse(
     val planId: Long,
     val userId: Long,
-    val userName: String,
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: LocalDate,
@@ -15,14 +14,13 @@ data class GetPlanResponse(
 ) {
     companion object {
         fun from(getPlanOutput: GetPlanOutput) =
-            with(getPlanOutput.plan) {
+            with(getPlanOutput) {
                 GetPlanResponse(
-                    planId = id,
-                    userId = user.id,
-                    userName = user.name,
-                    primaryRegion = region.primaryRegion,
-                    secondaryRegion = region.secondaryRegion,
-                    visitDate = visitDate.date,
+                    planId = plan.id,
+                    userId = plan.userId,
+                    primaryRegion = plan.region.primaryRegion,
+                    secondaryRegion = plan.region.secondaryRegion,
+                    visitDate = plan.visitDate.date,
                 )
             }
     }
