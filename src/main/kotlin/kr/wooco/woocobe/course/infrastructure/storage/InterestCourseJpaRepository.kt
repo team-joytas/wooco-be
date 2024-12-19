@@ -11,9 +11,12 @@ interface InterestCourseJpaRepository : JpaRepository<InterestCourseEntity, Long
 
     @Query(
         """
-            SELECT CASE WHEN COUNT(ic) > 0 THEN true ELSE false END
-            FROM InterestCourseEntity ic
-            WHERE ic.courseId = :courseId AND ic.userId = :userId
+            SELECT CASE WHEN EXISTS (
+                SELECT 1
+                FROM InterestCourseEntity ic
+                WHERE ic.courseId = :courseId
+                    AND ic.userId = :userId
+            ) THEN true ELSE false END
         """,
     )
     fun existsByCourseIdAndUserId(
