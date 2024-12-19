@@ -62,10 +62,16 @@ class PlanController(
 
     @GetMapping("/{planId}")
     fun getPlan(
+        @AuthenticationPrincipal userId: Long,
         @PathVariable planId: Long,
     ): ResponseEntity<GetPlanResponse> {
         val response = GetPlanResponse.from(
-            getPlanUseCase.execute(GetPlanInput(planId)),
+            getPlanUseCase.execute(
+                GetPlanInput(
+                    userId = userId,
+                    planId = planId,
+                ),
+            ),
         )
         return ResponseEntity.ok(response)
     }

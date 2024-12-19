@@ -1,44 +1,39 @@
 package kr.wooco.woocobe.plan.infrastructure.storage
 
+import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import kr.wooco.woocobe.common.storage.BaseTimeEntity
 import kr.wooco.woocobe.plan.domain.model.Plan
-import kr.wooco.woocobe.plan.domain.model.PlanDate
 import kr.wooco.woocobe.plan.domain.model.PlanRegion
-import kr.wooco.woocobe.user.infrastructure.storage.UserEntity
 import java.time.LocalDate
 
 @Entity
 @Table(name = "plans")
 class PlanEntity(
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    val user: UserEntity,
+    @Column(name = "user_id")
+    val userId: Long,
     @Column(name = "primary_region")
     val primaryRegion: String,
     @Column(name = "secondary_region")
     val secondaryRegion: String,
     @Column(name = "visit_date")
     val visitDate: LocalDate,
-    @Id
+    @Id @Tsid
     @Column(name = "plan_id")
-    val id: Long,
+    val id: Long? = 0L,
 ) : BaseTimeEntity() {
     fun toDomain(): Plan =
         Plan(
-            id = id,
-            user = user.toDomain(),
+            id = id!!,
+            userId = userId,
             region = PlanRegion.register(
                 primaryRegion = primaryRegion,
                 secondaryRegion = secondaryRegion,
             ),
-            visitDate = PlanDate.register(visitDate),
+            visitDate = visitDate,
         )
 
     companion object {
@@ -46,10 +41,10 @@ class PlanEntity(
             with(plan) {
                 PlanEntity(
                     id = id,
-                    user = UserEntity.from(plan.user),
+                    userId = userId,
                     primaryRegion = region.primaryRegion,
                     secondaryRegion = region.secondaryRegion,
-                    visitDate = visitDate.date,
+                    visitDate = visitDate,
                 )
             }
     }

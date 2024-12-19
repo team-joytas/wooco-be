@@ -17,5 +17,11 @@ data class GetAllPlanOutput(
 class GetAllPlanUseCase(
     private val planStorageGateway: PlanStorageGateway,
 ) : UseCase<GetAllPlanInput, GetAllPlanOutput> {
-    override fun execute(input: GetAllPlanInput): GetAllPlanOutput = GetAllPlanOutput(planStorageGateway.getAllByUserId(input.userId))
+    override fun execute(input: GetAllPlanInput): GetAllPlanOutput {
+        val plans = planStorageGateway.getAllByUserId(input.userId)
+
+        return GetAllPlanOutput(
+            plans = plans,
+        )
+    }
 }

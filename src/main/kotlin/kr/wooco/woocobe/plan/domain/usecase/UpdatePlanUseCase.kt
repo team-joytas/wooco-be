@@ -3,12 +3,10 @@ package kr.wooco.woocobe.plan.domain.usecase
 import jakarta.transaction.Transactional
 import kr.wooco.woocobe.common.domain.UseCase
 import kr.wooco.woocobe.plan.domain.gateway.PlanStorageGateway
-import kr.wooco.woocobe.plan.domain.model.PlanDate
 import kr.wooco.woocobe.plan.domain.model.PlanRegion
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
-// TODO: 장소 정보 추가
 data class UpdatePlanInput(
     val userId: Long,
     val planId: Long,
@@ -35,12 +33,10 @@ class UpdatePlanUseCase(
             secondaryRegion = input.secondaryRegion,
         )
 
-        val visitDate = PlanDate.register(input.visitDate)
-
         plan
             .update(
                 region = region,
-                visitDate = visitDate,
+                visitDate = input.visitDate,
             ).also(planStorageGateway::save)
     }
 }
