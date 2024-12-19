@@ -1,16 +1,12 @@
 package kr.wooco.woocobe.plan.domain.model
 
-import kr.wooco.woocobe.common.domain.IdGenerator
-import kr.wooco.woocobe.user.domain.model.User
-
-// TODO: 장소 정보 추가
 class Plan(
     val id: Long,
-    val user: User,
+    val userId: Long,
     var region: PlanRegion,
     var visitDate: PlanDate,
 ) {
-    fun isWriter(targetId: Long): Boolean = user.id == targetId
+    fun isWriter(targetId: Long): Boolean = userId == targetId
 
     fun update(
         region: PlanRegion,
@@ -20,16 +16,15 @@ class Plan(
         this.visitDate = visitDate
     }
 
-    // FIXME: 아이디 생성 책임을 storage에 위임
     companion object {
         fun register(
-            user: User,
+            userId: Long,
             region: PlanRegion,
             visitDate: PlanDate,
         ): Plan =
             Plan(
-                id = IdGenerator.generateId(),
-                user = user,
+                id = 0L,
+                userId = userId,
                 region = region,
                 visitDate = visitDate,
             )
