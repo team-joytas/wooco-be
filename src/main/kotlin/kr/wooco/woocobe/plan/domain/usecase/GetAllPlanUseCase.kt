@@ -20,6 +20,8 @@ class GetAllPlanUseCase(
     override fun execute(input: GetAllPlanInput): GetAllPlanOutput {
         val plans = planStorageGateway.getAllByUserId(input.userId)
 
-        return GetAllPlanOutput(plans = plans)
+        return GetAllPlanOutput(
+            plans = plans,
+        )
     }
 }

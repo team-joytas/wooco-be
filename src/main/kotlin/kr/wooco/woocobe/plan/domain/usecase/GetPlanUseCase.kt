@@ -22,6 +22,8 @@ class GetPlanUseCase(
         val plan = planStorageGateway.getById(input.planId)
             ?: throw RuntimeException()
 
-        return GetPlanOutput(plan = plan)
+        return GetPlanOutput(
+            plan = plan,
+        )
     }
 }
