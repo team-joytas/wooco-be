@@ -10,7 +10,7 @@ import kr.wooco.woocobe.course.domain.model.CourseComment
 import kr.wooco.woocobe.user.domain.model.User
 
 @Entity
-@Table(name = "course_comment")
+@Table(name = "course_comments")
 class CourseCommentEntity(
     @Column(columnDefinition = "text")
     val contents: String,
