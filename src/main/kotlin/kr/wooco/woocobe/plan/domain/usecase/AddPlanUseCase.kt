@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional
 import kr.wooco.woocobe.common.domain.UseCase
 import kr.wooco.woocobe.plan.domain.gateway.PlanStorageGateway
 import kr.wooco.woocobe.plan.domain.model.Plan
-import kr.wooco.woocobe.plan.domain.model.PlanDate
 import kr.wooco.woocobe.plan.domain.model.PlanRegion
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -27,13 +26,11 @@ class AddPlanUseCase(
             secondaryRegion = input.secondaryRegion,
         )
 
-        val visitDate = PlanDate.register(input.visitDate)
-
         Plan
             .register(
                 userId = input.userId,
                 region = region,
-                visitDate = visitDate,
+                visitDate = input.visitDate,
             ).also(planStorageGateway::save)
     }
 }

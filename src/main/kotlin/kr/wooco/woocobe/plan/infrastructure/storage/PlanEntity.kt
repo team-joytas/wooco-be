@@ -7,7 +7,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kr.wooco.woocobe.common.storage.BaseTimeEntity
 import kr.wooco.woocobe.plan.domain.model.Plan
-import kr.wooco.woocobe.plan.domain.model.PlanDate
 import kr.wooco.woocobe.plan.domain.model.PlanRegion
 import java.time.LocalDate
 
@@ -34,7 +33,7 @@ class PlanEntity(
                 primaryRegion = primaryRegion,
                 secondaryRegion = secondaryRegion,
             ),
-            visitDate = PlanDate.register(visitDate),
+            visitDate = visitDate,
         )
 
     companion object {
@@ -45,7 +44,7 @@ class PlanEntity(
                     userId = userId,
                     primaryRegion = region.primaryRegion,
                     secondaryRegion = region.secondaryRegion,
-                    visitDate = visitDate.date,
+                    visitDate = visitDate,
                 )
             }
     }

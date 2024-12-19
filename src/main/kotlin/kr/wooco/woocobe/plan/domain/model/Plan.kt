@@ -1,16 +1,18 @@
 package kr.wooco.woocobe.plan.domain.model
 
+import java.time.LocalDate
+
 class Plan(
     val id: Long,
     val userId: Long,
     var region: PlanRegion,
-    var visitDate: PlanDate,
+    var visitDate: LocalDate,
 ) {
     fun isWriter(targetId: Long): Boolean = userId == targetId
 
     fun update(
         region: PlanRegion,
-        visitDate: PlanDate,
+        visitDate: LocalDate,
     ) = apply {
         this.region = region
         this.visitDate = visitDate
@@ -20,7 +22,7 @@ class Plan(
         fun register(
             userId: Long,
             region: PlanRegion,
-            visitDate: PlanDate,
+            visitDate: LocalDate,
         ): Plan =
             Plan(
                 id = 0L,

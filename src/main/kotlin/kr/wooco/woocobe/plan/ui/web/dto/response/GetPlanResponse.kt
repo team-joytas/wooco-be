@@ -20,7 +20,7 @@ data class GetPlanResponse(
                     userId = plan.userId,
                     primaryRegion = plan.region.primaryRegion,
                     secondaryRegion = plan.region.secondaryRegion,
-                    visitDate = plan.visitDate.date,
+                    visitDate = plan.visitDate,
                 )
             }
     }
