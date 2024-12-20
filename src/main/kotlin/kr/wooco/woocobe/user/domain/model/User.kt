@@ -1,14 +1,28 @@
 package kr.wooco.woocobe.user.domain.model
 
-// TODO: 랜덤 닉네임 생성 로직이 필요
 class User(
     val id: Long,
-    var name: String = "",
+    var name: String,
+    var profileUrl: String,
 ) {
+    fun update(
+        name: String,
+        profileUrl: String,
+    ) = apply {
+        this.name = name
+        this.profileUrl = profileUrl
+    }
+
     companion object {
-        fun register(userId: Long): User =
+        fun register(
+            userId: Long = 0L,
+            name: String = "",
+            profileUrl: String = "",
+        ): User =
             User(
                 id = userId,
+                name = name,
+                profileUrl = profileUrl,
             )
     }
 }
