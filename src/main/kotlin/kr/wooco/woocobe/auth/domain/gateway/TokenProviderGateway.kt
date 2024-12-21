@@ -5,7 +5,7 @@ interface TokenProviderGateway {
 
     fun generateRefreshToken(tokenId: Long): String
 
-    fun extractAccessToken(accessToken: String): Long
+    fun extractUserId(accessToken: String): Long
 
-    fun extractRefreshToken(refreshToken: String): Long
+    fun extractTokenId(refreshToken: String): Long
 }

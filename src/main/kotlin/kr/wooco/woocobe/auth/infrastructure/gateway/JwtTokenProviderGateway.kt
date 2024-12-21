@@ -12,7 +12,7 @@ class JwtTokenProviderGateway(
 
     override fun generateRefreshToken(tokenId: Long): String = jwtProvider.generateRefreshToken(tokenId)
 
-    override fun extractAccessToken(accessToken: String): Long = jwtProvider.extractAccessToken(accessToken)
+    override fun extractUserId(accessToken: String): Long = jwtProvider.extractUserId(accessToken)
 
-    override fun extractRefreshToken(refreshToken: String): Long = jwtProvider.extractRefreshToken(refreshToken)
+    override fun extractTokenId(refreshToken: String): Long = jwtProvider.extractTokenId(refreshToken)
 }
