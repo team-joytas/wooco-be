@@ -15,4 +15,6 @@ class RedisAuthTokenStorageGateway(
     override fun getByTokenId(tokenId: Long): AuthToken? = authTokenRedisRepository.findById(tokenId)?.toDomain()
 
     override fun getWithDeleteByTokenId(tokenId: Long): AuthToken? = authTokenRedisRepository.findAndDeleteById(tokenId)?.toDomain()
+
+    override fun deleteByTokenId(tokenId: Long) = authTokenRedisRepository.deleteById(tokenId)
 }

@@ -20,4 +20,6 @@ class JpaAuthUserStorageGateway(
         socialId: String,
         socialType: SocialAuthType,
     ): AuthUser? = authUserJpaRepository.findBySocialIdAndSocialType(socialId, socialType)?.toDomain()
+
+    override fun deleteByUserId(userId: Long) = authUserJpaRepository.deleteByUserId(userId = userId)
 }

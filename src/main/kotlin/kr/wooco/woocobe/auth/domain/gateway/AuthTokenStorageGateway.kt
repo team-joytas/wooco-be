@@ -8,4 +8,6 @@ interface AuthTokenStorageGateway {
     fun getByTokenId(tokenId: Long): AuthToken?
 
     fun getWithDeleteByTokenId(tokenId: Long): AuthToken?
+
+    fun deleteByTokenId(tokenId: Long)
 }
