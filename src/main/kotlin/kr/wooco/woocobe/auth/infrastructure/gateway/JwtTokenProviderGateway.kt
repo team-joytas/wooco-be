@@ -5,7 +5,7 @@ import kr.wooco.woocobe.auth.infrastructure.token.JWTProvider
 import org.springframework.stereotype.Component
 
 @Component
-class JwtTokenProviderGateway(
+internal class JwtTokenProviderGateway(
     private val jwtProvider: JWTProvider,
 ) : TokenProviderGateway {
     override fun generateAccessToken(userId: Long): String = jwtProvider.generateAccessToken(userId)

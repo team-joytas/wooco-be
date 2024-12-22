@@ -6,7 +6,7 @@ import kr.wooco.woocobe.auth.infrastructure.client.KakaoOAuthRestClient
 import org.springframework.stereotype.Component
 
 @Component
-class RestSocialAuthClientGateway(
+internal class RestSocialAuthClientGateway(
     private val kakaoOAuthRestClient: KakaoOAuthRestClient,
 ) : SocialAuthClientGateway {
     override fun getSocialAuthInfo(socialToken: String): SocialAuthInfo =
