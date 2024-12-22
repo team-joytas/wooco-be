@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.auth.domain.usecase
 
+import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.AuthUserStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.SocialAuthClientGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
@@ -26,24 +27,33 @@ class SocialLoginUseCase(
     private val userStorageGateway: UserStorageGateway,
     private val tokenProviderGateway: TokenProviderGateway,
     private val authUserStorageGateway: AuthUserStorageGateway,
+    private val authTokenStorageGateway: AuthTokenStorageGateway,
     private val socialAuthClientGateway: SocialAuthClientGateway,
 ) : UseCase<SocialLoginInput, SocialLoginOutput> {
     @Transactional
     override fun execute(input: SocialLoginInput): SocialLoginOutput {
         val socialAuthInfo = socialAuthClientGateway.getSocialAuthInfo(input.socialToken)
 
-        val authUser =
-            authUserStorageGateway.getBySocialIdAndSocialType(socialAuthInfo.socialId, socialAuthInfo.socialType)
-                ?: AuthUser.register(socialAuthInfo.socialId, socialAuthInfo.socialType).also {
-                    userStorageGateway.save(User.register(userId = it.userId))
-                    authUserStorageGateway.save(it)
-                }
+        val authUser = authUserStorageGateway.getBySocialIdAndSocialType(
+            socialId = socialAuthInfo.socialId,
+            socialType = socialAuthInfo.socialType,
+        ) ?: run {
+            val user = userStorageGateway.save(User.register())
+            authUserStorageGateway.save(
+                AuthUser.register(
+                    userId = user.id,
+                    socialAuthInfo = socialAuthInfo,
+                ),
+            )
+        }
 
-        val authToken = AuthToken.register(userId = authUser.userId)
+        val authToken = AuthToken
+            .register(userId = authUser.userId)
+            .run(authTokenStorageGateway::save)
 
         return SocialLoginOutput(
             accessToken = tokenProviderGateway.generateAccessToken(authToken.userId),
-            refreshToken = tokenProviderGateway.generateRefreshToken(authToken.tokenId),
+            refreshToken = tokenProviderGateway.generateRefreshToken(authToken.id),
         )
     }
 }
