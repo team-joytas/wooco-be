@@ -3,22 +3,20 @@ package kr.wooco.woocobe.auth.domain.usecase
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldBeNull
-import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
-import kr.wooco.woocobe.auth.domain.model.AuthToken
+import kr.wooco.woocobe.auth.infrastructure.storage.AuthTokenEntity
+import kr.wooco.woocobe.auth.infrastructure.storage.AuthTokenRedisRepository
 import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
 import kr.wooco.woocobe.support.RedisCleaner
-import org.springframework.data.redis.core.StringRedisTemplate
 
 @IntegrationTest
 class LogoutUseCaseTest(
     private val logoutUseCase: LogoutUseCase,
-    private val stringRedisTemplate: StringRedisTemplate,
-    private val authTokenStorageGateway: AuthTokenStorageGateway,
+    private val authTokenRedisRepository: AuthTokenRedisRepository,
 ) : BehaviorSpec({
     listeners(MysqlCleaner(), RedisCleaner())
 
-    Given("유효한 input 값이 들어올 때") {
+    Given("유효한 input 값이 들어올 경우") {
         val validUserId = 9876543210L
         val validTokenId = 1234567890L
         val validRefreshToken = "eyJhbGciOiJIUzM4NCJ9" +
@@ -27,34 +25,30 @@ class LogoutUseCaseTest(
 
         val input = LogoutInput(userId = validUserId, refreshToken = validRefreshToken)
 
-        When("토큰 식별자와 일치하는 인증 토큰이 존재하는 경우") {
-            val authToken =
-                AuthToken(userId = validUserId, tokenId = validTokenId).let {
-                    authTokenStorageGateway.save(it)
-                }
+        When("토큰 식별자와 일치하는 인증 토큰이 존재할 때") {
+            val authTokenEntity =
+                AuthTokenEntity(id = validTokenId, userId = validUserId).run(authTokenRedisRepository::save)
 
             logoutUseCase.execute(input)
 
             Then("정상적으로 인증 토큰을 삭제한다.") {
-                val storageToken = stringRedisTemplate.opsForValue().get(authToken.tokenId.toString())
-                storageToken.shouldBeNull()
+                val expectNull = authTokenRedisRepository.findById(authTokenEntity.id)
+                expectNull.shouldBeNull()
             }
         }
 
-        When("사용자 식별자와 일치하지 않는 인증 토큰인 경우") {
-            AuthToken(userId = 0L, tokenId = validTokenId).let {
-                authTokenStorageGateway.save(it)
-            }
-
-            Then("UnMatchedTokenException 오류가 발생한다.") {
+        When("토큰 식별자와 일치하는 인증 토큰이 존재하지 않을 때") {
+            Then("NotExistsAuthTokenException 오류가 발생한다.") {
                 shouldThrow<RuntimeException> {
                     logoutUseCase.execute(input)
                 }
             }
         }
 
-        When("토큰 식별자와 일치하는 인증 토큰이 존재하지 않는 경우") {
-            Then("NotExistsTokenException 오류가 발생한다.") {
+        When("사용자 식별자와 일치하지 않는 인증 토큰일 때") {
+            AuthTokenEntity(id = validTokenId, userId = 999999999L).run(authTokenRedisRepository::save)
+
+            Then("UnMatchedTokenException 오류가 발생한다.") {
                 shouldThrow<RuntimeException> {
                     logoutUseCase.execute(input)
                 }

@@ -19,7 +19,7 @@ class JwtAuthenticationFilter(
     ) {
         runCatching {
             val accessToken = extractAccessTokenInRequestHeader(request)
-            val userId = jwtProvider.extractAccessToken(accessToken)
+            val userId = jwtProvider.extractUserId(accessToken)
             SecurityContextHolder.getContext().apply {
                 authentication = UsernamePasswordAuthenticationToken(userId, null, emptyList())
             }

@@ -12,4 +12,6 @@ interface AuthUserStorageGateway {
         socialId: String,
         socialType: SocialAuthType,
     ): AuthUser?
+
+    fun deleteByUserId(userId: Long)
 }

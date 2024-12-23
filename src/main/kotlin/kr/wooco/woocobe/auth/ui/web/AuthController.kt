@@ -7,6 +7,8 @@ import kr.wooco.woocobe.auth.domain.usecase.ReissueTokenInput
 import kr.wooco.woocobe.auth.domain.usecase.ReissueTokenUseCase
 import kr.wooco.woocobe.auth.domain.usecase.SocialLoginInput
 import kr.wooco.woocobe.auth.domain.usecase.SocialLoginUseCase
+import kr.wooco.woocobe.auth.domain.usecase.WithdrawInput
+import kr.wooco.woocobe.auth.domain.usecase.WithdrawUseCase
 import kr.wooco.woocobe.auth.ui.web.dto.request.LoginRequest
 import kr.wooco.woocobe.auth.ui.web.dto.response.ReissueTokenResponse
 import kr.wooco.woocobe.auth.ui.web.dto.response.SocialLoginResponse
@@ -15,6 +17,7 @@ import kr.wooco.woocobe.common.utils.deleteCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.CookieValue
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/auth")
 class AuthController(
     private val logoutUseCase: LogoutUseCase,
+    private val withdrawUseCase: WithdrawUseCase,
     private val socialLoginUseCase: SocialLoginUseCase,
     private val reissueTokenUseCase: ReissueTokenUseCase,
 ) {
@@ -32,7 +36,7 @@ class AuthController(
         @AuthenticationPrincipal userId: Long,
         @CookieValue(REFRESH_TOKEN_COOKIE_NAME) token: String,
         response: HttpServletResponse,
-    ): ResponseEntity<Void> {
+    ): ResponseEntity<Unit> {
         logoutUseCase.execute(
             LogoutInput(
                 userId = userId,
@@ -70,6 +74,21 @@ class AuthController(
         )
         response.addCookie(REFRESH_TOKEN_COOKIE_NAME, result.refreshToken)
         return ResponseEntity.ok(SocialLoginResponse.from(result))
+    }
+
+    @DeleteMapping("/withdraw")
+    fun withdraw(
+        @AuthenticationPrincipal userId: Long,
+        @CookieValue(REFRESH_TOKEN_COOKIE_NAME) token: String,
+        response: HttpServletResponse,
+    ): ResponseEntity<Unit> {
+        withdrawUseCase.execute(
+            WithdrawInput(
+                userId = userId,
+                refreshToken = token,
+            ),
+        )
+        return ResponseEntity.ok().build()
     }
 
     companion object {

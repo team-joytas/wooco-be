@@ -26,14 +26,14 @@ class JWTProvider(
 
     fun generateRefreshToken(tokenId: Long): String = createToken(TOKEN_ID, tokenId, refreshTokenExpiration)
 
-    fun extractAccessToken(token: String): Long =
+    fun extractUserId(token: String): Long =
         runCatching {
             parseClaimsBody(token)[USER_ID]!!.toString().toLong()
         }.getOrElse {
             throw RuntimeException(it)
         }
 
-    fun extractRefreshToken(token: String): Long =
+    fun extractTokenId(token: String): Long =
         runCatching {
             parseClaimsBody(token)[TOKEN_ID]!!.toString().toLong()
         }.getOrElse {

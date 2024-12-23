@@ -8,4 +8,6 @@ interface AuthUserJpaRepository : JpaRepository<AuthUserEntity, Long> {
         socialId: String,
         socialType: SocialAuthType,
     ): AuthUserEntity?
+
+    fun deleteByUserId(userId: Long)
 }

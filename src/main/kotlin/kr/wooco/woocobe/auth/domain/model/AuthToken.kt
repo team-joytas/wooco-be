@@ -1,22 +1,15 @@
 package kr.wooco.woocobe.auth.domain.model
 
-import kr.wooco.woocobe.common.domain.IdGenerator
-
 class AuthToken(
+    val id: Long,
     val userId: Long,
-    var tokenId: Long,
 ) {
-    fun regenerateId(): AuthToken =
-        apply {
-            tokenId = IdGenerator.generateId()
-        }
-
-    fun isMatchUserId(targetUserId: Long): Boolean = userId == targetUserId
+    fun isMatchUserId(targetId: Long): Boolean = userId == targetId
 
     companion object {
         fun register(userId: Long): AuthToken =
             AuthToken(
-                tokenId = IdGenerator.generateId(),
+                id = 0L,
                 userId = userId,
             )
     }

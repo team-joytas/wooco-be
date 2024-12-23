@@ -5,8 +5,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
-import kr.wooco.woocobe.auth.domain.model.AuthToken
+import kr.wooco.woocobe.auth.infrastructure.storage.AuthTokenEntity
+import kr.wooco.woocobe.auth.infrastructure.storage.AuthTokenRedisRepository
 import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
 import kr.wooco.woocobe.support.RedisCleaner
@@ -16,11 +16,11 @@ import org.springframework.data.redis.core.StringRedisTemplate
 class ReissueTokenUseCaseTest(
     private val stringRedisTemplate: StringRedisTemplate,
     private val reissueTokenUseCase: ReissueTokenUseCase,
-    private val authTokenStorageGateway: AuthTokenStorageGateway,
+    private val authTokenRedisRepository: AuthTokenRedisRepository,
 ) : BehaviorSpec({
     listeners(MysqlCleaner(), RedisCleaner())
 
-    Given("유효한 input 값이 들어올 때") {
+    Given("유효한 input 값이 들어올 경우") {
         val validTokenId = 1234567890L
         val validRefreshToken = "eyJhbGciOiJIUzM4NCJ9" +
                 ".eyJ0b2tlbl9pZCI6MTIzNDU2Nzg5MCwiZXhwIjo5OTk5OTk5OTk5fQ" +
@@ -28,10 +28,9 @@ class ReissueTokenUseCaseTest(
 
         val input = ReissueTokenInput(refreshToken = validRefreshToken)
 
-        When("토큰 식별자와 일치하는 인증 토큰이 존재하는 경우") {
-            AuthToken(userId = 9876543210L, tokenId = validTokenId).let {
-                authTokenStorageGateway.save(it)
-            }
+        When("토큰 식별자와 일치하는 인증 토큰이 존재할 때") {
+            val authTokenEntity =
+                AuthTokenEntity(id = validTokenId, userId = 9876543210L).run(authTokenRedisRepository::save)
 
             val sut = reissueTokenUseCase.execute(input)
 
@@ -40,16 +39,18 @@ class ReissueTokenUseCaseTest(
                 sut.refreshToken.shouldNotBeNull()
             }
 
-            Then("인증 토큰의 식별자는 변경되어 저장된다.") {
-                val tokens = stringRedisTemplate.keys("token:*")
-                tokens.size shouldBe 1
-
-                val expectNull = stringRedisTemplate.opsForValue().get(validTokenId.toString())
+            Then("기존 토큰이 삭제된다.") {
+                val expectNull = authTokenRedisRepository.findById(authTokenEntity.id)
                 expectNull.shouldBeNull()
+            }
+
+            Then("새로운 인증 토큰이 저장된다.") {
+                val authTokenEntities = stringRedisTemplate.keys("*")
+                authTokenEntities.size shouldBe 1
             }
         }
 
-        When("저장되지 않는 인증 토큰 식별자가 주어진 경우") {
+        When("저장되지 않는 인증 토큰 식별자가 주어질 때") {
             Then("NotExistsTokenException 오류가 발생한다.") {
                 shouldThrow<RuntimeException> {
                     reissueTokenUseCase.execute(input)

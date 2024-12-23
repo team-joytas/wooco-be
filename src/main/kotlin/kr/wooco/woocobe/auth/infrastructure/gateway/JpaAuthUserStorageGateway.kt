@@ -9,7 +9,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-class JpaAuthUserStorageGateway(
+internal class JpaAuthUserStorageGateway(
     private val authUserJpaRepository: AuthUserJpaRepository,
 ) : AuthUserStorageGateway {
     override fun save(authUser: AuthUser): AuthUser = authUserJpaRepository.save(AuthUserEntity.from(authUser)).toDomain()
@@ -20,4 +20,6 @@ class JpaAuthUserStorageGateway(
         socialId: String,
         socialType: SocialAuthType,
     ): AuthUser? = authUserJpaRepository.findBySocialIdAndSocialType(socialId, socialType)?.toDomain()
+
+    override fun deleteByUserId(userId: Long) = authUserJpaRepository.deleteByUserId(userId = userId)
 }
