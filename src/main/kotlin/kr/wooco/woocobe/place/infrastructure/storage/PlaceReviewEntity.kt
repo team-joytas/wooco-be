@@ -14,8 +14,6 @@ import kr.wooco.woocobe.user.domain.model.User
 @Entity
 @Table(name = "place_reviews")
 class PlaceReviewEntity(
-    @Column(name = "image_url")
-    val imageUrls: List<String>,
     @Column(name = "content", nullable = false)
     val content: String,
     @Column(name = "rating", nullable = false)
@@ -32,6 +30,7 @@ class PlaceReviewEntity(
         user: User,
         place: Place,
         placeOneLineReview: List<PlaceOneLineReview> = emptyList(),
+        imageUrls: List<String> = emptyList(),
     ): PlaceReview =
         PlaceReview(
             id = id!!,
@@ -51,7 +50,6 @@ class PlaceReviewEntity(
                     id = id,
                     userId = user.id,
                     placeId = place.id,
-                    imageUrls = imageUrls,
                     content = content,
                     rating = rating,
                 )
