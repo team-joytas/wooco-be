@@ -29,13 +29,13 @@ class MysqlCleaner : TestListener {
         try {
             jdbcTemplate.dataSource?.connection!!.use { connection ->
                 val metaData: DatabaseMetaData = connection.metaData
-                val tables =
-                    metaData.getTables(null, null, null, arrayOf("TABLE"))
-                        .use { resultSet ->
-                            generateSequence {
-                                resultSet.takeIf { it.next() }?.getString("TABLE_NAME")
-                            }.toList()
-                        }
+                val tables = metaData
+                    .getTables(null, null, null, arrayOf("TABLE"))
+                    .use { resultSet ->
+                        generateSequence {
+                            resultSet.takeIf { it.next() }?.getString("TABLE_NAME")
+                        }.toList()
+                    }
                 return tables.filter { EXCLUDED_TABLES.contains(it).not() }
             }
         } catch (e: SQLException) {
@@ -47,12 +47,14 @@ class MysqlCleaner : TestListener {
         tables: List<String>,
         jdbcTemplate: JdbcTemplate,
     ) {
-        tables.forEach { table ->
-            jdbcTemplate.execute("TRUNCATE TABLE $table")
-        }
+        jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0")
+        tables.forEach { table -> jdbcTemplate.execute("TRUNCATE TABLE $table") }
+        jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1")
     }
 
     companion object {
-        private val EXCLUDED_TABLES = setOf("flyway_schema_history")
+        private val EXCLUDED_TABLES = setOf(
+            "flyway_schema_history",
+        )
     }
 }
