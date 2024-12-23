@@ -11,18 +11,18 @@ class PlaceReview(
     var rating: Double,
     var content: String,
     var oneLineReviews: List<PlaceOneLineReview>,
-    var imageUrl: String,
+    var imageUrls: List<String>,
 ) {
     fun update(
         rating: Double,
         content: String,
         oneLineReviews: List<String>,
-        imageUrl: String,
+        imageUrls: List<String>,
     ) = apply {
         this.rating = rating
         this.content = content
         this.oneLineReviews = oneLineReviews.map { PlaceOneLineReview.from(it) }
-        this.imageUrl = imageUrl
+        this.imageUrls = imageUrls
     }
 
     fun isWriter(targetId: Long): Boolean =
@@ -38,7 +38,7 @@ class PlaceReview(
             rating: Double,
             content: String,
             oneLineReview: List<PlaceOneLineReview>,
-            imageUrl: String,
+            imageUrls: List<String>,
         ): PlaceReview =
             PlaceReview(
                 id = 0L,
@@ -48,7 +48,7 @@ class PlaceReview(
                 rating = rating,
                 content = content,
                 oneLineReviews = oneLineReview.map { it },
-                imageUrl = imageUrl,
+                imageUrls = imageUrls,
             )
     }
 }

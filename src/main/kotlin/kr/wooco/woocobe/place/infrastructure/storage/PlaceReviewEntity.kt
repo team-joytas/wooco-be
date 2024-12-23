@@ -15,7 +15,7 @@ import kr.wooco.woocobe.user.domain.model.User
 @Table(name = "place_reviews")
 class PlaceReviewEntity(
     @Column(name = "image_url")
-    val imageUrl: String,
+    val imageUrls: List<String>,
     @Column(name = "content", nullable = false)
     val content: String,
     @Column(name = "rating", nullable = false)
@@ -41,7 +41,7 @@ class PlaceReviewEntity(
             rating = rating,
             content = content,
             oneLineReviews = placeOneLineReview.map { PlaceOneLineReview.from(it.content) },
-            imageUrl = imageUrl,
+            imageUrls = imageUrls,
         )
 
     companion object {
@@ -51,7 +51,7 @@ class PlaceReviewEntity(
                     id = id,
                     userId = user.id,
                     placeId = place.id,
-                    imageUrl = imageUrl,
+                    imageUrls = imageUrls,
                     content = content,
                     rating = rating,
                 )

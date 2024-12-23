@@ -10,8 +10,8 @@ data class UpdatePlaceReviewInput(
     val placeReviewId: Long,
     val rating: Double,
     var content: String,
-    var oneLineReview: List<String>,
-    var imageUrl: String,
+    var oneLineReviews: List<String>,
+    var imageUrls: List<String>,
 )
 
 @Service
@@ -31,8 +31,8 @@ class UpdatePlaceReviewUseCase(
             .update(
                 rating = input.rating,
                 content = input.content,
-                oneLinenReview = input.oneLineReview,
-                imageUrl = input.imageUrl,
+                oneLineReviews = input.oneLineReviews,
+                imageUrls = input.imageUrls,
             ).also(placeReviewStorageGateway::save)
     }
 }
