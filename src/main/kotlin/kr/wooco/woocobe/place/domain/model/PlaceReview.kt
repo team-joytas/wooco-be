@@ -33,7 +33,7 @@ class PlaceReview(
             place: Place,
             rating: Double,
             content: String,
-            oneLineReview: List<PlaceOneLineReview>,
+            oneLineReview: List<String>,
             imageUrls: List<String>,
         ): PlaceReview =
             PlaceReview(
@@ -43,7 +43,7 @@ class PlaceReview(
                 writeDateTime = LocalDateTime.now(),
                 rating = rating,
                 content = content,
-                oneLineReviews = oneLineReview,
+                oneLineReviews = oneLineReview.map { PlaceOneLineReview.from(it) },
                 imageUrls = imageUrls,
             )
     }
