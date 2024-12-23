@@ -10,7 +10,7 @@ data class GetUserAllPlaceReviewInput(
 )
 
 data class GetUserAllPlaceReviewOutput(
-    val placeReviewList: List<PlaceReview>,
+    val placeReviews: List<PlaceReview>,
 )
 
 @Service
@@ -18,10 +18,10 @@ class GetUserAllPlaceReviewUseCase(
     private val placeReviewStorageGateway: PlaceReviewStorageGateway,
 ) : UseCase<GetUserAllPlaceReviewInput, GetUserAllPlaceReviewOutput> {
     override fun execute(input: GetUserAllPlaceReviewInput): GetUserAllPlaceReviewOutput {
-        val placeReviewList = placeReviewStorageGateway.getAllByUserId(input.userId)
+        val placeReviews = placeReviewStorageGateway.getAllByUserId(input.userId)
 
         return GetUserAllPlaceReviewOutput(
-            placeReviewList = placeReviewList,
+            placeReviews = placeReviews,
         )
     }
 }
