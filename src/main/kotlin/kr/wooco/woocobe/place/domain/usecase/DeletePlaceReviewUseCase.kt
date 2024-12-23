@@ -16,8 +16,7 @@ class DeletePlaceReviewUseCase(
 ) : UseCase<DeletePlaceReviewInput, Unit> {
     @Transactional
     override fun execute(input: DeletePlaceReviewInput) {
-        val placeReview = placeReviewStorageGateway
-            .getByPlaceReviewId(input.placeReviewId)
+        val placeReview = placeReviewStorageGateway.getByPlaceReviewId(input.placeReviewId)
             ?: throw RuntimeException()
 
         when {
