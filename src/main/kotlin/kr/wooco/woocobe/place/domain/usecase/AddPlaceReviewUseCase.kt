@@ -14,7 +14,7 @@ data class AddPlaceReviewInput(
     val placeId: Long,
     val rating: Double,
     val content: String,
-    val oneLineReview: List<PlaceOneLineReview>,
+    val oneLineReviews: List<PlaceOneLineReview>,
     val imageUrl: String,
 )
 
@@ -35,7 +35,7 @@ class AddPlaceReviewUseCase(
                 place = place,
                 rating = input.rating,
                 content = input.content,
-                oneLinenReview = input.oneLineReview,
+                oneLineReview = input.oneLineReviews,
                 imageUrl = input.imageUrl,
             ).also(placeReviewStorageGateway::save)
         place.increaseReviewCount()

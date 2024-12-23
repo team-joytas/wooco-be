@@ -10,18 +10,18 @@ class PlaceReview(
     val writeDateTime: LocalDateTime,
     var rating: Double,
     var content: String,
-    var oneLineReview: List<PlaceOneLineReview>,
+    var oneLineReviews: List<PlaceOneLineReview>,
     var imageUrl: String,
 ) {
     fun update(
         rating: Double,
         content: String,
-        oneLinenReview: List<String>,
+        oneLineReviews: List<String>,
         imageUrl: String,
     ) = apply {
         this.rating = rating
         this.content = content
-        this.oneLineReview = oneLinenReview.map { PlaceOneLineReview.from(it) }
+        this.oneLineReviews = oneLineReviews.map { PlaceOneLineReview.from(it) }
         this.imageUrl = imageUrl
     }
 
@@ -37,7 +37,7 @@ class PlaceReview(
             place: Place,
             rating: Double,
             content: String,
-            oneLinenReview: List<PlaceOneLineReview>,
+            oneLineReview: List<PlaceOneLineReview>,
             imageUrl: String,
         ): PlaceReview =
             PlaceReview(
@@ -47,7 +47,7 @@ class PlaceReview(
                 writeDateTime = LocalDateTime.now(),
                 rating = rating,
                 content = content,
-                oneLineReview = oneLinenReview.map { it },
+                oneLineReviews = oneLineReview.map { it },
                 imageUrl = imageUrl,
             )
     }

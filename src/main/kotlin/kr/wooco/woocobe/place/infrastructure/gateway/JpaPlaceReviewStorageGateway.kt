@@ -21,7 +21,7 @@ class JpaPlaceReviewStorageGateway(
     override fun save(placeReview: PlaceReview): PlaceReview {
         val placeReviewEntity = placeReviewJpaRepository.save(PlaceReviewEntity.from(placeReview))
         if (placeReview.id == 0L) {
-            placeReview.oneLineReview
+            placeReview.oneLineReviews
                 .map {
                     PlaceOneLineReviewEntity.of(
                         placeReviewId = placeReviewEntity.id!!,

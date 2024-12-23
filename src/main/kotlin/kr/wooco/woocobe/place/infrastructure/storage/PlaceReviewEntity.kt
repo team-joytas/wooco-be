@@ -40,7 +40,7 @@ class PlaceReviewEntity(
             writeDateTime = createdAt,
             rating = rating,
             content = content,
-            oneLineReview = placeOneLineReview.map { PlaceOneLineReview.from(it.content) },
+            oneLineReviews = placeOneLineReview.map { PlaceOneLineReview.from(it.content) },
             imageUrl = imageUrl,
         )
 
