@@ -3,10 +3,19 @@ server:
   shutdown: graceful
 
 spring:
+  cookie:
+    path: /
+    max-age: 9876543210
+    same-site: Lax
+    domain: localhost
+    secure: false
+    http-only: true
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     open-in-view: false
+    show-sql: true
 
   datasource:
     url: jdbc:mysql://localhost:3306/wooco-test-database?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
