@@ -6,7 +6,6 @@ import kr.wooco.woocobe.place.domain.model.Place
 import org.springframework.stereotype.Service
 
 data class GetPlaceInput(
-    val userId: Long?,
     val placeId: Long,
 )
 
