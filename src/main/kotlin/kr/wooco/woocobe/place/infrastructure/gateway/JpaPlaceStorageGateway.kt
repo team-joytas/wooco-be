@@ -14,10 +14,7 @@ class JpaPlaceStorageGateway(
     private val placeJpaRepository: PlaceJpaRepository,
 ) : PlaceStorageGateway {
     override fun save(place: Place): Place {
-        val placeEntity = placeJpaRepository.save(PlaceEntity.from(place))
-        if (place.id == 0L) {
-            placeJpaRepository.save(placeEntity)
-        }
+        placeJpaRepository.save(PlaceEntity.from(place))
 
         return place
     }
