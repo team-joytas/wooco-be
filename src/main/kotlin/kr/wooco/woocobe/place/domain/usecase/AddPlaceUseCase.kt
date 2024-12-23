@@ -23,7 +23,9 @@ class AddPlaceUseCase(
     @Transactional
     override fun execute(input: AddPlaceUseCaseInput) {
         when {
-            !placeStorageGateway.existsByKakaoMapPlaceId(input.kakaoMapPlaceId) -> throw RuntimeException()
+            placeStorageGateway
+                .existsByKakaoMapPlaceId(input.kakaoMapPlaceId)
+                .not() -> throw RuntimeException()
         }
 
         val user = User.register(userId = input.userId)
