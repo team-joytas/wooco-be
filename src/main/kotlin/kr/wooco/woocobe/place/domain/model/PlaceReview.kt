@@ -25,11 +25,7 @@ class PlaceReview(
         this.imageUrls = imageUrls
     }
 
-    fun isWriter(targetId: Long): Boolean =
-        when (user.id == targetId) {
-            true -> true
-            else -> throw RuntimeException()
-        }
+    fun isWriter(targetId: Long): Boolean = user.id == targetId
 
     companion object {
         fun register(
