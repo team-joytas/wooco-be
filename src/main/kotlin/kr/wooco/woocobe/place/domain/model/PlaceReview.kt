@@ -47,7 +47,7 @@ class PlaceReview(
                 writeDateTime = LocalDateTime.now(),
                 rating = rating,
                 content = content,
-                oneLineReviews = oneLineReview.map { it },
+                oneLineReviews = oneLineReview,
                 imageUrls = imageUrls,
             )
     }
