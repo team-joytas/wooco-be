@@ -29,18 +29,14 @@ class JpaPlaceReviewStorageGateway(
                     )
                 }.also(placeOneLineReviewJpaRepository::saveAll)
         }
-
         return placeReview
     }
 
     override fun getByPlaceReviewId(placeReviewId: Long): PlaceReview? =
         placeReviewJpaRepository.findByIdOrNull(placeReviewId)?.let { placeReviewEntity ->
-            val userEntity = userJpaRepository.findByIdOrNull(placeReviewEntity.userId)!!
-            val placeEntity = placeJpaRepository.findByIdOrNull(placeReviewEntity.placeId)!!
-
             placeReviewEntity.toDomain(
-                user = userEntity.toDomain(),
-                place = placeEntity.toDomain(userEntity.toDomain()),
+                user = userJpaRepository.findByIdOrNull(placeReviewEntity.userId)!!.toDomain(),
+                place = placeJpaRepository.findByIdOrNull(placeReviewEntity.placeId)!!.toDomain(),
                 placeOneLineReview = placeOneLineReviewJpaRepository
                     .findAllByPlaceReviewIdOrderByCreatedAt(placeReviewEntity.id!!)
                     .map { it.toDomain() },
@@ -55,16 +51,11 @@ class JpaPlaceReviewStorageGateway(
                 val placeEntities = placeJpaRepository.findAllById(map { it.placeId })
                 val placeOneLineReviewEntities = placeOneLineReviewJpaRepository
                     .findAllByPlaceReviewIdInOrderByCreatedAt(map { it.id!! })
+
                 map { placeReviewEntity ->
                     placeReviewEntity.toDomain(
                         user = userEntities.find { placeReviewEntity.userId == it.id }!!.toDomain(),
-                        place = placeEntities
-                            .find { placeReviewEntity.placeId == it.id }!!
-                            .toDomain(
-                                user = userEntities
-                                    .find { placeReviewEntity.userId == it.id }!!
-                                    .toDomain(),
-                            ),
+                        place = placeEntities.find { placeReviewEntity.placeId == it.id }!!.toDomain(),
                         placeOneLineReview = placeOneLineReviewEntities
                             .filter { placeReviewEntity.id == it.placeReviewId }
                             .map { it.toDomain() },
@@ -79,16 +70,11 @@ class JpaPlaceReviewStorageGateway(
                 val userEntity = userJpaRepository.findAllById(map { it.userId })
                 val placeOneLineReviewEntity =
                     placeOneLineReviewJpaRepository.findAllByPlaceReviewIdInOrderByCreatedAt(map { it.id!! })
+
                 map { placeReviewEntity ->
                     placeReviewEntity.toDomain(
                         user = userEntity.find { placeReviewEntity.userId == it.id }!!.toDomain(),
-                        place = placeJpaRepository
-                            .findByIdOrNull(placeReviewEntity.placeId)!!
-                            .toDomain(
-                                user = userEntity
-                                    .find { placeReviewEntity.userId == it.id }!!
-                                    .toDomain(),
-                            ),
+                        place = placeJpaRepository.findByIdOrNull(placeReviewEntity.placeId)!!.toDomain(),
                         placeOneLineReview = placeOneLineReviewEntity
                             .filter { placeReviewEntity.id == it.placeReviewId }
                             .map { it.toDomain() },
@@ -103,14 +89,11 @@ class JpaPlaceReviewStorageGateway(
                 val userEntity = userJpaRepository.findByIdOrNull(userId)!!
                 val placeOneLineReviewEntity =
                     placeOneLineReviewJpaRepository.findAllByPlaceReviewIdInOrderByCreatedAt(map { it.id!! })
+
                 map { placeReviewEntity ->
                     placeReviewEntity.toDomain(
                         user = userEntity.toDomain(),
-                        place = placeJpaRepository
-                            .findByIdOrNull(placeReviewEntity.placeId)!!
-                            .toDomain(
-                                user = userEntity.toDomain(),
-                            ),
+                        place = placeJpaRepository.findByIdOrNull(placeReviewEntity.placeId)!!.toDomain(),
                         placeOneLineReview = placeOneLineReviewEntity
                             .filter { placeReviewEntity.id == it.placeReviewId }
                             .map { it.toDomain() },
