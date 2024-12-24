@@ -3,12 +3,10 @@ package kr.wooco.woocobe.place.domain.usecase
 import kr.wooco.woocobe.common.domain.UseCase
 import kr.wooco.woocobe.place.domain.gateway.PlaceStorageGateway
 import kr.wooco.woocobe.place.domain.model.Place
-import kr.wooco.woocobe.user.domain.model.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 data class AddPlaceUseCaseInput(
-    val userId: Long,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -28,10 +26,8 @@ class AddPlaceUseCase(
                 .not() -> throw RuntimeException()
         }
 
-        val user = User.register(userId = input.userId)
         Place
             .register(
-                user = user,
                 name = input.name,
                 latitude = input.latitude,
                 longitude = input.longitude,

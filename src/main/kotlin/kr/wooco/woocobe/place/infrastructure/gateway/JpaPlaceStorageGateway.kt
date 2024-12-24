@@ -19,12 +19,7 @@ class JpaPlaceStorageGateway(
         return place
     }
 
-    override fun getByPlaceId(placeId: Long): Place? =
-        placeJpaRepository.findByIdOrNull(placeId)?.let { placeEntity ->
-            placeEntity.toDomain(
-                user = userJpaRepository.findByIdOrNull(placeEntity.userId)!!.toDomain(),
-            )
-        }
+    override fun getByPlaceId(placeId: Long): Place? = placeJpaRepository.findByIdOrNull(placeId)?.toDomain()
 
     override fun existsByKakaoMapPlaceId(placeId: String): Boolean = placeJpaRepository.existsByKakaoMapPlaceId(placeId)
 }

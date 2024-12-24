@@ -7,7 +7,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kr.wooco.woocobe.common.storage.BaseTimeEntity
 import kr.wooco.woocobe.place.domain.model.Place
-import kr.wooco.woocobe.user.domain.model.User
 
 @Entity
 @Table(name = "places")
@@ -26,16 +25,13 @@ class PlaceEntity(
     val address: String,
     @Column(name = "name", nullable = false)
     val name: String,
-    @Column(name = "user_id", nullable = false)
-    val userId: Long,
     @Id @Tsid
     @Column(name = "place_id", nullable = false)
     val id: Long? = 0L,
 ) : BaseTimeEntity() {
-    fun toDomain(user: User): Place =
+    fun toDomain(): Place =
         Place(
             id = id!!,
-            user = user,
             name = name,
             latitude = latitude,
             longitude = longitude,
@@ -50,7 +46,6 @@ class PlaceEntity(
             with(place) {
                 PlaceEntity(
                     id = id,
-                    userId = user.id,
                     name = name,
                     latitude = latitude,
                     longitude = longitude,
