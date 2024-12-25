@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.plan.domain.usecase
 
 import jakarta.transaction.Transactional
-import kr.wooco.woocobe.common.domain.UseCase
+import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.plan.domain.gateway.PlanStorageGateway
 import kr.wooco.woocobe.plan.domain.model.Plan
 import kr.wooco.woocobe.plan.domain.model.PlanRegion

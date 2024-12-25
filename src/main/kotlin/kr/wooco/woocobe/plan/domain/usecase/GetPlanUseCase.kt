@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.plan.domain.usecase
 
-import kr.wooco.woocobe.common.domain.UseCase
+import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.plan.domain.gateway.PlanStorageGateway
 import kr.wooco.woocobe.plan.domain.model.Plan
 import org.springframework.stereotype.Service

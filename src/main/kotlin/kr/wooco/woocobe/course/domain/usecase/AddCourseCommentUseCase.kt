@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.course.domain.usecase
 
-import kr.wooco.woocobe.common.domain.UseCase
+import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.course.domain.gateway.CourseCommentStorageGateway
 import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.CourseComment

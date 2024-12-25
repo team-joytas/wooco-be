@@ -2,7 +2,7 @@ package kr.wooco.woocobe.auth.domain.usecase
 
 import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
-import kr.wooco.woocobe.common.domain.UseCase
+import kr.wooco.woocobe.common.domain.usecase.UseCase
 import org.springframework.stereotype.Service
 
 data class LogoutInput(
