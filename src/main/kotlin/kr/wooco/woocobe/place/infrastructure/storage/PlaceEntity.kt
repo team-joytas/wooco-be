@@ -5,7 +5,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import kr.wooco.woocobe.common.storage.BaseTimeEntity
+import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
 import kr.wooco.woocobe.place.domain.model.Place
 
 @Entity
