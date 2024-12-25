@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.auth.infrastructure.storage
 
 import kr.wooco.woocobe.auth.domain.model.AuthToken
-import kr.wooco.woocobe.common.domain.IdGenerator
+import kr.wooco.woocobe.common.infrastructure.storage.IdGenerator
 
 // TODO: 네이밍 일관화 필요 -> ex) AuthTokenRedisEntity, AuthTokenJpaEntity
 class AuthTokenEntity(

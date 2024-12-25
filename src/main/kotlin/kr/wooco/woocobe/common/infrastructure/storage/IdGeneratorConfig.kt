@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.common.config
+package kr.wooco.woocobe.common.infrastructure.storage
 
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
