@@ -1,8 +1,6 @@
-package kr.wooco.woocobe.common.config
+package kr.wooco.woocobe.common.ui.security
 
 import kr.wooco.woocobe.auth.infrastructure.token.JWTProvider
-import kr.wooco.woocobe.common.security.AuthIgnorePaths
-import kr.wooco.woocobe.common.security.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
