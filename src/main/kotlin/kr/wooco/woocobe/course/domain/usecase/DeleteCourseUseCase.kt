@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.course.domain.usecase
 
-import kr.wooco.woocobe.common.domain.UseCase
+import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

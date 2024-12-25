@@ -9,8 +9,8 @@ import jakarta.persistence.Table
 import kr.wooco.woocobe.auth.domain.model.AuthUser
 import kr.wooco.woocobe.auth.domain.model.SocialAuthInfo
 import kr.wooco.woocobe.auth.domain.model.SocialAuthType
-import kr.wooco.woocobe.common.domain.IdGenerator
-import kr.wooco.woocobe.common.storage.BaseTimeEntity
+import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
+import kr.wooco.woocobe.common.infrastructure.storage.IdGenerator
 
 @Entity
 @Table(name = "auth_users")

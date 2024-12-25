@@ -5,7 +5,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import kr.wooco.woocobe.common.storage.BaseTimeEntity
+import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
 import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.course.domain.model.CourseCategory
 import kr.wooco.woocobe.course.domain.model.CourseRegion

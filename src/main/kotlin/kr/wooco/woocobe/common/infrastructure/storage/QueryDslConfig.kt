@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.common.config
+package kr.wooco.woocobe.common.infrastructure.storage
 
 import com.querydsl.jpa.JPQLTemplates
 import com.querydsl.jpa.impl.JPAQueryFactory

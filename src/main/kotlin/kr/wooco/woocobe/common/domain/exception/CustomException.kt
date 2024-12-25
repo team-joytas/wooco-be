@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.common.exception
+package kr.wooco.woocobe.common.domain.exception
 
 import org.springframework.http.HttpStatus
 

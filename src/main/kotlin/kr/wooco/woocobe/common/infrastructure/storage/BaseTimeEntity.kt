@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.common.storage
+package kr.wooco.woocobe.common.infrastructure.storage
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
@@ -10,11 +10,12 @@ import java.time.LocalDateTime
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
-class BaseTimeEntity(
+abstract class BaseTimeEntity {
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    var createdAt: LocalDateTime = LocalDateTime.now(),
+    var createdAt: LocalDateTime = LocalDateTime.now()
+
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
-    var updatedAt: LocalDateTime = LocalDateTime.now(),
-)
+    var updatedAt: LocalDateTime = LocalDateTime.now()
+}

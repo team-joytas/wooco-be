@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.common.config
+package kr.wooco.woocobe.common.infrastructure.client
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

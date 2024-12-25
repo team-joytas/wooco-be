@@ -1,6 +1,8 @@
-package kr.wooco.woocobe.common.exception
+package kr.wooco.woocobe.common.ui.web
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kr.wooco.woocobe.common.domain.exception.BaseErrorCode
+import kr.wooco.woocobe.common.domain.exception.CustomException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
@@ -19,7 +21,7 @@ data class GlobalExceptionResponse(
 )
 
 @RestControllerAdvice
-class GlobalExceptionHandler {
+class GlobalExceptionAdvice {
     @ExceptionHandler(CustomException::class)
     fun handleCustomException(e: CustomException): ResponseEntity<GlobalExceptionResponse> {
         val body = GlobalExceptionResponse(code = e.code, message = e.message)

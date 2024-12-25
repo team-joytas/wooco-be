@@ -6,7 +6,7 @@ import kr.wooco.woocobe.auth.domain.gateway.SocialAuthClientGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
 import kr.wooco.woocobe.auth.domain.model.AuthToken
 import kr.wooco.woocobe.auth.domain.model.AuthUser
-import kr.wooco.woocobe.common.domain.UseCase
+import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
 import kr.wooco.woocobe.user.domain.model.User
 import org.springframework.stereotype.Service

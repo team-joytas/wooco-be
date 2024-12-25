@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.common.security
+package kr.wooco.woocobe.common.ui.security
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

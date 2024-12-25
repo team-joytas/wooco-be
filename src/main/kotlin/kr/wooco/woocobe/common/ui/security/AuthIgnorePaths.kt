@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.common.security
+package kr.wooco.woocobe.common.ui.security
 
 import org.springframework.http.HttpMethod
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
