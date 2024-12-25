@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.common.logging
+package kr.wooco.woocobe.common.ui.logging
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain

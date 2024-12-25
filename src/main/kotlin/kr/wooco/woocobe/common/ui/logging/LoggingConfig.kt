@@ -1,7 +1,5 @@
-package kr.wooco.woocobe.common.config
+package kr.wooco.woocobe.common.ui.logging
 
-import kr.wooco.woocobe.common.logging.MdcLoggingFilter
-import kr.wooco.woocobe.common.logging.ReqResLoggingFilter
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
