@@ -1,60 +1,67 @@
 package kr.wooco.woocobe.course.infrastructure.storage
 
-import com.querydsl.jpa.impl.JPAQueryFactory
+import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
 import kr.wooco.woocobe.course.domain.model.CourseRegion
 import kr.wooco.woocobe.course.domain.model.CourseSortCondition
-import kr.wooco.woocobe.user.infrastructure.storage.QUserEntity
+import kr.wooco.woocobe.user.infrastructure.storage.UserEntity
 import org.springframework.stereotype.Repository
 
 @Repository
 class CourseCustomRepositoryImpl(
-    private val queryFactory: JPAQueryFactory,
+    private val executor: KotlinJdslJpqlExecutor,
 ) : CourseCustomRepository {
     override fun findAllByUserIdWithSort(
         userId: Long,
         sort: CourseSortCondition,
     ): List<CourseEntity> =
-        queryFactory
-            .selectFrom(course)
-            .leftJoin(courseCategory)
-            .on(course.id.eq(courseCategory.courseId))
-            .leftJoin(user)
-            .on(course.userId.eq(user.id))
-            .fetchJoin()
-            .where(course.id.eq(userId))
-            .orderBy(
-                when (sort) {
-                    CourseSortCondition.POPULAR -> course.viewCount.desc()
-                    CourseSortCondition.RECENT -> course.createdAt.desc()
-                },
-            ).fetch()
+        executor
+            .findAll {
+                select(
+                    entity(CourseEntity::class),
+                ).from(
+                    entity(CourseEntity::class),
+                    leftJoin(CourseCategoryEntity::class).on(
+                        path(CourseEntity::id).eq(path(CourseCategoryEntity::courseId)),
+                    ),
+                    leftJoin(UserEntity::class).on(
+                        path(CourseEntity::userId).eq(path(UserEntity::id)),
+                    ),
+                ).whereAnd(
+                    path(CourseEntity::userId).eq(path(UserEntity::id)),
+                ).orderBy(
+                    when (sort) {
+                        CourseSortCondition.POPULAR -> path(CourseEntity::viewCount).desc()
+                        CourseSortCondition.RECENT -> path(CourseEntity::createdAt).desc()
+                    },
+                )
+            }.filterNotNull()
 
     override fun findAllByRegionAndCategoryWithSort(
         region: CourseRegion,
         category: String,
         sort: CourseSortCondition,
     ): List<CourseEntity> =
-        queryFactory
-            .selectFrom(course)
-            .leftJoin(courseCategory)
-            .on(course.id.eq(courseCategory.courseId))
-            .leftJoin(user)
-            .on(course.userId.eq(user.id))
-            .fetchJoin()
-            .where(
-                course.primaryRegion.eq(region.primaryRegion),
-                course.secondaryRegion.eq(region.secondaryRegion),
-                courseCategory.name.eq(category),
-            ).orderBy(
-                when (sort) {
-                    CourseSortCondition.POPULAR -> course.viewCount.desc()
-                    CourseSortCondition.RECENT -> course.createdAt.desc()
-                },
-            ).fetch()
-
-    companion object {
-        private val user = QUserEntity.userEntity
-        private val course = QCourseEntity.courseEntity
-        private val courseCategory = QCourseCategoryEntity.courseCategoryEntity
-    }
+        executor
+            .findAll {
+                select(
+                    entity(CourseEntity::class),
+                ).from(
+                    entity(CourseEntity::class),
+                    leftJoin(CourseCategoryEntity::class).on(
+                        path(CourseEntity::id).eq(path(CourseCategoryEntity::courseId)),
+                    ),
+                    leftJoin(UserEntity::class).on(
+                        path(CourseEntity::userId).eq(path(UserEntity::id)),
+                    ),
+                ).whereAnd(
+                    path(CourseEntity::primaryRegion).eq(region.primaryRegion),
+                    path(CourseEntity::secondaryRegion).eq(region.secondaryRegion),
+                    path(CourseCategoryEntity::name).eq(category),
+                ).orderBy(
+                    when (sort) {
+                        CourseSortCondition.POPULAR -> path(CourseEntity::viewCount).desc()
+                        CourseSortCondition.RECENT -> path(CourseEntity::createdAt).desc()
+                    },
+                )
+            }.filterNotNull()
 }
