@@ -1,12 +1,11 @@
-package kr.wooco.woocobe.common.ui.security
+package kr.wooco.woocobe.auth.ui.config
 
 import org.springframework.http.HttpMethod
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.OrRequestMatcher
-import org.springframework.security.web.util.matcher.RequestMatcher
 
 object AuthIgnorePaths {
-    val ignoreRequestMatcher: RequestMatcher = initIgnorePaths()
+    val ignoreRequestMatcher: OrRequestMatcher = initIgnorePaths()
 
     private fun initIgnorePaths(): OrRequestMatcher =
         OrRequestMatcher(

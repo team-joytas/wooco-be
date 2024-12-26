@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.common.ui.logging
+package kr.wooco.woocobe.common.ui.filter
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
