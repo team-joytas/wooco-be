@@ -13,8 +13,10 @@ import kr.wooco.woocobe.place.domain.model.PlaceOneLineReview
 class PlaceOneLineReviewEntity(
     @Column(name = "content")
     val content: String,
-    @Column(name = "place_id")
+    @Column(name = "place_Review_id")
     val placeReviewId: Long,
+    @Column(name = "place_id")
+    val placeId: Long,
     @Id @Tsid
     @Column(name = "place_one_line_review_id")
     val id: Long? = 0L,
@@ -23,10 +25,12 @@ class PlaceOneLineReviewEntity(
 
     companion object {
         fun of(
+            placeId: Long,
             placeReviewId: Long,
             content: String,
         ): PlaceOneLineReviewEntity =
             PlaceOneLineReviewEntity(
+                placeId = placeId,
                 placeReviewId = placeReviewId,
                 content = content,
             )
