@@ -42,4 +42,11 @@ app:
       access-token: 987654321
       refresh-token: 987654321
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    url: /api-docs
+    disable-swagger-default-url: true
+
 logging.level.root: info
