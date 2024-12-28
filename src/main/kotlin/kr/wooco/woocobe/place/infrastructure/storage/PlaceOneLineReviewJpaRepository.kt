@@ -2,7 +2,6 @@ package kr.wooco.woocobe.place.infrastructure.storage
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import org.springframework.data.repository.query.Param
 
 interface PlaceOneLineReviewJpaRepository : JpaRepository<PlaceOneLineReviewEntity, Long> {
     fun findAllByPlaceReviewIdOrderByCreatedAt(placeReviewId: Long): List<PlaceOneLineReviewEntity>
@@ -18,7 +17,5 @@ interface PlaceOneLineReviewJpaRepository : JpaRepository<PlaceOneLineReviewEnti
             order by count desc
         """,
     )
-    fun findPlaceOneLineReviewStatsByPlaceId(
-        @Param("placeId") placeId: Long,
-    ): List<Map<String, Long>>
+    fun findPlaceOneLineReviewStatsByPlaceId(placeId: Long): List<Map<String, Long>>
 }
