@@ -11,20 +11,29 @@ class Place(
     var reviewCount: Long,
     // 한줄평 통계 로직 고려 중
 ) {
-    fun increaseReviewCount() =
-        apply {
-            reviewCount++
-        }
+    fun addReview(newRating: Double) {
+        averageRating = ((averageRating * reviewCount) + newRating) / (reviewCount + 1)
+        reviewCount++
+    }
 
-    fun decreaseReviewCount() =
-        apply {
+    fun updateReview(
+        oldRating: Double,
+        newRating: Double,
+    ) {
+        if (reviewCount > 0) {
+            averageRating += (newRating - oldRating) / reviewCount
+        }
+    }
+
+    fun deleteReview(oldRating: Double) {
+        if (reviewCount > 1) {
+            averageRating = ((averageRating * reviewCount) - oldRating) / (reviewCount - 1)
             reviewCount--
+        } else {
+            averageRating = 0.0
+            reviewCount = 0
         }
-
-    fun updateAverageRating(rating: Double) =
-        apply {
-            averageRating = (averageRating * reviewCount + rating) / (reviewCount)
-        }
+    }
 
     companion object {
         fun register(
