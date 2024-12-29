@@ -40,6 +40,7 @@ dependencies {
     implementation("com.linecorp.kotlin-jdsl:jpql-dsl:${property("jdslVersion")}")
     implementation("com.linecorp.kotlin-jdsl:jpql-render:${property("jdslVersion")}")
     implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:${property("jdslVersion")}")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springDocVersion")}")
     runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:${property("jjwtVersion")}")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:${property("jjwtVersion")}")
