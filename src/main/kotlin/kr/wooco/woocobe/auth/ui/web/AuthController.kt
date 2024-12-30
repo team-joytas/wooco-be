@@ -68,7 +68,7 @@ class AuthController(
     ): ResponseEntity<SocialLoginResponse> {
         val result = socialLoginUseCase.execute(
             SocialLoginInput(
-                socialToken = request.code,
+                authCode = request.code,
                 socialType = request.socialType,
             ),
         )

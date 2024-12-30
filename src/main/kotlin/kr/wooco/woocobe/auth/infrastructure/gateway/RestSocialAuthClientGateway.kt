@@ -11,11 +11,11 @@ internal class RestSocialAuthClientGateway(
     private val socialAuthClients: Set<SocialAuthClient>,
 ) : SocialAuthClientGateway {
     override fun fetchSocialAuth(
-        socialToken: String,
+        authCode: String,
         socialType: SocialType,
     ): SocialAuth {
         val socialAuthClient = socialAuthClients.firstOrNull { it.isSupportSocialType(socialType) }
             ?: throw RuntimeException("un supported social type")
-        return socialAuthClient.fetchSocialAuth(socialToken).toDomain()
+        return socialAuthClient.fetchSocialAuth(authCode).toDomain()
     }
 }

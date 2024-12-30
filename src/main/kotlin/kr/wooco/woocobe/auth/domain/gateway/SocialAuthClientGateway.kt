@@ -5,7 +5,7 @@ import kr.wooco.woocobe.auth.domain.model.SocialType
 
 interface SocialAuthClientGateway {
     fun fetchSocialAuth(
-        socialToken: String,
+        authCode: String,
         socialType: SocialType,
     ): SocialAuth
 }

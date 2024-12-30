@@ -12,8 +12,8 @@ class KakaoSocialAuthClient(
 ) : SocialAuthClient {
     override fun isSupportSocialType(socialType: SocialType): Boolean = socialType == SocialType.KAKAO
 
-    override fun fetchSocialAuth(socialToken: String): SocialAuthResponse {
-        val tokenRequestParams = kakaoSocialAuthProperties.toTokenRequestParams(socialToken)
+    override fun fetchSocialAuth(code: String): SocialAuthResponse {
+        val tokenRequestParams = kakaoSocialAuthProperties.toTokenRequestParams(code)
         val tokenResponse = kakaoSocialAuthApiClient.fetchSocialToken(tokenRequestParams)
         return kakaoSocialAuthApiClient.fetchSocialAuth(tokenResponse.accessToken)
     }

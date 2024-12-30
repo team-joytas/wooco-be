@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 
 data class SocialLoginInput(
     val socialType: String,
-    val socialToken: String,
+    val authCode: String,
 )
 
 data class SocialLoginOutput(
@@ -34,7 +34,7 @@ class SocialLoginUseCase(
     @Transactional
     override fun execute(input: SocialLoginInput): SocialLoginOutput {
         val socialType = SocialType.valueOf(input.socialType)
-        val socialAuth = socialAuthClientGateway.fetchSocialAuth(input.socialToken, socialType)
+        val socialAuth = socialAuthClientGateway.fetchSocialAuth(input.authCode, socialType)
 
         val authUser = authUserStorageGateway.getBySocialIdAndSocialType(
             socialId = socialAuth.socialId,
