@@ -42,6 +42,13 @@ app:
       access-token: 987654321
       refresh-token: 987654321
 
+  social:
+    kakao:
+      client-id: ${KAKAO_CLIENT_ID}
+      secret-key: ${KAKAO_SECRET_KEY}
+      grant-type: authorization_code
+      redirect-uri: ${KAKAO_REDIRECT_URI}
+
 springdoc:
   api-docs:
     path: /api-docs
