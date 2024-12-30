@@ -6,6 +6,7 @@ import kr.wooco.woocobe.auth.domain.gateway.SocialAuthClientGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
 import kr.wooco.woocobe.auth.domain.model.AuthToken
 import kr.wooco.woocobe.auth.domain.model.AuthUser
+import kr.wooco.woocobe.auth.domain.model.SocialType
 import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
 import kr.wooco.woocobe.user.domain.model.User
@@ -32,17 +33,18 @@ class SocialLoginUseCase(
 ) : UseCase<SocialLoginInput, SocialLoginOutput> {
     @Transactional
     override fun execute(input: SocialLoginInput): SocialLoginOutput {
-        val socialAuthInfo = socialAuthClientGateway.getSocialAuthInfo(input.socialToken)
+        val socialType = SocialType.valueOf(input.socialType)
+        val socialAuth = socialAuthClientGateway.fetchSocialAuth(input.socialToken, socialType)
 
         val authUser = authUserStorageGateway.getBySocialIdAndSocialType(
-            socialId = socialAuthInfo.socialId,
-            socialType = socialAuthInfo.socialType,
+            socialId = socialAuth.socialId,
+            socialType = socialAuth.socialType,
         ) ?: run {
             val user = userStorageGateway.save(User.register())
             authUserStorageGateway.save(
                 AuthUser.register(
                     userId = user.id,
-                    socialAuth = socialAuthInfo,
+                    socialAuth = socialAuth,
                 ),
             )
         }
