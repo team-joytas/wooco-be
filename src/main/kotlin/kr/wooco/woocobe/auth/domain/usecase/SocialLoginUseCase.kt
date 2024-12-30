@@ -42,7 +42,7 @@ class SocialLoginUseCase(
             authUserStorageGateway.save(
                 AuthUser.register(
                     userId = user.id,
-                    socialAuthInfo = socialAuthInfo,
+                    socialAuth = socialAuthInfo,
                 ),
             )
         }

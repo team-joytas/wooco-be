@@ -2,7 +2,7 @@ package kr.wooco.woocobe.auth.domain.usecase
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldBeNull
-import kr.wooco.woocobe.auth.domain.model.SocialAuthType
+import kr.wooco.woocobe.auth.domain.model.SocialType
 import kr.wooco.woocobe.auth.infrastructure.storage.AuthTokenEntity
 import kr.wooco.woocobe.auth.infrastructure.storage.AuthTokenRedisRepository
 import kr.wooco.woocobe.auth.infrastructure.storage.AuthUserEntity
@@ -38,7 +38,7 @@ class WithdrawUseCaseTest(
                 id = 1234567890L,
                 userId = validUserId,
                 socialId = "1234567890",
-                socialType = SocialAuthType.KAKAO,
+                socialType = SocialType.KAKAO,
             ).run(authUserJpaRepository::save)
             val authToken = AuthTokenEntity(id = validAuthTokenId, userId = validUserId)
                 .run(authTokenRedisRepository::save)

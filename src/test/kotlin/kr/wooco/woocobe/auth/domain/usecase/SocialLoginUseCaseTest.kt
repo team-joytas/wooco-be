@@ -9,7 +9,7 @@ import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.AuthUserStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.SocialAuthClientGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
-import kr.wooco.woocobe.auth.domain.model.SocialAuthInfo
+import kr.wooco.woocobe.auth.domain.model.SocialAuth
 import kr.wooco.woocobe.auth.infrastructure.storage.AuthUserEntity
 import kr.wooco.woocobe.auth.infrastructure.storage.AuthUserJpaRepository
 import kr.wooco.woocobe.support.IntegrationTest
@@ -33,8 +33,8 @@ class SocialLoginUseCaseTest(
     listeners(MysqlCleaner(), RedisCleaner())
 
     val socialAuthClientGateway = mockk<SocialAuthClientGateway>()
-    val socialAuthInfo = SocialAuthInfo.register(socialId = "1234567890", socialType = "kakao")
-    every { socialAuthClientGateway.getSocialAuthInfo(socialToken = "kakao_social_token") } returns socialAuthInfo
+    val socialAuth = SocialAuth.register(socialId = "1234567890", socialType = "kakao")
+    every { socialAuthClientGateway.getSocialAuthInfo(socialToken = "kakao_social_token") } returns socialAuth
 
     val socialLoginUseCase = SocialLoginUseCase(
         userStorageGateway = userStorageGateway,
@@ -78,8 +78,8 @@ class SocialLoginUseCaseTest(
             val authUserEntity = AuthUserEntity(
                 id = 1234567890L,
                 userId = userEntity.id,
-                socialId = socialAuthInfo.socialId,
-                socialType = socialAuthInfo.socialType,
+                socialId = socialAuth.socialId,
+                socialType = socialAuth.socialType,
             ).run(authUserJpaRepository::save)
 
             socialLoginUseCase.execute(input)

@@ -1,17 +1,17 @@
 package kr.wooco.woocobe.auth.domain.model
 
-class SocialAuthInfo(
+class SocialAuth(
     val socialId: String,
-    val socialType: SocialAuthType,
+    val socialType: SocialType,
 ) {
     companion object {
         fun register(
             socialId: String,
             socialType: String,
-        ): SocialAuthInfo =
-            SocialAuthInfo(
+        ): SocialAuth =
+            SocialAuth(
                 socialId = socialId,
-                socialType = SocialAuthType.from(socialType),
+                socialType = SocialType.from(socialType),
             )
     }
 }

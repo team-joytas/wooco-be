@@ -1,11 +1,11 @@
 package kr.wooco.woocobe.auth.domain.model
 
-enum class SocialAuthType {
+enum class SocialType {
     KAKAO,
     ;
 
     companion object {
-        fun from(value: String): SocialAuthType =
+        fun from(value: String): SocialType =
             entries.find { it.name.equals(value, ignoreCase = true) }
                 ?: throw RuntimeException()
     }

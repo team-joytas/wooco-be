@@ -7,8 +7,8 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kr.wooco.woocobe.auth.domain.model.AuthUser
-import kr.wooco.woocobe.auth.domain.model.SocialAuthInfo
-import kr.wooco.woocobe.auth.domain.model.SocialAuthType
+import kr.wooco.woocobe.auth.domain.model.SocialAuth
+import kr.wooco.woocobe.auth.domain.model.SocialType
 import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
 import kr.wooco.woocobe.common.infrastructure.storage.IdGenerator
 
@@ -17,7 +17,7 @@ import kr.wooco.woocobe.common.infrastructure.storage.IdGenerator
 class AuthUserEntity(
     @Enumerated(EnumType.STRING)
     @Column(name = "social_type")
-    val socialType: SocialAuthType,
+    val socialType: SocialType,
     @Column(name = "social_id")
     val socialId: String,
     @Column(name = "user_id")
@@ -30,7 +30,7 @@ class AuthUserEntity(
         AuthUser(
             id = id,
             userId = userId,
-            socialAuthInfo = SocialAuthInfo(
+            socialAuth = SocialAuth(
                 socialId = socialId,
                 socialType = socialType,
             ),
@@ -42,8 +42,8 @@ class AuthUserEntity(
                 AuthUserEntity(
                     id = IdGenerator.generateId(),
                     userId = userId,
-                    socialId = socialAuthInfo.socialId,
-                    socialType = socialAuthInfo.socialType,
+                    socialId = socialAuth.socialId,
+                    socialType = socialAuth.socialType,
                 )
             }
     }
