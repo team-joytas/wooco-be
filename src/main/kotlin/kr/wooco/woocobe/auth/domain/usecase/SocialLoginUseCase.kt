@@ -33,7 +33,7 @@ class SocialLoginUseCase(
 ) : UseCase<SocialLoginInput, SocialLoginOutput> {
     @Transactional
     override fun execute(input: SocialLoginInput): SocialLoginOutput {
-        val socialType = SocialType.valueOf(input.socialType)
+        val socialType = SocialType.from(input.socialType)
         val socialAuth = socialAuthClientGateway.fetchSocialAuth(input.authCode, socialType)
 
         val authUser = authUserStorageGateway.getBySocialIdAndSocialType(
