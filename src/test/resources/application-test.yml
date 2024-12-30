@@ -43,4 +43,11 @@ app:
       access-token: 987654321
       refresh-token: 987654321
 
+  social:
+    kakao:
+      client-id: fake-client-id
+      secret-key: fake-secret-key
+      grant-type: authorization_code
+      redirect-uri: fake-redirect-uri
+
 logging.level.root: info

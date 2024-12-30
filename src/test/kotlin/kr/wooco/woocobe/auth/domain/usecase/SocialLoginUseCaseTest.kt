@@ -10,6 +10,7 @@ import kr.wooco.woocobe.auth.domain.gateway.AuthUserStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.SocialAuthClientGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
 import kr.wooco.woocobe.auth.domain.model.SocialAuth
+import kr.wooco.woocobe.auth.domain.model.SocialType
 import kr.wooco.woocobe.auth.infrastructure.storage.AuthUserEntity
 import kr.wooco.woocobe.auth.infrastructure.storage.AuthUserJpaRepository
 import kr.wooco.woocobe.support.IntegrationTest
@@ -32,9 +33,17 @@ class SocialLoginUseCaseTest(
 ) : BehaviorSpec({
     listeners(MysqlCleaner(), RedisCleaner())
 
+    val mockAuthCode = "kakao_social_token"
+
     val socialAuthClientGateway = mockk<SocialAuthClientGateway>()
-    val socialAuth = SocialAuth.register(socialId = "1234567890", socialType = "kakao")
-    every { socialAuthClientGateway.getSocialAuthInfo(socialToken = "kakao_social_token") } returns socialAuth
+    val socialAuth = SocialAuth(socialId = "1234567890", socialType = SocialType.KAKAO)
+
+    every {
+        socialAuthClientGateway.fetchSocialAuth(
+            authCode = mockAuthCode,
+            socialType = SocialType.KAKAO,
+        )
+    } returns socialAuth
 
     val socialLoginUseCase = SocialLoginUseCase(
         userStorageGateway = userStorageGateway,
@@ -45,7 +54,7 @@ class SocialLoginUseCaseTest(
     )
 
     Given("유효한 input 값이 들어올 경우") {
-        val input = SocialLoginInput(socialType = "kakao", socialToken = "kakao_social_token")
+        val input = SocialLoginInput(socialType = "kakao", authCode = mockAuthCode)
 
         When("존재하지 않는 인증 정보일 때") {
             val sut = socialLoginUseCase.execute(input)
