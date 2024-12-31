@@ -15,6 +15,6 @@ class KakaoSocialAuthClient(
     override fun fetchSocialAuth(code: String): SocialAuthResponse {
         val tokenRequestParams = kakaoSocialAuthProperties.toTokenRequestParams(code)
         val tokenResponse = kakaoSocialAuthApiClient.fetchSocialToken(tokenRequestParams)
-        return kakaoSocialAuthApiClient.fetchSocialAuth(tokenResponse.accessToken)
+        return kakaoSocialAuthApiClient.fetchSocialAuth("Bearer ${tokenResponse.accessToken}")
     }
 }

@@ -17,6 +17,6 @@ interface KakaoSocialAuthApiClient {
 
     @GetExchange(url = "https://kapi.kakao.com/v2/user/me")
     fun fetchSocialAuth(
-        @RequestHeader(name = AUTHORIZATION) accessToken: String,
+        @RequestHeader(AUTHORIZATION) authorization: String,
     ): KakaoSocialAuthResponse
 }
