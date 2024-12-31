@@ -7,12 +7,16 @@ import io.mockk.every
 import io.mockk.mockk
 import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.AuthUserStorageGateway
+import kr.wooco.woocobe.auth.domain.gateway.PkceStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.SocialAuthClientGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
+import kr.wooco.woocobe.auth.domain.model.Pkce
 import kr.wooco.woocobe.auth.domain.model.SocialAuth
 import kr.wooco.woocobe.auth.domain.model.SocialType
 import kr.wooco.woocobe.auth.infrastructure.storage.AuthUserEntity
 import kr.wooco.woocobe.auth.infrastructure.storage.AuthUserJpaRepository
+import kr.wooco.woocobe.auth.infrastructure.storage.PkceEntity
+import kr.wooco.woocobe.auth.infrastructure.storage.PkceRedisRepository
 import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
 import kr.wooco.woocobe.support.RedisCleaner
@@ -24,12 +28,14 @@ import org.springframework.data.redis.core.StringRedisTemplate
 @IntegrationTest
 class SocialLoginUseCaseTest(
     private val userStorageGateway: UserStorageGateway,
+    private val pkceStorageGateway: PkceStorageGateway,
     private val tokenProviderGateway: TokenProviderGateway,
     private val authTokenStorageGateway: AuthTokenStorageGateway,
     private val authUserStorageGateway: AuthUserStorageGateway,
     private val stringRedisTemplate: StringRedisTemplate,
     private val userJpaRepository: UserJpaRepository,
     private val authUserJpaRepository: AuthUserJpaRepository,
+    private val pkceRedisRepository: PkceRedisRepository,
 ) : BehaviorSpec({
     listeners(MysqlCleaner(), RedisCleaner())
 
@@ -42,11 +48,13 @@ class SocialLoginUseCaseTest(
         socialAuthClientGateway.fetchSocialAuth(
             authCode = mockAuthCode,
             socialType = SocialType.KAKAO,
+            pkce = any(),
         )
     } returns socialAuth
 
     val socialLoginUseCase = SocialLoginUseCase(
         userStorageGateway = userStorageGateway,
+        pkceStorageGateway = pkceStorageGateway,
         tokenProviderGateway = tokenProviderGateway,
         authUserStorageGateway = authUserStorageGateway,
         authTokenStorageGateway = authTokenStorageGateway,
@@ -54,9 +62,13 @@ class SocialLoginUseCaseTest(
     )
 
     Given("유효한 input 값이 들어올 경우") {
-        val input = SocialLoginInput(socialType = "kakao", authCode = mockAuthCode)
+        val validPkce = Pkce.register()
+
+        val input = SocialLoginInput(socialType = "kakao", authCode = mockAuthCode, challenge = validPkce.challenge)
 
         When("존재하지 않는 인증 정보일 때") {
+            PkceEntity(verifier = validPkce.verifier, challenge = validPkce.challenge).run(pkceRedisRepository::save)
+
             val sut = socialLoginUseCase.execute(input)
 
             Then("access 토큰과 refresh 토큰을 발급한다.") {
@@ -65,8 +77,8 @@ class SocialLoginUseCaseTest(
             }
 
             Then("새로운 인증 토큰을 저장한다.") {
-                val authTokens = stringRedisTemplate.keys("*")
-                authTokens.size shouldBe 1
+                val authTokenEntities = stringRedisTemplate.keys("token:*")
+                authTokenEntities.size shouldBe 1
             }
 
             Then("새로운 인증 정보를 저장한다.") {
@@ -80,9 +92,16 @@ class SocialLoginUseCaseTest(
                 val users = userJpaRepository.findAll()
                 users.size shouldBe 1
             }
+
+            Then("저장된 PKCE를 삭제한다") {
+                val pkceEntities = stringRedisTemplate.keys("pkce:*")
+                pkceEntities.size shouldBe 0
+            }
         }
 
         When("존재하는 인증 정보일 때") {
+            PkceEntity(verifier = validPkce.verifier, challenge = validPkce.challenge).run(pkceRedisRepository::save)
+
             val userEntity = UserEntity(id = 1234567890L, name = "", profileUrl = "").run(userJpaRepository::save)
             val authUserEntity = AuthUserEntity(
                 id = 1234567890L,
@@ -103,6 +122,11 @@ class SocialLoginUseCaseTest(
                 val userEntities = userJpaRepository.findAll()
                 userEntities.size shouldBe 1
                 userEntities[0].id shouldBe userEntity.id
+            }
+
+            Then("저장된 PKCE를 삭제한다") {
+                val pkceEntities = stringRedisTemplate.keys("pkce:*")
+                pkceEntities.size shouldBe 0
             }
         }
     }

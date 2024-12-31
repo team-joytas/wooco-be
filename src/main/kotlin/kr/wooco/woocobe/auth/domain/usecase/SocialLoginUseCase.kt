@@ -2,6 +2,7 @@ package kr.wooco.woocobe.auth.domain.usecase
 
 import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.AuthUserStorageGateway
+import kr.wooco.woocobe.auth.domain.gateway.PkceStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.SocialAuthClientGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
 import kr.wooco.woocobe.auth.domain.model.AuthToken
@@ -14,8 +15,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 data class SocialLoginInput(
-    val socialType: String,
     val authCode: String,
+    val socialType: String,
+    val challenge: String,
 )
 
 data class SocialLoginOutput(
@@ -26,6 +28,7 @@ data class SocialLoginOutput(
 @Service
 class SocialLoginUseCase(
     private val userStorageGateway: UserStorageGateway,
+    private val pkceStorageGateway: PkceStorageGateway,
     private val tokenProviderGateway: TokenProviderGateway,
     private val authUserStorageGateway: AuthUserStorageGateway,
     private val authTokenStorageGateway: AuthTokenStorageGateway,
@@ -33,8 +36,11 @@ class SocialLoginUseCase(
 ) : UseCase<SocialLoginInput, SocialLoginOutput> {
     @Transactional
     override fun execute(input: SocialLoginInput): SocialLoginOutput {
+        val pkce = pkceStorageGateway.getWithDeleteByChallenge(input.challenge)
+            ?: throw RuntimeException()
+
         val socialType = SocialType.from(input.socialType)
-        val socialAuth = socialAuthClientGateway.fetchSocialAuth(input.authCode, socialType)
+        val socialAuth = socialAuthClientGateway.fetchSocialAuth(input.authCode, socialType, pkce)
 
         val authUser = authUserStorageGateway.getBySocialIdAndSocialType(
             socialId = socialAuth.socialId,
