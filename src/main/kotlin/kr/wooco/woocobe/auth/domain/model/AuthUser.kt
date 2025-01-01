@@ -3,17 +3,17 @@ package kr.wooco.woocobe.auth.domain.model
 class AuthUser(
     val id: Long,
     val userId: Long,
-    val socialAuthInfo: SocialAuthInfo,
+    val socialAuth: SocialAuth,
 ) {
     companion object {
         fun register(
             userId: Long = 0L,
-            socialAuthInfo: SocialAuthInfo,
+            socialAuth: SocialAuth,
         ): AuthUser =
             AuthUser(
                 id = 0L,
                 userId = userId,
-                socialAuthInfo = socialAuthInfo,
+                socialAuth = socialAuth,
             )
     }
 }

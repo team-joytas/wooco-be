@@ -1,6 +1,8 @@
 package kr.wooco.woocobe.auth.ui.web
 
 import jakarta.servlet.http.HttpServletResponse
+import kr.wooco.woocobe.auth.domain.usecase.GetSocialLoginUrlInput
+import kr.wooco.woocobe.auth.domain.usecase.GetSocialLoginUrlUseCase
 import kr.wooco.woocobe.auth.domain.usecase.LogoutInput
 import kr.wooco.woocobe.auth.domain.usecase.LogoutUseCase
 import kr.wooco.woocobe.auth.domain.usecase.ReissueTokenInput
@@ -12,12 +14,15 @@ import kr.wooco.woocobe.auth.domain.usecase.WithdrawUseCase
 import kr.wooco.woocobe.auth.ui.web.dto.request.LoginRequest
 import kr.wooco.woocobe.auth.ui.web.dto.response.ReissueTokenResponse
 import kr.wooco.woocobe.auth.ui.web.dto.response.SocialLoginResponse
+import kr.wooco.woocobe.auth.ui.web.dto.response.SocialLoginUrlResponse
 import kr.wooco.woocobe.common.utils.addCookie
 import kr.wooco.woocobe.common.utils.deleteCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -30,7 +35,41 @@ class AuthController(
     private val withdrawUseCase: WithdrawUseCase,
     private val socialLoginUseCase: SocialLoginUseCase,
     private val reissueTokenUseCase: ReissueTokenUseCase,
+    private val getSocialLoginUrlUseCase: GetSocialLoginUrlUseCase,
 ) {
+    @GetMapping("/{provider}/social-login/url")
+    fun socialLoginUrl(
+        @PathVariable provider: String,
+        response: HttpServletResponse,
+    ): ResponseEntity<SocialLoginUrlResponse> {
+        val results = getSocialLoginUrlUseCase.execute(
+            GetSocialLoginUrlInput(
+                socialType = provider,
+            ),
+        )
+        response.addCookie(CODE_CHALLENGE_COOKIE_NAME, results.challenge, 100000)
+        return ResponseEntity.ok(SocialLoginUrlResponse.from(results))
+    }
+
+    @PostMapping("/{provider}/social-login")
+    fun socialLogin(
+        @RequestBody request: LoginRequest,
+        @PathVariable provider: String,
+        @CookieValue(CODE_CHALLENGE_COOKIE_NAME) codeChallenge: String,
+        response: HttpServletResponse,
+    ): ResponseEntity<SocialLoginResponse> {
+        val result = socialLoginUseCase.execute(
+            SocialLoginInput(
+                authCode = request.code,
+                socialType = provider,
+                challenge = codeChallenge,
+            ),
+        )
+        response.addCookie(REFRESH_TOKEN_COOKIE_NAME, result.refreshToken)
+        response.deleteCookie(CODE_CHALLENGE_COOKIE_NAME)
+        return ResponseEntity.ok(SocialLoginResponse.from(result))
+    }
+
     @PostMapping("/logout")
     fun logout(
         @AuthenticationPrincipal userId: Long,
@@ -61,21 +100,6 @@ class AuthController(
         return ResponseEntity.ok(ReissueTokenResponse.from(result))
     }
 
-    @PostMapping("/login")
-    fun socialLogin(
-        @RequestBody request: LoginRequest,
-        response: HttpServletResponse,
-    ): ResponseEntity<SocialLoginResponse> {
-        val result = socialLoginUseCase.execute(
-            SocialLoginInput(
-                socialToken = request.code,
-                socialType = request.socialType,
-            ),
-        )
-        response.addCookie(REFRESH_TOKEN_COOKIE_NAME, result.refreshToken)
-        return ResponseEntity.ok(SocialLoginResponse.from(result))
-    }
-
     @DeleteMapping("/withdraw")
     fun withdraw(
         @AuthenticationPrincipal userId: Long,
@@ -93,5 +117,6 @@ class AuthController(
 
     companion object {
         private const val REFRESH_TOKEN_COOKIE_NAME = "refresh_token"
+        private const val CODE_CHALLENGE_COOKIE_NAME = "code_challenge"
     }
 }
