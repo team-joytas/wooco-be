@@ -4,24 +4,24 @@ import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.course.domain.model.CourseRegion
 import kr.wooco.woocobe.course.domain.model.CourseSortCondition
-import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseCategoryEntity
-import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseEntity
+import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseCategoryJpaEntity
+import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseJpaEntity
 import kr.wooco.woocobe.course.infrastructure.storage.repository.CourseCategoryJpaRepository
 import kr.wooco.woocobe.course.infrastructure.storage.repository.CourseJpaRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-class JpaCourseStorageGateway(
+class CourseStorageGatewayImpl(
     private val courseJpaRepository: CourseJpaRepository,
     private val courseCategoryJpaRepository: CourseCategoryJpaRepository,
 ) : CourseStorageGateway {
     // FIXME: 업데이트 로직 분리
     override fun save(course: Course): Course {
-        val courseEntity = courseJpaRepository.save(CourseEntity.from(course))
+        val courseJpaEntity = courseJpaRepository.save(CourseJpaEntity.from(course))
         if (course.id == 0L) {
             course.categories
-                .map { CourseCategoryEntity.of(courseId = courseEntity.id!!, name = it.name) }
+                .map { CourseCategoryJpaEntity.of(courseId = courseJpaEntity.id!!, name = it.name) }
                 .also(courseCategoryJpaRepository::saveAll)
         }
         return course

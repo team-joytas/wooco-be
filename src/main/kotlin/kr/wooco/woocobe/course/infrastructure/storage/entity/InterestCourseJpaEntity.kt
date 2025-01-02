@@ -10,7 +10,7 @@ import kr.wooco.woocobe.course.domain.model.InterestCourse
 
 @Entity
 @Table(name = "interest_course")
-class InterestCourseEntity(
+class InterestCourseJpaEntity(
     @Column(name = "course_id")
     val courseId: Long,
     @Column(name = "interest_user_id")
@@ -27,9 +27,9 @@ class InterestCourseEntity(
         )
 
     companion object {
-        fun from(interestCourse: InterestCourse): InterestCourseEntity =
+        fun from(interestCourse: InterestCourse): InterestCourseJpaEntity =
             with(interestCourse) {
-                InterestCourseEntity(
+                InterestCourseJpaEntity(
                     id = id,
                     userId = userId,
                     courseId = courseId,

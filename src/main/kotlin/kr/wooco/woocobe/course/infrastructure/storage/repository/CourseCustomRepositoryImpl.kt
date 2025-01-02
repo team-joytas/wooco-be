@@ -3,8 +3,8 @@ package kr.wooco.woocobe.course.infrastructure.storage.repository
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
 import kr.wooco.woocobe.course.domain.model.CourseRegion
 import kr.wooco.woocobe.course.domain.model.CourseSortCondition
-import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseCategoryEntity
-import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseEntity
+import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseCategoryJpaEntity
+import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseJpaEntity
 import kr.wooco.woocobe.user.infrastructure.storage.UserEntity
 import org.springframework.stereotype.Repository
 
@@ -15,25 +15,25 @@ class CourseCustomRepositoryImpl(
     override fun findAllByUserIdWithSort(
         userId: Long,
         sort: CourseSortCondition,
-    ): List<CourseEntity> =
+    ): List<CourseJpaEntity> =
         executor
             .findAll {
                 select(
-                    entity(CourseEntity::class),
+                    entity(CourseJpaEntity::class),
                 ).from(
-                    entity(CourseEntity::class),
-                    leftJoin(CourseCategoryEntity::class).on(
-                        path(CourseEntity::id).eq(path(CourseCategoryEntity::courseId)),
+                    entity(CourseJpaEntity::class),
+                    leftJoin(CourseCategoryJpaEntity::class).on(
+                        path(CourseJpaEntity::id).eq(path(CourseCategoryJpaEntity::courseId)),
                     ),
                     leftJoin(UserEntity::class).on(
-                        path(CourseEntity::userId).eq(path(UserEntity::id)),
+                        path(CourseJpaEntity::userId).eq(path(UserEntity::id)),
                     ),
                 ).whereAnd(
-                    path(CourseEntity::userId).eq(path(UserEntity::id)),
+                    path(CourseJpaEntity::userId).eq(path(UserEntity::id)),
                 ).orderBy(
                     when (sort) {
-                        CourseSortCondition.POPULAR -> path(CourseEntity::viewCount).desc()
-                        CourseSortCondition.RECENT -> path(CourseEntity::createdAt).desc()
+                        CourseSortCondition.POPULAR -> path(CourseJpaEntity::viewCount).desc()
+                        CourseSortCondition.RECENT -> path(CourseJpaEntity::createdAt).desc()
                     },
                 )
             }.filterNotNull()
@@ -42,27 +42,27 @@ class CourseCustomRepositoryImpl(
         region: CourseRegion,
         category: String,
         sort: CourseSortCondition,
-    ): List<CourseEntity> =
+    ): List<CourseJpaEntity> =
         executor
             .findAll {
                 select(
-                    entity(CourseEntity::class),
+                    entity(CourseJpaEntity::class),
                 ).from(
-                    entity(CourseEntity::class),
-                    leftJoin(CourseCategoryEntity::class).on(
-                        path(CourseEntity::id).eq(path(CourseCategoryEntity::courseId)),
+                    entity(CourseJpaEntity::class),
+                    leftJoin(CourseCategoryJpaEntity::class).on(
+                        path(CourseJpaEntity::id).eq(path(CourseCategoryJpaEntity::courseId)),
                     ),
                     leftJoin(UserEntity::class).on(
-                        path(CourseEntity::userId).eq(path(UserEntity::id)),
+                        path(CourseJpaEntity::userId).eq(path(UserEntity::id)),
                     ),
                 ).whereAnd(
-                    path(CourseEntity::primaryRegion).eq(region.primaryRegion),
-                    path(CourseEntity::secondaryRegion).eq(region.secondaryRegion),
-                    path(CourseCategoryEntity::name).eq(category),
+                    path(CourseJpaEntity::primaryRegion).eq(region.primaryRegion),
+                    path(CourseJpaEntity::secondaryRegion).eq(region.secondaryRegion),
+                    path(CourseCategoryJpaEntity::name).eq(category),
                 ).orderBy(
                     when (sort) {
-                        CourseSortCondition.POPULAR -> path(CourseEntity::viewCount).desc()
-                        CourseSortCondition.RECENT -> path(CourseEntity::createdAt).desc()
+                        CourseSortCondition.POPULAR -> path(CourseJpaEntity::viewCount).desc()
+                        CourseSortCondition.RECENT -> path(CourseJpaEntity::createdAt).desc()
                     },
                 )
             }.filterNotNull()

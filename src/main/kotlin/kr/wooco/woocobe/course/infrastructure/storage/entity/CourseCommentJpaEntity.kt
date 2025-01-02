@@ -10,7 +10,7 @@ import kr.wooco.woocobe.course.domain.model.CourseComment
 
 @Entity
 @Table(name = "course_comments")
-class CourseCommentEntity(
+class CourseCommentJpaEntity(
     @Column(columnDefinition = "text")
     val contents: String,
     @Column(name = "course_id")
@@ -31,9 +31,9 @@ class CourseCommentEntity(
         )
 
     companion object {
-        fun from(courseComment: CourseComment): CourseCommentEntity =
+        fun from(courseComment: CourseComment): CourseCommentJpaEntity =
             with(courseComment) {
-                CourseCommentEntity(
+                CourseCommentJpaEntity(
                     id = id,
                     userId = userId,
                     courseId = courseId,

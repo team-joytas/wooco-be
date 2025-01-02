@@ -10,7 +10,7 @@ import kr.wooco.woocobe.course.domain.model.CourseCategory
 
 @Entity
 @Table(name = "course_categories")
-class CourseCategoryEntity(
+class CourseCategoryJpaEntity(
     @Column(name = "category_name")
     val name: String,
     @Column(name = "course_id")
@@ -25,8 +25,8 @@ class CourseCategoryEntity(
         fun of(
             courseId: Long,
             name: String,
-        ): CourseCategoryEntity =
-            CourseCategoryEntity(
+        ): CourseCategoryJpaEntity =
+            CourseCategoryJpaEntity(
                 courseId = courseId,
                 name = name,
             )

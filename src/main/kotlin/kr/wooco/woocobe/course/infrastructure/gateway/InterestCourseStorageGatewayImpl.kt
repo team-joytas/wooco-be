@@ -2,16 +2,16 @@ package kr.wooco.woocobe.course.infrastructure.gateway
 
 import kr.wooco.woocobe.course.domain.gateway.InterestCourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.InterestCourse
-import kr.wooco.woocobe.course.infrastructure.storage.entity.InterestCourseEntity
+import kr.wooco.woocobe.course.infrastructure.storage.entity.InterestCourseJpaEntity
 import kr.wooco.woocobe.course.infrastructure.storage.repository.InterestCourseJpaRepository
 import org.springframework.stereotype.Component
 
 @Component
-class JpaInterestCourseStorageGateway(
+class InterestCourseStorageGatewayImpl(
     private val interestCourseJpaRepository: InterestCourseJpaRepository,
 ) : InterestCourseStorageGateway {
     override fun save(interestCourse: InterestCourse): InterestCourse =
-        interestCourseJpaRepository.save(InterestCourseEntity.from(interestCourse)).toDomain()
+        interestCourseJpaRepository.save(InterestCourseJpaEntity.from(interestCourse)).toDomain()
 
     override fun getByCourseIdAndUserId(
         courseId: Long,

@@ -12,7 +12,7 @@ import kr.wooco.woocobe.course.domain.model.CourseRegion
 
 @Entity
 @Table(name = "courses")
-class CourseEntity(
+class CourseJpaEntity(
     @Column(name = "comment_count")
     val commentCount: Long,
     @Column(name = "interest_count")
@@ -51,9 +51,9 @@ class CourseEntity(
         )
 
     companion object {
-        fun from(course: Course): CourseEntity =
+        fun from(course: Course): CourseJpaEntity =
             with(course) {
-                CourseEntity(
+                CourseJpaEntity(
                     id = id,
                     userId = userId,
                     name = name,
