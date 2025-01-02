@@ -4,7 +4,6 @@ import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.course.domain.gateway.CourseCommentStorageGateway
 import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.CourseComment
-import kr.wooco.woocobe.user.domain.model.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,18 +20,20 @@ class AddCourseCommentUseCase(
 ) : UseCase<AddCourseCommentInput, Unit> {
     @Transactional
     override fun execute(input: AddCourseCommentInput) {
-        val user = User.register(userId = input.userId)
+        val courseComment = CourseComment.register(
+            userId = input.userId,
+            courseId = input.courseId,
+            contents = input.contents,
+        )
+        courseCommentStorageGateway.save(courseComment)
 
-        CourseComment
-            .register(
-                user = user,
-                courseId = input.courseId,
-                contents = input.contents,
-            ).also(courseCommentStorageGateway::save)
-
-        courseStorageGateway
-            .getByCourseId(courseId = input.courseId)
-            ?.run { increaseComments().also(courseStorageGateway::save) }
+        // TODO
+        // courseStorageGateway.increaseCommentsCounts(courseId = input.courseId)
+        // 또는
+        // 이벤트로 처리해버리기 :: 이벤트 처리전에 courseComment 전용 패키지를 하나 만들어야할듯
+        val course = courseStorageGateway.getByCourseId(input.courseId)
             ?: throw RuntimeException()
+        course.increaseComments()
+        courseStorageGateway.save(course)
     }
 }

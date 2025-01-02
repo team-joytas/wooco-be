@@ -9,6 +9,8 @@ interface CourseStorageGateway {
 
     fun getByCourseId(courseId: Long): Course?
 
+    fun getAllByCourseIds(courseIds: List<Long>): List<Course>
+
     fun getAllByRegionAndCategoryWithSort(
         region: CourseRegion,
         category: String,

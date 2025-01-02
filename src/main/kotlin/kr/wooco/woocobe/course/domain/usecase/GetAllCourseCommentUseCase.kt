@@ -19,6 +19,7 @@ class GetAllCourseCommentUseCase(
 ) : UseCase<GetAllCourseCommentInput, GetAllCourseCommentOutput> {
     override fun execute(input: GetAllCourseCommentInput): GetAllCourseCommentOutput {
         val courseComments = courseCommentStorageGateway.getAllByCourseId(input.courseId)
+
         return GetAllCourseCommentOutput(
             courseComments = courseComments,
         )

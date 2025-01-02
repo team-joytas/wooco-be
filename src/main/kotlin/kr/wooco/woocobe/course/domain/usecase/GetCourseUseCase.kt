@@ -25,11 +25,13 @@ class GetCourseUseCase(
         val course = courseStorageGateway.getByCourseId(input.courseId)
             ?: throw RuntimeException()
 
-        val isInterested = input.userId?.let {
+        val isInterested = input.userId?.run {
             interestCourseStorageGateway.existsByCourseIdAndUserId(input.courseId, input.userId)
         } ?: false
 
-        course.increaseViews().also(courseStorageGateway::save)
+        // TODO 이벤트 기반 고려 :: Query 작업에 Command 작업이 껴있다.
+        course.increaseViews()
+        courseStorageGateway.save(course)
 
         return GetCourseOutput(
             course = course,
