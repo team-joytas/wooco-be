@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.course.infrastructure.storage
+package kr.wooco.woocobe.course.infrastructure.storage.entity
 
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
@@ -7,7 +7,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
 import kr.wooco.woocobe.course.domain.model.CourseComment
-import kr.wooco.woocobe.user.domain.model.User
 
 @Entity
 @Table(name = "course_comments")
@@ -22,10 +21,10 @@ class CourseCommentEntity(
     @Column(name = "course_comment_id")
     val id: Long? = 0L,
 ) : BaseTimeEntity() {
-    fun toDomain(user: User): CourseComment =
+    fun toDomain(): CourseComment =
         CourseComment(
             id = id!!,
-            user = user,
+            userId = userId,
             courseId = courseId,
             contents = contents,
             commentDateTime = createdAt,
@@ -36,7 +35,7 @@ class CourseCommentEntity(
             with(courseComment) {
                 CourseCommentEntity(
                     id = id,
-                    userId = user.id,
+                    userId = userId,
                     courseId = courseId,
                     contents = contents,
                 )

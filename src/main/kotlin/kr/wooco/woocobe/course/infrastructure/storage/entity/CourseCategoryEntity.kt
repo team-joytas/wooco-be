@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.course.infrastructure.storage
+package kr.wooco.woocobe.course.infrastructure.storage.entity
 
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column

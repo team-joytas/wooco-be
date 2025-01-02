@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.course.infrastructure.storage
+package kr.wooco.woocobe.course.infrastructure.storage.entity
 
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
@@ -9,7 +9,6 @@ import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
 import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.course.domain.model.CourseCategory
 import kr.wooco.woocobe.course.domain.model.CourseRegion
-import kr.wooco.woocobe.user.domain.model.User
 
 @Entity
 @Table(name = "courses")
@@ -34,13 +33,10 @@ class CourseEntity(
     @Column(name = "course_id", nullable = false)
     val id: Long? = 0L,
 ) : BaseTimeEntity() {
-    fun toDomain(
-        user: User,
-        courseCategory: List<CourseCategory> = emptyList(),
-    ): Course =
+    fun toDomain(courseCategory: List<CourseCategory> = emptyList()): Course =
         Course(
             id = id!!,
-            user = user,
+            userId = userId,
             region = CourseRegion(
                 primaryRegion = primaryRegion,
                 secondaryRegion = secondaryRegion,
@@ -59,7 +55,7 @@ class CourseEntity(
             with(course) {
                 CourseEntity(
                     id = id,
-                    userId = user.id,
+                    userId = userId,
                     name = name,
                     primaryRegion = region.primaryRegion,
                     secondaryRegion = region.secondaryRegion,

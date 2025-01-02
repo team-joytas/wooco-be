@@ -4,18 +4,15 @@ import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.course.domain.model.CourseRegion
 import kr.wooco.woocobe.course.domain.model.CourseSortCondition
-import kr.wooco.woocobe.course.infrastructure.storage.CourseCategoryEntity
-import kr.wooco.woocobe.course.infrastructure.storage.CourseCategoryJpaRepository
-import kr.wooco.woocobe.course.infrastructure.storage.CourseEntity
-import kr.wooco.woocobe.course.infrastructure.storage.CourseJpaRepository
-import kr.wooco.woocobe.user.infrastructure.storage.UserJpaRepository
+import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseCategoryEntity
+import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseEntity
+import kr.wooco.woocobe.course.infrastructure.storage.repository.CourseCategoryJpaRepository
+import kr.wooco.woocobe.course.infrastructure.storage.repository.CourseJpaRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-@Suppress("Duplicates") // TODO: 매퍼 클래스로 중복 제거
 class JpaCourseStorageGateway(
-    private val userJpaRepository: UserJpaRepository,
     private val courseJpaRepository: CourseJpaRepository,
     private val courseCategoryJpaRepository: CourseCategoryJpaRepository,
 ) : CourseStorageGateway {
@@ -33,12 +30,15 @@ class JpaCourseStorageGateway(
     override fun getByCourseId(courseId: Long): Course? =
         courseJpaRepository.findByIdOrNull(courseId)?.let { courseEntity ->
             courseEntity.toDomain(
-                user = userJpaRepository.findByIdOrNull(courseEntity.userId)!!.toDomain(),
                 courseCategory = courseCategoryJpaRepository
                     .findAllByCourseId(courseEntity.id!!)
                     .map { it.toDomain() },
             )
         }
+
+    override fun getAllByCourseIds(courseIds: List<Long>): List<Course> {
+        TODO("Not yet implemented")
+    }
 
     override fun getAllByRegionAndCategoryWithSort(
         region: CourseRegion,
@@ -48,11 +48,9 @@ class JpaCourseStorageGateway(
         courseJpaRepository
             .findAllByRegionAndCategoryWithSort(region = region, category = category, sort = sort)
             .run {
-                val userEntities = userJpaRepository.findAllById(map { it.userId })
                 val categoryEntities = courseCategoryJpaRepository.findAllByCourseIdIn(map { it.id!! })
                 map { courseEntity ->
                     courseEntity.toDomain(
-                        user = userEntities.find { courseEntity.userId == it.id }!!.toDomain(),
                         courseCategory = categoryEntities
                             .filter { courseEntity.userId == it.courseId }
                             .map { it.toDomain() },
@@ -67,11 +65,9 @@ class JpaCourseStorageGateway(
         courseJpaRepository
             .findAllByUserIdWithSort(userId = userId, sort = sort)
             .run {
-                val userEntities = userJpaRepository.findAllById(map { it.userId })
                 val categoryEntities = courseCategoryJpaRepository.findAllByCourseIdIn(map { it.id!! })
                 map { courseEntity ->
                     courseEntity.toDomain(
-                        user = userEntities.find { courseEntity.userId == it.id }!!.toDomain(),
                         courseCategory = categoryEntities
                             .filter { courseEntity.userId == it.courseId }
                             .map { it.toDomain() },
