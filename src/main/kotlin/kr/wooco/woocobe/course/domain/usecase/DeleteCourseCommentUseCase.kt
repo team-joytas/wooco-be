@@ -26,7 +26,6 @@ class DeleteCourseCommentUseCase(
         courseCommentStorageGateway.deleteByCommentId(commentId = courseComment.id)
 
         val course = courseStorageGateway.getByCourseId(courseComment.courseId)
-            ?: throw RuntimeException()
         course.decreaseComments()
         courseStorageGateway.save(course)
     }

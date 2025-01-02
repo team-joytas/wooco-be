@@ -32,7 +32,6 @@ class AddCourseCommentUseCase(
         // 또는
         // 이벤트로 처리해버리기 :: 이벤트 처리전에 courseComment 전용 패키지를 하나 만들어야할듯
         val course = courseStorageGateway.getByCourseId(input.courseId)
-            ?: throw RuntimeException()
         course.increaseComments()
         courseStorageGateway.save(course)
     }

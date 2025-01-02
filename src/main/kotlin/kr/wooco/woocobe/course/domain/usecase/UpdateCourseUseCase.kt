@@ -20,7 +20,6 @@ class UpdateCourseUseCase(
     @Transactional
     override fun execute(input: UpdateCourseInput) {
         val course = courseStorageGateway.getByCourseId(courseId = input.courseId)
-            ?: throw RuntimeException()
         course.isValidWriter(input.userId)
 
         course.update(

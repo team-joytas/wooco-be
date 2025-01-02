@@ -28,7 +28,6 @@ class AddInterestCourseUseCase(
 
         // TODO: 증가 로직 수정
         val course = courseStorageGateway.getByCourseId(input.courseId)
-            ?: throw RuntimeException()
         course.increaseInterests()
         courseStorageGateway.save(course)
     }

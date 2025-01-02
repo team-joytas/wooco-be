@@ -23,7 +23,6 @@ class GetCourseUseCase(
 ) : UseCase<GetCourseInput, GetCourseOutput> {
     override fun execute(input: GetCourseInput): GetCourseOutput {
         val course = courseStorageGateway.getByCourseId(input.courseId)
-            ?: throw RuntimeException()
 
         val isInterested = input.userId?.run {
             interestCourseStorageGateway.existsByCourseIdAndUserId(input.courseId, input.userId)

@@ -22,7 +22,6 @@ class DeleteInterestCourseUseCase(
             ?: throw RuntimeException()
 
         val course = courseStorageGateway.getByCourseId(interestCourse.courseId)
-            ?: throw RuntimeException()
         course.decreaseInterests()
         courseStorageGateway.save(course)
     }

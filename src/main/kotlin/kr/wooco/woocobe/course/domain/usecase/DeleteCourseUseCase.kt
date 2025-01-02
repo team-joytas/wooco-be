@@ -17,7 +17,6 @@ class DeleteCourseUseCase(
     @Transactional
     override fun execute(input: DeleteCourseInput) {
         val course = courseStorageGateway.getByCourseId(courseId = input.courseId)
-            ?: throw RuntimeException()
         course.isValidWriter(input.userId)
 
         courseStorageGateway.deleteByCourseId(courseId = course.id)
