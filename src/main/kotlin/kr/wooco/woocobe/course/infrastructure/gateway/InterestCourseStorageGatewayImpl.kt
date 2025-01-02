@@ -2,24 +2,34 @@ package kr.wooco.woocobe.course.infrastructure.gateway
 
 import kr.wooco.woocobe.course.domain.gateway.InterestCourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.InterestCourse
-import kr.wooco.woocobe.course.infrastructure.storage.entity.InterestCourseJpaEntity
+import kr.wooco.woocobe.course.infrastructure.storage.InterestCourseStorageMapper
 import kr.wooco.woocobe.course.infrastructure.storage.repository.InterestCourseJpaRepository
 import org.springframework.stereotype.Component
 
 @Component
 class InterestCourseStorageGatewayImpl(
     private val interestCourseJpaRepository: InterestCourseJpaRepository,
+    private val interestCourseStorageMapper: InterestCourseStorageMapper,
 ) : InterestCourseStorageGateway {
-    override fun save(interestCourse: InterestCourse): InterestCourse =
-        interestCourseJpaRepository.save(InterestCourseJpaEntity.from(interestCourse)).toDomain()
+    override fun save(interestCourse: InterestCourse): InterestCourse {
+        val interestCourseEntity = interestCourseStorageMapper.toEntity(interestCourse)
+        interestCourseJpaRepository.save(interestCourseEntity)
+        return interestCourseStorageMapper.toDomain(interestCourseEntity)
+    }
 
     override fun getByCourseIdAndUserId(
         courseId: Long,
         userId: Long,
-    ): InterestCourse? = interestCourseJpaRepository.findByUserIdAndCourseId(userId, courseId)?.toDomain()
+    ): InterestCourse {
+        val interestCourseEntity = interestCourseJpaRepository.findByUserIdAndCourseId(userId, courseId)
+            ?: throw RuntimeException()
+        return interestCourseStorageMapper.toDomain(interestCourseEntity)
+    }
 
-    override fun getAllByUserId(userId: Long): List<InterestCourse> =
-        interestCourseJpaRepository.findAllByUserId(userId = userId).map { it.toDomain() }
+    override fun getAllByUserId(userId: Long): List<InterestCourse> {
+        val interestCourseEntities = interestCourseJpaRepository.findAllByUserId(userId = userId)
+        return interestCourseEntities.map { interestCourseStorageMapper.toDomain(it) }
+    }
 
     override fun existsByCourseIdAndUserId(
         courseId: Long,
