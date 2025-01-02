@@ -6,9 +6,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
-import kr.wooco.woocobe.course.domain.model.Course
-import kr.wooco.woocobe.course.domain.model.CourseCategory
-import kr.wooco.woocobe.course.domain.model.CourseRegion
 
 @Entity
 @Table(name = "courses")
@@ -32,38 +29,4 @@ class CourseJpaEntity(
     @Id @Tsid
     @Column(name = "course_id", nullable = false)
     val id: Long? = 0L,
-) : BaseTimeEntity() {
-    fun toDomain(courseCategory: List<CourseCategory> = emptyList()): Course =
-        Course(
-            id = id!!,
-            userId = userId,
-            region = CourseRegion(
-                primaryRegion = primaryRegion,
-                secondaryRegion = secondaryRegion,
-            ),
-            writeDateTime = createdAt,
-            categories = courseCategory.map { CourseCategory.from(it.name) },
-            name = name,
-            contents = contents,
-            views = viewCount,
-            comments = commentCount,
-            interests = interestCount,
-        )
-
-    companion object {
-        fun from(course: Course): CourseJpaEntity =
-            with(course) {
-                CourseJpaEntity(
-                    id = id,
-                    userId = userId,
-                    name = name,
-                    primaryRegion = region.primaryRegion,
-                    secondaryRegion = region.secondaryRegion,
-                    contents = contents,
-                    viewCount = views,
-                    commentCount = comments,
-                    interestCount = interests,
-                )
-            }
-    }
-}
+) : BaseTimeEntity()
