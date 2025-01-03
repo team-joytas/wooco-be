@@ -2,15 +2,18 @@ package kr.wooco.woocobe.course.infrastructure.storage
 
 import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.course.domain.model.CourseCategory
+import kr.wooco.woocobe.course.domain.model.CoursePlace
 import kr.wooco.woocobe.course.domain.model.CourseRegion
 import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseCategoryJpaEntity
 import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseJpaEntity
+import kr.wooco.woocobe.course.infrastructure.storage.entity.CoursePlaceJpaEntity
 import org.springframework.stereotype.Component
 
 @Component
 class CourseStorageMapper {
     fun toDomain(
         courseJpaEntity: CourseJpaEntity,
+        coursePlaceJpaEntities: List<CoursePlaceJpaEntity>,
         courseCategoryJpaEntities: List<CourseCategoryJpaEntity>,
     ): Course =
         Course(
@@ -21,6 +24,7 @@ class CourseStorageMapper {
                 secondaryRegion = courseJpaEntity.secondaryRegion,
             ),
             categories = courseCategoryJpaEntities.map { CourseCategory.from(it.name) },
+            coursePlaces = coursePlaceJpaEntities.map { CoursePlace(order = it.order, placeId = it.placeId) },
             name = courseJpaEntity.name,
             contents = courseJpaEntity.contents,
             views = courseJpaEntity.viewCount,
