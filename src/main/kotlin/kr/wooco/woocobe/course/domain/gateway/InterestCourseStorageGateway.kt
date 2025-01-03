@@ -8,7 +8,7 @@ interface InterestCourseStorageGateway {
     fun getByCourseIdAndUserId(
         courseId: Long,
         userId: Long,
-    ): InterestCourse?
+    ): InterestCourse
 
     fun getAllByUserId(userId: Long): List<InterestCourse>
 
