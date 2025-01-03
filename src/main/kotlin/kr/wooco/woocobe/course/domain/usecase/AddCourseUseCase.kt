@@ -14,6 +14,7 @@ data class AddCourseUseCaseInput(
     val category: List<String>,
     val name: String,
     val contents: String,
+    val placeIds: List<Long>,
 )
 
 @Service
@@ -30,6 +31,7 @@ class AddCourseUseCase(
             categories = input.category,
             name = input.name,
             contents = input.contents,
+            placeIds = input.placeIds,
         )
         courseStorageGateway.save(course)
     }

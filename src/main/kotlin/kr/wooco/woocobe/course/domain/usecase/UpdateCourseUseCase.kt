@@ -11,6 +11,7 @@ data class UpdateCourseInput(
     val name: String,
     val contents: String,
     val categories: List<String>,
+    val placeIds: List<Long>,
 )
 
 @Service
@@ -26,6 +27,7 @@ class UpdateCourseUseCase(
             name = input.name,
             contents = input.contents,
             categories = input.categories,
+            placeIds = input.placeIds,
         )
         courseStorageGateway.save(course)
     }

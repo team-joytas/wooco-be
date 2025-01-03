@@ -7,6 +7,7 @@ class Course(
     val userId: Long,
     val region: CourseRegion,
     var categories: List<CourseCategory>,
+    var coursePlaces: List<CoursePlace>,
     var name: String,
     var contents: String,
     var views: Long,
@@ -38,10 +39,12 @@ class Course(
         name: String,
         categories: List<String>,
         contents: String,
+        placeIds: List<Long>,
     ) = apply {
         this.name = name
         this.categories = categories.map { CourseCategory.from(it) }
         this.contents = contents
+        this.coursePlaces = processCoursePlaceOrder(placeIds)
     }
 
     fun isValidWriter(userId: Long) {
@@ -55,6 +58,7 @@ class Course(
             userId: Long,
             region: CourseRegion,
             categories: List<String>,
+            placeIds: List<Long>,
             name: String,
             contents: String,
         ): Course =
@@ -63,6 +67,7 @@ class Course(
                 userId = userId,
                 region = region,
                 categories = categories.map { CourseCategory.from(it) },
+                coursePlaces = processCoursePlaceOrder(placeIds),
                 name = name,
                 contents = contents,
                 views = 0L,
@@ -70,5 +75,13 @@ class Course(
                 interests = 0L,
                 writeDateTime = LocalDateTime.now(),
             )
+
+        private fun processCoursePlaceOrder(placeIds: List<Long>): List<CoursePlace> =
+            placeIds.mapIndexed { index: Int, placeId: Long ->
+                CoursePlace(
+                    order = index,
+                    placeId = placeId,
+                )
+            }
     }
 }
