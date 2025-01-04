@@ -6,7 +6,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
-import kr.wooco.woocobe.course.domain.model.CourseComment
 
 @Entity
 @Table(name = "course_comments")
@@ -20,25 +19,4 @@ class CourseCommentJpaEntity(
     @Id @Tsid
     @Column(name = "course_comment_id")
     val id: Long? = 0L,
-) : BaseTimeEntity() {
-    fun toDomain(): CourseComment =
-        CourseComment(
-            id = id!!,
-            userId = userId,
-            courseId = courseId,
-            contents = contents,
-            commentDateTime = createdAt,
-        )
-
-    companion object {
-        fun from(courseComment: CourseComment): CourseCommentJpaEntity =
-            with(courseComment) {
-                CourseCommentJpaEntity(
-                    id = id,
-                    userId = userId,
-                    courseId = courseId,
-                    contents = contents,
-                )
-            }
-    }
-}
+) : BaseTimeEntity()
