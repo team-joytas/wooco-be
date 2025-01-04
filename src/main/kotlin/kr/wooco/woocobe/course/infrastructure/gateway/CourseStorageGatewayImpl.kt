@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @Suppress("Duplicates")
-class CourseStorageGatewayImpl(
+internal class CourseStorageGatewayImpl(
     private val courseJpaRepository: CourseJpaRepository,
     private val coursePlaceJpaRepository: CoursePlaceJpaRepository,
     private val courseCategoryJpaRepository: CourseCategoryJpaRepository,

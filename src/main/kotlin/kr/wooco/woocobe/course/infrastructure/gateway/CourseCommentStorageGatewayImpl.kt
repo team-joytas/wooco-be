@@ -8,7 +8,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-class CourseCommentStorageGatewayImpl(
+internal class CourseCommentStorageGatewayImpl(
     private val courseCommentJpaRepository: CourseCommentJpaRepository,
 ) : CourseCommentStorageGateway {
     override fun save(courseComment: CourseComment): CourseComment =

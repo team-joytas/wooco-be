@@ -7,7 +7,7 @@ import kr.wooco.woocobe.course.infrastructure.storage.repository.InterestCourseJ
 import org.springframework.stereotype.Component
 
 @Component
-class InterestCourseStorageGatewayImpl(
+internal class InterestCourseStorageGatewayImpl(
     private val interestCourseJpaRepository: InterestCourseJpaRepository,
     private val interestCourseStorageMapper: InterestCourseStorageMapper,
 ) : InterestCourseStorageGateway {
