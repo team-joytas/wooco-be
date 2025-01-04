@@ -18,7 +18,6 @@ class UpdateCourseCommentUseCase(
     @Transactional
     override fun execute(input: UpdateCourseCommentInput) {
         val courseComment = courseCommentStorageGateway.getByCommentId(input.commentId)
-            ?: throw RuntimeException()
         courseComment.isValidCommenter(input.userId)
 
         courseComment.update(contents = input.contents)

@@ -19,8 +19,6 @@ class DeleteCourseCommentUseCase(
     @Transactional
     override fun execute(input: DeleteCourseCommentInput) {
         val courseComment = courseCommentStorageGateway.getByCommentId(input.commentId)
-            ?: throw RuntimeException()
-
         courseComment.isValidCommenter(input.userId)
 
         courseCommentStorageGateway.deleteByCommentId(commentId = courseComment.id)
