@@ -5,9 +5,9 @@ import kr.wooco.woocobe.plan.domain.model.Plan
 interface PlanStorageGateway {
     fun save(plan: Plan): Plan
 
-    fun getById(id: Long): Plan?
+    fun getByPlanId(planId: Long): Plan
 
     fun getAllByUserId(userId: Long): List<Plan>
 
-    fun deleteById(id: Long)
+    fun deleteByPlanId(planId: Long)
 }
