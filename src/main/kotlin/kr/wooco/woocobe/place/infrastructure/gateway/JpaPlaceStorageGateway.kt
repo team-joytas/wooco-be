@@ -22,4 +22,6 @@ class JpaPlaceStorageGateway(
     override fun existsByKakaoMapPlaceId(kakaoMapPlaceId: String): Boolean = placeJpaRepository.existsByKakaoMapPlaceId(kakaoMapPlaceId)
 
     override fun getByKakaoMapPlaceId(kakaoMapPlaceId: String): Place = placeJpaRepository.findByKakaoMapPlaceId(kakaoMapPlaceId).toDomain()
+
+    override fun getAllByPlaceIds(placeIds: List<Long>): List<Place> = placeJpaRepository.findAllByIdIn(placeIds).map { it.toDomain() }
 }
