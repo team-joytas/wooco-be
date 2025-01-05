@@ -10,4 +10,6 @@ interface PlaceStorageGateway {
     fun existsByKakaoMapPlaceId(kakaoMapPlaceId: String): Boolean
 
     fun getByKakaoMapPlaceId(kakaoMapPlaceId: String): Place
+
+    fun getAllByPlaceIds(placeIds: List<Long>): List<Place>
 }
