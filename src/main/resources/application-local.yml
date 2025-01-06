@@ -30,12 +30,26 @@ spring:
       repositories:
         enabled: false
 
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+
   security:
     user:
       name: local-actuator
       password: local-actuator
 
 app:
+  aws:
+    s3:
+      bucket-name: ${AWS_S3_BUCKET_NAME}
+      content-type: image/webp
+      timeout: 60s
+
   jwt:
     signing-key: hong-jun2-eric-erica-jamie-hong-jun2-eric-erica-jamie
     expiration:
