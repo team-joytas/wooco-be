@@ -10,7 +10,7 @@ enum class CourseCategory {
 
     companion object {
         fun from(viewName: String) =
-            entries.find { it.name == viewName }
+            entries.find { it.name == viewName.uppercase() }
                 ?: throw RuntimeException("not found course category $viewName")
     }
 }

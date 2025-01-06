@@ -18,19 +18,13 @@ class DeleteCourseCommentUseCase(
 ) : UseCase<DeleteCourseCommentInput, Unit> {
     @Transactional
     override fun execute(input: DeleteCourseCommentInput) {
-        val courseComment = courseCommentStorageGateway
-            .getByCommentId(input.commentId)
-            ?: throw RuntimeException()
-
-        when {
-            courseComment.isCommenter(input.commentId).not() -> throw RuntimeException()
-        }
+        val courseComment = courseCommentStorageGateway.getByCommentId(input.commentId)
+        courseComment.isValidCommenter(input.userId)
 
         courseCommentStorageGateway.deleteByCommentId(commentId = courseComment.id)
 
-        courseStorageGateway
-            .getByCourseId(courseComment.courseId)
-            ?.run { decreaseComments().also(courseStorageGateway::save) }
-            ?: throw RuntimeException()
+        val course = courseStorageGateway.getByCourseId(courseComment.courseId)
+        course.decreaseComments()
+        courseStorageGateway.save(course)
     }
 }

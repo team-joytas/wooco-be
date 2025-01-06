@@ -4,7 +4,6 @@ import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.course.domain.model.CourseRegion
-import kr.wooco.woocobe.user.domain.model.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,6 +14,7 @@ data class AddCourseUseCaseInput(
     val category: List<String>,
     val name: String,
     val contents: String,
+    val placeIds: List<Long>,
 )
 
 @Service
@@ -23,20 +23,16 @@ class AddCourseUseCase(
 ) : UseCase<AddCourseUseCaseInput, Unit> {
     @Transactional
     override fun execute(input: AddCourseUseCaseInput) {
-        val user = User.register(userId = input.userId)
+        val courseRegion = CourseRegion.register(input.primaryRegion, input.secondaryRegion)
 
-        val courseRegion = CourseRegion.register(
-            primaryRegion = input.primaryRegion,
-            secondaryRegion = input.secondaryRegion,
+        val course = Course.register(
+            userId = input.userId,
+            region = courseRegion,
+            categories = input.category,
+            name = input.name,
+            contents = input.contents,
+            placeIds = input.placeIds,
         )
-
-        Course
-            .register(
-                user = user,
-                region = courseRegion,
-                categories = input.category,
-                name = input.name,
-                contents = input.contents,
-            ).also(courseStorageGateway::save)
+        courseStorageGateway.save(course)
     }
 }

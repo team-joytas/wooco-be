@@ -19,20 +19,16 @@ class AddInterestCourseUseCase(
 ) : UseCase<AddInterestCourseInput, Unit> {
     @Transactional
     override fun execute(input: AddInterestCourseInput) {
-        interestCourseStorageGateway
-            .existsByCourseIdAndUserId(courseId = input.courseId, userId = input.userId)
-            .takeIf { it }
-            ?.let { throw RuntimeException() }
+        if (interestCourseStorageGateway.existsByCourseIdAndUserId(courseId = input.courseId, userId = input.userId)) {
+            throw RuntimeException("already interest course ${input.courseId}")
+        }
 
+        val interestCourse = InterestCourse.register(userId = input.userId, courseId = input.courseId)
+        interestCourseStorageGateway.save(interestCourse)
+
+        // TODO: 증가 로직 수정
         val course = courseStorageGateway.getByCourseId(input.courseId)
-            ?: throw RuntimeException()
-
-        InterestCourse
-            .register(userId = input.userId, course = course)
-            .also(interestCourseStorageGateway::save)
-
-        course
-            .increaseInterests()
-            .also(courseStorageGateway::save)
+        course.increaseInterests()
+        courseStorageGateway.save(course)
     }
 }

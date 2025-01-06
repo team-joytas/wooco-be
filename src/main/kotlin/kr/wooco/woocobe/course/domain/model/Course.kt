@@ -1,80 +1,87 @@
 package kr.wooco.woocobe.course.domain.model
 
-import kr.wooco.woocobe.user.domain.model.User
 import java.time.LocalDateTime
 
 class Course(
     val id: Long,
-    val user: User,
+    val userId: Long,
     val region: CourseRegion,
-    val writeDateTime: LocalDateTime,
     var categories: List<CourseCategory>,
+    var coursePlaces: List<CoursePlace>,
     var name: String,
     var contents: String,
     var views: Long,
     var comments: Long,
     var interests: Long,
+    val writeDateTime: LocalDateTime,
 ) {
-    fun increaseViews() =
-        apply {
-            views++
-        }
+    fun increaseViews() {
+        views++
+    }
 
-    fun increaseComments() =
-        apply {
-            comments++
-        }
+    fun increaseComments() {
+        comments++
+    }
 
-    fun decreaseComments() =
-        apply {
-            comments--
-        }
+    fun decreaseComments() {
+        comments--
+    }
 
-    fun increaseInterests() =
-        apply {
-            interests++
-        }
+    fun increaseInterests() {
+        interests++
+    }
 
-    fun decreaseInterests() =
-        apply {
-            interests--
-        }
+    fun decreaseInterests() {
+        interests--
+    }
 
     fun update(
         name: String,
         categories: List<String>,
         contents: String,
+        placeIds: List<Long>,
     ) = apply {
         this.name = name
         this.categories = categories.map { CourseCategory.from(it) }
         this.contents = contents
+        this.coursePlaces = processCoursePlaceOrder(placeIds)
     }
 
-    fun isWriter(targetId: Long): Boolean =
-        when (user.id == targetId) {
-            true -> true
-            else -> throw RuntimeException()
+    fun isValidWriter(userId: Long) {
+        if (this.userId != userId) {
+            throw RuntimeException()
         }
+    }
 
     companion object {
         fun register(
-            user: User,
+            userId: Long,
             region: CourseRegion,
             categories: List<String>,
+            placeIds: List<Long>,
             name: String,
             contents: String,
         ): Course =
             Course(
                 id = 0L,
-                user = user,
+                userId = userId,
                 region = region,
                 categories = categories.map { CourseCategory.from(it) },
-                writeDateTime = LocalDateTime.now(),
+                coursePlaces = processCoursePlaceOrder(placeIds),
                 name = name,
                 contents = contents,
                 views = 0L,
                 comments = 0L,
                 interests = 0L,
+                writeDateTime = LocalDateTime.now(),
             )
+
+        private fun processCoursePlaceOrder(placeIds: List<Long>): List<CoursePlace> =
+            placeIds.mapIndexed { index: Int, placeId: Long ->
+                CoursePlace(
+                    order = index,
+                    placeId = placeId,
+                )
+            }
     }
 }

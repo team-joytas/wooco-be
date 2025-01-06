@@ -11,6 +11,7 @@ data class UpdateCourseInput(
     val name: String,
     val contents: String,
     val categories: List<String>,
+    val placeIds: List<Long>,
 )
 
 @Service
@@ -20,17 +21,14 @@ class UpdateCourseUseCase(
     @Transactional
     override fun execute(input: UpdateCourseInput) {
         val course = courseStorageGateway.getByCourseId(courseId = input.courseId)
-            ?: throw RuntimeException()
+        course.isValidWriter(input.userId)
 
-        when {
-            course.isWriter(input.userId).not() -> throw RuntimeException()
-        }
-
-        course
-            .update(
-                name = input.name,
-                contents = input.contents,
-                categories = input.categories,
-            ).also(courseStorageGateway::save)
+        course.update(
+            name = input.name,
+            contents = input.contents,
+            categories = input.categories,
+            placeIds = input.placeIds,
+        )
+        courseStorageGateway.save(course)
     }
 }

@@ -6,9 +6,9 @@ interface InterestCourseStorageGateway {
     fun save(interestCourse: InterestCourse): InterestCourse
 
     fun getByCourseIdAndUserId(
-        userId: Long,
         courseId: Long,
-    ): InterestCourse?
+        userId: Long,
+    ): InterestCourse
 
     fun getAllByUserId(userId: Long): List<InterestCourse>
 

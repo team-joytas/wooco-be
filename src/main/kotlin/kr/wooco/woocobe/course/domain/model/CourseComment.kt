@@ -1,11 +1,10 @@
 package kr.wooco.woocobe.course.domain.model
 
-import kr.wooco.woocobe.user.domain.model.User
 import java.time.LocalDateTime
 
 class CourseComment(
     val id: Long,
-    val user: User,
+    val userId: Long,
     val courseId: Long,
     var contents: String,
     val commentDateTime: LocalDateTime,
@@ -15,17 +14,21 @@ class CourseComment(
             this.contents = contents
         }
 
-    fun isCommenter(targetId: Long): Boolean = targetId == user.id
+    fun isValidCommenter(userId: Long) {
+        if (this.userId != userId) {
+            throw RuntimeException()
+        }
+    }
 
     companion object {
         fun register(
-            user: User,
+            userId: Long,
             courseId: Long,
             contents: String,
         ): CourseComment =
             CourseComment(
                 id = 0L,
-                user = user,
+                userId = userId,
                 courseId = courseId,
                 contents = contents,
                 commentDateTime = LocalDateTime.now(),
