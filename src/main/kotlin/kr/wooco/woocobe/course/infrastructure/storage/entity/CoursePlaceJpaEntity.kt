@@ -10,7 +10,7 @@ import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
 @Entity
 @Table(name = "course_places")
 class CoursePlaceJpaEntity(
-    @Column(name = "order")
+    @Column(name = "course_place_order")
     val order: Int,
     @Column(name = "course_id")
     val courseId: Long,
