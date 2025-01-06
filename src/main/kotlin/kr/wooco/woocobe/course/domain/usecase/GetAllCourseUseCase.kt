@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 data class GetAllCourseInput(
     val primaryRegion: String,
     val secondaryRegion: String,
-    val category: String,
+    val category: String?,
     val sort: String,
 )
 

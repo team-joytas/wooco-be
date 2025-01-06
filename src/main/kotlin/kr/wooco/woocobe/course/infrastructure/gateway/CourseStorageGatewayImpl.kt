@@ -62,7 +62,7 @@ internal class CourseStorageGatewayImpl(
 
     override fun getAllByRegionAndCategoryWithSort(
         region: CourseRegion,
-        category: String,
+        category: String?,
         sort: CourseSortCondition,
     ): List<Course> {
         val courseEntities =

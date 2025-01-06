@@ -13,7 +13,7 @@ interface CourseStorageGateway {
 
     fun getAllByRegionAndCategoryWithSort(
         region: CourseRegion,
-        category: String,
+        category: String?,
         sort: CourseSortCondition,
     ): List<Course>
 

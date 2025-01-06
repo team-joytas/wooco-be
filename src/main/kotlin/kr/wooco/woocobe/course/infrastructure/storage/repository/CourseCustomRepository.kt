@@ -12,7 +12,7 @@ interface CourseCustomRepository {
 
     fun findAllByRegionAndCategoryWithSort(
         region: CourseRegion,
-        category: String,
+        category: String?,
         sort: CourseSortCondition,
     ): List<CourseJpaEntity>
 }
