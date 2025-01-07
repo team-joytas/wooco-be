@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.plan.ui.web
+package kr.wooco.woocobe.plan.ui.web.controller
 
 import kr.wooco.woocobe.plan.domain.usecase.AddPlanInput
 import kr.wooco.woocobe.plan.domain.usecase.AddPlanUseCase
@@ -10,10 +10,10 @@ import kr.wooco.woocobe.plan.domain.usecase.GetPlanInput
 import kr.wooco.woocobe.plan.domain.usecase.GetPlanUseCase
 import kr.wooco.woocobe.plan.domain.usecase.UpdatePlanInput
 import kr.wooco.woocobe.plan.domain.usecase.UpdatePlanUseCase
-import kr.wooco.woocobe.plan.ui.web.dto.request.AddPlanRequest
-import kr.wooco.woocobe.plan.ui.web.dto.request.UpdatePlanRequest
-import kr.wooco.woocobe.plan.ui.web.dto.response.GetAllPlanResponse
-import kr.wooco.woocobe.plan.ui.web.dto.response.GetPlanResponse
+import kr.wooco.woocobe.plan.ui.web.controller.request.AddPlanRequest
+import kr.wooco.woocobe.plan.ui.web.controller.request.UpdatePlanRequest
+import kr.wooco.woocobe.plan.ui.web.controller.response.GetAllPlanResponse
+import kr.wooco.woocobe.plan.ui.web.controller.response.GetPlanResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -42,9 +42,13 @@ class PlanController(
         addPlanUseCase.execute(
             AddPlanInput(
                 userId = userId,
+                title = request.title,
+                description = request.description,
                 primaryRegion = request.primaryRegion,
                 secondaryRegion = request.secondaryRegion,
                 visitDate = request.visitDate,
+                placeIds = request.placeIds,
+                categories = request.categories,
             ),
         )
         return ResponseEntity.ok().build()
@@ -86,9 +90,13 @@ class PlanController(
             UpdatePlanInput(
                 userId = userId,
                 planId = planId,
+                title = request.title,
+                description = request.description,
                 primaryRegion = request.primaryRegion,
                 secondaryRegion = request.secondaryRegion,
                 visitDate = request.visitDate,
+                placeIds = request.placeIds,
+                categories = request.categories,
             ),
         )
         return ResponseEntity.ok().build()
