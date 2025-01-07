@@ -34,15 +34,14 @@ class UpdatePlanUseCase(
             secondaryRegion = input.secondaryRegion,
         )
 
-        plan
-            .update(
-                title = input.title,
-                description = input.description,
-                region = region,
-                visitDate = input.visitDate,
-                placeIds = input.placeIds,
-                categories = input.categories,
-            )
+        plan.update(
+            title = input.title,
+            description = input.description,
+            region = region,
+            visitDate = input.visitDate,
+            placeIds = input.placeIds,
+            categories = input.categories,
+        )
         planStorageGateway.save(plan)
     }
 }
