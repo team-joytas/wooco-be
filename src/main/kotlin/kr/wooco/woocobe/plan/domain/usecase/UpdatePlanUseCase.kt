@@ -10,9 +10,13 @@ import java.time.LocalDate
 data class UpdatePlanInput(
     val userId: Long,
     val planId: Long,
+    val title: String,
+    val description: String,
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: LocalDate,
+    val placeIds: List<Long>,
+    val categories: List<String>,
 )
 
 @Service
@@ -21,22 +25,23 @@ class UpdatePlanUseCase(
 ) : UseCase<UpdatePlanInput, Unit> {
     @Transactional
     override fun execute(input: UpdatePlanInput) {
-        val plan = planStorageGateway.getById(input.planId)
-            ?: throw RuntimeException("Not exists plan")
+        val plan = planStorageGateway.getByPlanId(input.planId)
 
-        when {
-            plan.isWriter(input.userId).not() -> throw RuntimeException()
-        }
+        plan.isWriterOrThrow(input.userId)
 
-        val region = PlanRegion.register(
+        val region = PlanRegion(
             primaryRegion = input.primaryRegion,
             secondaryRegion = input.secondaryRegion,
         )
 
-        plan
-            .update(
-                region = region,
-                visitDate = input.visitDate,
-            ).also(planStorageGateway::save)
+        plan.update(
+            title = input.title,
+            description = input.description,
+            region = region,
+            visitDate = input.visitDate,
+            placeIds = input.placeIds,
+            categories = input.categories,
+        )
+        planStorageGateway.save(plan)
     }
 }

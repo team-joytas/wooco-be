@@ -19,8 +19,7 @@ class GetPlanUseCase(
     private val planStorageGateway: PlanStorageGateway,
 ) : UseCase<GetPlanInput, GetPlanOutput> {
     override fun execute(input: GetPlanInput): GetPlanOutput {
-        val plan = planStorageGateway.getById(input.planId)
-            ?: throw RuntimeException()
+        val plan = planStorageGateway.getByPlanId(input.planId)
 
         return GetPlanOutput(
             plan = plan,

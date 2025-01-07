@@ -1,26 +1,31 @@
-package kr.wooco.woocobe.plan.ui.web.dto.response
+package kr.wooco.woocobe.plan.ui.web.controller.response
 
+import kr.wooco.woocobe.plan.domain.model.PlanPlace
 import kr.wooco.woocobe.plan.domain.usecase.GetPlanOutput
 import java.time.LocalDate
 
-// TODO: 장소 데이터 추가
 data class GetPlanResponse(
     val planId: Long,
-    val userId: Long,
+    val title: String,
+    val description: String,
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: LocalDate,
-    // val places: List<Place>
+    val places: List<PlanPlace>,
+    val categories: List<String>,
 ) {
     companion object {
         fun from(getPlanOutput: GetPlanOutput) =
             with(getPlanOutput) {
                 GetPlanResponse(
                     planId = plan.id,
-                    userId = plan.userId,
+                    title = plan.title,
+                    description = plan.description,
                     primaryRegion = plan.region.primaryRegion,
                     secondaryRegion = plan.region.secondaryRegion,
                     visitDate = plan.visitDate,
+                    places = plan.places,
+                    categories = plan.categories.map { it.name },
                 )
             }
     }
