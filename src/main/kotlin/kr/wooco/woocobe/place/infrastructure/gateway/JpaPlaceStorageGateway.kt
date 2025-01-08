@@ -13,13 +13,14 @@ class JpaPlaceStorageGateway(
 ) : PlaceStorageGateway {
     override fun save(place: Place): Place {
         placeJpaRepository.save(PlaceEntity.from(place))
-
         return place
     }
 
-    override fun getByPlaceId(placeId: Long): Place? = placeJpaRepository.findByIdOrNull(placeId)?.toDomain()
-
-    override fun existsByKakaoMapPlaceId(kakaoMapPlaceId: String): Boolean = placeJpaRepository.existsByKakaoMapPlaceId(kakaoMapPlaceId)
+    override fun getByPlaceId(placeId: Long): Place {
+        val placeEntity = placeJpaRepository.findByIdOrNull(placeId)
+            ?: throw RuntimeException()
+        return placeEntity.toDomain()
+    }
 
     override fun getByKakaoMapPlaceId(kakaoMapPlaceId: String): Place = placeJpaRepository.findByKakaoMapPlaceId(kakaoMapPlaceId).toDomain()
 
