@@ -31,12 +31,26 @@ spring:
       repositories:
         enabled: false
 
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      credentials:
+        access-key: ABCDEFGHIJKLMNOPQRST
+        secret-key: 1234567890abcdefghijklmnopqrstuvwxyz1234
+
   security:
     user:
       name: local
       password: local
 
 app:
+  aws:
+    s3:
+      bucket-name: mock-s3
+      content-type: image/webp
+      timeout: 60s
+
   jwt:
     signing-key: hong-jun2-eric-erica-jamie-hong-jun2-eric-erica-jamie
     expiration:
