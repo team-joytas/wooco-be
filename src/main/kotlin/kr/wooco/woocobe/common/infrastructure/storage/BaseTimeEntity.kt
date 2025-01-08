@@ -8,6 +8,13 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 
+@Deprecated(
+    message = "entity 패키지내에 정의된 BaseTimeEntity로 변경해주세요.",
+    replaceWith = ReplaceWith(
+        "BaseTimeEntity",
+        "kr.wooco.woocowe.common.infrastructure.storage.entity.BaseTimeEntity",
+    ),
+)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
 abstract class BaseTimeEntity {
