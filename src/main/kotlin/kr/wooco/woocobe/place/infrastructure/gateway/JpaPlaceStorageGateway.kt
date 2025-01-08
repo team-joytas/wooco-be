@@ -22,7 +22,8 @@ class JpaPlaceStorageGateway(
         return placeEntity.toDomain()
     }
 
-    override fun getByKakaoMapPlaceId(kakaoMapPlaceId: String): Place = placeJpaRepository.findByKakaoMapPlaceId(kakaoMapPlaceId).toDomain()
+    override fun getByKakaoMapPlaceId(kakaoMapPlaceId: String): Place? =
+        placeJpaRepository.findByKakaoMapPlaceId(kakaoMapPlaceId)?.toDomain()
 
     override fun getAllByPlaceIds(placeIds: List<Long>): List<Place> = placeJpaRepository.findAllByIdIn(placeIds).map { it.toDomain() }
 }

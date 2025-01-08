@@ -29,6 +29,7 @@ class AddPlaceUseCase(
         if (existingPlace != null) {
             return AddPlaceUseCaseOutput(placeId = existingPlace.id)
         }
+
         val newPlace = Place
             .register(
                 name = input.name,
