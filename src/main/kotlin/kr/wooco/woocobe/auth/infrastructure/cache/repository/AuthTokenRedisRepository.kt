@@ -1,5 +1,6 @@
-package kr.wooco.woocobe.auth.infrastructure.cache
+package kr.wooco.woocobe.auth.infrastructure.cache.repository
 
+import kr.wooco.woocobe.auth.infrastructure.cache.entity.AuthTokenRedisEntity
 import kr.wooco.woocobe.common.utils.getAndDeleteWithDeserialize
 import kr.wooco.woocobe.common.utils.getWithDeserialize
 import kr.wooco.woocobe.common.utils.setWithSerialize

@@ -2,7 +2,6 @@ package kr.wooco.woocobe.auth.domain.usecase
 
 import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
-import kr.wooco.woocobe.auth.domain.model.AuthToken
 import kr.wooco.woocobe.common.domain.usecase.UseCase
 import org.springframework.stereotype.Service
 
@@ -24,15 +23,13 @@ class ReissueTokenUseCase(
         val tokenId = tokenProviderGateway.extractTokenId(input.refreshToken)
 
         val authToken = authTokenStorageGateway.getWithDeleteByTokenId(tokenId)
-            ?: throw RuntimeException()
 
-        val newAuthToken = AuthToken
-            .register(userId = authToken.userId)
-            .run(authTokenStorageGateway::save)
+        val rotateAuthToken = authToken.rotateAuthToken()
+        authTokenStorageGateway.save(rotateAuthToken)
 
         return ReissueTokenOutput(
-            accessToken = tokenProviderGateway.generateAccessToken(newAuthToken.userId),
-            refreshToken = tokenProviderGateway.generateRefreshToken(newAuthToken.id),
+            accessToken = tokenProviderGateway.generateAccessToken(rotateAuthToken.userId),
+            refreshToken = tokenProviderGateway.generateRefreshToken(rotateAuthToken.tokenId),
         )
     }
 }

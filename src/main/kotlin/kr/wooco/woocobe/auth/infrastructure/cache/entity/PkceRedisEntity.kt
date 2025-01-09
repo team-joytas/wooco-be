@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.auth.infrastructure.cache.entity
 
-class PkceEntity(
+class PkceRedisEntity(
     val verifier: String,
     val challenge: String,
 )

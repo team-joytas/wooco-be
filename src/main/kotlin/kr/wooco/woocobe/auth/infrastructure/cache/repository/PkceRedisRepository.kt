@@ -1,5 +1,6 @@
-package kr.wooco.woocobe.auth.infrastructure.cache
+package kr.wooco.woocobe.auth.infrastructure.cache.repository
 
+import kr.wooco.woocobe.auth.infrastructure.cache.entity.PkceRedisEntity
 import kr.wooco.woocobe.common.utils.getAndDeleteWithDeserialize
 import kr.wooco.woocobe.common.utils.setWithSerialize
 import org.springframework.data.redis.core.StringRedisTemplate
@@ -9,19 +10,19 @@ import org.springframework.stereotype.Repository
 class PkceRedisRepository(
     private val redisTemplate: StringRedisTemplate,
 ) {
-    fun save(pkceEntity: PkceEntity): PkceEntity {
+    fun save(pkceRedisEntity: PkceRedisEntity): PkceRedisEntity {
         redisTemplate.opsForValue().setWithSerialize(
-            key = generateStorageKey(pkceEntity.challenge),
-            value = pkceEntity,
+            key = generateStorageKey(pkceRedisEntity.challenge),
+            value = pkceRedisEntity,
             timeout = TIMEOUT,
         )
-        return pkceEntity
+        return pkceRedisEntity
     }
 
-    fun findAndDeleteByChallenge(challenge: String): PkceEntity? =
+    fun findAndDeleteByChallenge(challenge: String): PkceRedisEntity? =
         redisTemplate.opsForValue().getAndDeleteWithDeserialize(
             key = generateStorageKey(challenge),
-            convertClass = PkceEntity::class,
+            convertClass = PkceRedisEntity::class,
         )
 
     companion object {

@@ -2,15 +2,24 @@ package kr.wooco.woocobe.auth.infrastructure.gateway
 
 import kr.wooco.woocobe.auth.domain.gateway.PkceStorageGateway
 import kr.wooco.woocobe.auth.domain.model.Pkce
-import kr.wooco.woocobe.auth.infrastructure.storage.PkceEntity
-import kr.wooco.woocobe.auth.infrastructure.storage.PkceRedisRepository
+import kr.wooco.woocobe.auth.infrastructure.cache.PkceCacheMapper
+import kr.wooco.woocobe.auth.infrastructure.cache.repository.PkceRedisRepository
 import org.springframework.stereotype.Component
 
 @Component
 internal class PkceStorageGatewayImpl(
     private val pkceRedisRepository: PkceRedisRepository,
+    private val pkceCacheMapper: PkceCacheMapper,
 ) : PkceStorageGateway {
-    override fun save(pkce: Pkce): Pkce = pkceRedisRepository.save(PkceEntity.from(pkce)).toDomain()
+    override fun save(pkce: Pkce): Pkce {
+        val pkceEntity = pkceCacheMapper.toEntity(pkce)
+        pkceRedisRepository.save(pkceEntity)
+        return pkceCacheMapper.toDomain(pkceEntity)
+    }
 
-    override fun getWithDeleteByChallenge(challenge: String): Pkce? = pkceRedisRepository.findAndDeleteByChallenge(challenge)?.toDomain()
+    override fun getWithDeleteByChallenge(challenge: String): Pkce {
+        val pkceEntity = pkceRedisRepository.findAndDeleteByChallenge(challenge)
+            ?: throw RuntimeException()
+        return pkceCacheMapper.toDomain(pkceEntity)
+    }
 }

@@ -24,13 +24,6 @@ class WithdrawUseCase(
     override fun execute(input: WithdrawInput) {
         val tokenId = tokenProviderGateway.extractTokenId(input.refreshToken)
 
-        val authToken = authTokenStorageGateway.getByTokenId(tokenId)
-            ?: throw RuntimeException()
-
-        when {
-            authToken.isMatchUserId(input.userId).not() -> throw RuntimeException()
-        }
-
         userStorageGateway.deleteByUserId(input.userId)
         authUserStorageGateway.deleteByUserId(input.userId)
         authTokenStorageGateway.deleteByTokenId(tokenId)
