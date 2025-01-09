@@ -33,7 +33,8 @@ class UpdatePlaceReviewUseCase(
                 imageUrls = input.imageUrls,
             ).also(placeReviewStorageGateway::save)
 
-        val place = placeReview.place
+        val place = placeStorageGateway.getByPlaceId(placeReview.placeId)
+
         place.updateReview(oldRating = placeReview.rating, newRating = input.rating)
         placeStorageGateway.save(place)
     }
