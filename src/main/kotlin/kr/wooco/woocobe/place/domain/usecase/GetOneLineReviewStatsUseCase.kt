@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.place.domain.usecase
 
 import kr.wooco.woocobe.common.domain.usecase.UseCase
-import kr.wooco.woocobe.place.domain.gateway.PlaceOneLineReviewStorageGateway
+import kr.wooco.woocobe.place.domain.gateway.PlaceStorageGateway
 import kr.wooco.woocobe.place.domain.model.PlaceOneLineReviewStat
 
 data class GetOneLineReviewStatsInput(
@@ -13,11 +13,11 @@ data class GetOneLineReviewStatsOutput(
 )
 
 class GetOneLineReviewStatsUseCase(
-    private val placeOneLineReviewStorageGateway: PlaceOneLineReviewStorageGateway,
+    private val placeStorageGateway: PlaceStorageGateway,
 ) : UseCase<GetOneLineReviewStatsInput, GetOneLineReviewStatsOutput> {
     override fun execute(input: GetOneLineReviewStatsInput): GetOneLineReviewStatsOutput {
         val placeOneLineReviewRank =
-            placeOneLineReviewStorageGateway.getOneLineReviewStats(input.placeId)
+            placeStorageGateway.getOneLineReviewStats(input.placeId)
 
         return GetOneLineReviewStatsOutput(
             placeOneLineReviewRank = placeOneLineReviewRank,
