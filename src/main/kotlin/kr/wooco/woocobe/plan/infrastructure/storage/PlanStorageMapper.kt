@@ -17,7 +17,7 @@ class PlanStorageMapper {
         planCategoryJpaEntities: List<PlanCategoryJpaEntity>,
     ): Plan =
         Plan(
-            id = planJpaEntity.id!!,
+            id = planJpaEntity.id,
             userId = planJpaEntity.userId,
             title = planJpaEntity.title,
             description = planJpaEntity.description,
@@ -26,7 +26,7 @@ class PlanStorageMapper {
                 secondaryRegion = planJpaEntity.secondaryRegion,
             ),
             visitDate = planJpaEntity.visitDate,
-            places = planPlaceJpaEntities.map { PlanPlace(order = it.order, placeId = it.planId) },
+            places = planPlaceJpaEntities.map { PlanPlace(order = it.order, placeId = it.placeId) },
             categories = planCategoryJpaEntities.map { PlanCategory.from(it.name.uppercase()) },
         )
 
