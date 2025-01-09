@@ -42,7 +42,7 @@ class SocialLoginUseCase(
         val socialType = SocialType.from(input.socialType)
         val socialAuth = socialAuthClientGateway.fetchSocialAuth(input.authCode, socialType, pkce)
 
-        val authUser = authUserStorageGateway.getBySocialIdAndSocialType(
+        val authUser = authUserStorageGateway.getOrNullBySocialIdAndSocialType(
             socialId = socialAuth.socialId,
             socialType = socialAuth.socialType,
         ) ?: run {

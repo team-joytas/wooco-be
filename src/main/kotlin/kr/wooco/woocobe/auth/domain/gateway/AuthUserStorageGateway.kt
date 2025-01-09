@@ -6,9 +6,7 @@ import kr.wooco.woocobe.auth.domain.model.SocialType
 interface AuthUserStorageGateway {
     fun save(authUser: AuthUser): AuthUser
 
-    fun getByAuthUserId(authUserId: Long): AuthUser?
-
-    fun getBySocialIdAndSocialType(
+    fun getOrNullBySocialIdAndSocialType(
         socialId: String,
         socialType: SocialType,
     ): AuthUser?

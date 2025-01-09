@@ -13,10 +13,10 @@ import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
 import kr.wooco.woocobe.auth.domain.model.Pkce
 import kr.wooco.woocobe.auth.domain.model.SocialAuth
 import kr.wooco.woocobe.auth.domain.model.SocialType
-import kr.wooco.woocobe.auth.infrastructure.storage.AuthUserEntity
-import kr.wooco.woocobe.auth.infrastructure.storage.AuthUserJpaRepository
 import kr.wooco.woocobe.auth.infrastructure.storage.PkceEntity
 import kr.wooco.woocobe.auth.infrastructure.storage.PkceRedisRepository
+import kr.wooco.woocobe.auth.infrastructure.storage.entity.AuthUserJpaEntity
+import kr.wooco.woocobe.auth.infrastructure.storage.repository.AuthUserJpaRepository
 import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
 import kr.wooco.woocobe.support.RedisCleaner
@@ -103,11 +103,11 @@ class SocialLoginUseCaseTest(
             PkceEntity(verifier = validPkce.verifier, challenge = validPkce.challenge).run(pkceRedisRepository::save)
 
             val userEntity = UserEntity(id = 1234567890L, name = "", profileUrl = "").run(userJpaRepository::save)
-            val authUserEntity = AuthUserEntity(
+            val authUserJpaEntity = AuthUserJpaEntity(
                 id = 1234567890L,
                 userId = userEntity.id,
                 socialId = socialAuth.socialId,
-                socialType = socialAuth.socialType,
+                socialType = socialAuth.socialType.name,
             ).run(authUserJpaRepository::save)
 
             socialLoginUseCase.execute(input)
@@ -115,7 +115,7 @@ class SocialLoginUseCaseTest(
             Then("새로운 인증 정보를 저장하지 않는다.") {
                 val authUserEntities = authUserJpaRepository.findAll()
                 authUserEntities.size shouldBe 1
-                authUserEntities[0].id shouldBe authUserEntity.id
+                authUserEntities[0].id shouldBe authUserJpaEntity.id
             }
 
             Then("새로운 회원 정보를 저장하지 않는다.") {

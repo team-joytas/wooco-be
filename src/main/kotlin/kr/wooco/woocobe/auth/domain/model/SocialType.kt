@@ -6,7 +6,7 @@ enum class SocialType {
 
     companion object {
         fun from(value: String): SocialType =
-            entries.find { it.name.equals(value, ignoreCase = true) }
+            entries.find { it.name == value.uppercase() }
                 ?: throw RuntimeException()
     }
 }
