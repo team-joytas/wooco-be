@@ -1,9 +1,10 @@
 package kr.wooco.woocobe.common.utils
 
+import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.http.HttpHeaders
-import org.springframework.http.ResponseCookie
+
+private const val SAME_SITE = "sameSite"
 
 private val properties: CookieProperties by lazy {
     SpringContextLoader.getBean(CookieProperties::class.java)
@@ -11,32 +12,36 @@ private val properties: CookieProperties by lazy {
 
 fun HttpServletResponse.addCookie(
     name: String,
-    value: String = "",
-    maxAge: Long = properties.maxAge,
-) = this.setHeader(HttpHeaders.SET_COOKIE, makeCookie(name, value, maxAge))
-
-fun HttpServletResponse.deleteCookie(name: String) = this.setHeader(HttpHeaders.SET_COOKIE, makeCookie(name, "", 0))
-
-private fun makeCookie(
-    name: String,
     value: String,
-    maxAge: Long,
-): String =
-    ResponseCookie
-        .from(name, value)
-        .maxAge(maxAge)
-        .path(properties.path)
-        .domain(properties.domain)
-        .sameSite(properties.sameSite)
-        .secure(properties.secure)
-        .httpOnly(properties.httpOnly)
-        .build()
-        .toString()
+    maxAge: Int = properties.maxAge,
+) {
+    val cookie = generateCookie(name, value, maxAge)
+    this.addCookie(cookie)
+}
+
+fun HttpServletResponse.deleteCookie(name: String) {
+    val cookie = generateCookie(name)
+    this.addCookie(cookie)
+}
+
+private fun generateCookie(
+    name: String,
+    value: String = "",
+    maxAge: Int = 0,
+): Cookie =
+    Cookie(name, value).apply {
+        setMaxAge(maxAge)
+        path = properties.path
+        domain = properties.domain
+        secure = properties.secure
+        isHttpOnly = properties.httpOnly
+        setAttribute(SAME_SITE, properties.sameSite)
+    }
 
 @ConfigurationProperties(prefix = "spring.cookie")
 data class CookieProperties(
     val path: String,
-    val maxAge: Long,
+    val maxAge: Int,
     val sameSite: String,
     val domain: String,
     val secure: Boolean,

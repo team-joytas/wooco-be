@@ -47,7 +47,7 @@ class AuthController(
                 socialType = provider,
             ),
         )
-        response.addCookie(CODE_CHALLENGE_COOKIE_NAME, results.challenge, 100000)
+        response.addCookie(CODE_CHALLENGE_COOKIE_NAME, results.challenge)
         return ResponseEntity.ok(SocialLoginUrlResponse.from(results))
     }
 
