@@ -9,7 +9,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-internal class JpaAuthUserStorageGateway(
+internal class AuthUserStorageGatewayImpl(
     private val authUserJpaRepository: AuthUserJpaRepository,
 ) : AuthUserStorageGateway {
     override fun save(authUser: AuthUser): AuthUser = authUserJpaRepository.save(AuthUserEntity.from(authUser)).toDomain()

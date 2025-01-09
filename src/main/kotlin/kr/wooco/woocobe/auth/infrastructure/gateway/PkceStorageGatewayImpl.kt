@@ -7,7 +7,7 @@ import kr.wooco.woocobe.auth.infrastructure.storage.PkceRedisRepository
 import org.springframework.stereotype.Component
 
 @Component
-internal class RedisPkceStorageGateway(
+internal class PkceStorageGatewayImpl(
     private val pkceRedisRepository: PkceRedisRepository,
 ) : PkceStorageGateway {
     override fun save(pkce: Pkce): Pkce = pkceRedisRepository.save(PkceEntity.from(pkce)).toDomain()

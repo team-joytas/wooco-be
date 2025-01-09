@@ -8,7 +8,7 @@ import kr.wooco.woocobe.auth.infrastructure.client.SocialAuthClient
 import org.springframework.stereotype.Component
 
 @Component
-internal class RestSocialAuthClientGateway(
+internal class SocialAuthClientGatewayImpl(
     private val socialAuthClients: Set<SocialAuthClient>,
 ) : SocialAuthClientGateway {
     override fun fetchSocialAuth(

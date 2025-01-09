@@ -7,7 +7,7 @@ import kr.wooco.woocobe.auth.infrastructure.storage.AuthTokenRedisRepository
 import org.springframework.stereotype.Component
 
 @Component
-internal class RedisAuthTokenStorageGateway(
+internal class AuthTokenStorageGatewayImpl(
     private val authTokenRedisRepository: AuthTokenRedisRepository,
 ) : AuthTokenStorageGateway {
     override fun save(authToken: AuthToken): AuthToken = authTokenRedisRepository.save(AuthTokenEntity.from(authToken)).toDomain()
