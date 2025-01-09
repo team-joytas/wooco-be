@@ -19,18 +19,11 @@ class DeletePlaceReviewUseCase(
     @Transactional
     override fun execute(input: DeletePlaceReviewInput) {
         val placeReview = placeReviewStorageGateway.getByPlaceReviewId(input.placeReviewId)
-            ?: throw RuntimeException()
-
-        when {
-            placeReview.isWriter(input.userId).not() -> throw RuntimeException()
-        }
-
+        placeReview.isValidWriter(input.userId)
         placeReviewStorageGateway.deleteByPlaceReviewId(placeReviewId = placeReview.id)
 
-        val place = placeReview.place
-
+        val place = placeStorageGateway.getByPlaceId(placeReview.placeId)
         place.deleteReview(oldRating = placeReview.rating)
-
         placeStorageGateway.save(place)
     }
 }

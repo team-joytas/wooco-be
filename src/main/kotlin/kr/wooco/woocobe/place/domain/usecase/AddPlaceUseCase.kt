@@ -14,19 +14,23 @@ data class AddPlaceUseCaseInput(
     val kakaoMapPlaceId: String,
 )
 
+data class AddPlaceUseCaseOutput(
+    val placeId: Long,
+)
+
 @Service
 class AddPlaceUseCase(
     private val placeStorageGateway: PlaceStorageGateway,
-) : UseCase<AddPlaceUseCaseInput, Unit> {
+) : UseCase<AddPlaceUseCaseInput, AddPlaceUseCaseOutput> {
     @Transactional
-    override fun execute(input: AddPlaceUseCaseInput) {
-        when {
-            placeStorageGateway
-                .existsByKakaoMapPlaceId(input.kakaoMapPlaceId)
-                .not() -> throw RuntimeException()
+    override fun execute(input: AddPlaceUseCaseInput): AddPlaceUseCaseOutput {
+        val existingPlace = placeStorageGateway.getByKakaoMapPlaceId(input.kakaoMapPlaceId)
+
+        if (existingPlace != null) {
+            return AddPlaceUseCaseOutput(placeId = existingPlace.id)
         }
 
-        Place
+        val newPlace = Place
             .register(
                 name = input.name,
                 latitude = input.latitude,
@@ -34,5 +38,7 @@ class AddPlaceUseCase(
                 address = input.address,
                 kakaoMapPlaceId = input.kakaoMapPlaceId,
             ).also(placeStorageGateway::save)
+
+        return AddPlaceUseCaseOutput(placeId = newPlace.id)
     }
 }
