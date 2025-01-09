@@ -9,7 +9,7 @@ interface PlaceReviewStorageGateway {
 
     fun getAllByPlaceId(placeId: Long): List<PlaceReview>
 
-    fun getAllByPlaceReviewIds(placeReviewId: List<Long>): List<PlaceReview>
+    fun getAllByPlaceReviewIds(placeReviewIds: List<Long>): List<PlaceReview>
 
     fun getAllByUserId(userId: Long): List<PlaceReview>
 

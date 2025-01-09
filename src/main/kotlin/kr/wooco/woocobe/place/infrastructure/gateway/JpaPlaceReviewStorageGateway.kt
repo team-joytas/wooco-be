@@ -2,111 +2,145 @@ package kr.wooco.woocobe.place.infrastructure.gateway
 
 import kr.wooco.woocobe.place.domain.gateway.PlaceReviewStorageGateway
 import kr.wooco.woocobe.place.domain.model.PlaceReview
-import kr.wooco.woocobe.place.infrastructure.storage.PlaceJpaRepository
-import kr.wooco.woocobe.place.infrastructure.storage.PlaceOneLineReviewEntity
-import kr.wooco.woocobe.place.infrastructure.storage.PlaceOneLineReviewJpaRepository
-import kr.wooco.woocobe.place.infrastructure.storage.PlaceReviewEntity
-import kr.wooco.woocobe.place.infrastructure.storage.PlaceReviewJpaRepository
-import kr.wooco.woocobe.user.infrastructure.storage.UserJpaRepository
+import kr.wooco.woocobe.place.infrastructure.PlaceOneLineReviewStorageMapper
+import kr.wooco.woocobe.place.infrastructure.PlaceReviewStorageMapper
+import kr.wooco.woocobe.place.infrastructure.storage.entity.PlaceReviewImageJpaEntity
+import kr.wooco.woocobe.place.infrastructure.storage.repository.PlaceOneLineReviewJpaRepository
+import kr.wooco.woocobe.place.infrastructure.storage.repository.PlaceReviewImageJpaRepository
+import kr.wooco.woocobe.place.infrastructure.storage.repository.PlaceReviewJpaRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
+@Suppress("Duplicates")
 class JpaPlaceReviewStorageGateway(
-    private val userJpaRepository: UserJpaRepository,
-    private val placeJpaRepository: PlaceJpaRepository,
     private val placeReviewJpaRepository: PlaceReviewJpaRepository,
+    private val placeReviewImageJpaRepository: PlaceReviewImageJpaRepository,
     private val placeOneLineReviewJpaRepository: PlaceOneLineReviewJpaRepository,
+    private val placeReviewStorageMapper: PlaceReviewStorageMapper,
+    private val placeOneLineReviewStorageMapper: PlaceOneLineReviewStorageMapper,
 ) : PlaceReviewStorageGateway {
     override fun save(placeReview: PlaceReview): PlaceReview {
-        val placeReviewEntity = placeReviewJpaRepository.save(PlaceReviewEntity.from(placeReview))
-        if (placeReview.id == 0L) {
-            placeReview.oneLineReviews
-                .map {
-                    PlaceOneLineReviewEntity.of(
-                        placeId = placeReviewEntity.placeId,
-                        placeReviewId = placeReviewEntity.id!!,
-                        content = it.content,
-                    )
-                }.also(placeOneLineReviewJpaRepository::saveAll)
-        }
-        return placeReview
-    }
+        val placeReviewEntity = placeReviewStorageMapper.toEntity(placeReview)
+        placeReviewJpaRepository.save(placeReviewEntity)
 
-    override fun getByPlaceReviewId(placeReviewId: Long): PlaceReview? =
-        placeReviewJpaRepository.findByIdOrNull(placeReviewId)?.let { placeReviewEntity ->
-            placeReviewEntity.toDomain(
-                user = userJpaRepository.findByIdOrNull(placeReviewEntity.userId)!!.toDomain(),
-                place = placeJpaRepository.findByIdOrNull(placeReviewEntity.placeId)!!.toDomain(),
-                placeOneLineReview = placeOneLineReviewJpaRepository
-                    .findAllByPlaceReviewIdOrderByCreatedAt(placeReviewEntity.id!!)
-                    .map { it.toDomain() },
+        val existingOneLineReviews =
+            placeOneLineReviewJpaRepository.findAllByPlaceReviewId(placeReviewEntity.id!!)
+
+        val newOneLineReviews = placeReview.oneLineReviews.filter { newReview ->
+            existingOneLineReviews.none { it.content == newReview.content }
+        }
+        val removedOneLineReviews = existingOneLineReviews.filter { existingReview ->
+            placeReview.oneLineReviews.none { it.content == existingReview.content }
+        }
+
+        placeOneLineReviewJpaRepository.deleteAll(removedOneLineReviews)
+
+        val placeOneLineEntities = placeOneLineReviewJpaRepository.saveAll(
+            newOneLineReviews.map {
+                placeOneLineReviewStorageMapper.toEntity(
+                    placeReview = placeReview,
+                    placeOneLineReview = it,
+                )
+            },
+        )
+
+        val placeReviewImageEntities = placeReview.imageUrls.map {
+            PlaceReviewImageJpaEntity(
+                placeReviewId = placeReviewEntity.id!!,
+                imageUrl = it,
             )
         }
 
-    override fun getAllByPlaceReviewIds(placeReviewId: List<Long>): List<PlaceReview> =
-        placeReviewJpaRepository
-            .findAllByIdInOrderByCreatedAt(placeReviewId)
-            .run {
-                val userEntities = userJpaRepository.findAllById(map { it.userId })
-                val placeEntities = placeJpaRepository.findAllById(map { it.placeId })
-                val placeOneLineReviewEntities = placeOneLineReviewJpaRepository
-                    .findAllByPlaceReviewIdInOrderByCreatedAt(map { it.id!! })
+        return placeReviewStorageMapper.toDomain(
+            placeReviewEntity,
+            placeOneLineEntities,
+            placeReviewImageEntities,
+        )
+    }
 
-                map { placeReviewEntity ->
-                    placeReviewEntity.toDomain(
-                        user = userEntities.find { placeReviewEntity.userId == it.id }!!.toDomain(),
-                        place = placeEntities
-                            .find { placeReviewEntity.placeId == it.id }!!
-                            .toDomain(),
-                        placeOneLineReview = placeOneLineReviewEntities
-                            .filter { placeReviewEntity.id == it.placeReviewId }
-                            .map { it.toDomain() },
-                    )
-                }
-            }
+    override fun getByPlaceReviewId(placeReviewId: Long): PlaceReview {
+        val placeReviewEntity = placeReviewJpaRepository.findByIdOrNull(placeReviewId)
+            ?: throw RuntimeException()
 
-    override fun getAllByPlaceId(placeId: Long): List<PlaceReview> =
-        placeReviewJpaRepository
-            .findAllByPlaceIdOrderByCreatedAt(placeId)
-            .run {
-                val userEntity = userJpaRepository.findAllById(map { it.userId })
-                val placeOneLineReviewEntity =
-                    placeOneLineReviewJpaRepository.findAllByPlaceReviewIdInOrderByCreatedAt(map { it.id!! })
+        val oneLineReviewJpaEntities = placeOneLineReviewJpaRepository
+            .findAllByPlaceReviewIdOrderByCreatedAt(placeReviewEntity.id!!)
 
-                map { placeReviewEntity ->
-                    placeReviewEntity.toDomain(
-                        user = userEntity.find { placeReviewEntity.userId == it.id }!!.toDomain(),
-                        place = placeJpaRepository
-                            .findByIdOrNull(placeReviewEntity.placeId)!!
-                            .toDomain(),
-                        placeOneLineReview = placeOneLineReviewEntity
-                            .filter { placeReviewEntity.id == it.placeReviewId }
-                            .map { it.toDomain() },
-                    )
-                }
-            }
+        val placeReviewImageEntities =
+            placeReviewImageJpaRepository.findAllByPlaceReviewId(placeReviewEntity.id!!)
 
-    override fun getAllByUserId(userId: Long): List<PlaceReview> =
-        placeReviewJpaRepository
-            .findAllByUserIdOrderByCreatedAt(userId)
-            .run {
-                val userEntity = userJpaRepository.findByIdOrNull(userId)!!
-                val placeOneLineReviewEntity =
-                    placeOneLineReviewJpaRepository.findAllByPlaceReviewIdInOrderByCreatedAt(map { it.id!! })
+        return placeReviewStorageMapper.toDomain(
+            placeReviewEntity,
+            oneLineReviewJpaEntities,
+            placeReviewImageEntities,
+        )
+    }
 
-                map { placeReviewEntity ->
-                    placeReviewEntity.toDomain(
-                        user = userEntity.toDomain(),
-                        place = placeJpaRepository
-                            .findByIdOrNull(placeReviewEntity.placeId)!!
-                            .toDomain(),
-                        placeOneLineReview = placeOneLineReviewEntity
-                            .filter { placeReviewEntity.id == it.placeReviewId }
-                            .map { it.toDomain() },
-                    )
-                }
-            }
+    override fun getAllByPlaceReviewIds(placeReviewIds: List<Long>): List<PlaceReview> {
+        val placeReviewEntities = placeReviewJpaRepository
+            .findAllByIdInOrderByCreatedAt(placeReviewIds)
 
-    override fun deleteByPlaceReviewId(placeReviewId: Long) = placeReviewJpaRepository.deleteById(placeReviewId)
+        val placeOneLineReviewEntities = placeOneLineReviewJpaRepository
+            .findAllByPlaceReviewIdInOrderByCreatedAt(placeReviewEntities.map { it.id!! })
+
+        val placeReviewImageEntities = placeReviewImageJpaRepository
+            .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id!! })
+
+        return placeReviewEntities.map { placeReviewEntity ->
+            placeReviewStorageMapper.toDomain(
+                placeReviewJpaEntity = placeReviewEntity,
+                placeOneLineReviewJpaEntities = placeOneLineReviewEntities
+                    .filter { it.placeReviewId == placeReviewEntity.id!! },
+                placeReviewImageJpaEntities = placeReviewImageEntities
+                    .filter { it.placeReviewId == placeReviewEntity.id!! },
+            )
+        }
+    }
+
+    override fun getAllByPlaceId(placeId: Long): List<PlaceReview> {
+        val placeReviewEntities = placeReviewJpaRepository.findAllByPlaceIdOrderByCreatedAt(placeId)
+
+        val placeOnLineReviewEntities = placeOneLineReviewJpaRepository
+            .findAllByPlaceReviewIdInOrderByCreatedAt(placeReviewEntities.map { it.id!! })
+
+        val placeReviewImageEntities = placeReviewImageJpaRepository
+            .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id!! })
+
+        return placeReviewEntities.map { placeReviewEntity ->
+            placeReviewStorageMapper.toDomain(
+                placeReviewJpaEntity = placeReviewEntity,
+                placeOneLineReviewJpaEntities = placeOnLineReviewEntities
+                    .filter { it.placeReviewId == placeReviewEntity.id!! },
+                placeReviewImageJpaEntities = placeReviewImageEntities
+                    .filter { it.placeReviewId == placeReviewEntity.id!! },
+            )
+        }
+    }
+
+    override fun getAllByUserId(userId: Long): List<PlaceReview> {
+        val placeReviewEntities = placeReviewJpaRepository.findAllByUserIdOrderByCreatedAt(userId)
+
+        val placeOneLineReviewEntity = placeOneLineReviewJpaRepository
+            .findAllByPlaceReviewIdInOrderByCreatedAt(placeReviewEntities.map { it.id!! })
+
+        val placeReviewImageEntities = placeReviewImageJpaRepository
+            .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id!! })
+
+        return placeReviewEntities.map { placeReviewEntity ->
+
+            placeReviewStorageMapper.toDomain(
+                placeReviewJpaEntity = placeReviewEntity,
+                placeOneLineReviewJpaEntities = placeOneLineReviewEntity
+                    .filter { it.placeReviewId == placeReviewEntity.id!! },
+                placeReviewImageJpaEntities = placeReviewImageEntities
+                    .filter { it.placeReviewId == placeReviewEntity.id!! },
+            )
+        }
+    }
+
+    override fun deleteByPlaceReviewId(placeReviewId: Long) {
+        placeReviewJpaRepository.deleteById(placeReviewId)
+        placeOneLineReviewJpaRepository.deleteAllByPlaceReviewId(placeReviewId)
+        placeReviewImageJpaRepository.deleteAllByPlaceReviewId(placeReviewId)
+    }
 }

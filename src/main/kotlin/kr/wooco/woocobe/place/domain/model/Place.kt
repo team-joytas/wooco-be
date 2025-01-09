@@ -7,9 +7,8 @@ class Place(
     val longitude: Double,
     val address: String,
     val kakaoMapPlaceId: String,
-    var averageRating: Double, // 평균 별점 로직 고려 중
+    var averageRating: Double,
     var reviewCount: Long,
-    // 한줄평 통계 로직 고려 중
 ) {
     fun addReview(newRating: Double) {
         averageRating = ((averageRating * reviewCount) + newRating) / (reviewCount + 1)

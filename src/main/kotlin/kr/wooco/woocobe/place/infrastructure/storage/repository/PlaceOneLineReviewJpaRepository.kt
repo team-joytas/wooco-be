@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query
 interface PlaceOneLineReviewJpaRepository : JpaRepository<PlaceOneLineReviewJpaEntity, Long> {
     fun findAllByPlaceReviewIdOrderByCreatedAt(placeReviewId: Long): List<PlaceOneLineReviewJpaEntity>
 
-    fun findAllByPlaceReviewIdInOrderByCreatedAt(placeReviewId: List<Long>): List<PlaceOneLineReviewJpaEntity>
+    fun findAllByPlaceReviewIdInOrderByCreatedAt(placeReviewIds: List<Long>): List<PlaceOneLineReviewJpaEntity>
 
     @Query(
         """
@@ -19,4 +19,8 @@ interface PlaceOneLineReviewJpaRepository : JpaRepository<PlaceOneLineReviewJpaE
         """,
     )
     fun findPlaceOneLineReviewStatsByPlaceId(placeId: Long): List<Map<String, Long>>
+
+    fun findAllByPlaceReviewId(placeReviewId: Long): List<PlaceOneLineReviewJpaEntity>
+
+    fun deleteAllByPlaceReviewId(placeReviewId: Long)
 }

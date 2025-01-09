@@ -33,7 +33,7 @@ class PlaceReviewJpaEntity(
         PlaceReview(
             id = id!!,
             userId = userId,
-            placeId = place,
+            placeId = place.id,
             writeDateTime = createdAt,
             rating = rating,
             content = content,
@@ -47,7 +47,7 @@ class PlaceReviewJpaEntity(
                 PlaceReviewJpaEntity(
                     id = id,
                     userId = userId,
-                    placeId = placeId.id,
+                    placeId = placeId,
                     content = content,
                     rating = rating,
                 )

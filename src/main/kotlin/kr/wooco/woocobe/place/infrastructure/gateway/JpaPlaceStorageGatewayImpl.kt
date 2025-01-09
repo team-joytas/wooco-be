@@ -46,10 +46,15 @@ class JpaPlaceStorageGatewayImpl(
     override fun getOneLineReviewStats(placeId: Long): List<PlaceOneLineReviewStat> {
         val stats = placeOneLineReviewRepository.findPlaceOneLineReviewStatsByPlaceId(placeId)
         return stats.map { row ->
-            val content = row["content"] ?: throw RuntimeException()
-            val count = row["count"] ?: throw RuntimeException()
+            val content = row[CONTENT] ?: throw RuntimeException()
+            val count = row[COUNT] ?: throw RuntimeException()
 
             placeOneLineReviewStatStorageMapper.toDomain(content.toString(), count)
         }
+    }
+
+    companion object {
+        private const val CONTENT = "content"
+        private const val COUNT = "count"
     }
 }
