@@ -28,7 +28,7 @@ class AddPlaceReviewUseCase(
         PlaceReview
             .register(
                 userId = input.userId,
-                place = place,
+                placeId = place.id,
                 rating = input.rating,
                 content = input.content,
                 oneLineReview = input.oneLineReviews,

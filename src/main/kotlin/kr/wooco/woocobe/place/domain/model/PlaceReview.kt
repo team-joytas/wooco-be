@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 class PlaceReview(
     val id: Long,
     val userId: Long,
-    val place: Place,
+    val placeId: Long,
     val writeDateTime: LocalDateTime,
     var rating: Double,
     var content: String,
@@ -33,7 +33,7 @@ class PlaceReview(
     companion object {
         fun register(
             userId: Long,
-            place: Place,
+            placeId: Long,
             rating: Double,
             content: String,
             oneLineReview: List<String>,
@@ -42,7 +42,7 @@ class PlaceReview(
             PlaceReview(
                 id = 0L,
                 userId = userId,
-                place = place,
+                placeId = placeId,
                 writeDateTime = LocalDateTime.now(),
                 rating = rating,
                 content = content,
