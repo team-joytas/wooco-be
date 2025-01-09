@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.auth.infrastructure.storage
+package kr.wooco.woocobe.auth.infrastructure.cache
 
 import kr.wooco.woocobe.common.utils.getAndDeleteWithDeserialize
 import kr.wooco.woocobe.common.utils.setWithSerialize
