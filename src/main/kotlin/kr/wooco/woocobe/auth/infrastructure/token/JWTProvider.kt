@@ -17,35 +17,27 @@ class JWTProvider(
     private val secretKey: Key = Keys.hmacShaKeyFor(signingKey.toByteArray())
     private val jwtParser: JwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build()
 
-    fun generateAccessToken(authUserId: Long): String = createToken(USER_ID, authUserId, accessTokenExpiration)
+    fun generateAccessToken(userId: Long): String = createToken(USER_ID, userId, accessTokenExpiration)
 
-    fun generateRefreshToken(tokenId: Long): String = createToken(TOKEN_ID, tokenId, refreshTokenExpiration)
+    fun generateRefreshToken(tokenId: String): String = createToken(TOKEN_ID, tokenId, refreshTokenExpiration)
 
-    fun extractUserId(token: String): Long =
+    fun extractUserId(token: String): Long = extractKey(USER_ID, token).toLong()
+
+    fun extractTokenId(token: String): String = extractKey(TOKEN_ID, token)
+
+    private fun extractKey(
+        key: String,
+        token: String,
+    ): String =
         runCatching {
-            jwtParser
-                .parseClaimsJws(token)
-                .body[USER_ID]
-                .toString()
-                .toLong()
-        }.getOrElse {
-            throw RuntimeException()
-        }
-
-    fun extractTokenId(token: String): Long =
-        runCatching {
-            jwtParser
-                .parseClaimsJws(token)
-                .body[TOKEN_ID]
-                .toString()
-                .toLong()
+            jwtParser.parseClaimsJws(token).body[key].toString()
         }.getOrElse {
             throw RuntimeException()
         }
 
     private fun createToken(
         key: String,
-        value: Long,
+        value: Any,
         expiredAt: Long,
     ): String =
         Jwts
