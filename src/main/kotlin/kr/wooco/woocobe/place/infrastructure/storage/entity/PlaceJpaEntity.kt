@@ -6,7 +6,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
-import kr.wooco.woocobe.place.domain.model.Place
 
 @Entity
 @Table(name = "places")
@@ -28,32 +27,4 @@ class PlaceJpaEntity(
     @Id @Tsid
     @Column(name = "place_id", nullable = false)
     val id: Long? = 0L,
-) : BaseTimeEntity() {
-    fun toDomain(): Place =
-        Place(
-            id = id!!,
-            name = name,
-            latitude = latitude,
-            longitude = longitude,
-            address = address,
-            kakaoMapPlaceId = kakaoMapPlaceId,
-            averageRating = averageRating,
-            reviewCount = reviewCount,
-        )
-
-    companion object {
-        fun from(place: Place): PlaceJpaEntity =
-            with(place) {
-                PlaceJpaEntity(
-                    id = id,
-                    name = name,
-                    latitude = latitude,
-                    longitude = longitude,
-                    address = address,
-                    kakaoMapPlaceId = kakaoMapPlaceId,
-                    averageRating = averageRating,
-                    reviewCount = reviewCount,
-                )
-            }
-    }
-}
+) : BaseTimeEntity()
