@@ -20,15 +20,10 @@ class DeletePlaceReviewUseCase(
     override fun execute(input: DeletePlaceReviewInput) {
         val placeReview = placeReviewStorageGateway.getByPlaceReviewId(input.placeReviewId)
         placeReview.isValidWriter(input.userId)
-
         placeReviewStorageGateway.deleteByPlaceReviewId(placeReviewId = placeReview.id)
 
-        placeReviewStorageGateway.save(placeReview)
-
         val place = placeStorageGateway.getByPlaceId(placeReview.placeId)
-
         place.deleteReview(oldRating = placeReview.rating)
-
         placeStorageGateway.save(place)
     }
 }
