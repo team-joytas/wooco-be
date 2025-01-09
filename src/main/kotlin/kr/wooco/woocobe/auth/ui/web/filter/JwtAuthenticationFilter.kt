@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.auth.ui.filter
+package kr.wooco.woocobe.auth.ui.web.filter
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

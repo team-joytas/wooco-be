@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.auth.ui.web
+package kr.wooco.woocobe.auth.ui.web.controller
 
 import jakarta.servlet.http.HttpServletResponse
 import kr.wooco.woocobe.auth.domain.usecase.GetSocialLoginUrlInput
@@ -11,10 +11,10 @@ import kr.wooco.woocobe.auth.domain.usecase.SocialLoginInput
 import kr.wooco.woocobe.auth.domain.usecase.SocialLoginUseCase
 import kr.wooco.woocobe.auth.domain.usecase.WithdrawInput
 import kr.wooco.woocobe.auth.domain.usecase.WithdrawUseCase
-import kr.wooco.woocobe.auth.ui.web.dto.request.LoginRequest
-import kr.wooco.woocobe.auth.ui.web.dto.response.ReissueTokenResponse
-import kr.wooco.woocobe.auth.ui.web.dto.response.SocialLoginResponse
-import kr.wooco.woocobe.auth.ui.web.dto.response.SocialLoginUrlResponse
+import kr.wooco.woocobe.auth.ui.web.controller.request.LoginRequest
+import kr.wooco.woocobe.auth.ui.web.controller.response.ReissueTokenResponse
+import kr.wooco.woocobe.auth.ui.web.controller.response.SocialLoginResponse
+import kr.wooco.woocobe.auth.ui.web.controller.response.SocialLoginUrlResponse
 import kr.wooco.woocobe.common.utils.addCookie
 import kr.wooco.woocobe.common.utils.deleteCookie
 import org.springframework.http.ResponseEntity
@@ -36,9 +36,9 @@ class AuthController(
     private val socialLoginUseCase: SocialLoginUseCase,
     private val reissueTokenUseCase: ReissueTokenUseCase,
     private val getSocialLoginUrlUseCase: GetSocialLoginUrlUseCase,
-) {
+) : AuthApi {
     @GetMapping("/{provider}/social-login/url")
-    fun socialLoginUrl(
+    override fun socialLoginUrl(
         @PathVariable provider: String,
         response: HttpServletResponse,
     ): ResponseEntity<SocialLoginUrlResponse> {
@@ -52,7 +52,7 @@ class AuthController(
     }
 
     @PostMapping("/{provider}/social-login")
-    fun socialLogin(
+    override fun socialLogin(
         @RequestBody request: LoginRequest,
         @PathVariable provider: String,
         @CookieValue(CODE_CHALLENGE_COOKIE_NAME) codeChallenge: String,
@@ -71,7 +71,7 @@ class AuthController(
     }
 
     @PostMapping("/logout")
-    fun logout(
+    override fun logout(
         @AuthenticationPrincipal userId: Long,
         @CookieValue(REFRESH_TOKEN_COOKIE_NAME) token: String,
         response: HttpServletResponse,
@@ -87,7 +87,7 @@ class AuthController(
     }
 
     @PostMapping("/reissue")
-    fun reissue(
+    override fun reissue(
         @CookieValue(REFRESH_TOKEN_COOKIE_NAME) token: String,
         response: HttpServletResponse,
     ): ResponseEntity<ReissueTokenResponse> {
@@ -101,7 +101,7 @@ class AuthController(
     }
 
     @DeleteMapping("/withdraw")
-    fun withdraw(
+    override fun withdraw(
         @AuthenticationPrincipal userId: Long,
         @CookieValue(REFRESH_TOKEN_COOKIE_NAME) token: String,
         response: HttpServletResponse,
