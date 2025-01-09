@@ -19,7 +19,6 @@ class GetPlaceReviewUseCase(
 ) : UseCase<GetPlaceReviewInput, GetPlaceReviewOutput> {
     override fun execute(input: GetPlaceReviewInput): GetPlaceReviewOutput {
         val placeReview = placeReviewStorageGateway.getByPlaceReviewId(input.placeReviewId)
-            ?: throw RuntimeException()
 
         return GetPlaceReviewOutput(
             placeReview = placeReview,

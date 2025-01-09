@@ -1,11 +1,10 @@
 package kr.wooco.woocobe.place.domain.model
 
-import kr.wooco.woocobe.user.domain.model.User
 import java.time.LocalDateTime
 
 class PlaceReview(
     val id: Long,
-    val user: User,
+    val userId: Long,
     val place: Place,
     val writeDateTime: LocalDateTime,
     var rating: Double,
@@ -25,11 +24,15 @@ class PlaceReview(
         this.imageUrls = imageUrls
     }
 
-    fun isWriter(targetId: Long): Boolean = user.id == targetId
+    fun isValidWriter(userId: Long) {
+        if (this.userId != userId) {
+            throw RuntimeException()
+        }
+    }
 
     companion object {
         fun register(
-            user: User,
+            userId: Long,
             place: Place,
             rating: Double,
             content: String,
@@ -38,7 +41,7 @@ class PlaceReview(
         ): PlaceReview =
             PlaceReview(
                 id = 0L,
-                user = user,
+                userId = userId,
                 place = place,
                 writeDateTime = LocalDateTime.now(),
                 rating = rating,

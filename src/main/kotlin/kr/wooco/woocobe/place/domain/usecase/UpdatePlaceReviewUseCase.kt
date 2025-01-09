@@ -23,11 +23,7 @@ class UpdatePlaceReviewUseCase(
     @Transactional
     override fun execute(input: UpdatePlaceReviewInput) {
         val placeReview = placeReviewStorageGateway.getByPlaceReviewId(input.placeReviewId)
-            ?: throw RuntimeException()
-
-        when {
-            placeReview.isWriter(input.userId).not() -> throw RuntimeException()
-        }
+        placeReview.isValidWriter(input.userId)
 
         placeReview
             .update(

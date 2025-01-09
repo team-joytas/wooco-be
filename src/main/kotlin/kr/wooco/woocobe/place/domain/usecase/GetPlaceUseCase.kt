@@ -19,7 +19,6 @@ class GetPlaceUseCase(
 ) : UseCase<GetPlaceInput, GetPlaceOutPut> {
     override fun execute(input: GetPlaceInput): GetPlaceOutPut {
         val place = placeStorageGateway.getByPlaceId(input.placeId)
-            ?: throw RuntimeException()
 
         return GetPlaceOutPut(
             place = place,

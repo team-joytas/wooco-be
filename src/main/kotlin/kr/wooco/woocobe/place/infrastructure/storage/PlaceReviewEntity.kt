@@ -34,7 +34,7 @@ class PlaceReviewEntity(
     ): PlaceReview =
         PlaceReview(
             id = id!!,
-            user = user,
+            userId = user,
             place = place,
             writeDateTime = createdAt,
             rating = rating,
@@ -48,7 +48,7 @@ class PlaceReviewEntity(
             with(placeReview) {
                 PlaceReviewEntity(
                     id = id,
-                    userId = user.id,
+                    userId = userId.id,
                     placeId = place.id,
                     content = content,
                     rating = rating,
