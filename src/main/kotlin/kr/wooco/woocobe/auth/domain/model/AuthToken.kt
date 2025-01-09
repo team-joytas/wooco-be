@@ -1,16 +1,22 @@
 package kr.wooco.woocobe.auth.domain.model
 
-class AuthToken(
-    val id: Long,
+import java.util.UUID
+
+data class AuthToken(
     val userId: Long,
+    val tokenId: String,
 ) {
-    fun isMatchUserId(targetId: Long): Boolean = userId == targetId
+    constructor(userId: Long) : this(
+        userId = userId,
+        tokenId = generateTokenId(),
+    )
+
+    fun rotateAuthToken(): AuthToken =
+        copy(
+            tokenId = generateTokenId(),
+        )
 
     companion object {
-        fun register(userId: Long): AuthToken =
-            AuthToken(
-                id = 0L,
-                userId = userId,
-            )
+        private fun generateTokenId(): String = UUID.randomUUID().toString()
     }
 }

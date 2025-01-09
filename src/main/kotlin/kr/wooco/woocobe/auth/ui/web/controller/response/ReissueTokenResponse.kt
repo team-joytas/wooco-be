@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.auth.ui.web.dto.response
+package kr.wooco.woocobe.auth.ui.web.controller.response
 
 import kr.wooco.woocobe.auth.domain.usecase.ReissueTokenOutput
 

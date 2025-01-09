@@ -5,7 +5,7 @@ server:
 spring:
   cookie:
     path: /
-    max-age: 9876543210
+    max-age: 987654321
     same-site: Lax
     domain: localhost
     secure: false

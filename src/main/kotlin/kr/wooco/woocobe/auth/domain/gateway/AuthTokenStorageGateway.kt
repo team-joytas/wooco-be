@@ -5,9 +5,7 @@ import kr.wooco.woocobe.auth.domain.model.AuthToken
 interface AuthTokenStorageGateway {
     fun save(authToken: AuthToken): AuthToken
 
-    fun getByTokenId(tokenId: Long): AuthToken?
+    fun getWithDeleteByTokenId(tokenId: String): AuthToken
 
-    fun getWithDeleteByTokenId(tokenId: Long): AuthToken?
-
-    fun deleteByTokenId(tokenId: Long)
+    fun deleteByTokenId(tokenId: String)
 }

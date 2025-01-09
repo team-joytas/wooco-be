@@ -1,7 +1,7 @@
-package kr.wooco.woocobe.auth.ui.config
+package kr.wooco.woocobe.auth.ui.web.config
 
 import kr.wooco.woocobe.auth.domain.usecase.ExtractTokenUseCase
-import kr.wooco.woocobe.auth.ui.filter.JwtAuthenticationFilter
+import kr.wooco.woocobe.auth.ui.web.filter.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.Customizer

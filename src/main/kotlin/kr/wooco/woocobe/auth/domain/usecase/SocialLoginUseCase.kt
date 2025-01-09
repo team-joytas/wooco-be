@@ -25,6 +25,7 @@ data class SocialLoginOutput(
     val refreshToken: String,
 )
 
+// TODO 책임과 역할이 너무 많다 -> 분리 예정
 @Service
 class SocialLoginUseCase(
     private val userStorageGateway: UserStorageGateway,
@@ -37,12 +38,11 @@ class SocialLoginUseCase(
     @Transactional
     override fun execute(input: SocialLoginInput): SocialLoginOutput {
         val pkce = pkceStorageGateway.getWithDeleteByChallenge(input.challenge)
-            ?: throw RuntimeException()
 
         val socialType = SocialType.from(input.socialType)
         val socialAuth = socialAuthClientGateway.fetchSocialAuth(input.authCode, socialType, pkce)
 
-        val authUser = authUserStorageGateway.getBySocialIdAndSocialType(
+        val authUser = authUserStorageGateway.getOrNullBySocialIdAndSocialType(
             socialId = socialAuth.socialId,
             socialType = socialAuth.socialType,
         ) ?: run {
@@ -55,13 +55,12 @@ class SocialLoginUseCase(
             )
         }
 
-        val authToken = AuthToken
-            .register(userId = authUser.userId)
-            .run(authTokenStorageGateway::save)
+        val authToken = AuthToken(userId = authUser.userId)
+        authTokenStorageGateway.save(authToken)
 
         return SocialLoginOutput(
             accessToken = tokenProviderGateway.generateAccessToken(authToken.userId),
-            refreshToken = tokenProviderGateway.generateRefreshToken(authToken.id),
+            refreshToken = tokenProviderGateway.generateRefreshToken(authToken.tokenId),
         )
     }
 }

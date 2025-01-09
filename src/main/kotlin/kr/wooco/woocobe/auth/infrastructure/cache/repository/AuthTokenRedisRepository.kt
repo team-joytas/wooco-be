@@ -1,5 +1,6 @@
-package kr.wooco.woocobe.auth.infrastructure.storage
+package kr.wooco.woocobe.auth.infrastructure.cache.repository
 
+import kr.wooco.woocobe.auth.infrastructure.cache.entity.AuthTokenRedisEntity
 import kr.wooco.woocobe.common.utils.getAndDeleteWithDeserialize
 import kr.wooco.woocobe.common.utils.getWithDeserialize
 import kr.wooco.woocobe.common.utils.setWithSerialize
@@ -12,32 +13,32 @@ class AuthTokenRedisRepository(
     private val redisTemplate: StringRedisTemplate,
     @Value("\${app.jwt.expiration.refresh-token}") private val timeout: Long,
 ) {
-    fun save(authTokenEntity: AuthTokenEntity): AuthTokenEntity {
+    fun save(authTokenEntity: AuthTokenRedisEntity): AuthTokenRedisEntity {
         redisTemplate.opsForValue().setWithSerialize(
-            key = generateStorageKey(authTokenEntity.id),
+            key = generateStorageKey(authTokenEntity.tokenId),
             value = authTokenEntity,
             timeout = timeout,
         )
         return authTokenEntity
     }
 
-    fun findById(id: Long): AuthTokenEntity? =
+    fun findById(id: String): AuthTokenRedisEntity? =
         redisTemplate.opsForValue().getWithDeserialize(
             key = generateStorageKey(id),
-            convertClass = AuthTokenEntity::class,
+            convertClass = AuthTokenRedisEntity::class,
         )
 
-    fun findAndDeleteById(id: Long): AuthTokenEntity? =
+    fun findAndDeleteById(id: String): AuthTokenRedisEntity? =
         redisTemplate.opsForValue().getAndDeleteWithDeserialize(
             key = generateStorageKey(id),
-            convertClass = AuthTokenEntity::class,
+            convertClass = AuthTokenRedisEntity::class,
         )
 
-    fun deleteById(id: Long) {
+    fun deleteById(id: String) {
         redisTemplate.delete(generateStorageKey(id))
     }
 
     companion object {
-        fun generateStorageKey(id: Long) = "token:$id"
+        fun generateStorageKey(id: String) = "token:$id"
     }
 }

@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.auth.ui.config
+package kr.wooco.woocobe.auth.ui.web.config
 
 import org.springframework.http.HttpMethod
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
