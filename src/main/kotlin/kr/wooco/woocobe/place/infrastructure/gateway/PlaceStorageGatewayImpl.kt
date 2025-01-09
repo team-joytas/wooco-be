@@ -3,8 +3,8 @@ package kr.wooco.woocobe.place.infrastructure.gateway
 import kr.wooco.woocobe.place.domain.gateway.PlaceStorageGateway
 import kr.wooco.woocobe.place.domain.model.Place
 import kr.wooco.woocobe.place.domain.model.PlaceOneLineReviewStat
-import kr.wooco.woocobe.place.infrastructure.PlaceOneLineReviewStatStorageMapper
-import kr.wooco.woocobe.place.infrastructure.PlaceStorageMapper
+import kr.wooco.woocobe.place.infrastructure.storage.PlaceOneLineReviewStatStorageMapper
+import kr.wooco.woocobe.place.infrastructure.storage.PlaceStorageMapper
 import kr.wooco.woocobe.place.infrastructure.storage.repository.PlaceJpaRepository
 import kr.wooco.woocobe.place.infrastructure.storage.repository.PlaceOneLineReviewJpaRepository
 import org.springframework.data.repository.findByIdOrNull

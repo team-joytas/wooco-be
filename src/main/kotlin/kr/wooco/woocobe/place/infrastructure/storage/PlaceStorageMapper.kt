@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.place.infrastructure
+package kr.wooco.woocobe.place.infrastructure.storage
 
 import kr.wooco.woocobe.place.domain.model.Place
 import kr.wooco.woocobe.place.infrastructure.storage.entity.PlaceJpaEntity

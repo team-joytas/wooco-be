@@ -2,8 +2,8 @@ package kr.wooco.woocobe.place.infrastructure.gateway
 
 import kr.wooco.woocobe.place.domain.gateway.PlaceReviewStorageGateway
 import kr.wooco.woocobe.place.domain.model.PlaceReview
-import kr.wooco.woocobe.place.infrastructure.PlaceOneLineReviewStorageMapper
-import kr.wooco.woocobe.place.infrastructure.PlaceReviewStorageMapper
+import kr.wooco.woocobe.place.infrastructure.storage.PlaceOneLineReviewStorageMapper
+import kr.wooco.woocobe.place.infrastructure.storage.PlaceReviewStorageMapper
 import kr.wooco.woocobe.place.infrastructure.storage.entity.PlaceReviewImageJpaEntity
 import kr.wooco.woocobe.place.infrastructure.storage.repository.PlaceOneLineReviewJpaRepository
 import kr.wooco.woocobe.place.infrastructure.storage.repository.PlaceReviewImageJpaRepository
