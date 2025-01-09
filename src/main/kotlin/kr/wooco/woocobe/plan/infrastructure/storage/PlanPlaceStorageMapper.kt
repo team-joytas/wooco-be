@@ -19,7 +19,7 @@ class PlanPlaceStorageMapper {
     ): PlanPlaceJpaEntity =
         PlanPlaceJpaEntity(
             order = planPlace.order,
-            planId = planJpaEntity.id!!,
+            planId = planJpaEntity.id,
             placeId = planPlace.placeId,
         )
 }

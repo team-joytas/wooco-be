@@ -12,7 +12,7 @@ class PlanCategoryStorageMapper {
         planCategory: PlanCategory,
     ): PlanCategoryJpaEntity =
         PlanCategoryJpaEntity(
-            planId = planJpaEntity.id!!,
+            planId = planJpaEntity.id,
             name = planCategory.name,
         )
 }

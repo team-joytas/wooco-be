@@ -23,11 +23,11 @@ internal class PlanStorageGatewayImpl(
     override fun save(plan: Plan): Plan {
         val planEntity = planJpaRepository.save(planStorageMapper.toEntity(plan))
 
-        planPlaceJpaRepository.deleteAllByPlanId(planEntity.id!!)
+        planPlaceJpaRepository.deleteAllByPlanId(planEntity.id)
         val planPlaceEntities = plan.places.map { planPlaceStorageMapper.toEntity(planEntity, it) }
         planPlaceJpaRepository.saveAll(planPlaceEntities)
 
-        planCategoryJpaRepository.deleteAllByPlanId(planEntity.id!!)
+        planCategoryJpaRepository.deleteAllByPlanId(planEntity.id)
         val planCategoryEntities = plan.categories.map { planCategoryStorageMapper.toEntity(planEntity, it) }
         planCategoryJpaRepository.saveAll(planCategoryEntities)
 
@@ -45,7 +45,7 @@ internal class PlanStorageGatewayImpl(
 
     override fun getAllByUserId(userId: Long): List<Plan> {
         val planEntities = planJpaRepository.findAllByUserId(userId)
-        val planIds = planEntities.map { it.id!! }
+        val planIds = planEntities.map { it.id }
         val planPlaceEntities = planPlaceJpaRepository.findAllByPlanIdIn(planIds)
         val planCategoryEntities = planCategoryJpaRepository.findAllByPlanIdIn(planIds)
 
