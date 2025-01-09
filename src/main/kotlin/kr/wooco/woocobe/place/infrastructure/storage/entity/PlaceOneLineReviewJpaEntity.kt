@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.place.infrastructure.storage
+package kr.wooco.woocobe.place.infrastructure.storage.entity
 
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
@@ -10,7 +10,7 @@ import kr.wooco.woocobe.place.domain.model.PlaceOneLineReview
 
 @Entity
 @Table(name = "place_one_line_reviews")
-class PlaceOneLineReviewEntity(
+class PlaceOneLineReviewJpaEntity(
     @Column(name = "content")
     val content: String,
     @Column(name = "place_Review_id")
@@ -28,8 +28,8 @@ class PlaceOneLineReviewEntity(
             placeId: Long,
             placeReviewId: Long,
             content: String,
-        ): PlaceOneLineReviewEntity =
-            PlaceOneLineReviewEntity(
+        ): PlaceOneLineReviewJpaEntity =
+            PlaceOneLineReviewJpaEntity(
                 placeId = placeId,
                 placeReviewId = placeReviewId,
                 content = content,

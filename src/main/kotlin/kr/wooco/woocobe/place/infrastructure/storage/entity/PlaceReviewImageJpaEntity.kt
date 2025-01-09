@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.place.infrastructure.storage
+package kr.wooco.woocobe.place.infrastructure.storage.entity
 
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
@@ -8,7 +8,7 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "place_review_images")
-class PlaceReviewImageEntity(
+class PlaceReviewImageJpaEntity(
     @Column(name = "image_url")
     val imageUrl: String,
     @Column(name = "place_id")

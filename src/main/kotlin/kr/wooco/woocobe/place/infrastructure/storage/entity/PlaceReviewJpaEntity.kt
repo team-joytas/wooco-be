@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.place.infrastructure.storage
+package kr.wooco.woocobe.place.infrastructure.storage.entity
 
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
@@ -9,11 +9,10 @@ import kr.wooco.woocobe.common.infrastructure.storage.BaseTimeEntity
 import kr.wooco.woocobe.place.domain.model.Place
 import kr.wooco.woocobe.place.domain.model.PlaceOneLineReview
 import kr.wooco.woocobe.place.domain.model.PlaceReview
-import kr.wooco.woocobe.user.domain.model.User
 
 @Entity
 @Table(name = "place_reviews")
-class PlaceReviewEntity(
+class PlaceReviewJpaEntity(
     @Column(name = "content", nullable = false)
     val content: String,
     @Column(name = "rating", nullable = false)
@@ -27,15 +26,14 @@ class PlaceReviewEntity(
     val id: Long? = 0L,
 ) : BaseTimeEntity() {
     fun toDomain(
-        user: User,
         place: Place,
         placeOneLineReview: List<PlaceOneLineReview> = emptyList(),
         imageUrls: List<String> = emptyList(),
     ): PlaceReview =
         PlaceReview(
             id = id!!,
-            userId = user,
-            place = place,
+            userId = userId,
+            placeId = place,
             writeDateTime = createdAt,
             rating = rating,
             content = content,
@@ -44,12 +42,12 @@ class PlaceReviewEntity(
         )
 
     companion object {
-        fun from(placeReview: PlaceReview): PlaceReviewEntity =
+        fun from(placeReview: PlaceReview): PlaceReviewJpaEntity =
             with(placeReview) {
-                PlaceReviewEntity(
+                PlaceReviewJpaEntity(
                     id = id,
-                    userId = userId.id,
-                    placeId = place.id,
+                    userId = userId,
+                    placeId = placeId.id,
                     content = content,
                     rating = rating,
                 )

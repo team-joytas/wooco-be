@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.place.infrastructure.storage
+package kr.wooco.woocobe.place.infrastructure.storage.entity
 
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
@@ -10,7 +10,7 @@ import kr.wooco.woocobe.place.domain.model.Place
 
 @Entity
 @Table(name = "places")
-class PlaceEntity(
+class PlaceJpaEntity(
     @Column(name = "review_count", nullable = false)
     val reviewCount: Long,
     @Column(name = "average_rating", nullable = false)
@@ -42,9 +42,9 @@ class PlaceEntity(
         )
 
     companion object {
-        fun from(place: Place): PlaceEntity =
+        fun from(place: Place): PlaceJpaEntity =
             with(place) {
-                PlaceEntity(
+                PlaceJpaEntity(
                     id = id,
                     name = name,
                     latitude = latitude,
