@@ -4,7 +4,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
-import kr.wooco.woocobe.user.infrastructure.storage.entity.UserEntity
+import kr.wooco.woocobe.user.infrastructure.storage.entity.UserJpaEntity
 import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
 
 @IntegrationTest
@@ -22,7 +22,7 @@ class UpdateUserUseCaseTest(
         val input = UpdateUserInput(userId = validUserId, name = updatedName, profileUrl = updatedProfileUrl)
 
         When("존재하는 회원일 때") {
-            UserEntity(id = validUserId, name = "홍인데유", profileUrl = "url").run(userJpaRepository::save)
+            UserJpaEntity(id = validUserId, name = "홍인데유", profileUrl = "url").run(userJpaRepository::save)
 
             updateUserUseCase.execute(input)
 

@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
-import kr.wooco.woocobe.user.infrastructure.storage.entity.UserEntity
+import kr.wooco.woocobe.user.infrastructure.storage.entity.UserJpaEntity
 import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
 
 @IntegrationTest
@@ -21,7 +21,7 @@ class GetUserUseCaseTest(
         val input = GetUserInput(userId = validUserId)
 
         When("해당 사용자가 존재할 때") {
-            val userEntity = UserEntity(
+            val userJpaEntity = UserJpaEntity(
                 id = validUserId,
                 name = "홍인데요",
                 profileUrl = "url",
@@ -31,9 +31,9 @@ class GetUserUseCaseTest(
 
             Then("사용자 정보를 반환한다.") {
                 val user = sut.user
-                user.id shouldBe userEntity.id
-                user.name shouldBe userEntity.name
-                user.profileUrl shouldBe userEntity.profileUrl
+                user.id shouldBe userJpaEntity.id
+                user.name shouldBe userJpaEntity.name
+                user.profileUrl shouldBe userJpaEntity.profileUrl
             }
         }
 
