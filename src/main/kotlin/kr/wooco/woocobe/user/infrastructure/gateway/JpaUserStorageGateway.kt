@@ -18,7 +18,7 @@ internal class JpaUserStorageGateway(
         return userStorageMapper.toDomain(userEntity)
     }
 
-    override fun getByUserId(userId: Long): User? {
+    override fun getByUserId(userId: Long): User {
         val userEntity = userJpaRepository.findByIdOrNull(userId)
             ?: throw RuntimeException()
         return userStorageMapper.toDomain(userEntity)

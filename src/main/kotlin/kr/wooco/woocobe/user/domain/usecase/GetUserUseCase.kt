@@ -19,7 +19,6 @@ class GetUserUseCase(
 ) : UseCase<GetUserInput, GetUserOutput> {
     override fun execute(input: GetUserInput): GetUserOutput {
         val user = userStorageGateway.getByUserId(userId = input.userId)
-            ?: throw RuntimeException()
 
         return GetUserOutput(
             user = user,
