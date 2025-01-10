@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/users")
 class UserController(
     private val userFacadeService: UserFacadeService,
-) {
+) : UserApi {
     @GetMapping("/me")
-    fun getCurrentUser(
+    override fun getCurrentUser(
         @AuthenticationPrincipal userId: Long,
     ): ResponseEntity<GetCurrentUserResponse> {
         val response = userFacadeService.getCurrentUser(userId)
@@ -25,7 +25,7 @@ class UserController(
     }
 
     @PatchMapping("/profile")
-    fun updateProfile(
+    override fun updateProfile(
         @AuthenticationPrincipal userId: Long,
         @RequestBody request: UpdateUserRequest,
     ): ResponseEntity<Unit> {
