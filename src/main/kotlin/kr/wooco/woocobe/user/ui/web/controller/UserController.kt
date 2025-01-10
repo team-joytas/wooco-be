@@ -1,11 +1,8 @@
 package kr.wooco.woocobe.user.ui.web.controller
 
-import kr.wooco.woocobe.user.domain.usecase.GetUserInput
-import kr.wooco.woocobe.user.domain.usecase.GetUserUseCase
-import kr.wooco.woocobe.user.domain.usecase.UpdateUserInput
-import kr.wooco.woocobe.user.domain.usecase.UpdateUserUseCase
-import kr.wooco.woocobe.user.ui.web.controller.request.UpdateUserProfileRequest
+import kr.wooco.woocobe.user.ui.web.controller.request.UpdateUserRequest
 import kr.wooco.woocobe.user.ui.web.controller.response.GetCurrentUserResponse
+import kr.wooco.woocobe.user.ui.web.facade.UserFacadeService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,34 +14,22 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/users")
 class UserController(
-    private val getUserUseCase: GetUserUseCase,
-    private val updateUserUseCase: UpdateUserUseCase,
+    private val userFacadeService: UserFacadeService,
 ) {
     @GetMapping("/me")
     fun getCurrentUser(
         @AuthenticationPrincipal userId: Long,
     ): ResponseEntity<GetCurrentUserResponse> {
-        val result = getUserUseCase.execute(
-            GetUserInput(
-                userId = userId,
-            ),
-        )
-        val response = GetCurrentUserResponse.from(result)
+        val response = userFacadeService.getCurrentUser(userId)
         return ResponseEntity.ok(response)
     }
 
     @PatchMapping("/profile")
     fun updateProfile(
         @AuthenticationPrincipal userId: Long,
-        @RequestBody request: UpdateUserProfileRequest,
+        @RequestBody request: UpdateUserRequest,
     ): ResponseEntity<Unit> {
-        updateUserUseCase.execute(
-            UpdateUserInput(
-                userId = userId,
-                name = request.name,
-                profileUrl = request.profileUrl,
-            ),
-        )
+        userFacadeService.updateUser(userId, request)
         return ResponseEntity.ok().build()
     }
 }

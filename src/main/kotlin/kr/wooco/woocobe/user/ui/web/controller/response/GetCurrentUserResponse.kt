@@ -9,12 +9,10 @@ data class GetCurrentUserResponse(
 ) {
     companion object {
         fun from(getUserOutput: GetUserOutput): GetCurrentUserResponse =
-            with(getUserOutput) {
-                GetCurrentUserResponse(
-                    userId = user.id,
-                    name = user.name,
-                    profileUrl = user.profileUrl,
-                )
-            }
+            GetCurrentUserResponse(
+                userId = getUserOutput.user.id,
+                name = getUserOutput.user.name,
+                profileUrl = getUserOutput.user.profileUrl,
+            )
     }
 }
