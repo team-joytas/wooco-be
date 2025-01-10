@@ -5,8 +5,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
-import kr.wooco.woocobe.user.infrastructure.storage.UserEntity
-import kr.wooco.woocobe.user.infrastructure.storage.UserJpaRepository
+import kr.wooco.woocobe.user.infrastructure.storage.entity.UserJpaEntity
+import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
 
 @IntegrationTest
 class GetUserUseCaseTest(
@@ -15,29 +15,26 @@ class GetUserUseCaseTest(
 ) : BehaviorSpec({
     listeners(MysqlCleaner())
 
-    Given("유효한 input 값이 들어올 경우") {
-        val validUserId = 1234567890L
+    Given("저장된 회원이 존재할 경우") {
+        val userJpaEntity = UserJpaEntity(name = "홍인데요", profileUrl = "url").run(userJpaRepository::save)
+        val validUserId = userJpaEntity.id
 
-        val input = GetUserInput(userId = validUserId)
-
-        When("해당 사용자가 존재할 때") {
-            val userEntity = UserEntity(
-                id = validUserId,
-                name = "홍인데요",
-                profileUrl = "url",
-            ).run(userJpaRepository::save)
+        When("해당 회원 식별자 값이 주어질 때") {
+            val input = GetUserInput(userId = validUserId)
 
             val sut = getUserUseCase.execute(input)
 
             Then("사용자 정보를 반환한다.") {
                 val user = sut.user
-                user.id shouldBe userEntity.id
-                user.name shouldBe userEntity.name
-                user.profileUrl shouldBe userEntity.profileUrl
+                user.id shouldBe userJpaEntity.id
+                user.name shouldBe userJpaEntity.name
+                user.profileUrl shouldBe userJpaEntity.profileUrl
             }
         }
 
-        When("해당 사용자가 존재하지 않을 때") {
+        When("일치하지 않는 식별자 값이 주어질 때") {
+            val input = GetUserInput(userId = 0L)
+
             Then("NotExistsUserException 오류가 발생한다.") {
                 shouldThrow<RuntimeException> {
                     getUserUseCase.execute(input)

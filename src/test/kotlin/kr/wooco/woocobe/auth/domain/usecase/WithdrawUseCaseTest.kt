@@ -1,18 +1,12 @@
 package kr.wooco.woocobe.auth.domain.usecase
 
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import kr.wooco.woocobe.auth.domain.model.SocialType
-import kr.wooco.woocobe.auth.infrastructure.cache.entity.AuthTokenRedisEntity
 import kr.wooco.woocobe.auth.infrastructure.cache.repository.AuthTokenRedisRepository
-import kr.wooco.woocobe.auth.infrastructure.storage.entity.AuthUserJpaEntity
 import kr.wooco.woocobe.auth.infrastructure.storage.repository.AuthUserJpaRepository
 import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
 import kr.wooco.woocobe.support.RedisCleaner
-import kr.wooco.woocobe.user.infrastructure.storage.UserEntity
-import kr.wooco.woocobe.user.infrastructure.storage.UserJpaRepository
-import org.springframework.data.repository.findByIdOrNull
+import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
 
 @IntegrationTest
 class WithdrawUseCaseTest(

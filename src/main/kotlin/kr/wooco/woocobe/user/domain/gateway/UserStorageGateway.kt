@@ -5,9 +5,9 @@ import kr.wooco.woocobe.user.domain.model.User
 interface UserStorageGateway {
     fun save(user: User): User
 
-    fun update(user: User): User
+    fun getByUserId(userId: Long): User
 
-    fun getByUserId(userId: Long): User?
+    fun getAllByUserIds(userIds: List<Long>): List<User>
 
     fun deleteByUserId(userId: Long)
 }

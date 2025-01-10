@@ -18,10 +18,8 @@ class UpdateUserUseCase(
     @Transactional
     override fun execute(input: UpdateUserInput) {
         val user = userStorageGateway.getByUserId(userId = input.userId)
-            ?: throw RuntimeException()
 
-        user
-            .update(name = input.name, profileUrl = input.profileUrl)
-            .run(userStorageGateway::update)
+        user.update(name = input.name, profileUrl = input.profileUrl)
+        userStorageGateway.save(user)
     }
 }

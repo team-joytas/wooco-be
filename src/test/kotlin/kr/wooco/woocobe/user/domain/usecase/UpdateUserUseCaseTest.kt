@@ -4,8 +4,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
-import kr.wooco.woocobe.user.infrastructure.storage.UserEntity
-import kr.wooco.woocobe.user.infrastructure.storage.UserJpaRepository
+import kr.wooco.woocobe.user.infrastructure.storage.entity.UserJpaEntity
+import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
 
 @IntegrationTest
 class UpdateUserUseCaseTest(
@@ -14,15 +14,15 @@ class UpdateUserUseCaseTest(
 ) : BehaviorSpec({
     listeners(MysqlCleaner())
 
-    Given("유효한 input 값이 들어올 경우") {
-        val validUserId = 1234567890L
+    Given("저장된 회원이 존재하는 경우") {
+        val userEntity = UserJpaEntity(name = "홍인데유", profileUrl = "url").run(userJpaRepository::save)
+        val validUserId = userEntity.id
+
         val updatedName = "홍이름바꿈"
         val updatedProfileUrl = "url-hong"
 
-        val input = UpdateUserInput(userId = validUserId, name = updatedName, profileUrl = updatedProfileUrl)
-
-        When("존재하는 회원일 때") {
-            UserEntity(id = validUserId, name = "홍인데유", profileUrl = "url").run(userJpaRepository::save)
+        When("해당 회원의 정보를 수정할 때") {
+            val input = UpdateUserInput(userId = validUserId, name = updatedName, profileUrl = updatedProfileUrl)
 
             updateUserUseCase.execute(input)
 
