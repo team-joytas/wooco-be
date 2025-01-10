@@ -11,7 +11,7 @@ import kr.wooco.woocobe.support.IntegrationTest
 import kr.wooco.woocobe.support.MysqlCleaner
 import kr.wooco.woocobe.support.RedisCleaner
 import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
-import kr.wooco.woocobe.user.infrastructure.storage.UserJpaRepository
+import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
 import org.springframework.data.redis.core.StringRedisTemplate
 
 @IntegrationTest

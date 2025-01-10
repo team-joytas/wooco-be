@@ -2,8 +2,8 @@ package kr.wooco.woocobe.user.infrastructure.gateway
 
 import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
 import kr.wooco.woocobe.user.domain.model.User
-import kr.wooco.woocobe.user.infrastructure.storage.UserEntity
-import kr.wooco.woocobe.user.infrastructure.storage.UserJpaRepository
+import kr.wooco.woocobe.user.infrastructure.storage.entity.UserEntity
+import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 

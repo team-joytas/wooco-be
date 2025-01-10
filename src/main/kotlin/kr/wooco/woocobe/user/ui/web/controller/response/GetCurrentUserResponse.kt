@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.user.ui.web.dto.response
+package kr.wooco.woocobe.user.ui.web.controller.response
 
 import kr.wooco.woocobe.user.domain.usecase.GetUserOutput
 

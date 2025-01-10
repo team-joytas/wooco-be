@@ -1,11 +1,11 @@
-package kr.wooco.woocobe.user.ui.web
+package kr.wooco.woocobe.user.ui.web.controller
 
 import kr.wooco.woocobe.user.domain.usecase.GetUserInput
 import kr.wooco.woocobe.user.domain.usecase.GetUserUseCase
 import kr.wooco.woocobe.user.domain.usecase.UpdateUserInput
 import kr.wooco.woocobe.user.domain.usecase.UpdateUserUseCase
-import kr.wooco.woocobe.user.ui.web.dto.request.UpdateUserProfileRequest
-import kr.wooco.woocobe.user.ui.web.dto.response.GetCurrentUserResponse
+import kr.wooco.woocobe.user.ui.web.controller.request.UpdateUserProfileRequest
+import kr.wooco.woocobe.user.ui.web.controller.response.GetCurrentUserResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
