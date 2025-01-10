@@ -24,6 +24,11 @@ internal class JpaUserStorageGateway(
         return userStorageMapper.toDomain(userEntity)
     }
 
+    override fun getAllByUserIds(userIds: List<Long>): List<User> {
+        val userEntities = userJpaRepository.findAllById(userIds)
+        return userEntities.map { userStorageMapper.toDomain(it) }
+    }
+
     override fun deleteByUserId(userId: Long) {
         userJpaRepository.deleteById(userId)
     }

@@ -7,5 +7,7 @@ interface UserStorageGateway {
 
     fun getByUserId(userId: Long): User
 
+    fun getAllByUserIds(userIds: List<Long>): List<User>
+
     fun deleteByUserId(userId: Long)
 }
