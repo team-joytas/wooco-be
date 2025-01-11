@@ -45,6 +45,7 @@ class PlaceStorageGatewayImpl(
 
     override fun getOneLineReviewStats(placeId: Long): List<PlaceOneLineReviewStat> {
         val stats = placeOneLineReviewRepository.findPlaceOneLineReviewStatsByPlaceId(placeId)
+
         return stats.map { row ->
             val content = row[CONTENT] ?: throw RuntimeException()
             val count = row[COUNT] ?: throw RuntimeException()
