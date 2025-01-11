@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  test:
+  ci-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,11 +24,10 @@ jobs:
 
       - name: Gradle 캐싱
         uses: actions/cache@v4
+        id: cache-gradle
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
@@ -64,28 +63,24 @@ jobs:
 
   discord-web-hook:
     runs-on: ubuntu-latest
-    needs: test
-    if: always()
+    needs: ci-test
+    if: failure()
 
     steps:
       - name: 디스코드 알림 발송
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          REPO="${{ github.repository }}"
-          PR_ACTION="${{ github.event.action }}"
           PR_NUMBER="${{ github.event.pull_request.number }}"
           PR_TITLE="${{ github.event.pull_request.title }}"
           PR_URL="${{ github.event.pull_request.html_url }}"
           SENDER_NAME="${{ github.event.sender.login }}"
           SENDER_AVATAR="${{ github.event.sender.avatar_url }}"
-          TEST_RESULT_EMOJI=$([[ "${{ needs.test.result }}" == "success" ]] && echo "✅" || echo "❌")
 
           JSON_PAYLOAD=$(jq -n \
-            --arg content "**${TEST_RESULT_EMOJI} WOOCO BE PULL REQUEST (<@&${{ secrets.DISCORD_MENTION_ID }}>)**" \
-            --arg title "[${REPO}] ${PR_ACTION}: (#${PR_NUMBER}) ${PR_TITLE}" \
-            --arg description "${PR_BODY}" \
+            --arg content "**🚨 PULL REQUEST CI TEST FAIL (<@&${{ secrets.DISCORD_MENTION_ID }}>) 🚨**" \
+            --arg title "${PR_TITLE}#${PR_NUMBER}" \
+            --arg description "${PR_TITLE} (#${PR_NUMBER})의 테스트가 실패했습니다." \
             --arg url "${PR_URL}" \
             --arg username "${SENDER_NAME}" \
             --arg avatar_url "${SENDER_AVATAR}" \
