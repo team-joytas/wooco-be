@@ -5,4 +5,4 @@ COPY ./build/libs/*.jar /app/wooco-be.jar
 
 ENV TZ=Asia/Seoul
 
-CMD ["java", "-jar", "-Djava.net.preferIPv4Stack=true", "wooco-be.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=dev", "-Djava.net.preferIPv4Stack=true", "wooco-be.jar"]
