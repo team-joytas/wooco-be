@@ -35,7 +35,7 @@ class UpdatePlaceReviewUseCase(
 
         val place = placeStorageGateway.getByPlaceId(placeReview.placeId)
 
-        place.updateReview(oldRating = placeReview.rating, newRating = input.rating)
+        place.updateStats(oldRating = placeReview.rating, newRating = input.rating)
         placeStorageGateway.save(place)
     }
 }

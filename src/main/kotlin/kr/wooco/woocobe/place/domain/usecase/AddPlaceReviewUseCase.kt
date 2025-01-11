@@ -35,7 +35,7 @@ class AddPlaceReviewUseCase(
                 imageUrls = input.imageUrls,
             ).also(placeReviewStorageGateway::save)
 
-        place.addReview(input.rating)
+        place.increaseStats(input.rating)
         placeStorageGateway.save(place)
     }
 }
