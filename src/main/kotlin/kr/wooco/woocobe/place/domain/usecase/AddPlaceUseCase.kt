@@ -30,15 +30,16 @@ class AddPlaceUseCase(
             return AddPlaceUseCaseOutput(placeId = existingPlace.id)
         }
 
-        val newPlace = Place
+        val place = Place
             .register(
                 name = input.name,
                 latitude = input.latitude,
                 longitude = input.longitude,
                 address = input.address,
                 kakaoMapPlaceId = input.kakaoMapPlaceId,
-            ).also(placeStorageGateway::save)
+            )
+        placeStorageGateway.save(place)
 
-        return AddPlaceUseCaseOutput(placeId = newPlace.id)
+        return AddPlaceUseCaseOutput(placeId = place.id)
     }
 }
