@@ -10,12 +10,12 @@ class Place(
     var averageRating: Double,
     var reviewCount: Long,
 ) {
-    fun increaseStats(newRating: Double) {
+    fun increasePlaceStats(newRating: Double) {
         averageRating = ((averageRating * reviewCount) + newRating) / (reviewCount + 1)
         reviewCount++
     }
 
-    fun updateStats(
+    fun processPlaceStats(
         oldRating: Double,
         newRating: Double,
     ) {
@@ -24,7 +24,7 @@ class Place(
         }
     }
 
-    fun decreaseStats(oldRating: Double) {
+    fun decreasePlaceStats(oldRating: Double) {
         if (reviewCount > 1) {
             averageRating = ((averageRating * reviewCount) - oldRating) / (reviewCount - 1)
             reviewCount--
