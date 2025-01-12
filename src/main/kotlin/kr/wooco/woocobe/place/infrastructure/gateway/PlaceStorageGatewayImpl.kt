@@ -31,7 +31,7 @@ class PlaceStorageGatewayImpl(
         return placeStorageMapper.toDomain(placeEntity)
     }
 
-    override fun getByKakaoMapPlaceIdOrNull(kakaoMapPlaceId: String): Place? {
+    override fun getOrNullByKakaoMapPlaceId(kakaoMapPlaceId: String): Place? {
         val placeEntity = placeJpaRepository.findByKakaoMapPlaceId(kakaoMapPlaceId)
 
         return placeEntity?.let { placeStorageMapper.toDomain(it) }

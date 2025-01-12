@@ -24,7 +24,7 @@ class AddPlaceUseCase(
 ) : UseCase<AddPlaceUseCaseInput, AddPlaceUseCaseOutput> {
     @Transactional
     override fun execute(input: AddPlaceUseCaseInput): AddPlaceUseCaseOutput {
-        val existingPlace = placeStorageGateway.getByKakaoMapPlaceIdOrNull(input.kakaoMapPlaceId)
+        val existingPlace = placeStorageGateway.getOrNullByKakaoMapPlaceId(input.kakaoMapPlaceId)
 
         if (existingPlace != null) {
             return AddPlaceUseCaseOutput(placeId = existingPlace.id)
