@@ -25,15 +25,14 @@ class AddPlaceReviewUseCase(
     override fun execute(input: AddPlaceReviewInput) {
         val place = placeStorageGateway.getByPlaceId(input.placeId)
 
-        val placeReview = PlaceReview
-            .register(
-                userId = input.userId,
-                placeId = place.id,
-                rating = input.rating,
-                content = input.content,
-                oneLineReview = input.oneLineReviews,
-                imageUrls = input.imageUrls,
-            )
+        val placeReview = PlaceReview.register(
+            userId = input.userId,
+            placeId = place.id,
+            rating = input.rating,
+            content = input.content,
+            oneLineReview = input.oneLineReviews,
+            imageUrls = input.imageUrls,
+        )
         placeReviewStorageGateway.save(placeReview)
 
         place.increasePlaceStats(input.rating)
