@@ -8,7 +8,7 @@ interface PlaceStorageGateway {
 
     fun getByPlaceId(placeId: Long): Place
 
-    fun getByKakaoMapPlaceId(kakaoMapPlaceId: String): Place?
+    fun getByKakaoMapPlaceIdOrNull(kakaoMapPlaceId: String): Place?
 
     fun getAllByPlaceIds(placeIds: List<Long>): List<Place>
 
