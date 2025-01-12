@@ -11,10 +11,13 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfig(
+    private val corsProperties: CorsProperties,
     private val extractTokenUseCase: ExtractTokenUseCase,
 ) {
     @Bean
@@ -32,4 +35,24 @@ class WebSecurityConfig(
                 JwtAuthenticationFilter(extractTokenUseCase),
                 UsernamePasswordAuthenticationFilter::class.java,
             ).build()
+
+    @Bean
+    fun corsConfigurationSource(): UrlBasedCorsConfigurationSource =
+        UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration(
+                MATCH_ALL_PATTERN,
+                CorsConfiguration().apply {
+                    maxAge = corsProperties.maxAge
+                    allowedMethods = corsProperties.allowedMethods
+                    allowedOrigins = corsProperties.allowedOrigins
+                    allowedHeaders = corsProperties.allowedHeaders
+                    exposedHeaders = corsProperties.exposedHeaders
+                    allowCredentials = corsProperties.allowCredentials
+                },
+            )
+        }
+
+    companion object {
+        private const val MATCH_ALL_PATTERN = "/**"
+    }
 }
