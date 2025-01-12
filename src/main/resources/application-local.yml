@@ -1,8 +1,15 @@
 server:
-  node: ${LOCAL_SERVER_NODE:0}
   shutdown: graceful
 
 spring:
+  cors:
+    allowed-methods: "OPTIONS,GET,POST,PUT,PATCH,DELETE"
+    allowed-origins: "http://localhost:3000,http://localhost:5173"
+    allowed-headers: "*"
+    exposed-headers: "*"
+    allow-credentials: true
+    max-age: 7200
+
   cookie:
     path: /
     max-age: 987654321
