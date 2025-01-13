@@ -24,21 +24,21 @@ class AddPlaceUseCase(
 ) : UseCase<AddPlaceUseCaseInput, AddPlaceUseCaseOutput> {
     @Transactional
     override fun execute(input: AddPlaceUseCaseInput): AddPlaceUseCaseOutput {
-        val existingPlace = placeStorageGateway.getByKakaoMapPlaceId(input.kakaoMapPlaceId)
+        val existingPlace = placeStorageGateway.getOrNullByKakaoMapPlaceId(input.kakaoMapPlaceId)
 
         if (existingPlace != null) {
             return AddPlaceUseCaseOutput(placeId = existingPlace.id)
         }
 
-        val newPlace = Place
-            .register(
-                name = input.name,
-                latitude = input.latitude,
-                longitude = input.longitude,
-                address = input.address,
-                kakaoMapPlaceId = input.kakaoMapPlaceId,
-            ).also(placeStorageGateway::save)
+        val place = Place.register(
+            name = input.name,
+            latitude = input.latitude,
+            longitude = input.longitude,
+            address = input.address,
+            kakaoMapPlaceId = input.kakaoMapPlaceId,
+        )
+        placeStorageGateway.save(place)
 
-        return AddPlaceUseCaseOutput(placeId = newPlace.id)
+        return AddPlaceUseCaseOutput(placeId = place.id)
     }
 }

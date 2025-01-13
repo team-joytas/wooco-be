@@ -10,27 +10,23 @@ class Place(
     var averageRating: Double,
     var reviewCount: Long,
 ) {
-    fun addReview(newRating: Double) {
-        averageRating = ((averageRating * reviewCount) + newRating) / (reviewCount + 1)
+    fun increaseReviewCounts() {
         reviewCount++
     }
 
-    fun updateReview(
-        oldRating: Double,
-        newRating: Double,
-    ) {
+    fun decreaseReviewCounts() {
         if (reviewCount > 0) {
-            averageRating += (newRating - oldRating) / reviewCount
+            reviewCount--
         }
     }
 
-    fun deleteReview(oldRating: Double) {
-        if (reviewCount > 1) {
-            averageRating = ((averageRating * reviewCount) - oldRating) / (reviewCount - 1)
-            reviewCount--
-        } else {
-            averageRating = 0.0
-            reviewCount = 0
+    fun processPlaceStats(
+        currentReviewRate: Double,
+        reviewRate: Double,
+    ) {
+        averageRating = when (reviewCount) {
+            0L -> 0.0
+            else -> ((averageRating * reviewCount) - currentReviewRate + reviewRate) / reviewCount
         }
     }
 

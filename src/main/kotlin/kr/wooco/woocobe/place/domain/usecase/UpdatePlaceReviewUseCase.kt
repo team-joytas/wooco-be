@@ -25,17 +25,19 @@ class UpdatePlaceReviewUseCase(
         val placeReview = placeReviewStorageGateway.getByPlaceReviewId(input.placeReviewId)
         placeReview.isValidWriter(input.userId)
 
-        placeReview
-            .update(
-                rating = input.rating,
-                content = input.content,
-                oneLineReviews = input.oneLineReviews,
-                imageUrls = input.imageUrls,
-            ).also(placeReviewStorageGateway::save)
+        placeReview.update(
+            rating = input.rating,
+            content = input.content,
+            oneLineReviews = input.oneLineReviews,
+            imageUrls = input.imageUrls,
+        )
+        placeReviewStorageGateway.save(placeReview)
 
         val place = placeStorageGateway.getByPlaceId(placeReview.placeId)
-
-        place.updateReview(oldRating = placeReview.rating, newRating = input.rating)
+        place.processPlaceStats(
+            currentReviewRate = placeReview.rating,
+            reviewRate = input.rating,
+        )
         placeStorageGateway.save(place)
     }
 }

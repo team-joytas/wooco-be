@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class PlaceStorageMapper {
     fun toDomain(placeJpaEntity: PlaceJpaEntity): Place =
         Place(
-            id = placeJpaEntity.id!!,
+            id = placeJpaEntity.id,
             name = placeJpaEntity.name,
             latitude = placeJpaEntity.latitude,
             longitude = placeJpaEntity.longitude,

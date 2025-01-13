@@ -31,7 +31,7 @@ class PlaceStorageGatewayImpl(
         return placeStorageMapper.toDomain(placeEntity)
     }
 
-    override fun getByKakaoMapPlaceId(kakaoMapPlaceId: String): Place? {
+    override fun getOrNullByKakaoMapPlaceId(kakaoMapPlaceId: String): Place? {
         val placeEntity = placeJpaRepository.findByKakaoMapPlaceId(kakaoMapPlaceId)
 
         return placeEntity?.let { placeStorageMapper.toDomain(it) }
@@ -45,6 +45,7 @@ class PlaceStorageGatewayImpl(
 
     override fun getOneLineReviewStats(placeId: Long): List<PlaceOneLineReviewStat> {
         val stats = placeOneLineReviewRepository.findPlaceOneLineReviewStatsByPlaceId(placeId)
+
         return stats.map { row ->
             val content = row[CONTENT] ?: throw RuntimeException()
             val count = row[COUNT] ?: throw RuntimeException()
