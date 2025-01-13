@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.models.security.SecurityScheme
+import io.swagger.v3.oas.models.servers.Server
 import org.springdoc.core.customizers.OperationCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,7 +21,7 @@ class SwaggerConfig {
             JWT_AUTH,
             SecurityScheme().type(SecurityScheme.Type.HTTP).scheme(BEARER_PREFIX).bearerFormat(JWT_AUTH),
         )
-        return OpenAPI().components(component)
+        return OpenAPI().components(component).addServersItem(Server().url("/"))
     }
 
     @Bean
