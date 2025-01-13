@@ -17,9 +17,6 @@ class Place(
     fun decreaseReviewCounts() {
         if (reviewCount > 1) {
             reviewCount--
-        } else {
-            averageRating = 0.0
-            reviewCount = 0
         }
     }
 
@@ -30,6 +27,9 @@ class Place(
         if (reviewCount > 0) {
             averageRating =
                 ((averageRating * reviewCount) - currentReviewRate + reviewRate) / reviewCount
+        } else {
+            averageRating = 0.0
+            reviewCount = 0
         }
     }
 
