@@ -24,12 +24,9 @@ class Place(
         currentReviewRate: Double,
         reviewRate: Double,
     ) {
-        if (reviewCount > 0) {
-            averageRating =
-                ((averageRating * reviewCount) - currentReviewRate + reviewRate) / reviewCount
-        } else {
-            averageRating = 0.0
-            reviewCount = 0
+        averageRating = when (reviewCount) {
+            0L -> 0.0
+            else -> ((averageRating * reviewCount) - currentReviewRate + reviewRate) / reviewCount
         }
     }
 
