@@ -15,7 +15,7 @@ class PlaceReviewStorageMapper {
         placeReviewImageJpaEntities: List<PlaceReviewImageJpaEntity>,
     ): PlaceReview =
         PlaceReview(
-            id = placeReviewJpaEntity.id!!,
+            id = placeReviewJpaEntity.id,
             userId = placeReviewJpaEntity.userId,
             placeId = placeReviewJpaEntity.placeId,
             rating = placeReviewJpaEntity.rating,
