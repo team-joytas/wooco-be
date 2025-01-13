@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class InterestCourseStorageMapper {
     fun toDomain(interestCourseJpaEntity: InterestCourseJpaEntity): InterestCourse =
         InterestCourse(
-            id = interestCourseJpaEntity.id!!,
+            id = interestCourseJpaEntity.id,
             userId = interestCourseJpaEntity.userId,
             courseId = interestCourseJpaEntity.courseId,
         )

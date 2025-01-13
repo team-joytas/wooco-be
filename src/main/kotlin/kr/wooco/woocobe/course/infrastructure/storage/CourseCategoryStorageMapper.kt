@@ -12,7 +12,7 @@ class CourseCategoryStorageMapper {
         courseCategory: CourseCategory,
     ): CourseCategoryJpaEntity =
         CourseCategoryJpaEntity(
-            courseId = courseJpaEntity.id!!,
+            courseId = courseJpaEntity.id,
             name = courseCategory.name,
         )
 }

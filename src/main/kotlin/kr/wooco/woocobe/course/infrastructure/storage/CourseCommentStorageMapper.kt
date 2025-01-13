@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class CourseCommentStorageMapper {
     fun toDomain(courseCommentJpaEntity: CourseCommentJpaEntity): CourseComment =
         CourseComment(
-            id = courseCommentJpaEntity.id!!,
+            id = courseCommentJpaEntity.id,
             userId = courseCommentJpaEntity.userId,
             courseId = courseCommentJpaEntity.courseId,
             contents = courseCommentJpaEntity.contents,

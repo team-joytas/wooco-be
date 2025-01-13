@@ -19,7 +19,7 @@ class CoursePlaceStorageMapper {
     ): CoursePlaceJpaEntity =
         CoursePlaceJpaEntity(
             order = coursePlace.order,
-            courseId = courseJpaEntity.id!!,
+            courseId = courseJpaEntity.id,
             placeId = coursePlace.placeId,
         )
 }
