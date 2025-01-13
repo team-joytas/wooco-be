@@ -35,7 +35,8 @@ class AddPlaceReviewUseCase(
         )
         placeReviewStorageGateway.save(placeReview)
 
-        place.increasePlaceStats(input.rating)
+        place.increaseReviewCounts()
+        place.processPlaceStats(currentReviewRate = 0.0, reviewRate = input.rating)
         placeStorageGateway.save(place)
     }
 }

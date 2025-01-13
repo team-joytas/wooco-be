@@ -23,7 +23,8 @@ class DeletePlaceReviewUseCase(
         placeReviewStorageGateway.deleteByPlaceReviewId(placeReviewId = placeReview.id)
 
         val place = placeStorageGateway.getByPlaceId(placeReview.placeId)
-        place.decreasePlaceStats(oldRating = placeReview.rating)
+        place.decreaseReviewCounts()
+        place.processPlaceStats(currentReviewRate = placeReview.rating, reviewRate = 0.0)
         placeStorageGateway.save(place)
     }
 }
