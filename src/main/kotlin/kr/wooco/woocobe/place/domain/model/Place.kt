@@ -15,7 +15,7 @@ class Place(
     }
 
     fun decreaseReviewCounts() {
-        if (reviewCount > 1) {
+        if (reviewCount > 0) {
             reviewCount--
         }
     }
