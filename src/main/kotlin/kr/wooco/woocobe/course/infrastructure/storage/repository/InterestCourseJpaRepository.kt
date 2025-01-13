@@ -25,5 +25,18 @@ interface InterestCourseJpaRepository : JpaRepository<InterestCourseJpaEntity, L
         userId: Long,
     ): Boolean
 
+    @Query(
+        """
+           SELECT ic.courseId
+           FROM InterestCourseJpaEntity ic
+           WHERE ic.userId = :userId
+                AND ic.courseId IN :courseIds
+        """,
+    )
+    fun findCourseIdsByUserIdAndCourseIds(
+        userId: Long,
+        courseIds: List<Long>,
+    ): List<Long>
+
     fun findAllByUserId(userId: Long): List<InterestCourseJpaEntity>
 }
