@@ -4,6 +4,7 @@ import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.Course
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 data class GetCourseInput(
     val courseId: Long,
@@ -18,6 +19,7 @@ data class GetCourseOutput(
 class GetCourseUseCase(
     private val courseStorageGateway: CourseStorageGateway,
 ) : UseCase<GetCourseInput, GetCourseOutput> {
+    @Transactional // FIXME: 임시 트랜잭션
     override fun execute(input: GetCourseInput): GetCourseOutput {
         val course = courseStorageGateway.getByCourseId(input.courseId)
 
