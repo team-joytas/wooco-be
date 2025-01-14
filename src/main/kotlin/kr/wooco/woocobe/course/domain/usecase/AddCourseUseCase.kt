@@ -17,22 +17,31 @@ data class AddCourseUseCaseInput(
     val placeIds: List<Long>,
 )
 
+data class AddCourseUseCaseOutput(
+    val courseId: Long,
+)
+
 @Service
 class AddCourseUseCase(
     private val courseStorageGateway: CourseStorageGateway,
-) : UseCase<AddCourseUseCaseInput, Unit> {
+) : UseCase<AddCourseUseCaseInput, AddCourseUseCaseOutput> {
     @Transactional
-    override fun execute(input: AddCourseUseCaseInput) {
+    override fun execute(input: AddCourseUseCaseInput): AddCourseUseCaseOutput {
         val courseRegion = CourseRegion.register(input.primaryRegion, input.secondaryRegion)
 
-        val course = Course.register(
-            userId = input.userId,
-            region = courseRegion,
-            categories = input.category,
-            name = input.name,
-            contents = input.contents,
-            placeIds = input.placeIds,
+        val course = courseStorageGateway.save(
+            Course.register(
+                userId = input.userId,
+                region = courseRegion,
+                categories = input.category,
+                name = input.name,
+                contents = input.contents,
+                placeIds = input.placeIds,
+            ),
         )
-        courseStorageGateway.save(course)
+
+        return AddCourseUseCaseOutput(
+            courseId = course.id,
+        )
     }
 }
