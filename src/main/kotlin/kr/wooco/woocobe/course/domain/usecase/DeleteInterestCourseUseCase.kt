@@ -19,6 +19,7 @@ class DeleteInterestCourseUseCase(
     @Transactional
     override fun execute(input: DeleteInterestCourseInput) {
         val interestCourse = interestCourseStorageGateway.getByCourseIdAndUserId(input.courseId, input.userId)
+        interestCourseStorageGateway.deleteByInterestCourseId(interestCourseId = interestCourse.id)
 
         val course = courseStorageGateway.getByCourseId(interestCourse.courseId)
         course.decreaseInterests()
