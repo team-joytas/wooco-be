@@ -9,6 +9,7 @@ data class UpdateUserInput(
     val userId: Long,
     val name: String,
     val profileUrl: String,
+    val description: String,
 )
 
 @Service
@@ -19,7 +20,7 @@ class UpdateUserUseCase(
     override fun execute(input: UpdateUserInput) {
         val user = userStorageGateway.getByUserId(userId = input.userId)
 
-        user.update(name = input.name, profileUrl = input.profileUrl)
+        user.update(name = input.name, profileUrl = input.profileUrl, description = input.description)
         userStorageGateway.save(user)
     }
 }

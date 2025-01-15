@@ -2,7 +2,6 @@ package kr.wooco.woocobe.user.ui.web.facade
 
 import kr.wooco.woocobe.user.domain.usecase.GetUserInput
 import kr.wooco.woocobe.user.domain.usecase.GetUserUseCase
-import kr.wooco.woocobe.user.domain.usecase.UpdateUserInput
 import kr.wooco.woocobe.user.domain.usecase.UpdateUserUseCase
 import kr.wooco.woocobe.user.ui.web.controller.request.UpdateUserRequest
 import kr.wooco.woocobe.user.ui.web.controller.response.GetCurrentUserResponse
@@ -23,13 +22,5 @@ class UserFacadeService(
     fun updateUser(
         userId: Long,
         request: UpdateUserRequest,
-    ) {
-        updateUserUseCase.execute(
-            UpdateUserInput(
-                userId = userId,
-                name = request.name,
-                profileUrl = request.profileUrl,
-            ),
-        )
-    }
+    ) = updateUserUseCase.execute(request.toCommand(userId))
 }
