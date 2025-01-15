@@ -14,7 +14,7 @@ data class GetUserAllPlaceReviewOutput(
 )
 
 @Service
-class GetUserAllPlaceReviewUseCase(
+class GetAllMyPlaceReviewUseCase(
     private val placeReviewStorageGateway: PlaceReviewStorageGateway,
 ) : UseCase<GetUserAllPlaceReviewInput, GetUserAllPlaceReviewOutput> {
     override fun execute(input: GetUserAllPlaceReviewInput): GetUserAllPlaceReviewOutput {
