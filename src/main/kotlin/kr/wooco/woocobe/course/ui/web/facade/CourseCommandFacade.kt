@@ -26,9 +26,7 @@ class CourseCommandFacade(
         request: CreateCourseRequest,
     ): CreateCourseResponse {
         val addCourseResult = addCourseUseCase.execute(request.toCommand(userId))
-        return CreateCourseResponse(
-            courseId = addCourseResult.courseId,
-        )
+        return CreateCourseResponse(addCourseResult.courseId)
     }
 
     fun addInterestCourse(

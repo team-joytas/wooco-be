@@ -6,9 +6,18 @@ import kr.wooco.woocobe.user.domain.model.User
 import java.time.LocalDateTime
 
 data class CourseDetailResponse(
-    val course: CourseResponse,
-    val places: List<CoursePlaceDetailResponse>,
-    val writer: CourseWriterDetailResponse,
+    val id: Long,
+    val name: String,
+    val primaryRegion: String,
+    val secondaryRegion: String,
+    val categories: List<String>,
+    val contents: String,
+    val views: Long,
+    val comments: Long,
+    val likes: Long,
+    val createdAt: LocalDateTime,
+    val places: List<CoursePlaceResponse>,
+    val writer: CourseWriterResponse,
     val isLiked: Boolean,
 ) {
     companion object {
@@ -21,13 +30,22 @@ data class CourseDetailResponse(
             val placeMap = places.associateBy { it.id }
 
             return CourseDetailResponse(
-                course = CourseResponse.from(course),
+                id = course.id,
+                name = course.name,
+                primaryRegion = course.region.primaryRegion,
+                secondaryRegion = course.region.secondaryRegion,
+                categories = course.categories.map { it.name },
+                contents = course.contents,
+                views = course.views,
+                comments = course.comments,
+                likes = course.interests,
+                createdAt = course.writeDateTime,
                 places = course.coursePlaces
                     .map { coursePlace ->
                         val place = requireNotNull(placeMap[coursePlace.placeId])
-                        CoursePlaceDetailResponse.of(coursePlace.order, place)
+                        CoursePlaceResponse.of(coursePlace.order, place)
                     },
-                writer = CourseWriterDetailResponse.from(user),
+                writer = CourseWriterResponse.from(user),
                 isLiked = isInterest,
             )
         }
@@ -45,12 +63,21 @@ data class CourseDetailResponse(
                 val writer = requireNotNull(userMap[course.userId])
 
                 CourseDetailResponse(
-                    course = CourseResponse.from(course),
+                    id = course.id,
+                    name = course.name,
+                    primaryRegion = course.region.primaryRegion,
+                    secondaryRegion = course.region.secondaryRegion,
+                    categories = course.categories.map { it.name },
+                    contents = course.contents,
+                    views = course.views,
+                    comments = course.comments,
+                    likes = course.interests,
+                    createdAt = course.writeDateTime,
                     places = course.coursePlaces.map { coursePlace ->
                         val place = requireNotNull(placeMap[coursePlace.placeId])
-                        CoursePlaceDetailResponse.of(coursePlace.order, place)
+                        CoursePlaceResponse.of(coursePlace.order, place)
                     },
-                    writer = CourseWriterDetailResponse.from(writer),
+                    writer = CourseWriterResponse.from(writer),
                     isLiked = course.id in interestCourseIds,
                 )
             }
@@ -58,36 +85,7 @@ data class CourseDetailResponse(
     }
 }
 
-data class CourseResponse(
-    val id: Long,
-    val name: String,
-    val primaryRegion: String,
-    val secondaryRegion: String,
-    val categories: List<String>,
-    val contents: String,
-    val views: Long,
-    val comments: Long,
-    val likes: Long,
-    val createdAt: LocalDateTime,
-) {
-    companion object {
-        fun from(course: Course): CourseResponse =
-            CourseResponse(
-                id = course.id,
-                name = course.name,
-                primaryRegion = course.region.primaryRegion,
-                secondaryRegion = course.region.secondaryRegion,
-                categories = course.categories.map { it.name },
-                contents = course.contents,
-                views = course.views,
-                comments = course.comments,
-                likes = course.interests,
-                createdAt = course.writeDateTime,
-            )
-    }
-}
-
-data class CoursePlaceDetailResponse(
+data class CoursePlaceResponse(
     val order: Int,
     val id: Long,
     val name: String,
@@ -102,8 +100,8 @@ data class CoursePlaceDetailResponse(
         fun of(
             order: Int,
             place: Place,
-        ): CoursePlaceDetailResponse =
-            CoursePlaceDetailResponse(
+        ): CoursePlaceResponse =
+            CoursePlaceResponse(
                 order = order,
                 id = place.id,
                 name = place.name,
@@ -117,14 +115,14 @@ data class CoursePlaceDetailResponse(
     }
 }
 
-data class CourseWriterDetailResponse(
+data class CourseWriterResponse(
     val id: Long,
     val name: String,
     val profileUrl: String,
 ) {
     companion object {
-        fun from(user: User): CourseWriterDetailResponse =
-            CourseWriterDetailResponse(
+        fun from(user: User): CourseWriterResponse =
+            CourseWriterResponse(
                 id = user.id,
                 name = user.name,
                 profileUrl = user.profileUrl,
