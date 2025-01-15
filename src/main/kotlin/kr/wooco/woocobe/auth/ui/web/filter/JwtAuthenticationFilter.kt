@@ -8,8 +8,10 @@ import kr.wooco.woocobe.auth.domain.usecase.ExtractTokenUseCase
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
+@Component
 class JwtAuthenticationFilter(
     private val extractTokenUseCase: ExtractTokenUseCase,
 ) : OncePerRequestFilter() {
@@ -18,28 +20,26 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
-        val accessToken = extractAccessTokenInRequestHeader(request)
-        val results = extractTokenUseCase.execute(
-            ExtractTokenInput(
-                accessToken = accessToken,
-            ),
-        )
-
-        val authentication = UsernamePasswordAuthenticationToken(results.userId, null, emptyList())
-        SecurityContextHolder.getContext().apply {
-            this.authentication = authentication
+        extractAccessToken(request)?.let {
+            processAuthentication(it)
         }
-
         filterChain.doFilter(request, response)
     }
 
-    private fun extractAccessTokenInRequestHeader(request: HttpServletRequest): String =
-        request.getHeader(HttpHeaders.AUTHORIZATION)?.let {
-            when (it.startsWith(BEARER_PREFIX)) {
-                true -> it.substring(BEARER_PREFIX.length)
-                else -> throw RuntimeException()
-            }
-        } ?: throw RuntimeException()
+    private fun extractAccessToken(request: HttpServletRequest): String? =
+        request
+            .getHeader(HttpHeaders.AUTHORIZATION)
+            ?.takeIf { it.startsWith(BEARER_PREFIX) }
+            ?.substring(BEARER_PREFIX.length)
+
+    private fun processAuthentication(accessToken: String) {
+        val extractTokenResult = extractTokenUseCase.execute(ExtractTokenInput(accessToken))
+
+        val authentication = UsernamePasswordAuthenticationToken(extractTokenResult.userId, null, emptyList())
+        SecurityContextHolder.getContext().apply {
+            this.authentication = authentication
+        }
+    }
 
     companion object {
         private const val BEARER_PREFIX = "Bearer "
