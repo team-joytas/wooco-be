@@ -17,7 +17,7 @@ class CourseStorageMapper {
         courseCategoryJpaEntities: List<CourseCategoryJpaEntity>,
     ): Course =
         Course(
-            id = courseJpaEntity.id!!,
+            id = courseJpaEntity.id,
             userId = courseJpaEntity.userId,
             region = CourseRegion(
                 primaryRegion = courseJpaEntity.primaryRegion,

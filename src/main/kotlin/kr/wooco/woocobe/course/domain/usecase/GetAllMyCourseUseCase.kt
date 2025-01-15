@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 
 data class GetAllByCourseInput(
     val userId: Long,
-    val sort: CourseSortCondition,
+    val sort: String,
 )
 
 data class GetAllMyCourseOutput(
@@ -20,7 +20,9 @@ class GetAllMyCourseUseCase(
     private val courseStorageGateway: CourseStorageGateway,
 ) : UseCase<GetAllByCourseInput, GetAllMyCourseOutput> {
     override fun execute(input: GetAllByCourseInput): GetAllMyCourseOutput {
-        val courses = courseStorageGateway.getAllByUserIdWithSort(input.userId, input.sort)
+        val sort = CourseSortCondition.from(input.sort)
+
+        val courses = courseStorageGateway.getAllByUserIdWithSort(input.userId, sort)
 
         return GetAllMyCourseOutput(
             courses = courses,

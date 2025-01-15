@@ -13,26 +13,32 @@ data class AddCourseCommentInput(
     val contents: String,
 )
 
+data class AddCourseCommentOutput(
+    val commentId: Long,
+)
+
+// TODO: 코스 댓글 수 증가 로직 이벤트 처리
 @Service
 class AddCourseCommentUseCase(
     private val courseStorageGateway: CourseStorageGateway,
     private val courseCommentStorageGateway: CourseCommentStorageGateway,
-) : UseCase<AddCourseCommentInput, Unit> {
+) : UseCase<AddCourseCommentInput, AddCourseCommentOutput> {
     @Transactional
-    override fun execute(input: AddCourseCommentInput) {
-        val courseComment = CourseComment.register(
-            userId = input.userId,
-            courseId = input.courseId,
-            contents = input.contents,
+    override fun execute(input: AddCourseCommentInput): AddCourseCommentOutput {
+        val courseComment = courseCommentStorageGateway.save(
+            CourseComment.register(
+                userId = input.userId,
+                courseId = input.courseId,
+                contents = input.contents,
+            ),
         )
-        courseCommentStorageGateway.save(courseComment)
 
-        // TODO
-        // courseStorageGateway.increaseCommentsCounts(courseId = input.courseId)
-        // 또는
-        // 이벤트로 처리해버리기 :: 이벤트 처리전에 courseComment 전용 패키지를 하나 만들어야할듯
         val course = courseStorageGateway.getByCourseId(input.courseId)
         course.increaseComments()
         courseStorageGateway.save(course)
+
+        return AddCourseCommentOutput(
+            commentId = courseComment.id,
+        )
     }
 }

@@ -17,5 +17,10 @@ interface InterestCourseStorageGateway {
         userId: Long,
     ): Boolean
 
+    fun getInterestCourseIdsByUserIdAndCourseIds(
+        userId: Long,
+        courseIds: List<Long>,
+    ): List<Long>
+
     fun deleteByInterestCourseId(interestCourseId: Long)
 }

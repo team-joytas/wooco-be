@@ -28,11 +28,11 @@ internal class CourseStorageGatewayImpl(
         val courseEntity = courseStorageMapper.toEntity(course)
         courseJpaRepository.save(courseEntity)
 
-        coursePlaceJpaRepository.deleteAllByCourseId(courseEntity.id!!)
+        coursePlaceJpaRepository.deleteAllByCourseId(courseEntity.id)
         val coursePlaceEntities = course.coursePlaces.map { coursePlaceStorageMapper.toEntity(courseEntity, it) }
         coursePlaceJpaRepository.saveAll(coursePlaceEntities)
 
-        courseCategoryJpaRepository.deleteAllByCourseId(courseEntity.id!!)
+        courseCategoryJpaRepository.deleteAllByCourseId(courseEntity.id)
         val courseCategoryEntities = course.categories.map { courseCategoryStorageMapper.toEntity(courseEntity, it) }
         courseCategoryJpaRepository.saveAll(courseCategoryEntities)
 
@@ -42,7 +42,7 @@ internal class CourseStorageGatewayImpl(
     override fun getByCourseId(courseId: Long): Course {
         val courseEntity = courseJpaRepository.findByIdOrNull(courseId)
             ?: throw RuntimeException()
-        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseId(courseEntity.id!!)
+        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseId(courseEntity.id)
         val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseId(courseId)
         return courseStorageMapper.toDomain(courseEntity, coursePlaceEntities, courseCategoryEntities)
     }
@@ -67,9 +67,9 @@ internal class CourseStorageGatewayImpl(
     ): List<Course> {
         val courseEntities =
             courseJpaRepository.findAllByRegionAndCategoryWithSort(region = region, category = category, sort = sort)
-        val courseIds = courseEntities.map { it.id!! }
+        val courseIds = courseEntities.map { it.id }
         val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseIdIn(courseIds)
-        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseEntities.map { it.id!! })
+        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseEntities.map { it.id })
         return courseEntities.map { courseJpaEntity ->
             courseStorageMapper.toDomain(
                 courseJpaEntity = courseJpaEntity,
@@ -84,9 +84,9 @@ internal class CourseStorageGatewayImpl(
         sort: CourseSortCondition,
     ): List<Course> {
         val courseEntities = courseJpaRepository.findAllByUserIdWithSort(userId = userId, sort = sort)
-        val courseIds = courseEntities.map { it.id!! }
+        val courseIds = courseEntities.map { it.id }
         val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseIdIn(courseIds)
-        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseEntities.map { it.id!! })
+        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseEntities.map { it.id })
         return courseEntities.map { courseJpaEntity ->
             courseStorageMapper.toDomain(
                 courseJpaEntity = courseJpaEntity,

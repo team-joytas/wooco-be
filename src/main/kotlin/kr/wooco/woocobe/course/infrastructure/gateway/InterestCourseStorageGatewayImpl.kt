@@ -36,5 +36,10 @@ internal class InterestCourseStorageGatewayImpl(
         userId: Long,
     ): Boolean = interestCourseJpaRepository.existsByCourseIdAndUserId(courseId = courseId, userId = userId)
 
+    override fun getInterestCourseIdsByUserIdAndCourseIds(
+        userId: Long,
+        courseIds: List<Long>,
+    ): List<Long> = interestCourseJpaRepository.findCourseIdsByUserIdAndCourseIds(userId, courseIds)
+
     override fun deleteByInterestCourseId(interestCourseId: Long) = interestCourseJpaRepository.deleteById(interestCourseId)
 }
