@@ -16,13 +16,17 @@ data class AddPlaceReviewInput(
     val imageUrls: List<String>,
 )
 
+data class AddPlaceReviewOutput(
+    val placeReviewId: Long,
+)
+
 @Service
 class AddPlaceReviewUseCase(
     private val placeReviewStorageGateway: PlaceReviewStorageGateway,
     private val placeStorageGateway: PlaceStorageGateway,
-) : UseCase<AddPlaceReviewInput, Unit> {
+) : UseCase<AddPlaceReviewInput, AddPlaceReviewOutput> {
     @Transactional
-    override fun execute(input: AddPlaceReviewInput) {
+    override fun execute(input: AddPlaceReviewInput): AddPlaceReviewOutput {
         val place = placeStorageGateway.getByPlaceId(input.placeId)
 
         val placeReview = PlaceReview.register(
@@ -38,5 +42,9 @@ class AddPlaceReviewUseCase(
         place.increaseReviewCounts()
         place.processPlaceStats(currentReviewRate = 0.0, reviewRate = input.rating)
         placeStorageGateway.save(place)
+
+        return AddPlaceReviewOutput(
+            placeReviewId = placeReview.id,
+        )
     }
 }
