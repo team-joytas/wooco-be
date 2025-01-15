@@ -13,6 +13,9 @@ object AuthIgnorePaths {
             append(path = "/swagger-ui/**", method = HttpMethod.GET),
             append(path = "/actuator/health", method = HttpMethod.GET),
             append(path = "/api/v1/auth/reissue", method = HttpMethod.POST),
+            append(path = "/api/v1/courses", method = HttpMethod.GET),
+            append(path = "/api/v1/courses/{courseId:[0-9]+}", method = HttpMethod.GET),
+            append(path = "/api/v1/comments/course/{courseId:[0-9]+}", method = HttpMethod.GET),
             append(path = "/api/v1/auth/{provider}/social-login", method = HttpMethod.POST),
             append(path = "/api/v1/auth/{provider}/social-login/url", method = HttpMethod.GET),
         )
