@@ -15,14 +15,21 @@ class UpdateUserUseCaseTest(
     listeners(MysqlCleaner())
 
     Given("저장된 회원이 존재하는 경우") {
-        val userEntity = UserJpaEntity(name = "홍인데유", profileUrl = "url").run(userJpaRepository::save)
+        val userEntity =
+            UserJpaEntity(name = "홍인데유", profileUrl = "url", description = "한줄소개").run(userJpaRepository::save)
         val validUserId = userEntity.id
 
         val updatedName = "홍이름바꿈"
         val updatedProfileUrl = "url-hong"
+        val updatedDescription = "변경된 소개 문장"
 
         When("해당 회원의 정보를 수정할 때") {
-            val input = UpdateUserInput(userId = validUserId, name = updatedName, profileUrl = updatedProfileUrl)
+            val input = UpdateUserInput(
+                userId = validUserId,
+                name = updatedName,
+                profileUrl = updatedProfileUrl,
+                description = updatedDescription,
+            )
 
             updateUserUseCase.execute(input)
 
@@ -33,6 +40,7 @@ class UpdateUserUseCaseTest(
                 userEntities[0].id shouldBe validUserId
                 userEntities[0].name shouldBe updatedName
                 userEntities[0].profileUrl shouldBe updatedProfileUrl
+                userEntities[0].description shouldBe updatedDescription
             }
         }
     }
