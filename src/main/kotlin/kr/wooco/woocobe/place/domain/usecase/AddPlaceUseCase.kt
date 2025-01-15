@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 data class AddPlaceUseCaseInput(
+    val userId: Long,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -31,6 +32,7 @@ class AddPlaceUseCase(
         }
 
         val place = Place.register(
+            userId = input.userId,
             name = input.name,
             latitude = input.latitude,
             longitude = input.longitude,

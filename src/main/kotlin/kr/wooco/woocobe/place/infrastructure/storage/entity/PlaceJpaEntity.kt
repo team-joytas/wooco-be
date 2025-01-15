@@ -24,6 +24,8 @@ class PlaceJpaEntity(
     val address: String,
     @Column(name = "name", nullable = false)
     val name: String,
+    @Column(name = "user_id", nullable = false)
+    val userId: Long,
     @Id @Tsid
     @Column(name = "place_id", nullable = false)
     override val id: Long = 0L,

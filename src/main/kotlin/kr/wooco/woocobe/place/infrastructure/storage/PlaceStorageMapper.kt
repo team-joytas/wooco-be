@@ -9,6 +9,7 @@ class PlaceStorageMapper {
     fun toDomain(placeJpaEntity: PlaceJpaEntity): Place =
         Place(
             id = placeJpaEntity.id,
+            userId = placeJpaEntity.userId,
             name = placeJpaEntity.name,
             latitude = placeJpaEntity.latitude,
             longitude = placeJpaEntity.longitude,
@@ -21,6 +22,7 @@ class PlaceStorageMapper {
     fun toEntity(place: Place): PlaceJpaEntity =
         PlaceJpaEntity(
             id = place.id,
+            userId = place.userId,
             name = place.name,
             latitude = place.latitude,
             longitude = place.longitude,
