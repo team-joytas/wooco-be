@@ -6,8 +6,7 @@ import kr.wooco.woocobe.place.domain.model.Place
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-data class AddPlaceUseCaseInput(
-    val userId: Long,
+data class AddPlaceInput(
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -15,32 +14,31 @@ data class AddPlaceUseCaseInput(
     val kakaoMapPlaceId: String,
 )
 
-data class AddPlaceUseCaseOutput(
+data class AddPlaceOutput(
     val placeId: Long,
 )
 
 @Service
 class AddPlaceUseCase(
     private val placeStorageGateway: PlaceStorageGateway,
-) : UseCase<AddPlaceUseCaseInput, AddPlaceUseCaseOutput> {
+) : UseCase<AddPlaceInput, AddPlaceOutput> {
     @Transactional
-    override fun execute(input: AddPlaceUseCaseInput): AddPlaceUseCaseOutput {
+    override fun execute(input: AddPlaceInput): AddPlaceOutput {
         val existingPlace = placeStorageGateway.getOrNullByKakaoMapPlaceId(input.kakaoMapPlaceId)
 
         if (existingPlace != null) {
-            return AddPlaceUseCaseOutput(placeId = existingPlace.id)
+            return AddPlaceOutput(placeId = existingPlace.id)
         }
 
-        val place = Place.register(
-            userId = input.userId,
-            name = input.name,
-            latitude = input.latitude,
-            longitude = input.longitude,
-            address = input.address,
-            kakaoMapPlaceId = input.kakaoMapPlaceId,
+        val place = placeStorageGateway.save(
+            Place.register(
+                name = input.name,
+                latitude = input.latitude,
+                longitude = input.longitude,
+                address = input.address,
+                kakaoMapPlaceId = input.kakaoMapPlaceId,
+            ),
         )
-        placeStorageGateway.save(place)
-
-        return AddPlaceUseCaseOutput(placeId = place.id)
+        return AddPlaceOutput(placeId = place.id)
     }
 }

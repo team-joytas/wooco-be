@@ -2,7 +2,6 @@ package kr.wooco.woocobe.place.domain.model
 
 class Place(
     val id: Long,
-    val userId: Long,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -33,7 +32,6 @@ class Place(
 
     companion object {
         fun register(
-            userId: Long,
             name: String,
             latitude: Double,
             longitude: Double,
@@ -42,7 +40,6 @@ class Place(
         ): Place =
             Place(
                 id = 0L,
-                userId = userId,
                 name = name,
                 latitude = latitude,
                 longitude = longitude,
