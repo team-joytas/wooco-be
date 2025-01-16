@@ -12,6 +12,7 @@ data class PlaceDetailResponse(
     val kakaoMapPlaceId: String,
     val averageRating: Double,
     val reviewCount: Long,
+    val thumbnailUrl: String,
     val placeOnLineReviewStats: List<PlaceOneLineReviewStatDetailResponse>,
 ) {
     companion object {
@@ -28,6 +29,7 @@ data class PlaceDetailResponse(
                 kakaoMapPlaceId = place.kakaoMapPlaceId,
                 averageRating = place.averageRating,
                 reviewCount = place.reviewCount,
+                thumbnailUrl = place.thumbnailUrl,
                 placeOnLineReviewStats = PlaceOneLineReviewStatDetailResponse.listFrom(placeOneLineReviewStats),
             )
     }

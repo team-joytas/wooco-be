@@ -41,8 +41,8 @@ class AddPlaceReviewUseCase(
             ),
         )
 
-        val mainImageUrl = placeReview.imageUrls[0]
-        place.updateMainImageUrl(imageUrl = mainImageUrl)
+        val thumbnailUrl = placeReview.imageUrls[0]
+        place.updateMainImageUrl(imageUrl = thumbnailUrl)
 
         place.increaseReviewCounts()
         place.processPlaceStats(currentReviewRate = 0.0, reviewRate = input.rating)

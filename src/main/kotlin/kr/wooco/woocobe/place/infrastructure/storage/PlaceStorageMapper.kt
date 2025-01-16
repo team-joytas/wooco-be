@@ -16,7 +16,7 @@ class PlaceStorageMapper {
             kakaoMapPlaceId = placeJpaEntity.kakaoMapPlaceId,
             averageRating = placeJpaEntity.averageRating,
             reviewCount = placeJpaEntity.reviewCount,
-            mainImageUrl = placeJpaEntity.mainImageUrl,
+            thumbnailUrl = placeJpaEntity.thumbnailUrl,
         )
 
     fun toEntity(place: Place): PlaceJpaEntity =
@@ -29,6 +29,6 @@ class PlaceStorageMapper {
             kakaoMapPlaceId = place.kakaoMapPlaceId,
             averageRating = place.averageRating,
             reviewCount = place.reviewCount,
-            mainImageUrl = place.mainImageUrl,
+            thumbnailUrl = place.thumbnailUrl,
         )
 }

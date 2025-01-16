@@ -9,7 +9,7 @@ class Place(
     val kakaoMapPlaceId: String,
     var averageRating: Double,
     var reviewCount: Long,
-    var mainImageUrl: String,
+    var thumbnailUrl: String,
 ) {
     fun increaseReviewCounts() {
         reviewCount++
@@ -32,7 +32,7 @@ class Place(
     }
 
     fun updateMainImageUrl(imageUrl: String) {
-        mainImageUrl = imageUrl
+        thumbnailUrl = imageUrl
     }
 
     companion object {
@@ -52,7 +52,7 @@ class Place(
                 kakaoMapPlaceId = kakaoMapPlaceId,
                 averageRating = 0.0,
                 reviewCount = 0,
-                mainImageUrl = "",
+                thumbnailUrl = "",
             )
     }
 }
