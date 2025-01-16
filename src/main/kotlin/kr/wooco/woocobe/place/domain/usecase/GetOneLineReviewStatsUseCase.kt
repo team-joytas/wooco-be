@@ -10,7 +10,7 @@ data class GetOneLineReviewStatsInput(
 )
 
 data class GetOneLineReviewStatsOutput(
-    val placeOneLineReviewRank: List<PlaceOneLineReviewStat>,
+    val placeOneLineReviewStats: List<PlaceOneLineReviewStat>,
 )
 
 @Service
@@ -22,7 +22,7 @@ class GetOneLineReviewStatsUseCase(
             placeStorageGateway.getOneLineReviewStats(input.placeId)
 
         return GetOneLineReviewStatsOutput(
-            placeOneLineReviewRank = placeOneLineReviewRank,
+            placeOneLineReviewStats = placeOneLineReviewRank,
         )
     }
 }
