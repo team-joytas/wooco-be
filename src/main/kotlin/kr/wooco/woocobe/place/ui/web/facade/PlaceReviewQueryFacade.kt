@@ -1,17 +1,14 @@
 package kr.wooco.woocobe.place.ui.web.facade
 
 import kr.wooco.woocobe.place.domain.usecase.AddPlaceReviewUseCase
-import kr.wooco.woocobe.place.domain.usecase.AddPlaceUseCase
 import kr.wooco.woocobe.place.domain.usecase.DeletePlaceReviewInput
 import kr.wooco.woocobe.place.domain.usecase.DeletePlaceReviewUseCase
+import kr.wooco.woocobe.place.domain.usecase.GetAllMyPlaceReviewUseCase
 import kr.wooco.woocobe.place.domain.usecase.GetAllPlaceReviewInput
 import kr.wooco.woocobe.place.domain.usecase.GetAllPlaceReviewUseCase
-import kr.wooco.woocobe.place.domain.usecase.GetAllPlaceUseCase
-import kr.wooco.woocobe.place.domain.usecase.GetOneLineReviewStatsUseCase
 import kr.wooco.woocobe.place.domain.usecase.GetPlaceReviewInput
 import kr.wooco.woocobe.place.domain.usecase.GetPlaceReviewUseCase
-import kr.wooco.woocobe.place.domain.usecase.GetPlaceUseCase
-import kr.wooco.woocobe.place.domain.usecase.GetAllMyPlaceReviewUseCase
+import kr.wooco.woocobe.place.domain.usecase.GetUserAllPlaceReviewInput
 import kr.wooco.woocobe.place.domain.usecase.UpdatePlaceReviewUseCase
 import kr.wooco.woocobe.place.ui.web.controller.request.CreatePlaceReviewRequest
 import kr.wooco.woocobe.place.ui.web.controller.request.UpdatePlaceReviewRequest
@@ -24,17 +21,13 @@ import kr.wooco.woocobe.user.domain.usecase.GetUserUseCase
 import org.springframework.stereotype.Service
 
 @Service
-class PlaceReviewFacade(
-    private val addPlaceUseCase: AddPlaceUseCase,
+class PlaceReviewQueryFacade(
     private val addPlaceReviewUseCase: AddPlaceReviewUseCase,
     private val updatePlaceReviewUseCase: UpdatePlaceReviewUseCase,
     private val deletePlaceReviewUseCase: DeletePlaceReviewUseCase,
-    private val getPlaceUseCase: GetPlaceUseCase,
     private val getPlaceReviewUseCase: GetPlaceReviewUseCase,
-    private val getAllPlaceUseCase: GetAllPlaceUseCase,
     private val getAllPlaceReviewUseCase: GetAllPlaceReviewUseCase,
-    private val getOneLineReviewStatsUseCase: GetOneLineReviewStatsUseCase,
-    private val getAllMyPlaceReviewUsecase: GetAllMyPlaceReviewUseCase,
+    private val getAllMyPlaceReviewUseCase: GetAllMyPlaceReviewUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val getAllUserUseCase: GetAllUserUseCase,
 ) {
@@ -82,5 +75,14 @@ class PlaceReviewFacade(
         )
     }
 
-    fun getAllUserWith
+    fun getAllMyPlaceReview(userId: Long): List<PlaceReviewDetailsResponse> {
+        val getAllMyPlaceReviewResult = getAllMyPlaceReviewUseCase.execute(GetUserAllPlaceReviewInput(userId = userId))
+
+        val getUserResult = getUserUseCase.execute(GetUserInput(userId = userId))
+
+        return PlaceReviewDetailsResponse.listOf(
+            placeReviews = getAllMyPlaceReviewResult.placeReviews,
+            users = listOf(getUserResult.user),
+        )
+    }
 }
