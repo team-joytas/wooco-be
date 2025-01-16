@@ -1,9 +1,9 @@
 package kr.wooco.woocobe.plan.ui.web.controller.request
 
-import kr.wooco.woocobe.plan.domain.usecase.UpdatePlanInput
+import kr.wooco.woocobe.plan.domain.usecase.AddPlanInput
 import java.time.LocalDate
 
-data class UpdatePlanRequest(
+data class CreatePlanRequest(
     val title: String,
     val description: String,
     val primaryRegion: String,
@@ -12,13 +12,9 @@ data class UpdatePlanRequest(
     val placeIds: List<Long>,
     val categories: List<String>,
 ) {
-    fun toCommand(
-        userId: Long,
-        planId: Long,
-    ): UpdatePlanInput =
-        UpdatePlanInput(
+    fun toCommand(userId: Long): AddPlanInput =
+        AddPlanInput(
             userId = userId,
-            planId = planId,
             title = title,
             description = description,
             primaryRegion = primaryRegion,
