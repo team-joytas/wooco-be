@@ -32,7 +32,7 @@ class Place(
         }
     }
 
-    fun updateMainImageUrl(imageUrl: String) {
+    fun updateThumbnailUrl(imageUrl: String) {
         thumbnailUrl = imageUrl
     }
 
