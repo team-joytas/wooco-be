@@ -1,14 +1,11 @@
 package kr.wooco.woocobe.place.ui.web.facade
 
-import kr.wooco.woocobe.place.domain.usecase.AddPlaceReviewUseCase
-import kr.wooco.woocobe.place.domain.usecase.DeletePlaceReviewUseCase
 import kr.wooco.woocobe.place.domain.usecase.GetAllMyPlaceReviewUseCase
 import kr.wooco.woocobe.place.domain.usecase.GetAllPlaceReviewInput
 import kr.wooco.woocobe.place.domain.usecase.GetAllPlaceReviewUseCase
 import kr.wooco.woocobe.place.domain.usecase.GetPlaceReviewInput
 import kr.wooco.woocobe.place.domain.usecase.GetPlaceReviewUseCase
 import kr.wooco.woocobe.place.domain.usecase.GetUserAllPlaceReviewInput
-import kr.wooco.woocobe.place.domain.usecase.UpdatePlaceReviewUseCase
 import kr.wooco.woocobe.place.ui.web.controller.response.PlaceReviewDetailsResponse
 import kr.wooco.woocobe.user.domain.usecase.GetAllUserInput
 import kr.wooco.woocobe.user.domain.usecase.GetAllUserUseCase
@@ -18,9 +15,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class PlaceReviewQueryFacade(
-    private val addPlaceReviewUseCase: AddPlaceReviewUseCase,
-    private val updatePlaceReviewUseCase: UpdatePlaceReviewUseCase,
-    private val deletePlaceReviewUseCase: DeletePlaceReviewUseCase,
     private val getPlaceReviewUseCase: GetPlaceReviewUseCase,
     private val getAllPlaceReviewUseCase: GetAllPlaceReviewUseCase,
     private val getAllMyPlaceReviewUseCase: GetAllMyPlaceReviewUseCase,
