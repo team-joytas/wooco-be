@@ -9,7 +9,6 @@ class PlaceStorageMapper {
     fun toDomain(placeJpaEntity: PlaceJpaEntity): Place =
         Place(
             id = placeJpaEntity.id,
-            userId = placeJpaEntity.userId,
             name = placeJpaEntity.name,
             latitude = placeJpaEntity.latitude,
             longitude = placeJpaEntity.longitude,
@@ -17,12 +16,12 @@ class PlaceStorageMapper {
             kakaoMapPlaceId = placeJpaEntity.kakaoMapPlaceId,
             averageRating = placeJpaEntity.averageRating,
             reviewCount = placeJpaEntity.reviewCount,
+            mainImageUrl = placeJpaEntity.mainImageUrl,
         )
 
     fun toEntity(place: Place): PlaceJpaEntity =
         PlaceJpaEntity(
             id = place.id,
-            userId = place.userId,
             name = place.name,
             latitude = place.latitude,
             longitude = place.longitude,
@@ -30,5 +29,6 @@ class PlaceStorageMapper {
             kakaoMapPlaceId = place.kakaoMapPlaceId,
             averageRating = place.averageRating,
             reviewCount = place.reviewCount,
+            mainImageUrl = place.mainImageUrl,
         )
 }
