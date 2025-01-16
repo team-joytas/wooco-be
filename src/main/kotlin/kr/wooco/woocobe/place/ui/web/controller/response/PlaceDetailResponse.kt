@@ -1,8 +1,7 @@
 package kr.wooco.woocobe.place.ui.web.controller.response
 
 import kr.wooco.woocobe.place.domain.model.Place
-import kr.wooco.woocobe.place.domain.model.PlaceReview
-import kr.wooco.woocobe.user.domain.model.User
+import kr.wooco.woocobe.place.domain.model.PlaceOneLineReviewStat
 
 data class PlaceDetailResponse(
     val placeId: Long,
@@ -13,13 +12,12 @@ data class PlaceDetailResponse(
     val kakaoMapPlaceId: String,
     val averageRating: Double,
     val reviewCount: Long,
-    val placeReviews: List<PlaceReviewDetailsResponse>,
+    val placeOnLineReviewStats: List<PlaceOneLineReviewStatDetailResponse>,
 ) {
     companion object {
         fun of(
             place: Place,
-            placeReviews: List<PlaceReview>,
-            users: List<User>,
+            placeOneLineReviewStats: List<PlaceOneLineReviewStat>,
         ): PlaceDetailResponse =
             PlaceDetailResponse(
                 placeId = place.id,
@@ -30,10 +28,7 @@ data class PlaceDetailResponse(
                 kakaoMapPlaceId = place.kakaoMapPlaceId,
                 averageRating = place.averageRating,
                 reviewCount = place.reviewCount,
-                placeReviews = PlaceReviewDetailsResponse.listOf(
-                    placeReviews = placeReviews,
-                    users = users,
-                ),
+                placeOnLineReviewStats = PlaceOneLineReviewStatDetailResponse.listFrom(placeOneLineReviewStats),
             )
     }
 }
