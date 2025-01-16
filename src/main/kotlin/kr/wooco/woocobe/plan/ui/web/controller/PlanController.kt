@@ -1,19 +1,11 @@
 package kr.wooco.woocobe.plan.ui.web.controller
 
-import kr.wooco.woocobe.plan.domain.usecase.AddPlanInput
-import kr.wooco.woocobe.plan.domain.usecase.AddPlanUseCase
-import kr.wooco.woocobe.plan.domain.usecase.DeletePlanInput
-import kr.wooco.woocobe.plan.domain.usecase.DeletePlanUseCase
-import kr.wooco.woocobe.plan.domain.usecase.GetAllPlanInput
-import kr.wooco.woocobe.plan.domain.usecase.GetAllPlanUseCase
-import kr.wooco.woocobe.plan.domain.usecase.GetPlanInput
-import kr.wooco.woocobe.plan.domain.usecase.GetPlanUseCase
-import kr.wooco.woocobe.plan.domain.usecase.UpdatePlanInput
-import kr.wooco.woocobe.plan.domain.usecase.UpdatePlanUseCase
-import kr.wooco.woocobe.plan.ui.web.controller.request.AddPlanRequest
+import kr.wooco.woocobe.plan.ui.web.controller.request.CreatePlanRequest
 import kr.wooco.woocobe.plan.ui.web.controller.request.UpdatePlanRequest
-import kr.wooco.woocobe.plan.ui.web.controller.response.GetAllPlanResponse
-import kr.wooco.woocobe.plan.ui.web.controller.response.GetPlanResponse
+import kr.wooco.woocobe.plan.ui.web.controller.response.CreatePlanResponse
+import kr.wooco.woocobe.plan.ui.web.controller.response.PlanDetailResponse
+import kr.wooco.woocobe.plan.ui.web.facade.PlanCommandFacade
+import kr.wooco.woocobe.plan.ui.web.facade.PlanQueryFacade
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -28,90 +20,63 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/plans")
 class PlanController(
-    private val addPlanUseCase: AddPlanUseCase,
-    private val getAllPlanUseCase: GetAllPlanUseCase,
-    private val getPlanUseCase: GetPlanUseCase,
-    private val updatePlanUseCase: UpdatePlanUseCase,
-    private val deletePlanUseCase: DeletePlanUseCase,
-) {
+    private val planQueryFacade: PlanQueryFacade,
+    private val planCommandFacade: PlanCommandFacade,
+) : PlanApi {
     @PostMapping
-    fun createPlan(
+    override fun createPlan(
         @AuthenticationPrincipal userId: Long,
-        @RequestBody request: AddPlanRequest,
-    ): ResponseEntity<Unit> {
-        addPlanUseCase.execute(
-            AddPlanInput(
-                userId = userId,
-                title = request.title,
-                description = request.description,
-                primaryRegion = request.primaryRegion,
-                secondaryRegion = request.secondaryRegion,
-                visitDate = request.visitDate,
-                placeIds = request.placeIds,
-                categories = request.categories,
-            ),
-        )
-        return ResponseEntity.ok().build()
-    }
-
-    @GetMapping
-    fun getAllPlans(
-        @AuthenticationPrincipal userId: Long,
-    ): ResponseEntity<GetAllPlanResponse> {
-        val response = GetAllPlanResponse.from(
-            getAllPlanUseCase.execute(GetAllPlanInput(userId)),
+        @RequestBody request: CreatePlanRequest,
+    ): ResponseEntity<CreatePlanResponse> {
+        val response = planCommandFacade.createPlan(
+            userId = userId,
+            request = request,
         )
         return ResponseEntity.ok(response)
     }
 
+    @GetMapping
+    override fun getAllPlanDetail(
+        @AuthenticationPrincipal userId: Long,
+    ): ResponseEntity<List<PlanDetailResponse>> {
+        val response = planQueryFacade.getAllPlanDetail(userId)
+        return ResponseEntity.ok(response)
+    }
+
     @GetMapping("/{planId}")
-    fun getPlan(
+    override fun getPlanDetail(
         @AuthenticationPrincipal userId: Long,
         @PathVariable planId: Long,
-    ): ResponseEntity<GetPlanResponse> {
-        val response = GetPlanResponse.from(
-            getPlanUseCase.execute(
-                GetPlanInput(
-                    userId = userId,
-                    planId = planId,
-                ),
-            ),
+    ): ResponseEntity<PlanDetailResponse> {
+        val response = planQueryFacade.getPlanDetail(
+            userId = userId,
+            planId = planId,
         )
         return ResponseEntity.ok(response)
     }
 
     @PatchMapping("/{planId}")
-    fun updatePlan(
+    override fun updatePlan(
         @AuthenticationPrincipal userId: Long,
         @RequestBody request: UpdatePlanRequest,
         @PathVariable planId: Long,
     ): ResponseEntity<Unit> {
-        updatePlanUseCase.execute(
-            UpdatePlanInput(
-                userId = userId,
-                planId = planId,
-                title = request.title,
-                description = request.description,
-                primaryRegion = request.primaryRegion,
-                secondaryRegion = request.secondaryRegion,
-                visitDate = request.visitDate,
-                placeIds = request.placeIds,
-                categories = request.categories,
-            ),
+        planCommandFacade.updatePlan(
+            userId = userId,
+            planId = planId,
+            request = request,
         )
         return ResponseEntity.ok().build()
     }
 
     @DeleteMapping("/{planId}")
-    fun deletePlan(
+    override fun deletePlan(
         @AuthenticationPrincipal userId: Long,
         @PathVariable planId: Long,
     ): ResponseEntity<Unit> {
-        deletePlanUseCase.execute(
-            DeletePlanInput(
-                userId = userId,
-                planId = planId,
-            ),
+        planCommandFacade.deletePlan(
+            userId = userId,
+            planId = planId,
         )
         return ResponseEntity.ok().build()
     }
