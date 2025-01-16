@@ -16,7 +16,12 @@ class GetUserUseCaseTest(
     listeners(MysqlCleaner())
 
     Given("저장된 회원이 존재할 경우") {
-        val userJpaEntity = UserJpaEntity(name = "홍인데요", profileUrl = "url").run(userJpaRepository::save)
+        val userJpaEntity = UserJpaEntity(
+            name = "홍인데요",
+            profileUrl = "url",
+            description = "소개 문장",
+        ).run(userJpaRepository::save)
+
         val validUserId = userJpaEntity.id
 
         When("해당 회원 식별자 값이 주어질 때") {

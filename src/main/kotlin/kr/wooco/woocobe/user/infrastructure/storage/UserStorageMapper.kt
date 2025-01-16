@@ -11,6 +11,7 @@ class UserStorageMapper {
             id = userJpaEntity.id,
             name = userJpaEntity.name,
             profileUrl = userJpaEntity.profileUrl,
+            description = userJpaEntity.description,
         )
 
     fun toEntity(user: User): UserJpaEntity =
@@ -18,5 +19,6 @@ class UserStorageMapper {
             id = user.id,
             name = user.name,
             profileUrl = user.profileUrl,
+            description = user.description,
         )
 }
