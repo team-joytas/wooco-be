@@ -2,14 +2,14 @@ package kr.wooco.woocobe.place.ui.web.controller.response
 
 import kr.wooco.woocobe.place.domain.model.PlaceOneLineReviewStat
 
-data class PlaceOneLineReviewStatsDetailResponse(
+data class PlaceOneLineReviewStatDetailResponse(
     val content: String,
     val count: Long,
 ) {
     companion object {
-        fun listFrom(placeOneLineReviewStat: List<PlaceOneLineReviewStat>): List<PlaceOneLineReviewStatsDetailResponse> =
+        fun listFrom(placeOneLineReviewStat: List<PlaceOneLineReviewStat>): List<PlaceOneLineReviewStatDetailResponse> =
             placeOneLineReviewStat.map {
-                PlaceOneLineReviewStatsDetailResponse(
+                PlaceOneLineReviewStatDetailResponse(
                     content = it.content,
                     count = it.count,
                 )

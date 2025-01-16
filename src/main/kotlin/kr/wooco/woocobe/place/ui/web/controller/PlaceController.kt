@@ -3,7 +3,6 @@ package kr.wooco.woocobe.place.ui.web.controller
 import kr.wooco.woocobe.place.ui.web.controller.request.CreatePlaceRequest
 import kr.wooco.woocobe.place.ui.web.controller.response.CreatePlaceResponse
 import kr.wooco.woocobe.place.ui.web.controller.response.PlaceDetailResponse
-import kr.wooco.woocobe.place.ui.web.controller.response.PlaceOneLineReviewStatsDetailResponse
 import kr.wooco.woocobe.place.ui.web.facade.PlaceCommandFacade
 import kr.wooco.woocobe.place.ui.web.facade.PlaceQueryFacade
 import org.springframework.http.HttpStatus
@@ -27,14 +26,6 @@ class PlaceController(
         @PathVariable placeId: Long,
     ): ResponseEntity<PlaceDetailResponse> {
         val response = placeQueryFacade.getPlaceDetail(placeId = placeId)
-        return ResponseEntity.ok(response)
-    }
-
-    @GetMapping("/{placeId}/oneLineReviewStats")
-    override fun getPlaceOneLineReviewStats(
-        @PathVariable placeId: Long,
-    ): ResponseEntity<List<PlaceOneLineReviewStatsDetailResponse>> {
-        val response = placeQueryFacade.getPlaceOneLineReviewStatsDetail(placeId = placeId)
         return ResponseEntity.ok(response)
     }
 
