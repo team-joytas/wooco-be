@@ -9,9 +9,8 @@ data class CreatePlaceRequest(
     val address: String,
     val kakaoMapPlaceId: String,
 ) {
-    fun toCommand(userId: Long): AddPlaceInput =
+    fun toCommand(): AddPlaceInput =
         AddPlaceInput(
-            userId = userId,
             name = name,
             latitude = latitude,
             longitude = longitude,

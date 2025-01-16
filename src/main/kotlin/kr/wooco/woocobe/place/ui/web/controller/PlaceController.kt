@@ -34,7 +34,7 @@ class PlaceController(
         @AuthenticationPrincipal userId: Long,
         @RequestBody request: CreatePlaceRequest,
     ): ResponseEntity<CreatePlaceResponse> {
-        val response = placeCommandFacade.createPlace(userId = userId, request = request)
+        val response = placeCommandFacade.createPlace(request = request)
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 }

@@ -9,11 +9,8 @@ import org.springframework.stereotype.Service
 class PlaceCommandFacade(
     private val addPlaceUseCase: AddPlaceUseCase,
 ) {
-    fun createPlace(
-        userId: Long,
-        request: CreatePlaceRequest,
-    ): CreatePlaceResponse {
-        val createPlaceResult = addPlaceUseCase.execute(request.toCommand(userId))
+    fun createPlace(request: CreatePlaceRequest): CreatePlaceResponse {
+        val createPlaceResult = addPlaceUseCase.execute(request.toCommand())
         return CreatePlaceResponse(createPlaceResult.placeId)
     }
 }
