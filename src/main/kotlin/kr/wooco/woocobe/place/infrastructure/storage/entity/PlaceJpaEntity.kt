@@ -10,7 +10,9 @@ import kr.wooco.woocobe.common.infrastructure.storage.entity.BaseTimeEntity
 @Entity
 @Table(name = "places")
 class PlaceJpaEntity(
-    @Column(name = "thumbnail_url", nullable = false)
+    @Column(name = "phone_number")
+    val phoneNumber: String,
+    @Column(name = "thumbnail_url")
     val thumbnailUrl: String,
     @Column(name = "review_count", nullable = false)
     val reviewCount: Long,

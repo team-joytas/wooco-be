@@ -17,6 +17,7 @@ class PlaceStorageMapper {
             averageRating = placeJpaEntity.averageRating,
             reviewCount = placeJpaEntity.reviewCount,
             thumbnailUrl = placeJpaEntity.thumbnailUrl,
+            phoneNumber = placeJpaEntity.phoneNumber,
         )
 
     fun toEntity(place: Place): PlaceJpaEntity =
@@ -30,5 +31,6 @@ class PlaceStorageMapper {
             averageRating = place.averageRating,
             reviewCount = place.reviewCount,
             thumbnailUrl = place.thumbnailUrl,
+            phoneNumber = place.phoneNumber,
         )
 }

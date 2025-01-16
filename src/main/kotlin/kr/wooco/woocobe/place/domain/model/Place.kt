@@ -9,6 +9,7 @@ class Place(
     val kakaoMapPlaceId: String,
     var averageRating: Double,
     var reviewCount: Long,
+    val phoneNumber: String,
     var thumbnailUrl: String,
 ) {
     fun increaseReviewCounts() {
@@ -42,6 +43,7 @@ class Place(
             longitude: Double,
             address: String,
             kakaoMapPlaceId: String,
+            phoneNumber: String,
         ): Place =
             Place(
                 id = 0L,
@@ -52,6 +54,7 @@ class Place(
                 kakaoMapPlaceId = kakaoMapPlaceId,
                 averageRating = 0.0,
                 reviewCount = 0,
+                phoneNumber = phoneNumber,
                 thumbnailUrl = "",
             )
     }

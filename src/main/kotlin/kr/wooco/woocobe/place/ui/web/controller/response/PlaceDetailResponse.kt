@@ -12,6 +12,7 @@ data class PlaceDetailResponse(
     val kakaoMapPlaceId: String,
     val averageRating: Double,
     val reviewCount: Long,
+    val phoneNumber: String,
     val thumbnailUrl: String,
     val placeOnLineReviewStats: List<PlaceOneLineReviewStatDetailResponse>,
 ) {
@@ -29,6 +30,7 @@ data class PlaceDetailResponse(
                 kakaoMapPlaceId = place.kakaoMapPlaceId,
                 averageRating = place.averageRating,
                 reviewCount = place.reviewCount,
+                phoneNumber = place.phoneNumber,
                 thumbnailUrl = place.thumbnailUrl,
                 placeOnLineReviewStats = PlaceOneLineReviewStatDetailResponse.listFrom(placeOneLineReviewStats),
             )

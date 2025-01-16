@@ -12,6 +12,7 @@ data class AddPlaceInput(
     val longitude: Double,
     val address: String,
     val kakaoMapPlaceId: String,
+    val phoneNumber: String,
 )
 
 data class AddPlaceOutput(
@@ -37,6 +38,7 @@ class AddPlaceUseCase(
                 longitude = input.longitude,
                 address = input.address,
                 kakaoMapPlaceId = input.kakaoMapPlaceId,
+                phoneNumber = input.phoneNumber,
             ),
         )
         return AddPlaceOutput(placeId = place.id)
