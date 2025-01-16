@@ -19,26 +19,35 @@ data class AddPlanInput(
     val categories: List<String>,
 )
 
+data class AddPlanOutput(
+    val planId: Long,
+)
+
 @Service
 class AddPlanUseCase(
     private val planStorageGateway: PlanStorageGateway,
-) : UseCase<AddPlanInput, Unit> {
+) : UseCase<AddPlanInput, AddPlanOutput> {
     @Transactional
-    override fun execute(input: AddPlanInput) {
+    override fun execute(input: AddPlanInput): AddPlanOutput {
         val region = PlanRegion(
             primaryRegion = input.primaryRegion,
             secondaryRegion = input.secondaryRegion,
         )
 
-        val plan = Plan.register(
-            userId = input.userId,
-            title = input.title,
-            description = input.description,
-            region = region,
-            visitDate = input.visitDate,
-            placeIds = input.placeIds,
-            categories = input.categories,
+        val plan = planStorageGateway.save(
+            Plan.register(
+                userId = input.userId,
+                title = input.title,
+                description = input.description,
+                region = region,
+                visitDate = input.visitDate,
+                placeIds = input.placeIds,
+                categories = input.categories,
+            ),
         )
-        planStorageGateway.save(plan)
+
+        return AddPlanOutput(
+            planId = plan.id,
+        )
     }
 }
