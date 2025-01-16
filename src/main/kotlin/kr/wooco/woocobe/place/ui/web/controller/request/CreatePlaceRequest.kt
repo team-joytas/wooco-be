@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.place.ui.web.controller.request
 
-import kr.wooco.woocobe.place.domain.usecase.AddPlaceUseCaseInput
+import kr.wooco.woocobe.place.domain.usecase.AddPlaceInput
 
 data class CreatePlaceRequest(
     val name: String,
@@ -9,8 +9,8 @@ data class CreatePlaceRequest(
     val address: String,
     val kakaoMapPlaceId: String,
 ) {
-    fun toCommand(userId: Long): AddPlaceUseCaseInput =
-        AddPlaceUseCaseInput(
+    fun toCommand(userId: Long): AddPlaceInput =
+        AddPlaceInput(
             userId = userId,
             name = name,
             latitude = latitude,
