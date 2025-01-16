@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController
 class PlaceController(
     private val placeQueryFacade: PlaceQueryFacade,
     private val placeCommandFacade: PlaceCommandFacade,
-) {
+) : PlaceApi {
     @GetMapping("/{placeId}")
-    fun getPlaceDetail(
+    override fun getPlaceDetail(
         @PathVariable placeId: Long,
     ): ResponseEntity<PlaceDetailResponse> {
         val response = placeQueryFacade.getPlaceDetail(placeId = placeId)
@@ -31,7 +31,7 @@ class PlaceController(
     }
 
     @GetMapping("/{placeId}/oneLineReviewStats")
-    fun getPlaceOneLineReviewStats(
+    override fun getPlaceOneLineReviewStats(
         @PathVariable placeId: Long,
     ): ResponseEntity<List<PlaceOneLineReviewStatsDetailResponse>> {
         val response = placeQueryFacade.getPlaceOneLineReviewStatsDetail(placeId = placeId)
@@ -39,7 +39,7 @@ class PlaceController(
     }
 
     @PostMapping
-    fun createPlace(
+    override fun createPlace(
         @AuthenticationPrincipal userId: Long,
         @RequestBody request: CreatePlaceRequest,
     ): ResponseEntity<CreatePlaceResponse> {

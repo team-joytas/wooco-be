@@ -9,16 +9,23 @@ import kr.wooco.woocobe.place.ui.web.facade.PlaceReviewQueryFacade
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/reviews")
 class PlaceReviewController(
     private val placeReviewQueryFacade: PlaceReviewQueryFacade,
     private val placeReviewCommandFacade: PlaceReviewCommandFacade,
-) {
+) : PlaceReviewApi {
     @GetMapping("/{placeReviewId}")
-    fun getPlaceReviewDetail(
+    override fun getPlaceReviewDetail(
         @PathVariable placeReviewId: Long,
     ): ResponseEntity<PlaceReviewDetailsResponse> {
         val response = placeReviewQueryFacade.getPlaceReviewDetail(placeReviewId)
@@ -26,7 +33,7 @@ class PlaceReviewController(
     }
 
     @GetMapping("/places/{placeId}")
-    fun getAllPlaceReviews(
+    override fun getAllPlaceReviews(
         @PathVariable placeId: Long,
     ): ResponseEntity<List<PlaceReviewDetailsResponse>> {
         val response = placeReviewQueryFacade.getAllPlaceReviewDetail(placeId)
@@ -34,7 +41,7 @@ class PlaceReviewController(
     }
 
     @GetMapping("/my")
-    fun getAllMyPlaceReviews(
+    override fun getAllMyPlaceReviews(
         @AuthenticationPrincipal userId: Long,
     ): ResponseEntity<List<PlaceReviewDetailsResponse>> {
         val response = placeReviewQueryFacade.getAllMyPlaceReview(userId)
@@ -42,7 +49,7 @@ class PlaceReviewController(
     }
 
     @PostMapping("/places/{placeId}")
-    fun createPlaceReview(
+    override fun createPlaceReview(
         @AuthenticationPrincipal userId: Long,
         @PathVariable placeId: Long,
         @RequestBody request: CreatePlaceReviewRequest,
@@ -52,7 +59,7 @@ class PlaceReviewController(
     }
 
     @PatchMapping("/{placeReviewId}")
-    fun updatePlaceReview(
+    override fun updatePlaceReview(
         @AuthenticationPrincipal userId: Long,
         @PathVariable placeReviewId: Long,
         @RequestBody request: UpdatePlaceReviewRequest,
@@ -62,7 +69,7 @@ class PlaceReviewController(
     }
 
     @DeleteMapping("/{placeReviewId}")
-    fun deletePlaceReview(
+    override fun deletePlaceReview(
         @AuthenticationPrincipal userId: Long,
         @PathVariable placeReviewId: Long,
     ): ResponseEntity<Unit> {
