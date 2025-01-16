@@ -29,26 +29,11 @@ class JacksonConfig {
     private fun optimizedStringSerializerModule(): SimpleModule =
         SimpleModule().apply {
             addSerializer(Long::class.java, OptimizedLongSerializer)
-            addSerializer(Double::class.java, OptimizedDoubleSerializer)
         }
 
     data object OptimizedLongSerializer : JsonSerializer<Long>() {
         override fun serialize(
             value: Long,
-            gen: JsonGenerator,
-            serializers: SerializerProvider,
-        ) {
-            if (abs(value) > THRESHOLD) {
-                gen.writeString(value.toString())
-            } else {
-                gen.writeNumber(value)
-            }
-        }
-    }
-
-    data object OptimizedDoubleSerializer : JsonSerializer<Double>() {
-        override fun serialize(
-            value: Double,
             gen: JsonGenerator,
             serializers: SerializerProvider,
         ) {
