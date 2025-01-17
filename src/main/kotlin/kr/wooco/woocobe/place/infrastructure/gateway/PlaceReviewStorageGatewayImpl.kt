@@ -28,10 +28,10 @@ internal class PlaceReviewStorageGatewayImpl(
         val existingOneLineReviews =
             placeOneLineReviewJpaRepository.findAllByPlaceReviewId(placeReviewEntity.id)
         val newOneLineReviews = placeReview.oneLineReviews.filter { newReview ->
-            existingOneLineReviews.none { it.content == newReview.content }
+            existingOneLineReviews.none { it.contents == newReview.contents }
         }
         val removedOneLineReviews = existingOneLineReviews.filter { existingReview ->
-            placeReview.oneLineReviews.none { it.content == existingReview.content }
+            placeReview.oneLineReviews.none { it.contents == existingReview.contents }
         }
         placeOneLineReviewJpaRepository.deleteAll(removedOneLineReviews)
 

@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.place.domain.model
 
 class PlaceOneLineReviewStat(
-    val content: String,
+    val contents: String,
     val count: Long,
 )

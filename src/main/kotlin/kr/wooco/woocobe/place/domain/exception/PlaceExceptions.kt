@@ -17,12 +17,12 @@ data object NotExistsPlaceException : BasePlaceException(
     private fun readResolve(): Any = NotExistsPlaceException
 }
 
-data object MissingPlaceOneLineReviewContentException : BasePlaceException(
-    code = "MISSING_PLACE_ONE_LINE_REVIEW_CONTENT",
+data object MissingPlaceOneLineReviewContentsException : BasePlaceException(
+    code = "MISSING_PLACE_ONE_LINE_REVIEW_CONTENTS",
     message = "장소 한줄평 내용이 없습니다.",
     status = HttpStatus.BAD_REQUEST,
 ) {
-    private fun readResolve(): Any = MissingPlaceOneLineReviewContentException
+    private fun readResolve(): Any = MissingPlaceOneLineReviewContentsException
 }
 
 data object MissingPlaceOneLineReviewCountException : BasePlaceException(

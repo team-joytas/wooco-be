@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.place.infrastructure.gateway
 
-import kr.wooco.woocobe.place.domain.exception.MissingPlaceOneLineReviewContentException
+import kr.wooco.woocobe.place.domain.exception.MissingPlaceOneLineReviewContentsException
 import kr.wooco.woocobe.place.domain.exception.MissingPlaceOneLineReviewCountException
 import kr.wooco.woocobe.place.domain.exception.NotExistsPlaceException
 import kr.wooco.woocobe.place.domain.gateway.PlaceStorageGateway
@@ -50,15 +50,15 @@ internal class PlaceStorageGatewayImpl(
         val stats = placeOneLineReviewRepository.findPlaceOneLineReviewStatsByPlaceId(placeId)
 
         return stats.map { row ->
-            val content = row[CONTENT] ?: throw MissingPlaceOneLineReviewContentException
+            val contents = row[CONTENTS] ?: throw MissingPlaceOneLineReviewContentsException
             val count = row[COUNT] ?: throw MissingPlaceOneLineReviewCountException
 
-            placeOneLineReviewStatStorageMapper.toDomain(content.toString(), count)
+            placeOneLineReviewStatStorageMapper.toDomain(contents.toString(), count)
         }
     }
 
     companion object {
-        private const val CONTENT = "content"
+        private const val CONTENTS = "contents"
         private const val COUNT = "count"
     }
 }

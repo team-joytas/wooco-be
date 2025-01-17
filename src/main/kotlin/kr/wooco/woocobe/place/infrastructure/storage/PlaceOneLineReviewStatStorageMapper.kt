@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component
 @Component
 class PlaceOneLineReviewStatStorageMapper {
     fun toDomain(
-        content: String,
+        contents: String,
         count: Long,
     ): PlaceOneLineReviewStat =
         PlaceOneLineReviewStat(
-            content = content,
+            contents = contents,
             count = count,
         )
 }

@@ -11,10 +11,10 @@ interface PlaceOneLineReviewJpaRepository : JpaRepository<PlaceOneLineReviewJpaE
 
     @Query(
         """
-            select r.content as content, count(r.content) as count
+            select r.contents as contents, count(r.contents) as count
             from PlaceOneLineReviewJpaEntity r
             where r.placeId = :placeId
-            group by r.content
+            group by r.contents
             order by count desc
         """,
     )

@@ -19,9 +19,9 @@ class PlaceReviewStorageMapper {
             userId = placeReviewJpaEntity.userId,
             placeId = placeReviewJpaEntity.placeId,
             rating = placeReviewJpaEntity.rating,
-            content = placeReviewJpaEntity.content,
+            contents = placeReviewJpaEntity.contents,
             writeDateTime = placeReviewJpaEntity.createdAt,
-            oneLineReviews = placeOneLineReviewJpaEntities.map { PlaceOneLineReview(content = it.content) },
+            oneLineReviews = placeOneLineReviewJpaEntities.map { PlaceOneLineReview(contents = it.contents) },
             imageUrls = placeReviewImageJpaEntities.map { it.imageUrl },
         )
 
@@ -31,6 +31,6 @@ class PlaceReviewStorageMapper {
             userId = placeReview.userId,
             placeId = placeReview.placeId,
             rating = placeReview.rating,
-            content = placeReview.content,
+            contents = placeReview.contents,
         )
 }
