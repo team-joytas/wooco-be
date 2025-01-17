@@ -8,4 +8,5 @@ data class S3ClientProperties(
     val bucketName: String,
     val contentType: String,
     val timeout: Duration,
+    val baseImageUrl: String,
 )
