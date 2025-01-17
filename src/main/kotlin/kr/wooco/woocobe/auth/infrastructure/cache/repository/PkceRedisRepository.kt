@@ -26,8 +26,8 @@ class PkceRedisRepository(
         )
 
     companion object {
-        private const val TIMEOUT = 10 * 1000L // 10초
+        private const val TIMEOUT = 1800 * 1000L // 30분
 
-        fun generateStorageKey(challenge: String) = "pkce:$challenge"
+        private fun generateStorageKey(challenge: String) = "pkce:$challenge"
     }
 }

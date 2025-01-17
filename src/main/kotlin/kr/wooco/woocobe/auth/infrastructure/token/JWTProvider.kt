@@ -3,6 +3,7 @@ package kr.wooco.woocobe.auth.infrastructure.token
 import io.jsonwebtoken.JwtParser
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import kr.wooco.woocobe.auth.domain.exception.InvalidTokenException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.security.Key
@@ -32,7 +33,7 @@ class JWTProvider(
         runCatching {
             jwtParser.parseClaimsJws(token).body[key].toString()
         }.getOrElse {
-            throw RuntimeException()
+            throw InvalidTokenException
         }
 
     private fun createToken(
