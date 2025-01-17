@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.course.infrastructure.gateway
 
+import kr.wooco.woocobe.course.domain.exception.NotExistsInterestCourseException
 import kr.wooco.woocobe.course.domain.gateway.InterestCourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.InterestCourse
 import kr.wooco.woocobe.course.infrastructure.storage.InterestCourseStorageMapper
@@ -22,7 +23,7 @@ internal class InterestCourseStorageGatewayImpl(
         userId: Long,
     ): InterestCourse {
         val interestCourseEntity = interestCourseJpaRepository.findByUserIdAndCourseId(userId, courseId)
-            ?: throw RuntimeException()
+            ?: throw NotExistsInterestCourseException
         return interestCourseStorageMapper.toDomain(interestCourseEntity)
     }
 

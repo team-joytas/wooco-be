@@ -25,6 +25,14 @@ data object NotExistsCourseException : BaseCourseException(
     private fun readResolve(): Any = NotExistsCourseException
 }
 
+data object NotExistsInterestCourseException : BaseCourseException(
+    code = "NOT_EXISTS_INTEREST_COURSE",
+    message = "좋아요를 누르지 않은 코스입니다.",
+    status = HttpStatus.NOT_FOUND,
+) {
+    private fun readResolve(): Any = NotExistsInterestCourseException
+}
+
 data object UnSupportCategoryException : BaseCourseException(
     code = "UN_SUPPORT_CATEGORY",
     message = "지원하지 않는 카테고리 형식입니다.",

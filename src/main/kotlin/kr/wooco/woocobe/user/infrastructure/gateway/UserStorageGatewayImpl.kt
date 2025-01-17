@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.user.infrastructure.gateway
 
+import kr.wooco.woocobe.user.domain.exception.NotExistsUserException
 import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
 import kr.wooco.woocobe.user.domain.model.User
 import kr.wooco.woocobe.user.infrastructure.storage.UserStorageMapper
@@ -20,7 +21,7 @@ internal class UserStorageGatewayImpl(
 
     override fun getByUserId(userId: Long): User {
         val userEntity = userJpaRepository.findByIdOrNull(userId)
-            ?: throw RuntimeException()
+            ?: throw NotExistsUserException
         return userStorageMapper.toDomain(userEntity)
     }
 
