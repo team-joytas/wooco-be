@@ -6,6 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kr.wooco.woocobe.common.infrastructure.storage.Tsid
 import kr.wooco.woocobe.common.infrastructure.storage.entity.BaseTimeEntity
+import java.time.LocalDate
 
 @Entity
 @Table(name = "courses")
@@ -16,6 +17,8 @@ class CourseJpaEntity(
     val interestCount: Long,
     @Column(name = "view_count")
     val viewCount: Long,
+    @Column(name = "visit_date")
+    val visitDate: LocalDate,
     @Column(columnDefinition = "text")
     val contents: String,
     @Column(name = "secondary_region")

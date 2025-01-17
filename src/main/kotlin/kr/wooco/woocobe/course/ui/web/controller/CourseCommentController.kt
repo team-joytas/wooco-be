@@ -24,7 +24,7 @@ class CourseCommentController(
     private val courseCommentQueryFacade: CourseCommentQueryFacade,
     private val courseCommentCommandFacade: CourseCommentCommandFacade,
 ) : CourseCommentApi {
-    @GetMapping("/course/{courseId}")
+    @GetMapping("/courses/{courseId}")
     override fun getAllCourseComment(
         @PathVariable courseId: Long,
     ): ResponseEntity<List<CourseCommentDetailResponse>> {
@@ -32,7 +32,7 @@ class CourseCommentController(
         return ResponseEntity.ok(response)
     }
 
-    @PostMapping("/course/{courseId}")
+    @PostMapping("/courses/{courseId}")
     override fun createCourseComment(
         @AuthenticationPrincipal userId: Long,
         @PathVariable courseId: Long,

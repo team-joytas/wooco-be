@@ -1,5 +1,7 @@
 package kr.wooco.woocobe.course.domain.model
 
+import kr.wooco.woocobe.course.domain.exception.InvalidCourseWriterException
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 class Course(
@@ -10,6 +12,7 @@ class Course(
     var coursePlaces: List<CoursePlace>,
     var name: String,
     var contents: String,
+    var visitDate: LocalDate,
     var views: Long,
     var comments: Long,
     var interests: Long,
@@ -40,17 +43,17 @@ class Course(
         categories: List<String>,
         contents: String,
         placeIds: List<Long>,
+        visitDate: LocalDate,
     ) = apply {
         this.name = name
         this.categories = categories.map { CourseCategory.from(it) }
         this.contents = contents
         this.coursePlaces = processCoursePlaceOrder(placeIds)
+        this.visitDate = visitDate
     }
 
     fun isValidWriter(userId: Long) {
-        if (this.userId != userId) {
-            throw RuntimeException()
-        }
+        if (this.userId != userId) throw InvalidCourseWriterException
     }
 
     companion object {
@@ -61,6 +64,7 @@ class Course(
             placeIds: List<Long>,
             name: String,
             contents: String,
+            visitDate: LocalDate,
         ): Course =
             Course(
                 id = 0L,
@@ -70,6 +74,7 @@ class Course(
                 coursePlaces = processCoursePlaceOrder(placeIds),
                 name = name,
                 contents = contents,
+                visitDate = visitDate,
                 views = 0L,
                 comments = 0L,
                 interests = 0L,

@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.course.ui.web.controller.request
 
 import kr.wooco.woocobe.course.domain.usecase.AddCourseUseCaseInput
+import java.time.LocalDate
 
 data class CreateCourseRequest(
     val primaryRegion: String,
@@ -9,6 +10,7 @@ data class CreateCourseRequest(
     val name: String,
     val contents: String,
     val placeIds: List<Long>,
+    val visitDate: LocalDate,
 ) {
     fun toCommand(userId: Long): AddCourseUseCaseInput =
         AddCourseUseCaseInput(
@@ -19,5 +21,6 @@ data class CreateCourseRequest(
             name = name,
             contents = contents,
             placeIds = placeIds,
+            visitDate = visitDate,
         )
 }

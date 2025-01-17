@@ -37,7 +37,7 @@ class CourseController(
     @GetMapping
     override fun getAllCourse(
         @AuthenticationPrincipal userId: Long?,
-        @RequestParam sort: String,
+        @RequestParam(required = false, defaultValue = "RECENT") sort: String,
         @RequestParam primaryRegion: String,
         @RequestParam secondaryRegion: String,
         @RequestParam(required = false) category: String?,
@@ -52,20 +52,23 @@ class CourseController(
         return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/my")
-    override fun getAllMyCourse(
-        @AuthenticationPrincipal userId: Long,
-        @RequestParam sort: String,
+    @GetMapping("/users/{userId}")
+    override fun getAllUserCourse(
+        @AuthenticationPrincipal currentUserId: Long?,
+        @PathVariable userId: Long,
+        @RequestParam(required = false, defaultValue = "RECENT") sort: String,
     ): ResponseEntity<List<CourseDetailResponse>> {
-        val response = courseQueryFacade.getMyCourseDetail(userId = userId, sort = sort)
+        val response =
+            courseQueryFacade.getAllUserCourseDetail(currentUserId = currentUserId, userId = userId, sort = sort)
         return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/my/interest")
-    override fun getAllMyInterestCourse(
-        @AuthenticationPrincipal userId: Long,
+    @GetMapping("/users/{userId}/like")
+    override fun getAllUserInterestCourse(
+        @AuthenticationPrincipal currentUserId: Long?,
+        @PathVariable userId: Long,
     ): ResponseEntity<List<CourseDetailResponse>> {
-        val response = courseQueryFacade.getAllMyInterestCourse(userId = userId)
+        val response = courseQueryFacade.getAllUserInterestCourse(currentUserId = currentUserId, userId = userId)
         return ResponseEntity.ok(response)
     }
 

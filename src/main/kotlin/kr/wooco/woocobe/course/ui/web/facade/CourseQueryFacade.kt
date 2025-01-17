@@ -2,14 +2,14 @@ package kr.wooco.woocobe.course.ui.web.facade
 
 import kr.wooco.woocobe.course.domain.usecase.CheckInterestCourseInput
 import kr.wooco.woocobe.course.domain.usecase.CheckInterestCourseUseCase
-import kr.wooco.woocobe.course.domain.usecase.GetAllByCourseInput
 import kr.wooco.woocobe.course.domain.usecase.GetAllCourseInput
 import kr.wooco.woocobe.course.domain.usecase.GetAllCourseUseCase
 import kr.wooco.woocobe.course.domain.usecase.GetAllInterestCourseIdInput
 import kr.wooco.woocobe.course.domain.usecase.GetAllInterestCourseIdUseCase
-import kr.wooco.woocobe.course.domain.usecase.GetAllMyCourseUseCase
-import kr.wooco.woocobe.course.domain.usecase.GetAllMyInterestCourseInput
-import kr.wooco.woocobe.course.domain.usecase.GetAllMyInterestCourseUseCase
+import kr.wooco.woocobe.course.domain.usecase.GetAllUserCourseInput
+import kr.wooco.woocobe.course.domain.usecase.GetAllUserCourseUseCase
+import kr.wooco.woocobe.course.domain.usecase.GetAllUserInterestCourseInput
+import kr.wooco.woocobe.course.domain.usecase.GetAllUserInterestCourseUseCase
 import kr.wooco.woocobe.course.domain.usecase.GetCourseInput
 import kr.wooco.woocobe.course.domain.usecase.GetCourseUseCase
 import kr.wooco.woocobe.course.ui.web.controller.response.CourseDetailResponse
@@ -27,10 +27,10 @@ import org.springframework.stereotype.Service
 class CourseQueryFacade(
     private val getCourseUseCase: GetCourseUseCase,
     private val getAllCourseUseCase: GetAllCourseUseCase,
-    private val getAllMyCourseUseCase: GetAllMyCourseUseCase,
+    private val getAllUserCourseUseCase: GetAllUserCourseUseCase,
     private val checkInterestCourseUseCase: CheckInterestCourseUseCase,
     private val getAllInterestCourseIdUseCase: GetAllInterestCourseIdUseCase,
-    private val getAllMyInterestCourseUseCase: GetAllMyInterestCourseUseCase,
+    private val getAllUserInterestCourseUseCase: GetAllUserInterestCourseUseCase,
     private val getUserUseCase: GetUserUseCase,
     private val getAllUserUseCase: GetAllUserUseCase,
     private val getAllPlaceUseCase: GetAllPlaceUseCase,
@@ -77,8 +77,8 @@ class CourseQueryFacade(
         val placeIds = getAllCourseResult.courses.flatMap { it.coursePlaces }.map { it.placeId }
         val getAllPlaceResult = getAllPlaceUseCase.execute(GetAllPlaceInput(placeIds = placeIds))
 
-        val userIds = getAllCourseResult.courses.map { it.userId }
-        val getAllUserResult = getAllUserUseCase.execute(GetAllUserInput(userIds = userIds))
+        val writerIds = getAllCourseResult.courses.map { it.userId }
+        val getAllUserResult = getAllUserUseCase.execute(GetAllUserInput(userIds = writerIds))
 
         val courseIds = getAllCourseResult.courses.map { it.id }
         val getAllInterestCourseIdResult = userId?.run {
@@ -93,43 +93,63 @@ class CourseQueryFacade(
         )
     }
 
-    fun getMyCourseDetail(
+    fun getAllUserCourseDetail(
+        currentUserId: Long?,
         userId: Long,
         sort: String,
     ): List<CourseDetailResponse> {
-        val getAllMyCourseResult = getAllMyCourseUseCase.execute(GetAllByCourseInput(userId = userId, sort = sort))
+        val getAllUserCourseResult =
+            getAllUserCourseUseCase.execute(GetAllUserCourseInput(userId = userId, sort = sort))
 
-        val getUserResult = getUserUseCase.execute(GetUserInput(userId = userId))
-
-        val placeIds = getAllMyCourseResult.courses.flatMap { it.coursePlaces }.map { it.placeId }
+        val placeIds = getAllUserCourseResult.courses.flatMap { it.coursePlaces }.map { it.placeId }
         val getAllPlaceResult = getAllPlaceUseCase.execute(GetAllPlaceInput(placeIds = placeIds))
 
-        val courseIds = getAllMyCourseResult.courses.map { it.id }
-        val getAllInterestCourseIdResult =
-            getAllInterestCourseIdUseCase.execute(GetAllInterestCourseIdInput(userId = userId, courseIds = courseIds))
+        val getAllUserResult = getAllUserUseCase.execute(GetAllUserInput(userIds = listOf(userId)))
+
+        val getAllInterestCourseIdResult = currentUserId?.run {
+            getAllInterestCourseIdUseCase.execute(
+                GetAllInterestCourseIdInput(
+                    userId = currentUserId,
+                    courseIds = getAllUserCourseResult.courses.map { it.id },
+                ),
+            )
+        }
 
         return CourseDetailResponse.listOf(
-            courses = getAllMyCourseResult.courses,
+            courses = getAllUserCourseResult.courses,
             places = getAllPlaceResult.places,
-            users = listOf(getUserResult.user),
-            interestCourseIds = getAllInterestCourseIdResult.interestCourseIds,
+            users = getAllUserResult.users,
+            interestCourseIds = getAllInterestCourseIdResult?.interestCourseIds ?: emptyList(),
         )
     }
 
-    fun getAllMyInterestCourse(userId: Long): List<CourseDetailResponse> {
-        val getAllMyInterestResult = getAllMyInterestCourseUseCase.execute(GetAllMyInterestCourseInput(userId = userId))
+    fun getAllUserInterestCourse(
+        currentUserId: Long?,
+        userId: Long,
+    ): List<CourseDetailResponse> {
+        val getAllUserInterestCourseResult =
+            getAllUserInterestCourseUseCase.execute(GetAllUserInterestCourseInput(userId = userId))
 
-        val userIds = getAllMyInterestResult.courses.map { it.userId }
-        val getAllUserResult = getAllUserUseCase.execute(GetAllUserInput(userIds = userIds))
+        val writerIds = getAllUserInterestCourseResult.courses.map { it.userId }
+        val getAllUserResult = getAllUserUseCase.execute(GetAllUserInput(userIds = writerIds))
 
-        val placeIds = getAllMyInterestResult.courses.flatMap { it.coursePlaces }.map { it.placeId }
+        val placeIds = getAllUserInterestCourseResult.courses.flatMap { it.coursePlaces }.map { it.placeId }
         val getAllPlaceResult = getAllPlaceUseCase.execute(GetAllPlaceInput(placeIds = placeIds))
 
+        val getAllInterestCourseIdResult = currentUserId?.run {
+            getAllInterestCourseIdUseCase.execute(
+                GetAllInterestCourseIdInput(
+                    userId = currentUserId,
+                    courseIds = getAllUserInterestCourseResult.courses.map { it.id },
+                ),
+            )
+        }
+
         return CourseDetailResponse.listOf(
-            courses = getAllMyInterestResult.courses,
+            courses = getAllUserInterestCourseResult.courses,
             places = getAllPlaceResult.places,
             users = getAllUserResult.users,
-            interestCourseIds = getAllMyInterestResult.courses.map { it.id },
+            interestCourseIds = getAllInterestCourseIdResult?.interestCourseIds ?: emptyList(),
         )
     }
 }

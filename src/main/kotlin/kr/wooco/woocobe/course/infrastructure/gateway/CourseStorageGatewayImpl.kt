@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.course.infrastructure.gateway
 
+import kr.wooco.woocobe.course.domain.exception.NotExistsCourseException
 import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.course.domain.model.CourseRegion
@@ -41,7 +42,7 @@ internal class CourseStorageGatewayImpl(
 
     override fun getByCourseId(courseId: Long): Course {
         val courseEntity = courseJpaRepository.findByIdOrNull(courseId)
-            ?: throw RuntimeException()
+            ?: throw NotExistsCourseException
         val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseId(courseEntity.id)
         val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseId(courseId)
         return courseStorageMapper.toDomain(courseEntity, coursePlaceEntities, courseCategoryEntities)

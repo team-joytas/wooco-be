@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.course.domain.usecase
 
 import kr.wooco.woocobe.common.domain.usecase.UseCase
+import kr.wooco.woocobe.course.domain.exception.AlreadyLikedCourseException
 import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import kr.wooco.woocobe.course.domain.gateway.InterestCourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.InterestCourse
@@ -20,7 +21,7 @@ class AddInterestCourseUseCase(
     @Transactional
     override fun execute(input: AddInterestCourseInput) {
         if (interestCourseStorageGateway.existsByCourseIdAndUserId(courseId = input.courseId, userId = input.userId)) {
-            throw RuntimeException("already interest course ${input.courseId}")
+            throw AlreadyLikedCourseException
         }
 
         val interestCourse = InterestCourse.register(userId = input.userId, courseId = input.courseId)
