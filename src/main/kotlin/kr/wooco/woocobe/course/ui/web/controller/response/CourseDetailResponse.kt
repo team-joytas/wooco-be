@@ -3,6 +3,7 @@ package kr.wooco.woocobe.course.ui.web.controller.response
 import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.place.domain.model.Place
 import kr.wooco.woocobe.user.domain.model.User
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class CourseDetailResponse(
@@ -12,6 +13,7 @@ data class CourseDetailResponse(
     val secondaryRegion: String,
     val categories: List<String>,
     val contents: String,
+    val visitDate: LocalDate,
     val views: Long,
     val comments: Long,
     val likes: Long,
@@ -36,6 +38,7 @@ data class CourseDetailResponse(
                 secondaryRegion = course.region.secondaryRegion,
                 categories = course.categories.map { it.name },
                 contents = course.contents,
+                visitDate = course.visitDate,
                 views = course.views,
                 comments = course.comments,
                 likes = course.interests,
@@ -69,6 +72,7 @@ data class CourseDetailResponse(
                     secondaryRegion = course.region.secondaryRegion,
                     categories = course.categories.map { it.name },
                     contents = course.contents,
+                    visitDate = course.visitDate,
                     views = course.views,
                     comments = course.comments,
                     likes = course.interests,
@@ -92,6 +96,7 @@ data class CoursePlaceResponse(
     val latitude: Double,
     val longitude: Double,
     val address: String,
+    val thumbnailUrl: String,
     val kakaoMapPlaceId: String,
     val averageRating: Double,
     val reviewCount: Long,
@@ -108,6 +113,7 @@ data class CoursePlaceResponse(
                 latitude = place.latitude,
                 longitude = place.longitude,
                 address = place.address,
+                thumbnailUrl = place.thumbnailUrl,
                 kakaoMapPlaceId = place.kakaoMapPlaceId,
                 averageRating = place.averageRating,
                 reviewCount = place.reviewCount,

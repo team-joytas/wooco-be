@@ -6,6 +6,7 @@ import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.course.domain.model.CourseRegion
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 data class AddCourseUseCaseInput(
     val userId: Long,
@@ -15,6 +16,7 @@ data class AddCourseUseCaseInput(
     val name: String,
     val contents: String,
     val placeIds: List<Long>,
+    val visitDate: LocalDate,
 )
 
 data class AddCourseUseCaseOutput(
@@ -37,6 +39,7 @@ class AddCourseUseCase(
                 name = input.name,
                 contents = input.contents,
                 placeIds = input.placeIds,
+                visitDate = input.visitDate,
             ),
         )
 

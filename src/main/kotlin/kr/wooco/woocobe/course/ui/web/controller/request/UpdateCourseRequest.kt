@@ -1,12 +1,14 @@
 package kr.wooco.woocobe.course.ui.web.controller.request
 
 import kr.wooco.woocobe.course.domain.usecase.UpdateCourseInput
+import java.time.LocalDate
 
 data class UpdateCourseRequest(
     val name: String,
     val contents: String,
     val categories: List<String>,
     val placeIds: List<Long>,
+    val visitDate: LocalDate,
 ) {
     fun toCommand(
         userId: Long,
@@ -19,5 +21,6 @@ data class UpdateCourseRequest(
             contents = contents,
             categories = categories,
             placeIds = placeIds,
+            visitDate = visitDate,
         )
 }

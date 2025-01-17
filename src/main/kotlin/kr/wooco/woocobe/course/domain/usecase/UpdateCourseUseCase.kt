@@ -4,6 +4,7 @@ import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 data class UpdateCourseInput(
     val userId: Long,
@@ -12,6 +13,7 @@ data class UpdateCourseInput(
     val contents: String,
     val categories: List<String>,
     val placeIds: List<Long>,
+    val visitDate: LocalDate,
 )
 
 @Service
@@ -28,6 +30,7 @@ class UpdateCourseUseCase(
             contents = input.contents,
             categories = input.categories,
             placeIds = input.placeIds,
+            visitDate = input.visitDate,
         )
         courseStorageGateway.save(course)
     }
