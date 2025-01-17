@@ -10,12 +10,7 @@ class ImageFacadeService(
     private val getImageUploadUrlUseCase: GetImageUploadUrlUseCase,
 ) {
     fun getImageUploadUrl(userId: Long): ImageUploadUrlResponse {
-        val result = getImageUploadUrlUseCase.execute(
-            GetImageUploadUrlInput(userId = userId),
-        )
-        return ImageUploadUrlResponse(
-            imagePath = result.image.imagePath,
-            uploadUrl = result.image.uploadUrl,
-        )
+        val getImageUploadResult = getImageUploadUrlUseCase.execute(GetImageUploadUrlInput(userId = userId))
+        return ImageUploadUrlResponse.from(getImageUploadResult.image)
     }
 }
