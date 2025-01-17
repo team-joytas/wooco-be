@@ -1,5 +1,8 @@
 package kr.wooco.woocobe.place.infrastructure.gateway
 
+import kr.wooco.woocobe.place.domain.exception.MissingPlaceOneLineReviewContentException
+import kr.wooco.woocobe.place.domain.exception.MissingPlaceOneLineReviewCountException
+import kr.wooco.woocobe.place.domain.exception.NotExistsPlaceException
 import kr.wooco.woocobe.place.domain.gateway.PlaceStorageGateway
 import kr.wooco.woocobe.place.domain.model.Place
 import kr.wooco.woocobe.place.domain.model.PlaceOneLineReviewStat
@@ -26,7 +29,7 @@ class PlaceStorageGatewayImpl(
 
     override fun getByPlaceId(placeId: Long): Place {
         val placeEntity = placeJpaRepository.findByIdOrNull(placeId)
-            ?: throw RuntimeException()
+            ?: throw NotExistsPlaceException
 
         return placeStorageMapper.toDomain(placeEntity)
     }
@@ -47,8 +50,8 @@ class PlaceStorageGatewayImpl(
         val stats = placeOneLineReviewRepository.findPlaceOneLineReviewStatsByPlaceId(placeId)
 
         return stats.map { row ->
-            val content = row[CONTENT] ?: throw RuntimeException()
-            val count = row[COUNT] ?: throw RuntimeException()
+            val content = row[CONTENT] ?: throw MissingPlaceOneLineReviewContentException
+            val count = row[COUNT] ?: throw MissingPlaceOneLineReviewCountException
 
             placeOneLineReviewStatStorageMapper.toDomain(content.toString(), count)
         }

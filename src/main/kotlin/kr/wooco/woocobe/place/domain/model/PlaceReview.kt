@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.place.domain.model
 
+import kr.wooco.woocobe.place.domain.exception.InvalidPlaceReviewWriterException
 import java.time.LocalDateTime
 
 class PlaceReview(
@@ -26,7 +27,7 @@ class PlaceReview(
 
     fun isValidWriter(userId: Long) {
         if (this.userId != userId) {
-            throw RuntimeException()
+            throw InvalidPlaceReviewWriterException
         }
     }
 

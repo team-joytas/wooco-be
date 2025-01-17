@@ -21,9 +21,8 @@ interface PlaceReviewApi {
         @PathVariable placeId: Long,
     ): ResponseEntity<List<PlaceReviewDetailsResponse>>
 
-    @SecurityRequirement(name = "JWT")
     fun getAllMyPlaceReviews(
-        @AuthenticationPrincipal userId: Long,
+        @PathVariable userId: Long,
     ): ResponseEntity<List<PlaceReviewDetailsResponse>>
 
     @SecurityRequirement(name = "JWT")

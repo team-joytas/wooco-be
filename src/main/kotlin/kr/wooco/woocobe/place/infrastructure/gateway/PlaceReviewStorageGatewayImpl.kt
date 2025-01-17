@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.place.infrastructure.gateway
 
+import kr.wooco.woocobe.place.domain.exception.NotExistsPlaceReviewException
 import kr.wooco.woocobe.place.domain.gateway.PlaceReviewStorageGateway
 import kr.wooco.woocobe.place.domain.model.PlaceReview
 import kr.wooco.woocobe.place.infrastructure.storage.PlaceOneLineReviewStorageMapper
@@ -58,7 +59,7 @@ class PlaceReviewStorageGatewayImpl(
 
     override fun getByPlaceReviewId(placeReviewId: Long): PlaceReview {
         val placeReviewEntity = placeReviewJpaRepository.findByIdOrNull(placeReviewId)
-            ?: throw RuntimeException()
+            ?: throw NotExistsPlaceReviewException
         val oneLineReviewJpaEntities = placeOneLineReviewJpaRepository
             .findAllByPlaceReviewIdOrderByCreatedAt(placeReviewEntity.id)
         val placeReviewImageEntities = placeReviewImageJpaRepository
