@@ -2,12 +2,14 @@ package kr.wooco.woocobe.place.ui.web.controller.response
 
 import kr.wooco.woocobe.place.domain.model.PlaceReview
 import kr.wooco.woocobe.user.domain.model.User
+import java.time.LocalDateTime
 
 data class PlaceReviewDetailsResponse(
     val placeReviewId: Long,
     val writer: PlaceReviewWriterResponse,
     val rating: Double,
     val content: String,
+    val createdAt: LocalDateTime,
     val oneLineReviews: List<PlaceOneLineReviewResponse>,
     val imageUrls: List<String>,
 ) {
@@ -21,6 +23,7 @@ data class PlaceReviewDetailsResponse(
                 writer = PlaceReviewWriterResponse.from(user),
                 rating = placeReview.rating,
                 content = placeReview.content,
+                createdAt = placeReview.writeDateTime,
                 oneLineReviews = placeReview.oneLineReviews
                     .map { placeOneLineReview ->
                         PlaceOneLineReviewResponse.from(placeOneLineReview.content)
@@ -42,6 +45,7 @@ data class PlaceReviewDetailsResponse(
                     writer = PlaceReviewWriterResponse.from(writer),
                     rating = placeReview.rating,
                     content = placeReview.content,
+                    createdAt = placeReview.writeDateTime,
                     oneLineReviews = placeReview.oneLineReviews
                         .map { placeOneLineReview ->
                             PlaceOneLineReviewResponse.from(placeOneLineReview.content)
