@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @Suppress("Duplicates")
-class PlaceReviewStorageGatewayImpl(
+internal class PlaceReviewStorageGatewayImpl(
     private val placeReviewJpaRepository: PlaceReviewJpaRepository,
     private val placeReviewImageJpaRepository: PlaceReviewImageJpaRepository,
     private val placeOneLineReviewJpaRepository: PlaceOneLineReviewJpaRepository,

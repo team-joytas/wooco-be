@@ -14,7 +14,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-class PlaceStorageGatewayImpl(
+internal class PlaceStorageGatewayImpl(
     private val placeJpaRepository: PlaceJpaRepository,
     private val placeOneLineReviewRepository: PlaceOneLineReviewJpaRepository,
     private val placeStorageMapper: PlaceStorageMapper,
