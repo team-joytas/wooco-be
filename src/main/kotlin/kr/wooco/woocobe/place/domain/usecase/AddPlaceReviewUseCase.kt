@@ -42,7 +42,7 @@ class AddPlaceReviewUseCase(
         )
 
         placeReview.imageUrls.firstOrNull()?.let {
-            place.updateThumbnailUrl(imageUrl = it)
+            place.updateThumbnailUrl(it)
         }
 
         place.increaseReviewCounts()
