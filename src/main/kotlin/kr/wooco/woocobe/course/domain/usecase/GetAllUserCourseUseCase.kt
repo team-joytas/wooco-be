@@ -6,25 +6,25 @@ import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.course.domain.model.CourseSortCondition
 import org.springframework.stereotype.Service
 
-data class GetAllByCourseInput(
+data class GetAllUserCourseInput(
     val userId: Long,
     val sort: String,
 )
 
-data class GetAllMyCourseOutput(
+data class GetAllUserCourseOutput(
     val courses: List<Course>,
 )
 
 @Service
-class GetAllMyCourseUseCase(
+class GetAllUserCourseUseCase(
     private val courseStorageGateway: CourseStorageGateway,
-) : UseCase<GetAllByCourseInput, GetAllMyCourseOutput> {
-    override fun execute(input: GetAllByCourseInput): GetAllMyCourseOutput {
+) : UseCase<GetAllUserCourseInput, GetAllUserCourseOutput> {
+    override fun execute(input: GetAllUserCourseInput): GetAllUserCourseOutput {
         val sort = CourseSortCondition.from(input.sort)
 
         val courses = courseStorageGateway.getAllByUserIdWithSort(input.userId, sort)
 
-        return GetAllMyCourseOutput(
+        return GetAllUserCourseOutput(
             courses = courses,
         )
     }

@@ -56,8 +56,9 @@ interface CourseApi {
     ): ResponseEntity<List<CourseDetailResponse>>
 
     @SecurityRequirement(name = "JWT")
-    fun getAllMyCourse(
-        @AuthenticationPrincipal userId: Long,
+    fun getAllUserCourse(
+        @AuthenticationPrincipal currentUserId: Long?,
+        @PathVariable userId: Long,
         @Parameter(
             description = "정렬 조건",
             examples = [
@@ -69,8 +70,9 @@ interface CourseApi {
     ): ResponseEntity<List<CourseDetailResponse>>
 
     @SecurityRequirement(name = "JWT")
-    fun getAllMyInterestCourse(
-        @AuthenticationPrincipal userId: Long,
+    fun getAllUserInterestCourse(
+        @AuthenticationPrincipal currentUserId: Long?,
+        @PathVariable userId: Long,
     ): ResponseEntity<List<CourseDetailResponse>>
 
     @SecurityRequirement(name = "JWT")

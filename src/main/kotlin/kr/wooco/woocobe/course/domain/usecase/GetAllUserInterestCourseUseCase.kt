@@ -7,26 +7,26 @@ import kr.wooco.woocobe.course.domain.model.Course
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-data class GetAllMyInterestCourseInput(
+data class GetAllUserInterestCourseInput(
     val userId: Long,
 )
 
-data class GetAllMyInterestCourseOutput(
+data class GetAllUserInterestCourseOutput(
     val courses: List<Course>,
 )
 
 @Service
-class GetAllMyInterestCourseUseCase(
+class GetAllUserInterestCourseUseCase(
     private val courseStorageGateway: CourseStorageGateway,
     private val interestCourseStorageGateway: InterestCourseStorageGateway,
-) : UseCase<GetAllMyInterestCourseInput, GetAllMyInterestCourseOutput> {
+) : UseCase<GetAllUserInterestCourseInput, GetAllUserInterestCourseOutput> {
     @Transactional(readOnly = true)
-    override fun execute(input: GetAllMyInterestCourseInput): GetAllMyInterestCourseOutput {
+    override fun execute(input: GetAllUserInterestCourseInput): GetAllUserInterestCourseOutput {
         val interestCourses = interestCourseStorageGateway.getAllByUserId(userId = input.userId)
         val courseIds = interestCourses.map { it.courseId }
         val courses = courseStorageGateway.getAllByCourseIds(courseIds)
 
-        return GetAllMyInterestCourseOutput(
+        return GetAllUserInterestCourseOutput(
             courses = courses,
         )
     }
