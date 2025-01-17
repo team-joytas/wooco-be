@@ -20,9 +20,11 @@ class GetImageUploadUrlUseCase(
 ) : UseCase<GetImageUploadUrlInput, GetImageUploadUrlOutput> {
     override fun execute(input: GetImageUploadUrlInput): GetImageUploadUrlOutput {
         val imageKey = ImageKey(input.userId)
+
+        val imageUrl = imageClientGateway.fetchImageUrl(imageKey)
         val uploadUrl = imageClientGateway.fetchImageUploadUrl(imageKey)
 
-        val image = Image(imageKey, uploadUrl)
+        val image = Image(imageUrl, uploadUrl)
 
         return GetImageUploadUrlOutput(
             image = image,

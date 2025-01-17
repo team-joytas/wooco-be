@@ -9,5 +9,7 @@ import org.springframework.stereotype.Component
 internal class ImageClientGatewayImpl(
     private val s3ClientHandler: S3ClientHandler,
 ) : ImageClientGateway {
+    override fun fetchImageUrl(imageKey: ImageKey): String = s3ClientHandler.generateImageUrl(imageKey.key)
+
     override fun fetchImageUploadUrl(imageKey: ImageKey): String = s3ClientHandler.generatePresignedUrl(imageKey.key)
 }

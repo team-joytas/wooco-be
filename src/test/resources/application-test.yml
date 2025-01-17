@@ -57,6 +57,7 @@ app:
       bucket-name: mock-s3
       content-type: image/webp
       timeout: 60s
+      base-image-url: https://cdn.example.com
 
   jwt:
     signing-key: hong-jun2-eric-erica-jamie-hong-jun2-eric-erica-jamie
