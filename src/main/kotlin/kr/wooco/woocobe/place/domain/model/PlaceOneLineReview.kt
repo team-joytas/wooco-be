@@ -1,12 +1,12 @@
 package kr.wooco.woocobe.place.domain.model
 
 class PlaceOneLineReview(
-    val content: String,
+    val contents: String,
 ) {
     companion object {
-        fun from(content: String): PlaceOneLineReview =
+        fun from(contents: String): PlaceOneLineReview =
             PlaceOneLineReview(
-                content = content,
+                contents = contents,
             )
     }
 }

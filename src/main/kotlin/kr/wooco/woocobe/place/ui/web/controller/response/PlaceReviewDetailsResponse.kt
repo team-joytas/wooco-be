@@ -2,12 +2,14 @@ package kr.wooco.woocobe.place.ui.web.controller.response
 
 import kr.wooco.woocobe.place.domain.model.PlaceReview
 import kr.wooco.woocobe.user.domain.model.User
+import java.time.LocalDateTime
 
 data class PlaceReviewDetailsResponse(
     val placeReviewId: Long,
     val writer: PlaceReviewWriterResponse,
     val rating: Double,
-    val content: String,
+    val contents: String,
+    val createdAt: LocalDateTime,
     val oneLineReviews: List<PlaceOneLineReviewResponse>,
     val imageUrls: List<String>,
 ) {
@@ -20,10 +22,11 @@ data class PlaceReviewDetailsResponse(
                 placeReviewId = placeReview.id,
                 writer = PlaceReviewWriterResponse.from(user),
                 rating = placeReview.rating,
-                content = placeReview.content,
+                contents = placeReview.contents,
+                createdAt = placeReview.writeDateTime,
                 oneLineReviews = placeReview.oneLineReviews
                     .map { placeOneLineReview ->
-                        PlaceOneLineReviewResponse.from(placeOneLineReview.content)
+                        PlaceOneLineReviewResponse.from(placeOneLineReview.contents)
                     },
                 imageUrls = placeReview.imageUrls,
             )
@@ -41,10 +44,11 @@ data class PlaceReviewDetailsResponse(
                     placeReviewId = placeReview.id,
                     writer = PlaceReviewWriterResponse.from(writer),
                     rating = placeReview.rating,
-                    content = placeReview.content,
+                    contents = placeReview.contents,
+                    createdAt = placeReview.writeDateTime,
                     oneLineReviews = placeReview.oneLineReviews
                         .map { placeOneLineReview ->
-                            PlaceOneLineReviewResponse.from(placeOneLineReview.content)
+                            PlaceOneLineReviewResponse.from(placeOneLineReview.contents)
                         },
                     imageUrls = placeReview.imageUrls,
                 )
@@ -54,12 +58,12 @@ data class PlaceReviewDetailsResponse(
 }
 
 data class PlaceOneLineReviewResponse(
-    val content: String,
+    val contents: String,
 ) {
     companion object {
         fun from(oneLineReview: String): PlaceOneLineReviewResponse =
             PlaceOneLineReviewResponse(
-                content = oneLineReview,
+                contents = oneLineReview,
             )
     }
 }

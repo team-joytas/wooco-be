@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.place.infrastructure.gateway
 
+import kr.wooco.woocobe.place.domain.exception.NotExistsPlaceReviewException
 import kr.wooco.woocobe.place.domain.gateway.PlaceReviewStorageGateway
 import kr.wooco.woocobe.place.domain.model.PlaceReview
 import kr.wooco.woocobe.place.infrastructure.storage.PlaceOneLineReviewStorageMapper
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @Suppress("Duplicates")
-class PlaceReviewStorageGatewayImpl(
+internal class PlaceReviewStorageGatewayImpl(
     private val placeReviewJpaRepository: PlaceReviewJpaRepository,
     private val placeReviewImageJpaRepository: PlaceReviewImageJpaRepository,
     private val placeOneLineReviewJpaRepository: PlaceOneLineReviewJpaRepository,
@@ -27,10 +28,10 @@ class PlaceReviewStorageGatewayImpl(
         val existingOneLineReviews =
             placeOneLineReviewJpaRepository.findAllByPlaceReviewId(placeReviewEntity.id)
         val newOneLineReviews = placeReview.oneLineReviews.filter { newReview ->
-            existingOneLineReviews.none { it.content == newReview.content }
+            existingOneLineReviews.none { it.contents == newReview.contents }
         }
         val removedOneLineReviews = existingOneLineReviews.filter { existingReview ->
-            placeReview.oneLineReviews.none { it.content == existingReview.content }
+            placeReview.oneLineReviews.none { it.contents == existingReview.contents }
         }
         placeOneLineReviewJpaRepository.deleteAll(removedOneLineReviews)
 
@@ -58,7 +59,7 @@ class PlaceReviewStorageGatewayImpl(
 
     override fun getByPlaceReviewId(placeReviewId: Long): PlaceReview {
         val placeReviewEntity = placeReviewJpaRepository.findByIdOrNull(placeReviewId)
-            ?: throw RuntimeException()
+            ?: throw NotExistsPlaceReviewException
         val oneLineReviewJpaEntities = placeOneLineReviewJpaRepository
             .findAllByPlaceReviewIdOrderByCreatedAt(placeReviewEntity.id)
         val placeReviewImageEntities = placeReviewImageJpaRepository

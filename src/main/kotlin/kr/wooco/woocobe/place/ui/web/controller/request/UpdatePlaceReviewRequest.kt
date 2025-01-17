@@ -4,7 +4,7 @@ import kr.wooco.woocobe.place.domain.usecase.UpdatePlaceReviewInput
 
 data class UpdatePlaceReviewRequest(
     val rating: Double,
-    val content: String,
+    val contents: String,
     val oneLineReviews: List<String>,
     val imageUrls: List<String>,
 ) {
@@ -16,7 +16,7 @@ data class UpdatePlaceReviewRequest(
             userId = userId,
             placeReviewId = placeReviewId,
             rating = rating,
-            content = content,
+            contents = contents,
             oneLineReviews = oneLineReviews,
             imageUrls = imageUrls,
         )

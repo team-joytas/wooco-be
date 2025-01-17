@@ -10,8 +10,8 @@ import kr.wooco.woocobe.common.infrastructure.storage.entity.BaseTimeEntity
 @Entity
 @Table(name = "place_reviews")
 class PlaceReviewJpaEntity(
-    @Column(name = "content", nullable = false)
-    val content: String,
+    @Column(name = "contents", nullable = false)
+    val contents: String,
     @Column(name = "rating", nullable = false)
     val rating: Double,
     @Column(name = "user_id", nullable = false)

@@ -32,8 +32,8 @@ class Place(
         }
     }
 
-    fun updateThumbnailUrl(imageUrl: String) {
-        thumbnailUrl = imageUrl
+    fun updateThumbnailUrl(thumbnailUrl: String) {
+        this.thumbnailUrl = thumbnailUrl
     }
 
     companion object {

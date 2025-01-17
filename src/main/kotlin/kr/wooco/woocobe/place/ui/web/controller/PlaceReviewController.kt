@@ -40,9 +40,9 @@ class PlaceReviewController(
         return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/my")
+    @GetMapping("/users/{userId}")
     override fun getAllMyPlaceReviews(
-        @AuthenticationPrincipal userId: Long,
+        @PathVariable userId: Long,
     ): ResponseEntity<List<PlaceReviewDetailsResponse>> {
         val response = placeReviewQueryFacade.getAllMyPlaceReview(userId)
         return ResponseEntity.ok(response)

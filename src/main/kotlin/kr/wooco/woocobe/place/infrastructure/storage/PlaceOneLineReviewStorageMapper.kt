@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 @Component
 class PlaceOneLineReviewStorageMapper {
     fun toDomain(placeOneLineReviewJpaEntity: PlaceOneLineReviewJpaEntity): PlaceOneLineReview =
-        PlaceOneLineReview(content = placeOneLineReviewJpaEntity.content)
+        PlaceOneLineReview(contents = placeOneLineReviewJpaEntity.contents)
 
     fun toEntity(
         placeReview: PlaceReview,
@@ -17,6 +17,6 @@ class PlaceOneLineReviewStorageMapper {
         PlaceOneLineReviewJpaEntity(
             placeId = placeReview.placeId,
             placeReviewId = placeReview.id,
-            content = placeOneLineReview.content,
+            contents = placeOneLineReview.contents,
         )
 }

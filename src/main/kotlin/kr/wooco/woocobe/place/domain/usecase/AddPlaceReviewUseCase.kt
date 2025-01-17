@@ -11,7 +11,7 @@ data class AddPlaceReviewInput(
     val userId: Long,
     val placeId: Long,
     val rating: Double,
-    val content: String,
+    val contents: String,
     val oneLineReviews: List<String>,
     val imageUrls: List<String>,
 )
@@ -35,14 +35,14 @@ class AddPlaceReviewUseCase(
                 userId = input.userId,
                 placeId = place.id,
                 rating = input.rating,
-                content = input.content,
+                contents = input.contents,
                 oneLineReview = input.oneLineReviews,
                 imageUrls = input.imageUrls,
             ),
         )
 
         placeReview.imageUrls.firstOrNull()?.let {
-            place.updateThumbnailUrl(imageUrl = it)
+            place.updateThumbnailUrl(it)
         }
 
         place.increaseReviewCounts()

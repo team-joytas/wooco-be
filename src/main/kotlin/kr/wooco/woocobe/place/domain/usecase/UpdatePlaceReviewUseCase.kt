@@ -10,7 +10,7 @@ data class UpdatePlaceReviewInput(
     val userId: Long,
     val placeReviewId: Long,
     val rating: Double,
-    var content: String,
+    var contents: String,
     var oneLineReviews: List<String>,
     var imageUrls: List<String>,
 )
@@ -27,7 +27,7 @@ class UpdatePlaceReviewUseCase(
 
         placeReview.update(
             rating = input.rating,
-            content = input.content,
+            contents = input.contents,
             oneLineReviews = input.oneLineReviews,
             imageUrls = input.imageUrls,
         )
