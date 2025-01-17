@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.auth.infrastructure.gateway
 
+import kr.wooco.woocobe.auth.domain.exception.NotExistsTokenException
 import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
 import kr.wooco.woocobe.auth.domain.model.AuthToken
 import kr.wooco.woocobe.auth.infrastructure.cache.AuthTokenCacheMapper
@@ -19,7 +20,7 @@ internal class AuthTokenStorageGatewayImpl(
 
     override fun getWithDeleteByTokenId(tokenId: String): AuthToken {
         val authTokenEntity = authTokenRedisRepository.findAndDeleteById(tokenId)
-            ?: throw RuntimeException()
+            ?: throw NotExistsTokenException
         return authTokenCacheMapper.toDomain(authTokenEntity)
     }
 

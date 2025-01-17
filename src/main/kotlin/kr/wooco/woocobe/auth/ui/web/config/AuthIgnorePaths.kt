@@ -12,10 +12,19 @@ object AuthIgnorePaths {
             append(path = "/api-docs/**", method = HttpMethod.GET),
             append(path = "/swagger-ui/**", method = HttpMethod.GET),
             append(path = "/actuator/health", method = HttpMethod.GET),
-            append(path = "/api/v1/auth/reissue", method = HttpMethod.POST),
+            // course
             append(path = "/api/v1/courses", method = HttpMethod.GET),
             append(path = "/api/v1/courses/{courseId:[0-9]+}", method = HttpMethod.GET),
-            append(path = "/api/v1/comments/course/{courseId:[0-9]+}", method = HttpMethod.GET),
+            append(path = "/api/v1/courses/users/{userId:[0-9]+}", method = HttpMethod.GET),
+            append(path = "/api/v1/courses/users/{userId:[0-9]+}/like", method = HttpMethod.GET),
+            append(path = "/api/v1/comments/courses/{courseId:[0-9]+}", method = HttpMethod.GET),
+            // place
+            append(path = "/api/v1/places/{placeId[0-9]+}", method = HttpMethod.GET),
+            append(path = "/api/v1/reviews/{placeReviewId:[0-9]+}", method = HttpMethod.GET),
+            append(path = "/api/v1/reviews/places/{placeId:[0-9]+}", method = HttpMethod.GET),
+            append(path = "/api/v1/reviews/places/users/{userId:[0-9]+}", method = HttpMethod.GET),
+            // auth
+            append(path = "/api/v1/auth/reissue", method = HttpMethod.POST),
             append(path = "/api/v1/auth/{provider}/social-login", method = HttpMethod.POST),
             append(path = "/api/v1/auth/{provider}/social-login/url", method = HttpMethod.GET),
         )

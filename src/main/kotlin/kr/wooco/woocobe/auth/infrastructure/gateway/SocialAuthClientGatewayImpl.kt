@@ -17,7 +17,7 @@ internal class SocialAuthClientGatewayImpl(
         pkce: Pkce,
     ): SocialAuth {
         val socialAuthClient = socialAuthClients.firstOrNull { it.isSupportSocialType(socialType) }
-            ?: throw RuntimeException("un supported social type")
+            ?: throw UnsupportedOperationException(CLIENT_NOT_FOUND_MESSAGE)
         return socialAuthClient.fetchSocialAuth(authCode, pkce.verifier, pkce.challenge).toDomain()
     }
 
@@ -26,7 +26,11 @@ internal class SocialAuthClientGatewayImpl(
         challenge: String,
     ): String {
         val socialAuthClient = socialAuthClients.firstOrNull { it.isSupportSocialType(socialType) }
-            ?: throw RuntimeException("un supported social type")
+            ?: throw UnsupportedOperationException(CLIENT_NOT_FOUND_MESSAGE)
         return socialAuthClient.generateSocialLoginUrl(challenge)
+    }
+
+    companion object {
+        private const val CLIENT_NOT_FOUND_MESSAGE = "미구현된 소셜 인증 클라이언트 타입입니다."
     }
 }

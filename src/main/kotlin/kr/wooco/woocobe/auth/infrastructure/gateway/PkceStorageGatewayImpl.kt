@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.auth.infrastructure.gateway
 
+import kr.wooco.woocobe.auth.domain.exception.NotExistsChallengeCodeException
 import kr.wooco.woocobe.auth.domain.gateway.PkceStorageGateway
 import kr.wooco.woocobe.auth.domain.model.Pkce
 import kr.wooco.woocobe.auth.infrastructure.cache.PkceCacheMapper
@@ -19,7 +20,7 @@ internal class PkceStorageGatewayImpl(
 
     override fun getWithDeleteByChallenge(challenge: String): Pkce {
         val pkceEntity = pkceRedisRepository.findAndDeleteByChallenge(challenge)
-            ?: throw RuntimeException()
+            ?: throw NotExistsChallengeCodeException
         return pkceCacheMapper.toDomain(pkceEntity)
     }
 }
