@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.course.domain.model
 
+import kr.wooco.woocobe.course.domain.exception.InvalidCommentWriterException
 import java.time.LocalDateTime
 
 class CourseComment(
@@ -15,9 +16,7 @@ class CourseComment(
         }
 
     fun isValidCommenter(userId: Long) {
-        if (this.userId != userId) {
-            throw RuntimeException()
-        }
+        if (this.userId != userId) throw InvalidCommentWriterException
     }
 
     companion object {

@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.course.infrastructure.gateway
 
+import kr.wooco.woocobe.course.domain.exception.NotExistsCommentException
 import kr.wooco.woocobe.course.domain.gateway.CourseCommentStorageGateway
 import kr.wooco.woocobe.course.domain.model.CourseComment
 import kr.wooco.woocobe.course.infrastructure.storage.CourseCommentStorageMapper
@@ -20,7 +21,7 @@ internal class CourseCommentStorageGatewayImpl(
 
     override fun getByCommentId(commentId: Long): CourseComment {
         val courseCommentEntity = courseCommentJpaRepository.findByIdOrNull(commentId)
-            ?: throw RuntimeException()
+            ?: throw NotExistsCommentException
         return courseCommentStorageMapper.toDomain(courseCommentEntity)
     }
 

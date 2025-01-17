@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.course.domain.model
 
+import kr.wooco.woocobe.course.domain.exception.InvalidCourseWriterException
 import java.time.LocalDateTime
 
 class Course(
@@ -48,9 +49,7 @@ class Course(
     }
 
     fun isValidWriter(userId: Long) {
-        if (this.userId != userId) {
-            throw RuntimeException()
-        }
+        if (this.userId != userId) throw InvalidCourseWriterException
     }
 
     companion object {
