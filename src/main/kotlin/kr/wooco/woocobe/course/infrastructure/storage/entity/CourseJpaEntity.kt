@@ -25,8 +25,8 @@ class CourseJpaEntity(
     val secondaryRegion: String,
     @Column(name = "primary_region")
     val primaryRegion: String,
-    @Column(name = "name")
-    val name: String,
+    @Column(name = "title")
+    val title: String,
     @Column(name = "user_id")
     val userId: Long,
     @Id @Tsid
