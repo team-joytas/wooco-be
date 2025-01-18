@@ -5,7 +5,7 @@ import kr.wooco.woocobe.user.domain.model.User
 import java.time.LocalDateTime
 
 data class PlaceReviewDetailsResponse(
-    val placeReviewId: Long,
+    val id: Long,
     val writer: PlaceReviewWriterResponse,
     val rating: Double,
     val contents: String,
@@ -19,7 +19,7 @@ data class PlaceReviewDetailsResponse(
             user: User,
         ): PlaceReviewDetailsResponse =
             PlaceReviewDetailsResponse(
-                placeReviewId = placeReview.id,
+                id = placeReview.id,
                 writer = PlaceReviewWriterResponse.from(user),
                 rating = placeReview.rating,
                 contents = placeReview.contents,
@@ -41,7 +41,7 @@ data class PlaceReviewDetailsResponse(
                 val writer = requireNotNull(userMap[placeReview.userId])
 
                 PlaceReviewDetailsResponse(
-                    placeReviewId = placeReview.id,
+                    id = placeReview.id,
                     writer = PlaceReviewWriterResponse.from(writer),
                     rating = placeReview.rating,
                     contents = placeReview.contents,

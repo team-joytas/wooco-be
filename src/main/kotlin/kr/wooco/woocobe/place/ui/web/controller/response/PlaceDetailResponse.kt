@@ -4,7 +4,7 @@ import kr.wooco.woocobe.place.domain.model.Place
 import kr.wooco.woocobe.place.domain.model.PlaceOneLineReviewStat
 
 data class PlaceDetailResponse(
-    val placeId: Long,
+    val id: Long,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -22,7 +22,7 @@ data class PlaceDetailResponse(
             placeOneLineReviewStats: List<PlaceOneLineReviewStat>,
         ): PlaceDetailResponse =
             PlaceDetailResponse(
-                placeId = place.id,
+                id = place.id,
                 name = place.name,
                 latitude = place.latitude,
                 longitude = place.longitude,
