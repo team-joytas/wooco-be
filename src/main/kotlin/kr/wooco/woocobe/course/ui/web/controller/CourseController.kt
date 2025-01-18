@@ -38,15 +38,17 @@ class CourseController(
     override fun getAllCourse(
         @AuthenticationPrincipal userId: Long?,
         @RequestParam(required = false, defaultValue = "RECENT") sort: String,
-        @RequestParam primaryRegion: String,
-        @RequestParam secondaryRegion: String,
+        @RequestParam(required = false) primaryRegion: String?,
+        @RequestParam(required = false) secondaryRegion: String?,
         @RequestParam(required = false) category: String?,
+        @RequestParam(required = false) limit: Int?,
     ): ResponseEntity<List<CourseDetailResponse>> {
         val response = courseQueryFacade.getAllCourseDetail(
             userId = userId,
             primaryRegion = primaryRegion,
             secondaryRegion = secondaryRegion,
             category = category,
+            limit = limit,
             sort = sort,
         )
         return ResponseEntity.ok(response)

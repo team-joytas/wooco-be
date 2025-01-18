@@ -60,9 +60,10 @@ class CourseQueryFacade(
 
     fun getAllCourseDetail(
         userId: Long?,
-        primaryRegion: String,
-        secondaryRegion: String,
+        primaryRegion: String?,
+        secondaryRegion: String?,
         category: String?,
+        limit: Int?,
         sort: String,
     ): List<CourseDetailResponse> {
         val getAllCourseResult = getAllCourseUseCase.execute(
@@ -70,6 +71,7 @@ class CourseQueryFacade(
                 primaryRegion = primaryRegion,
                 secondaryRegion = secondaryRegion,
                 category = category,
+                limit = limit,
                 sort = sort,
             ),
         )
