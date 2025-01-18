@@ -9,7 +9,7 @@ import java.time.LocalDate
 data class UpdateCourseInput(
     val userId: Long,
     val courseId: Long,
-    val name: String,
+    val title: String,
     val contents: String,
     val categories: List<String>,
     val placeIds: List<Long>,
@@ -26,7 +26,7 @@ class UpdateCourseUseCase(
         course.isValidWriter(input.userId)
 
         course.update(
-            name = input.name,
+            title = input.title,
             contents = input.contents,
             categories = input.categories,
             placeIds = input.placeIds,

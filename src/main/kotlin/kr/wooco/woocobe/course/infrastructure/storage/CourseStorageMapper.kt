@@ -25,7 +25,7 @@ class CourseStorageMapper {
             ),
             categories = courseCategoryJpaEntities.map { CourseCategory.from(it.name) },
             coursePlaces = coursePlaceJpaEntities.map { CoursePlace(order = it.order, placeId = it.placeId) },
-            name = courseJpaEntity.name,
+            title = courseJpaEntity.title,
             contents = courseJpaEntity.contents,
             visitDate = courseJpaEntity.visitDate,
             views = courseJpaEntity.viewCount,
@@ -38,7 +38,7 @@ class CourseStorageMapper {
         CourseJpaEntity(
             id = course.id,
             userId = course.userId,
-            name = course.name,
+            title = course.title,
             primaryRegion = course.region.primaryRegion,
             secondaryRegion = course.region.secondaryRegion,
             contents = course.contents,

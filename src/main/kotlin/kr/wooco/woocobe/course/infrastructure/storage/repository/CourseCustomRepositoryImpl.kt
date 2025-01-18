@@ -1,7 +1,6 @@
 package kr.wooco.woocobe.course.infrastructure.storage.repository
 
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
-import kr.wooco.woocobe.course.domain.model.CourseRegion
 import kr.wooco.woocobe.course.domain.model.CourseSortCondition
 import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseCategoryJpaEntity
 import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseJpaEntity
@@ -32,12 +31,14 @@ class CourseCustomRepositoryImpl(
             }.filterNotNull()
 
     override fun findAllByRegionAndCategoryWithSort(
-        region: CourseRegion,
+        primaryRegion: String?,
+        secondaryRegion: String?,
         category: String?,
         sort: CourseSortCondition,
+        limit: Int?,
     ): List<CourseJpaEntity> =
         executor
-            .findAll {
+            .findAll(limit = limit) {
                 select(
                     entity(CourseJpaEntity::class),
                 ).from(
@@ -46,8 +47,12 @@ class CourseCustomRepositoryImpl(
                         path(CourseJpaEntity::id).eq(path(CourseCategoryJpaEntity::courseId)),
                     ),
                 ).whereAnd(
-                    path(CourseJpaEntity::primaryRegion).eq(region.primaryRegion),
-                    path(CourseJpaEntity::secondaryRegion).eq(region.secondaryRegion),
+                    primaryRegion?.let {
+                        path(CourseJpaEntity::primaryRegion).eq(primaryRegion)
+                    },
+                    secondaryRegion?.let {
+                        path(CourseJpaEntity::secondaryRegion).eq(secondaryRegion)
+                    },
                     category?.let {
                         path(CourseCategoryJpaEntity::name).eq(category)
                     },

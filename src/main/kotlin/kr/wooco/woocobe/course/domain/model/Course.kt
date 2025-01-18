@@ -10,7 +10,7 @@ class Course(
     val region: CourseRegion,
     var categories: List<CourseCategory>,
     var coursePlaces: List<CoursePlace>,
-    var name: String,
+    var title: String,
     var contents: String,
     var visitDate: LocalDate,
     var views: Long,
@@ -39,13 +39,13 @@ class Course(
     }
 
     fun update(
-        name: String,
+        title: String,
         categories: List<String>,
         contents: String,
         placeIds: List<Long>,
         visitDate: LocalDate,
     ) = apply {
-        this.name = name
+        this.title = title
         this.categories = categories.map { CourseCategory.from(it) }
         this.contents = contents
         this.coursePlaces = processCoursePlaceOrder(placeIds)
@@ -62,7 +62,7 @@ class Course(
             region: CourseRegion,
             categories: List<String>,
             placeIds: List<Long>,
-            name: String,
+            title: String,
             contents: String,
             visitDate: LocalDate,
         ): Course =
@@ -72,7 +72,7 @@ class Course(
                 region = region,
                 categories = categories.map { CourseCategory.from(it) },
                 coursePlaces = processCoursePlaceOrder(placeIds),
-                name = name,
+                title = title,
                 contents = contents,
                 visitDate = visitDate,
                 views = 0L,

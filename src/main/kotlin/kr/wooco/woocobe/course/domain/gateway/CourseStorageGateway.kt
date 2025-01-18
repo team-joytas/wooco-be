@@ -1,7 +1,6 @@
 package kr.wooco.woocobe.course.domain.gateway
 
 import kr.wooco.woocobe.course.domain.model.Course
-import kr.wooco.woocobe.course.domain.model.CourseRegion
 import kr.wooco.woocobe.course.domain.model.CourseSortCondition
 
 interface CourseStorageGateway {
@@ -12,9 +11,11 @@ interface CourseStorageGateway {
     fun getAllByCourseIds(courseIds: List<Long>): List<Course>
 
     fun getAllByRegionAndCategoryWithSort(
-        region: CourseRegion,
-        category: String?,
         sort: CourseSortCondition,
+        limit: Int?,
+        category: String?,
+        primaryRegion: String?,
+        secondaryRegion: String?,
     ): List<Course>
 
     fun getAllByUserIdWithSort(

@@ -36,12 +36,12 @@ interface CourseApi {
             description = "시/도",
             example = "서울",
         )
-        @RequestParam primaryRegion: String,
+        @RequestParam primaryRegion: String?,
         @Parameter(
             description = "구/군",
             example = "노원",
         )
-        @RequestParam secondaryRegion: String,
+        @RequestParam secondaryRegion: String?,
         @Parameter(
             description = "전체 카테고리 검색시 파라미터를 지정하지 않습니다",
             examples = [
@@ -53,6 +53,7 @@ interface CourseApi {
             ],
         )
         @RequestParam(required = false) category: String?,
+        @RequestParam(required = false) limit: Int?,
     ): ResponseEntity<List<CourseDetailResponse>>
 
     @SecurityRequirement(name = "JWT")

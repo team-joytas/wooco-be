@@ -8,7 +8,7 @@ import kr.wooco.woocobe.common.infrastructure.storage.Tsid
 import kr.wooco.woocobe.common.infrastructure.storage.entity.BaseEntity
 
 @Entity
-@Table(name = "interest_course")
+@Table(name = "interest_courses")
 class InterestCourseJpaEntity(
     @Column(name = "course_id")
     val courseId: Long,

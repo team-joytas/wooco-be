@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 data class CourseDetailResponse(
     val id: Long,
-    val name: String,
+    val title: String,
     val primaryRegion: String,
     val secondaryRegion: String,
     val categories: List<String>,
@@ -33,7 +33,7 @@ data class CourseDetailResponse(
 
             return CourseDetailResponse(
                 id = course.id,
-                name = course.name,
+                title = course.title,
                 primaryRegion = course.region.primaryRegion,
                 secondaryRegion = course.region.secondaryRegion,
                 categories = course.categories.map { it.name },
@@ -67,7 +67,7 @@ data class CourseDetailResponse(
 
                 CourseDetailResponse(
                     id = course.id,
-                    name = course.name,
+                    title = course.title,
                     primaryRegion = course.region.primaryRegion,
                     secondaryRegion = course.region.secondaryRegion,
                     categories = course.categories.map { it.name },

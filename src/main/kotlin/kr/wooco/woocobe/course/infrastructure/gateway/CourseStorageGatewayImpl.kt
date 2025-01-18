@@ -3,7 +3,6 @@ package kr.wooco.woocobe.course.infrastructure.gateway
 import kr.wooco.woocobe.course.domain.exception.NotExistsCourseException
 import kr.wooco.woocobe.course.domain.gateway.CourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.Course
-import kr.wooco.woocobe.course.domain.model.CourseRegion
 import kr.wooco.woocobe.course.domain.model.CourseSortCondition
 import kr.wooco.woocobe.course.infrastructure.storage.CourseCategoryStorageMapper
 import kr.wooco.woocobe.course.infrastructure.storage.CoursePlaceStorageMapper
@@ -62,12 +61,19 @@ internal class CourseStorageGatewayImpl(
     }
 
     override fun getAllByRegionAndCategoryWithSort(
-        region: CourseRegion,
-        category: String?,
         sort: CourseSortCondition,
+        limit: Int?,
+        category: String?,
+        primaryRegion: String?,
+        secondaryRegion: String?,
     ): List<Course> {
-        val courseEntities =
-            courseJpaRepository.findAllByRegionAndCategoryWithSort(region = region, category = category, sort = sort)
+        val courseEntities = courseJpaRepository.findAllByRegionAndCategoryWithSort(
+            sort = sort,
+            limit = limit,
+            category = category,
+            primaryRegion = primaryRegion,
+            secondaryRegion = secondaryRegion,
+        )
         val courseIds = courseEntities.map { it.id }
         val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseIdIn(courseIds)
         val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseEntities.map { it.id })

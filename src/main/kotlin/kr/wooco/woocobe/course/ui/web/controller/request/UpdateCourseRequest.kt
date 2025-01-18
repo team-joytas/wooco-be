@@ -4,7 +4,7 @@ import kr.wooco.woocobe.course.domain.usecase.UpdateCourseInput
 import java.time.LocalDate
 
 data class UpdateCourseRequest(
-    val name: String,
+    val title: String,
     val contents: String,
     val categories: List<String>,
     val placeIds: List<Long>,
@@ -17,7 +17,7 @@ data class UpdateCourseRequest(
         UpdateCourseInput(
             userId = userId,
             courseId = courseId,
-            name = name,
+            title = title,
             contents = contents,
             categories = categories,
             placeIds = placeIds,
