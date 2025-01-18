@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 data class CreatePlanRequest(
     val title: String,
-    val description: String,
+    val contents: String,
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: LocalDate,
@@ -16,7 +16,7 @@ data class CreatePlanRequest(
         AddPlanInput(
             userId = userId,
             title = title,
-            description = description,
+            contents = contents,
             primaryRegion = primaryRegion,
             secondaryRegion = secondaryRegion,
             visitDate = visitDate,

@@ -6,7 +6,7 @@ class Plan(
     val id: Long,
     val userId: Long,
     var title: String,
-    var description: String,
+    var contents: String,
     var region: PlanRegion,
     var visitDate: LocalDate,
     var places: List<PlanPlace>,
@@ -20,14 +20,14 @@ class Plan(
 
     fun update(
         title: String,
-        description: String,
+        contents: String,
         region: PlanRegion,
         visitDate: LocalDate,
         placeIds: List<Long>,
         categories: List<String>,
     ) = apply {
         this.title = title
-        this.description = description
+        this.contents = contents
         this.region = region
         this.visitDate = visitDate
         this.places = processPlanPlaceOrder(placeIds)
@@ -38,7 +38,7 @@ class Plan(
         fun register(
             userId: Long,
             title: String,
-            description: String,
+            contents: String,
             region: PlanRegion,
             visitDate: LocalDate,
             categories: List<String>,
@@ -48,7 +48,7 @@ class Plan(
                 id = 0L,
                 userId = userId,
                 title = title,
-                description = description,
+                contents = contents,
                 region = region,
                 visitDate = visitDate,
                 categories = categories.map { PlanCategory.from(it) },

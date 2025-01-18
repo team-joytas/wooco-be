@@ -7,7 +7,7 @@ import java.time.LocalDate
 data class PlanDetailResponse(
     val id: Long,
     val title: String,
-    val description: String,
+    val contents: String,
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: LocalDate,
@@ -38,7 +38,7 @@ data class PlanDetailResponse(
             PlanDetailResponse(
                 id = plan.id,
                 title = plan.title,
-                description = plan.description,
+                contents = plan.contents,
                 primaryRegion = plan.region.primaryRegion,
                 secondaryRegion = plan.region.secondaryRegion,
                 visitDate = plan.visitDate,

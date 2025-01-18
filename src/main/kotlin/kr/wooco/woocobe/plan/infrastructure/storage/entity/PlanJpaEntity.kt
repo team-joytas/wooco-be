@@ -15,8 +15,8 @@ class PlanJpaEntity(
     val userId: Long,
     @Column(name = "title", length = 20)
     val title: String,
-    @Column(name = "description", columnDefinition = "text")
-    val description: String,
+    @Column(name = "contents", columnDefinition = "text")
+    val contents: String,
     @Column(name = "primary_region")
     val primaryRegion: String,
     @Column(name = "secondary_region")

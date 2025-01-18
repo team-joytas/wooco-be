@@ -20,7 +20,7 @@ class PlanStorageMapper {
             id = planJpaEntity.id,
             userId = planJpaEntity.userId,
             title = planJpaEntity.title,
-            description = planJpaEntity.description,
+            contents = planJpaEntity.contents,
             region = PlanRegion(
                 primaryRegion = planJpaEntity.primaryRegion,
                 secondaryRegion = planJpaEntity.secondaryRegion,
@@ -35,7 +35,7 @@ class PlanStorageMapper {
             id = plan.id,
             userId = plan.userId,
             title = plan.title,
-            description = plan.description,
+            contents = plan.contents,
             primaryRegion = plan.region.primaryRegion,
             secondaryRegion = plan.region.secondaryRegion,
             visitDate = plan.visitDate,

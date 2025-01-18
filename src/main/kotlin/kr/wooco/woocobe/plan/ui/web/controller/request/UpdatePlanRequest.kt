@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 data class UpdatePlanRequest(
     val title: String,
-    val description: String,
+    val contents: String,
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: LocalDate,
@@ -20,7 +20,7 @@ data class UpdatePlanRequest(
             userId = userId,
             planId = planId,
             title = title,
-            description = description,
+            contents = contents,
             primaryRegion = primaryRegion,
             secondaryRegion = secondaryRegion,
             visitDate = visitDate,
