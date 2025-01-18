@@ -11,7 +11,7 @@ import java.time.LocalDate
 data class AddPlanInput(
     val userId: Long,
     val title: String,
-    val description: String,
+    val contents: String,
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: LocalDate,
@@ -38,7 +38,7 @@ class AddPlanUseCase(
             Plan.register(
                 userId = input.userId,
                 title = input.title,
-                description = input.description,
+                contents = input.contents,
                 region = region,
                 visitDate = input.visitDate,
                 placeIds = input.placeIds,

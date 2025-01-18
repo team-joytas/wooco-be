@@ -11,7 +11,7 @@ data class UpdatePlanInput(
     val userId: Long,
     val planId: Long,
     val title: String,
-    val description: String,
+    val contents: String,
     val primaryRegion: String,
     val secondaryRegion: String,
     val visitDate: LocalDate,
@@ -36,7 +36,7 @@ class UpdatePlanUseCase(
 
         plan.update(
             title = input.title,
-            description = input.description,
+            contents = input.contents,
             region = region,
             visitDate = input.visitDate,
             placeIds = input.placeIds,

@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.plan.infrastructure.gateway
 
+import kr.wooco.woocobe.plan.domain.exception.NotExistsPlanException
 import kr.wooco.woocobe.plan.domain.gateway.PlanStorageGateway
 import kr.wooco.woocobe.plan.domain.model.Plan
 import kr.wooco.woocobe.plan.infrastructure.storage.PlanCategoryStorageMapper
@@ -36,7 +37,7 @@ internal class PlanStorageGatewayImpl(
 
     override fun getByPlanId(planId: Long): Plan {
         val planEntity = planJpaRepository.findByIdOrNull(planId)
-            ?: throw RuntimeException()
+            ?: throw NotExistsPlanException
         val planPlaceEntities = planPlaceJpaRepository.findAllByPlanId(planId)
         val planCategoryEntities = planCategoryJpaRepository.findAllByPlanId(planId)
 
