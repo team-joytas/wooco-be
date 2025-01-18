@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.plan.domain.model
 
+import kr.wooco.woocobe.plan.domain.exception.InvalidPlanWriterException
 import java.time.LocalDate
 
 class Plan(
@@ -12,10 +13,8 @@ class Plan(
     var places: List<PlanPlace>,
     var categories: List<PlanCategory>,
 ) {
-    fun isWriterOrThrow(targetId: Long) {
-        if (userId != targetId) {
-            throw RuntimeException()
-        }
+    fun isWriterOrThrow(userId: Long) {
+        if (this.userId != userId) throw InvalidPlanWriterException
     }
 
     fun update(
