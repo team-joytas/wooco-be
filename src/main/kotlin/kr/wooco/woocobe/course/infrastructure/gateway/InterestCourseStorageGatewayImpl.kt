@@ -5,6 +5,8 @@ import kr.wooco.woocobe.course.domain.gateway.InterestCourseStorageGateway
 import kr.wooco.woocobe.course.domain.model.InterestCourse
 import kr.wooco.woocobe.course.infrastructure.storage.InterestCourseStorageMapper
 import kr.wooco.woocobe.course.infrastructure.storage.repository.InterestCourseJpaRepository
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 
 @Component
@@ -27,8 +29,12 @@ internal class InterestCourseStorageGatewayImpl(
         return interestCourseStorageMapper.toDomain(interestCourseEntity)
     }
 
-    override fun getAllByUserId(userId: Long): List<InterestCourse> {
-        val interestCourseEntities = interestCourseJpaRepository.findAllByUserId(userId = userId)
+    override fun getAllByUserId(
+        userId: Long,
+        limit: Int?,
+    ): List<InterestCourse> {
+        val pageable = limit?.let { PageRequest.of(0, it) } ?: Pageable.unpaged()
+        val interestCourseEntities = interestCourseJpaRepository.findAllByUserId(userId = userId, pageable = pageable)
         return interestCourseEntities.map { interestCourseStorageMapper.toDomain(it) }
     }
 

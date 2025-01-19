@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.course.infrastructure.storage.repository
 
 import kr.wooco.woocobe.course.infrastructure.storage.entity.InterestCourseJpaEntity
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
@@ -38,5 +39,8 @@ interface InterestCourseJpaRepository : JpaRepository<InterestCourseJpaEntity, L
         courseIds: List<Long>,
     ): List<Long>
 
-    fun findAllByUserId(userId: Long): List<InterestCourseJpaEntity>
+    fun findAllByUserId(
+        userId: Long,
+        pageable: Pageable,
+    ): List<InterestCourseJpaEntity>
 }
