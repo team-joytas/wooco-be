@@ -74,6 +74,7 @@ interface CourseApi {
     fun getAllUserInterestCourse(
         @AuthenticationPrincipal currentUserId: Long?,
         @PathVariable userId: Long,
+        @RequestParam(required = false) limit: Int?,
     ): ResponseEntity<List<CourseDetailResponse>>
 
     @SecurityRequirement(name = "JWT")
