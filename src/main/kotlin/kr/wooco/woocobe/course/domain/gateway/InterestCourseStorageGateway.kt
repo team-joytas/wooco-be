@@ -10,7 +10,10 @@ interface InterestCourseStorageGateway {
         userId: Long,
     ): InterestCourse
 
-    fun getAllByUserId(userId: Long): List<InterestCourse>
+    fun getAllByUserId(
+        userId: Long,
+        limit: Int?,
+    ): List<InterestCourse>
 
     fun existsByCourseIdAndUserId(
         courseId: Long,
