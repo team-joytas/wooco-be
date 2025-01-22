@@ -128,9 +128,10 @@ class CourseQueryFacade(
     fun getAllUserInterestCourse(
         currentUserId: Long?,
         userId: Long,
+        limit: Int?,
     ): List<CourseDetailResponse> {
         val getAllUserInterestCourseResult =
-            getAllUserInterestCourseUseCase.execute(GetAllUserInterestCourseInput(userId = userId))
+            getAllUserInterestCourseUseCase.execute(GetAllUserInterestCourseInput(userId = userId, limit = limit))
 
         val writerIds = getAllUserInterestCourseResult.courses.map { it.userId }
         val getAllUserResult = getAllUserUseCase.execute(GetAllUserInput(userIds = writerIds))

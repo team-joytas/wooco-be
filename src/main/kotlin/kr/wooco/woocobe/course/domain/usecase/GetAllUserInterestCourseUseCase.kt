@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 
 data class GetAllUserInterestCourseInput(
     val userId: Long,
+    val limit: Int?,
 )
 
 data class GetAllUserInterestCourseOutput(
@@ -22,7 +23,7 @@ class GetAllUserInterestCourseUseCase(
 ) : UseCase<GetAllUserInterestCourseInput, GetAllUserInterestCourseOutput> {
     @Transactional(readOnly = true)
     override fun execute(input: GetAllUserInterestCourseInput): GetAllUserInterestCourseOutput {
-        val interestCourses = interestCourseStorageGateway.getAllByUserId(userId = input.userId)
+        val interestCourses = interestCourseStorageGateway.getAllByUserId(userId = input.userId, limit = input.limit)
         val courseIds = interestCourses.map { it.courseId }
         val courses = courseStorageGateway.getAllByCourseIds(courseIds)
 

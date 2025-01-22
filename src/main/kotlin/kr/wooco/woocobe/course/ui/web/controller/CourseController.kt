@@ -38,8 +38,8 @@ class CourseController(
     override fun getAllCourse(
         @AuthenticationPrincipal userId: Long?,
         @RequestParam(required = false, defaultValue = "RECENT") sort: String,
-        @RequestParam(required = false) primaryRegion: String?,
-        @RequestParam(required = false) secondaryRegion: String?,
+        @RequestParam(required = false, name = "primary_region") primaryRegion: String?,
+        @RequestParam(required = false, name = "secondary_region") secondaryRegion: String?,
         @RequestParam(required = false) category: String?,
         @RequestParam(required = false) limit: Int?,
     ): ResponseEntity<List<CourseDetailResponse>> {
@@ -69,8 +69,13 @@ class CourseController(
     override fun getAllUserInterestCourse(
         @AuthenticationPrincipal currentUserId: Long?,
         @PathVariable userId: Long,
+        @RequestParam(required = false) limit: Int?,
     ): ResponseEntity<List<CourseDetailResponse>> {
-        val response = courseQueryFacade.getAllUserInterestCourse(currentUserId = currentUserId, userId = userId)
+        val response = courseQueryFacade.getAllUserInterestCourse(
+            currentUserId = currentUserId,
+            userId = userId,
+            limit = limit,
+        )
         return ResponseEntity.ok(response)
     }
 
