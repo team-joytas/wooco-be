@@ -37,7 +37,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.oshai:kotlin-logging-jvm:${property("kotlinLoggingVersion")}")
     implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
-    implementation("io.hypersistence:hypersistence-utils-hibernate-63:${property("tsidVersion")}")
     implementation("com.linecorp.kotlin-jdsl:jpql-dsl:${property("jdslVersion")}")
     implementation("com.linecorp.kotlin-jdsl:jpql-render:${property("jdslVersion")}")
     implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:${property("jdslVersion")}")
