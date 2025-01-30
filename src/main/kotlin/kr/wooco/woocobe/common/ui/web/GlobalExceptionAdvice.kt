@@ -9,6 +9,7 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.MissingRequestCookieException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
@@ -46,6 +47,7 @@ class GlobalExceptionAdvice {
 
     @ExceptionHandler(
         value = [
+            MissingRequestCookieException::class,
             MethodArgumentNotValidException::class,
             HttpMessageNotReadableException::class,
             MethodArgumentTypeMismatchException::class,
