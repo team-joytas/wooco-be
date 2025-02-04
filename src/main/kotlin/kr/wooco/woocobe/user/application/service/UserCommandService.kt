@@ -26,6 +26,7 @@ internal class UserCommandService(
         saveUserPersistencePort.saveUser(user)
     }
 
+    @Transactional
     override fun withdrawUser(command: WithdrawUserUseCase.Command) {
         deleteUserPersistencePort.deleteByUserId(command.userId)
     }
