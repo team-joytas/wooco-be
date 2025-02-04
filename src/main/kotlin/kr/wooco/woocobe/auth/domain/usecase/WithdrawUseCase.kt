@@ -4,7 +4,7 @@ import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.AuthUserStorageGateway
 import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
 import kr.wooco.woocobe.common.domain.usecase.UseCase
-import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
+import kr.wooco.woocobe.user.application.port.out.DeleteUserPersistencePort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,7 +15,7 @@ data class WithdrawInput(
 
 @Service
 class WithdrawUseCase(
-    private val userStorageGateway: UserStorageGateway,
+    private val deleteUserPersistencePort: DeleteUserPersistencePort,
     private val tokenProviderGateway: TokenProviderGateway,
     private val authUserStorageGateway: AuthUserStorageGateway,
     private val authTokenStorageGateway: AuthTokenStorageGateway,
@@ -24,7 +24,7 @@ class WithdrawUseCase(
     override fun execute(input: WithdrawInput) {
         val tokenId = tokenProviderGateway.extractTokenId(input.refreshToken)
 
-        userStorageGateway.deleteByUserId(input.userId)
+        deleteUserPersistencePort.deleteByUserId(input.userId)
         authUserStorageGateway.deleteByUserId(input.userId)
         authTokenStorageGateway.deleteByTokenId(tokenId)
     }

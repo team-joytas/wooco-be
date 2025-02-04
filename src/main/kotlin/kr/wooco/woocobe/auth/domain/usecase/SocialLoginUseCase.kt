@@ -9,8 +9,8 @@ import kr.wooco.woocobe.auth.domain.model.AuthToken
 import kr.wooco.woocobe.auth.domain.model.AuthUser
 import kr.wooco.woocobe.auth.domain.model.SocialType
 import kr.wooco.woocobe.common.domain.usecase.UseCase
-import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
-import kr.wooco.woocobe.user.domain.model.User
+import kr.wooco.woocobe.user.application.port.out.SaveUserPersistencePort
+import kr.wooco.woocobe.user.domain.entity.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -28,7 +28,7 @@ data class SocialLoginOutput(
 // TODO 책임과 역할이 너무 많다 -> 분리 예정
 @Service
 class SocialLoginUseCase(
-    private val userStorageGateway: UserStorageGateway,
+    private val saveUserPersistencePort: SaveUserPersistencePort,
     private val pkceStorageGateway: PkceStorageGateway,
     private val tokenProviderGateway: TokenProviderGateway,
     private val authUserStorageGateway: AuthUserStorageGateway,
@@ -46,7 +46,7 @@ class SocialLoginUseCase(
             socialId = socialAuth.socialId,
             socialType = socialAuth.socialType,
         ) ?: run {
-            val user = userStorageGateway.save(User.register())
+            val user = saveUserPersistencePort.saveUser(User.createDefault())
             authUserStorageGateway.save(
                 AuthUser.register(
                     userId = user.id,

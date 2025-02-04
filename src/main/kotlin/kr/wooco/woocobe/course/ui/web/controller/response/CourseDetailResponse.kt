@@ -2,7 +2,7 @@ package kr.wooco.woocobe.course.ui.web.controller.response
 
 import kr.wooco.woocobe.course.domain.model.Course
 import kr.wooco.woocobe.place.domain.model.Place
-import kr.wooco.woocobe.user.domain.model.User
+import kr.wooco.woocobe.user.domain.entity.User
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -130,8 +130,8 @@ data class CourseWriterResponse(
         fun from(user: User): CourseWriterResponse =
             CourseWriterResponse(
                 id = user.id,
-                name = user.name,
-                profileUrl = user.profileUrl,
+                name = user.profile.name,
+                profileUrl = user.profile.profileUrl,
             )
     }
 }
