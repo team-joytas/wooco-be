@@ -1,33 +1,33 @@
-package kr.wooco.woocobe.auth.domain.usecase
-
-import io.kotest.core.spec.style.BehaviorSpec
-import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
-import kr.wooco.woocobe.auth.domain.gateway.AuthUserStorageGateway
-import kr.wooco.woocobe.auth.domain.gateway.PkceStorageGateway
-import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
-import kr.wooco.woocobe.auth.infrastructure.cache.repository.PkceRedisRepository
-import kr.wooco.woocobe.auth.infrastructure.storage.repository.AuthUserJpaRepository
-import kr.wooco.woocobe.support.IntegrationTest
-import kr.wooco.woocobe.support.MysqlCleaner
-import kr.wooco.woocobe.support.RedisCleaner
-import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
-import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
-import org.springframework.data.redis.core.StringRedisTemplate
-
-@IntegrationTest
-class SocialLoginUseCaseTest(
-    private val userStorageGateway: UserStorageGateway,
-    private val pkceStorageGateway: PkceStorageGateway,
-    private val tokenProviderGateway: TokenProviderGateway,
-    private val authTokenStorageGateway: AuthTokenStorageGateway,
-    private val authUserStorageGateway: AuthUserStorageGateway,
-    private val stringRedisTemplate: StringRedisTemplate,
-    private val userJpaRepository: UserJpaRepository,
-    private val authUserJpaRepository: AuthUserJpaRepository,
-    private val pkceRedisRepository: PkceRedisRepository,
-) : BehaviorSpec({
-    listeners(MysqlCleaner(), RedisCleaner())
-
+// package kr.wooco.woocobe.auth.domain.usecase
+//
+// import io.kotest.core.spec.style.BehaviorSpec
+// import kr.wooco.woocobe.auth.domain.gateway.AuthTokenStorageGateway
+// import kr.wooco.woocobe.auth.domain.gateway.AuthUserStorageGateway
+// import kr.wooco.woocobe.auth.domain.gateway.PkceStorageGateway
+// import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
+// import kr.wooco.woocobe.auth.infrastructure.cache.repository.PkceRedisRepository
+// import kr.wooco.woocobe.auth.infrastructure.storage.repository.AuthUserJpaRepository
+// import kr.wooco.woocobe.support.IntegrationTest
+// import kr.wooco.woocobe.support.MysqlCleaner
+// import kr.wooco.woocobe.support.RedisCleaner
+// import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
+// import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
+// import org.springframework.data.redis.core.StringRedisTemplate
+//
+// @IntegrationTest
+// class SocialLoginUseCaseTest(
+//    private val userStorageGateway: UserStorageGateway,
+//    private val pkceStorageGateway: PkceStorageGateway,
+//    private val tokenProviderGateway: TokenProviderGateway,
+//    private val authTokenStorageGateway: AuthTokenStorageGateway,
+//    private val authUserStorageGateway: AuthUserStorageGateway,
+//    private val stringRedisTemplate: StringRedisTemplate,
+//    private val userJpaRepository: UserJpaRepository,
+//    private val authUserJpaRepository: AuthUserJpaRepository,
+//    private val pkceRedisRepository: PkceRedisRepository,
+// ) : BehaviorSpec({
+//    listeners(MysqlCleaner(), RedisCleaner())
+//
 //    val mockAuthCode = "kakao_social_token"
 //
 //    val socialAuthClientGateway = mockk<SocialAuthClientGateway>()
@@ -125,4 +125,4 @@ class SocialLoginUseCaseTest(
 //            }
 //        }
 //    }
-})
+// })

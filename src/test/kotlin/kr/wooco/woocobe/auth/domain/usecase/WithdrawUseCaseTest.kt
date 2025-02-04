@@ -1,22 +1,22 @@
-package kr.wooco.woocobe.auth.domain.usecase
-
-import io.kotest.core.spec.style.BehaviorSpec
-import kr.wooco.woocobe.auth.infrastructure.cache.repository.AuthTokenRedisRepository
-import kr.wooco.woocobe.auth.infrastructure.storage.repository.AuthUserJpaRepository
-import kr.wooco.woocobe.support.IntegrationTest
-import kr.wooco.woocobe.support.MysqlCleaner
-import kr.wooco.woocobe.support.RedisCleaner
-import kr.wooco.woocobe.user.infrastructure.storage.repository.UserJpaRepository
-
-@IntegrationTest
-class WithdrawUseCaseTest(
-    private val withdrawUseCase: WithdrawUseCase,
-    private val userJpaRepository: UserJpaRepository,
-    private val authUserJpaRepository: AuthUserJpaRepository,
-    private val authTokenRedisRepository: AuthTokenRedisRepository,
-) : BehaviorSpec({
-    listeners(MysqlCleaner(), RedisCleaner())
-
+// package kr.wooco.woocobe.auth.domain.usecase
+//
+// import io.kotest.core.spec.style.BehaviorSpec
+// import kr.wooco.woocobe.auth.infrastructure.cache.repository.AuthTokenRedisRepository
+// import kr.wooco.woocobe.auth.infrastructure.storage.repository.AuthUserJpaRepository
+// import kr.wooco.woocobe.support.IntegrationTest
+// import kr.wooco.woocobe.support.MysqlCleaner
+// import kr.wooco.woocobe.support.RedisCleaner
+// import kr.wooco.woocobe.user.adapter.out.persistence.repository.UserJpaRepository
+//
+// @IntegrationTest
+// class WithdrawUseCaseTest(
+//    private val withdrawUseCase: WithdrawUseCase,
+//    private val userJpaRepository: UserJpaRepository,
+//    private val authUserJpaRepository: AuthUserJpaRepository,
+//    private val authTokenRedisRepository: AuthTokenRedisRepository,
+// ) : BehaviorSpec({
+//    listeners(MysqlCleaner(), RedisCleaner())
+//
 //    Given("유효한 input 값이 들어올 경우") {
 //        val validUserId = 9876543210L
 //        val validAuthTokenId = 1234567890L
@@ -58,4 +58,4 @@ class WithdrawUseCaseTest(
 //        When("회원 정보가 존재하지 안") {
 //        }
 //    }
-})
+// })
