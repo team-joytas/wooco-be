@@ -1,6 +1,6 @@
-package kr.wooco.woocobe.user.infrastructure.storage.repository
+package kr.wooco.woocobe.user.adapter.out.persistence.repository
 
-import kr.wooco.woocobe.user.infrastructure.storage.entity.UserJpaEntity
+import kr.wooco.woocobe.user.adapter.out.persistence.entity.UserJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserJpaRepository : JpaRepository<UserJpaEntity, Long>

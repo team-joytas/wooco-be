@@ -1,11 +1,11 @@
-package kr.wooco.woocobe.user.infrastructure.storage
+package kr.wooco.woocobe.user.adapter.out.persistence
 
+import kr.wooco.woocobe.user.adapter.out.persistence.entity.UserJpaEntity
 import kr.wooco.woocobe.user.domain.entity.User
-import kr.wooco.woocobe.user.infrastructure.storage.entity.UserJpaEntity
 import org.springframework.stereotype.Component
 
 @Component
-class UserStorageMapper {
+internal class UserPersistenceMapper {
     fun toDomain(userJpaEntity: UserJpaEntity): User =
         User(
             id = userJpaEntity.id,

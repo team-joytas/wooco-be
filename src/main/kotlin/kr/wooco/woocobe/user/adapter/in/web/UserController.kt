@@ -1,8 +1,9 @@
-package kr.wooco.woocobe.user.ui.web.controller
+package kr.wooco.woocobe.user.adapter.`in`.web
 
-import kr.wooco.woocobe.user.ui.web.controller.request.UpdateUserRequest
-import kr.wooco.woocobe.user.ui.web.controller.response.UserDetailResponse
-import kr.wooco.woocobe.user.ui.web.facade.UserFacadeService
+import kr.wooco.woocobe.user.adapter.`in`.web.request.UpdateUserRequest
+import kr.wooco.woocobe.user.adapter.`in`.web.response.UserDetailResponse
+import kr.wooco.woocobe.user.application.port.`in`.ReadUserUseCase
+import kr.wooco.woocobe.user.application.port.`in`.UpdateUserProfileUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,22 +16,25 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/users")
 class UserController(
-    private val userFacadeService: UserFacadeService,
+    private val readUserUseCase: ReadUserUseCase,
+    private val updateUserProfileUseCase: UpdateUserProfileUseCase,
 ) : UserApi {
     @GetMapping("/me")
     override fun getCurrentUser(
         @AuthenticationPrincipal userId: Long,
     ): ResponseEntity<UserDetailResponse> {
-        val response = userFacadeService.getUser(userId)
-        return ResponseEntity.ok(response)
+        val query = ReadUserUseCase.Query(userId)
+        val results = readUserUseCase.readUser(query)
+        return ResponseEntity.ok(UserDetailResponse.from(results))
     }
 
     @GetMapping("/{userId}")
     override fun getUser(
         @PathVariable userId: Long,
     ): ResponseEntity<UserDetailResponse> {
-        val response = userFacadeService.getUser(userId)
-        return ResponseEntity.ok(response)
+        val query = ReadUserUseCase.Query(userId)
+        val results = readUserUseCase.readUser(query)
+        return ResponseEntity.ok(UserDetailResponse.from(results))
     }
 
     @PatchMapping("/profile")
@@ -38,7 +42,8 @@ class UserController(
         @AuthenticationPrincipal userId: Long,
         @RequestBody request: UpdateUserRequest,
     ): ResponseEntity<Unit> {
-        userFacadeService.updateUser(userId, request)
+        val command = request.toCommand(userId)
+        updateUserProfileUseCase.updateUserProfile(command)
         return ResponseEntity.ok().build()
     }
 }

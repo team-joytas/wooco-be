@@ -1,9 +1,9 @@
-package kr.wooco.woocobe.user.ui.web.controller
+package kr.wooco.woocobe.user.adapter.`in`.web
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import kr.wooco.woocobe.user.ui.web.controller.request.UpdateUserRequest
-import kr.wooco.woocobe.user.ui.web.controller.response.UserDetailResponse
+import kr.wooco.woocobe.user.adapter.`in`.web.request.UpdateUserRequest
+import kr.wooco.woocobe.user.adapter.`in`.web.response.UserDetailResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PathVariable

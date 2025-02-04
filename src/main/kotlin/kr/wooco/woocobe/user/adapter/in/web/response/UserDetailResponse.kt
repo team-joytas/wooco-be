@@ -1,6 +1,6 @@
-package kr.wooco.woocobe.user.ui.web.controller.response
+package kr.wooco.woocobe.user.adapter.`in`.web.response
 
-import kr.wooco.woocobe.user.domain.entity.User
+import kr.wooco.woocobe.user.application.port.`in`.results.UserResult
 
 data class UserDetailResponse(
     val userId: Long,
@@ -10,13 +10,13 @@ data class UserDetailResponse(
     val onBoarding: Boolean,
 ) {
     companion object {
-        fun from(user: User): UserDetailResponse =
+        fun from(userResult: UserResult): UserDetailResponse =
             UserDetailResponse(
-                userId = user.id,
-                name = user.profile.name,
-                profileUrl = user.profile.profileUrl,
-                description = user.profile.description,
-                onBoarding = user.profile.name.isBlank(),
+                userId = userResult.id,
+                name = userResult.name,
+                profileUrl = userResult.profileUrl,
+                description = userResult.description,
+                onBoarding = userResult.name.isBlank(),
             )
     }
 }

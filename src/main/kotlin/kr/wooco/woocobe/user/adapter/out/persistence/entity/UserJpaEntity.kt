@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.user.infrastructure.storage.entity
+package kr.wooco.woocobe.user.adapter.out.persistence.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
