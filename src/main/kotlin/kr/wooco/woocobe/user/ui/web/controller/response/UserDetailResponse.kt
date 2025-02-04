@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.user.ui.web.controller.response
 
-import kr.wooco.woocobe.user.domain.model.User
+import kr.wooco.woocobe.user.domain.entity.User
 
 data class UserDetailResponse(
     val userId: Long,
@@ -13,10 +13,10 @@ data class UserDetailResponse(
         fun from(user: User): UserDetailResponse =
             UserDetailResponse(
                 userId = user.id,
-                name = user.name,
-                profileUrl = user.profileUrl,
-                description = user.description,
-                onBoarding = user.name.isBlank(),
+                name = user.profile.name,
+                profileUrl = user.profile.profileUrl,
+                description = user.profile.description,
+                onBoarding = user.profile.name.isBlank(),
             )
     }
 }

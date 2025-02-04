@@ -2,7 +2,7 @@ package kr.wooco.woocobe.user.domain.usecase
 
 import kr.wooco.woocobe.common.domain.usecase.UseCase
 import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
-import kr.wooco.woocobe.user.domain.model.User
+import kr.wooco.woocobe.user.domain.entity.User
 import org.springframework.stereotype.Service
 
 data class GetUserInput(

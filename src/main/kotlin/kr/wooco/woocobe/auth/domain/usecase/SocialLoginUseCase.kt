@@ -9,8 +9,8 @@ import kr.wooco.woocobe.auth.domain.model.AuthToken
 import kr.wooco.woocobe.auth.domain.model.AuthUser
 import kr.wooco.woocobe.auth.domain.model.SocialType
 import kr.wooco.woocobe.common.domain.usecase.UseCase
+import kr.wooco.woocobe.user.domain.entity.User
 import kr.wooco.woocobe.user.domain.gateway.UserStorageGateway
-import kr.wooco.woocobe.user.domain.model.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -46,7 +46,7 @@ class SocialLoginUseCase(
             socialId = socialAuth.socialId,
             socialType = socialAuth.socialType,
         ) ?: run {
-            val user = userStorageGateway.save(User.register())
+            val user = userStorageGateway.save(User.createDefault())
             authUserStorageGateway.save(
                 AuthUser.register(
                     userId = user.id,

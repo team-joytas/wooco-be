@@ -20,7 +20,7 @@ class UpdateUserUseCase(
     override fun execute(input: UpdateUserInput) {
         val user = userStorageGateway.getByUserId(userId = input.userId)
 
-        user.update(name = input.name, profileUrl = input.profileUrl, description = input.description)
+        user.updateProfile(name = input.name, profileUrl = input.profileUrl, description = input.description)
         userStorageGateway.save(user)
     }
 }
