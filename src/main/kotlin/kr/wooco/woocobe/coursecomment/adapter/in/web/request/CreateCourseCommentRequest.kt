@@ -1,6 +1,6 @@
-package kr.wooco.woocobe.course.ui.web.controller.request
+package kr.wooco.woocobe.coursecomment.adapter.`in`.web.request
 
-import kr.wooco.woocobe.course.domain.usecase.AddCourseCommentInput
+import kr.wooco.woocobe.coursecomment.application.port.`in`.CreateCourseCommentUseCase
 
 data class CreateCourseCommentRequest(
     val contents: String,
@@ -8,8 +8,8 @@ data class CreateCourseCommentRequest(
     fun toCommand(
         userId: Long,
         courseId: Long,
-    ): AddCourseCommentInput =
-        AddCourseCommentInput(
+    ): CreateCourseCommentUseCase.Command =
+        CreateCourseCommentUseCase.Command(
             userId = userId,
             courseId = courseId,
             contents = contents,

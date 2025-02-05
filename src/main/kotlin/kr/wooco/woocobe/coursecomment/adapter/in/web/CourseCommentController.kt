@@ -1,11 +1,13 @@
-package kr.wooco.woocobe.course.ui.web.controller
+package kr.wooco.woocobe.coursecomment.adapter.`in`.web
 
-import kr.wooco.woocobe.course.ui.web.controller.request.CreateCourseCommentRequest
-import kr.wooco.woocobe.course.ui.web.controller.request.UpdateCourseCommentRequest
-import kr.wooco.woocobe.course.ui.web.controller.response.CourseCommentDetailResponse
-import kr.wooco.woocobe.course.ui.web.controller.response.CreateCourseCommentResponse
-import kr.wooco.woocobe.course.ui.web.facade.CourseCommentCommandFacade
-import kr.wooco.woocobe.course.ui.web.facade.CourseCommentQueryFacade
+import kr.wooco.woocobe.coursecomment.adapter.`in`.web.request.CreateCourseCommentRequest
+import kr.wooco.woocobe.coursecomment.adapter.`in`.web.request.UpdateCourseCommentRequest
+import kr.wooco.woocobe.coursecomment.adapter.`in`.web.response.CourseCommentDetailResponse
+import kr.wooco.woocobe.coursecomment.adapter.`in`.web.response.CreateCourseCommentResponse
+import kr.wooco.woocobe.coursecomment.application.port.`in`.CreateCourseCommentUseCase
+import kr.wooco.woocobe.coursecomment.application.port.`in`.DeleteCourseCommentUseCase
+import kr.wooco.woocobe.coursecomment.application.port.`in`.ReadAllCourseCommentUseCase
+import kr.wooco.woocobe.coursecomment.application.port.`in`.UpdateCourseCommentUseCase
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -21,15 +23,18 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/comments")
 class CourseCommentController(
-    private val courseCommentQueryFacade: CourseCommentQueryFacade,
-    private val courseCommentCommandFacade: CourseCommentCommandFacade,
+    private val readAllCourseCommentUseCase: ReadAllCourseCommentUseCase,
+    private val createCourseCommentUseCase: CreateCourseCommentUseCase,
+    private val updateCourseCommentUseCase: UpdateCourseCommentUseCase,
+    private val deleteCourseCommentUseCase: DeleteCourseCommentUseCase,
 ) : CourseCommentApi {
     @GetMapping("/courses/{courseId}")
     override fun getAllCourseComment(
         @PathVariable courseId: Long,
     ): ResponseEntity<List<CourseCommentDetailResponse>> {
-        val response = courseCommentQueryFacade.getAllCourseComment(courseId)
-        return ResponseEntity.ok(response)
+        val query = ReadAllCourseCommentUseCase.Query(courseId)
+        val results = readAllCourseCommentUseCase.readAllCourseComment(query)
+        return ResponseEntity.ok(CourseCommentDetailResponse.listFrom(results))
     }
 
     @PostMapping("/courses/{courseId}")
@@ -38,9 +43,9 @@ class CourseCommentController(
         @PathVariable courseId: Long,
         @RequestBody request: CreateCourseCommentRequest,
     ): ResponseEntity<CreateCourseCommentResponse> {
-        val response =
-            courseCommentCommandFacade.createCourseComment(userId = userId, courseId = courseId, request = request)
-        return ResponseEntity.status(HttpStatus.CREATED).body(response)
+        val command = request.toCommand(userId, courseId)
+        val results = createCourseCommentUseCase.createCourseComment(command)
+        return ResponseEntity.status(HttpStatus.CREATED).body(CreateCourseCommentResponse(results))
     }
 
     @PatchMapping("/{commentId}")
@@ -49,7 +54,8 @@ class CourseCommentController(
         @PathVariable commentId: Long,
         @RequestBody request: UpdateCourseCommentRequest,
     ): ResponseEntity<Unit> {
-        courseCommentCommandFacade.updateCourseComment(userId = userId, commentId = commentId, request = request)
+        val command = request.toCommand(userId, commentId)
+        updateCourseCommentUseCase.updateCourseComment(command)
         return ResponseEntity.ok().build()
     }
 
@@ -58,7 +64,8 @@ class CourseCommentController(
         @AuthenticationPrincipal userId: Long,
         @PathVariable commentId: Long,
     ): ResponseEntity<Unit> {
-        courseCommentCommandFacade.deleteCourseComment(userId = userId, commentId = commentId)
+        val command = DeleteCourseCommentUseCase.Command(userId, commentId)
+        deleteCourseCommentUseCase.deleteCourseComment(command)
         return ResponseEntity.ok().build()
     }
 }

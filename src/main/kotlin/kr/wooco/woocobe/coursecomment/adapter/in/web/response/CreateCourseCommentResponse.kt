@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.course.ui.web.controller.response
+package kr.wooco.woocobe.coursecomment.adapter.`in`.web.response
 
 data class CreateCourseCommentResponse(
     val id: Long,

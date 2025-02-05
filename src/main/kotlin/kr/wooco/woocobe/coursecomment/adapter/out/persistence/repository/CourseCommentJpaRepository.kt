@@ -1,6 +1,6 @@
-package kr.wooco.woocobe.course.infrastructure.storage.repository
+package kr.wooco.woocobe.coursecomment.adapter.out.persistence.repository
 
-import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseCommentJpaEntity
+import kr.wooco.woocobe.coursecomment.adapter.out.persistence.entity.CourseCommentJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface CourseCommentJpaRepository : JpaRepository<CourseCommentJpaEntity, Long> {
