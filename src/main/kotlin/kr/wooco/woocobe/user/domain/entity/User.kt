@@ -1,57 +1,36 @@
 package kr.wooco.woocobe.user.domain.entity
 
-class User(
+import kr.wooco.woocobe.user.domain.vo.UserProfile
+import kr.wooco.woocobe.user.domain.vo.UserStatus
+
+data class User(
     val id: Long,
-    var profile: UserProfile,
+    val profile: UserProfile,
+    val status: UserStatus,
 ) {
-    constructor() : this(
-        id = 0L,
-        profile = UserProfile(),
-    )
-
-    @JvmRecord
-    data class UserProfile(
-        val name: String,
-        val profileUrl: String,
-        val description: String,
-    ) {
-        constructor() : this(
-            name = "",
-            profileUrl = "",
-            description = "",
-        )
-
-        init {
-            validate()
-        }
-
-        private fun validate() {
-            if (this == DEFAULT) return
-
-            require(name.length in 2..10) { "이름은 2글자에서 10글자 내로 작성해야합니다." }
-            require(profileUrl.startsWith(URL_PREFIX)) { "프로필 이미지는 URL 형식이어야 합니다." }
-            require(description.length in 1..20) { "소개글은 1글자에서 20글자 내로 작성해야합니다." }
-        }
-
-        companion object {
-            private val DEFAULT = UserProfile()
-            private const val URL_PREFIX = "https://"
+    init {
+        if (status != UserStatus.ONBOARDING) {
+            require(profile.name.isNotBlank()) { "이름은 공백이 될 수 없습니다." }
         }
     }
 
-    fun updateProfile(
-        name: String,
-        profileUrl: String,
-        description: String,
-    ) = apply {
-        profile = UserProfile(
-            name = name,
-            profileUrl = profileUrl,
-            description = description,
-        )
-    }
+    fun updateProfile(profile: UserProfile): User =
+        if (status == UserStatus.ONBOARDING) {
+            copy(status = UserStatus.ACTIVE, profile = profile)
+        } else {
+            copy(profile = profile)
+        }
 
     companion object {
-        fun createDefault(): User = User()
+        fun createDefault(): User =
+            User(
+                id = 0L,
+                profile = UserProfile(
+                    name = "",
+                    profileUrl = "",
+                    description = "",
+                ),
+                status = UserStatus.ONBOARDING,
+            )
     }
 }

@@ -7,6 +7,7 @@ data class UserResult(
     val name: String,
     val profileUrl: String,
     val description: String,
+    val status: String,
 ) {
     companion object {
         fun fromUser(user: User): UserResult =
@@ -15,6 +16,7 @@ data class UserResult(
                 name = user.profile.name,
                 profileUrl = user.profile.profileUrl,
                 description = user.profile.description,
+                status = user.status.name,
             )
     }
 }

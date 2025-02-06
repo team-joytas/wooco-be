@@ -10,6 +10,8 @@ import kr.wooco.woocobe.common.infrastructure.storage.entity.BaseTimeEntity
 @Entity
 @Table(name = "users")
 class UserJpaEntity(
+    @Column(name = "status")
+    val status: String,
     @Column(name = "description")
     val description: String,
     @Column(name = "profile_url")
