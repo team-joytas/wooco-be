@@ -24,8 +24,8 @@ internal class UserCommandService(
             profileUrl = command.profileUrl,
             description = command.description,
         )
-        user.updateProfile(userProfile)
-        saveUserPersistencePort.saveUser(user)
+        val updateUser = user.updateProfile(userProfile)
+        saveUserPersistencePort.saveUser(updateUser)
     }
 
     @Transactional

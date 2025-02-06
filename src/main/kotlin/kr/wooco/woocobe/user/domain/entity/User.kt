@@ -3,30 +3,32 @@ package kr.wooco.woocobe.user.domain.entity
 import kr.wooco.woocobe.user.domain.vo.UserProfile
 import kr.wooco.woocobe.user.domain.vo.UserStatus
 
-class User(
+data class User(
     val id: Long,
-    var profile: UserProfile,
-    var status: UserStatus,
+    val profile: UserProfile,
+    val status: UserStatus,
 ) {
-    fun updateProfile(profile: UserProfile) {
-        if (this.status == UserStatus.ONBOARDING) {
-            this.status = UserStatus.ACTIVE
+    init {
+        if (status != UserStatus.ONBOARDING) {
+            require(profile.name.isNotBlank()) { "이름은 공백이 될 수 없습니다." }
         }
-        this.profile = profile
     }
 
-    companion object {
-        private const val DEFAULT_NAME = "우코"
-        private const val DEFAULT_PROFILE_URL = "https://cdn.wooco.kr/wooco-default-logo"
-        private const val DEFAULT_DESCRIPTION = "아직 소개글을 작성하지 않았습니다."
+    fun updateProfile(profile: UserProfile): User =
+        if (status == UserStatus.ONBOARDING) {
+            copy(status = UserStatus.ACTIVE, profile = profile)
+        } else {
+            copy(profile = profile)
+        }
 
+    companion object {
         fun createDefault(): User =
             User(
                 id = 0L,
                 profile = UserProfile(
-                    name = DEFAULT_NAME,
-                    profileUrl = DEFAULT_PROFILE_URL,
-                    description = DEFAULT_DESCRIPTION,
+                    name = "",
+                    profileUrl = "",
+                    description = "",
                 ),
                 status = UserStatus.ONBOARDING,
             )
