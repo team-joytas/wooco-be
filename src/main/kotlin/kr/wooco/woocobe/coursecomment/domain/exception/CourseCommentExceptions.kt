@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.course.domain.exception
+package kr.wooco.woocobe.coursecomment.domain.exception
 
 import kr.wooco.woocobe.common.domain.exception.CustomException
 import org.springframework.http.HttpStatus

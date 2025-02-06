@@ -1,11 +1,11 @@
-package kr.wooco.woocobe.course.ui.web.controller
+package kr.wooco.woocobe.coursecomment.adapter.`in`.web
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import kr.wooco.woocobe.course.ui.web.controller.request.CreateCourseCommentRequest
-import kr.wooco.woocobe.course.ui.web.controller.request.UpdateCourseCommentRequest
-import kr.wooco.woocobe.course.ui.web.controller.response.CourseCommentDetailResponse
-import kr.wooco.woocobe.course.ui.web.controller.response.CreateCourseCommentResponse
+import kr.wooco.woocobe.coursecomment.adapter.`in`.web.request.CreateCourseCommentRequest
+import kr.wooco.woocobe.coursecomment.adapter.`in`.web.request.UpdateCourseCommentRequest
+import kr.wooco.woocobe.coursecomment.adapter.`in`.web.response.CourseCommentDetailResponse
+import kr.wooco.woocobe.coursecomment.adapter.`in`.web.response.CreateCourseCommentResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PathVariable

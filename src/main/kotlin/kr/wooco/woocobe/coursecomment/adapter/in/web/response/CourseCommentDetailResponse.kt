@@ -1,6 +1,7 @@
-package kr.wooco.woocobe.course.ui.web.controller.response
+package kr.wooco.woocobe.coursecomment.adapter.`in`.web.response
 
-import kr.wooco.woocobe.course.domain.model.CourseComment
+import kr.wooco.woocobe.coursecomment.application.port.`in`.results.CourseCommentResult
+import kr.wooco.woocobe.coursecomment.domain.entity.CourseComment
 import kr.wooco.woocobe.user.domain.entity.User
 import java.time.LocalDateTime
 
@@ -22,12 +23,26 @@ data class CourseCommentDetailResponse(
 
                 CourseCommentDetailResponse(
                     id = courseComment.id,
-                    contents = courseComment.contents,
-                    createdAt = courseComment.commentDateTime,
+                    contents = courseComment.contents.value,
+                    createdAt = courseComment.createdAt,
                     writer = CourseCommentWriterResponse.from(writer),
                 )
             }
         }
+
+        fun listFrom(courseCommentResults: List<CourseCommentResult>): List<CourseCommentDetailResponse> =
+            courseCommentResults.map {
+                CourseCommentDetailResponse(
+                    id = it.commentId,
+                    contents = it.contents,
+                    createdAt = it.createdAt,
+                    writer = CourseCommentWriterResponse(
+                        id = it.writerId,
+                        name = it.writerName,
+                        profileUrl = it.writerProfileUrl,
+                    ),
+                )
+            }
     }
 }
 

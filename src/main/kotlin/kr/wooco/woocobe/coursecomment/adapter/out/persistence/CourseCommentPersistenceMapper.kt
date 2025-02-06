@@ -1,18 +1,20 @@
-package kr.wooco.woocobe.course.infrastructure.storage
+package kr.wooco.woocobe.coursecomment.adapter.out.persistence
 
-import kr.wooco.woocobe.course.domain.model.CourseComment
-import kr.wooco.woocobe.course.infrastructure.storage.entity.CourseCommentJpaEntity
+import kr.wooco.woocobe.coursecomment.adapter.out.persistence.entity.CourseCommentJpaEntity
+import kr.wooco.woocobe.coursecomment.domain.entity.CourseComment
 import org.springframework.stereotype.Component
 
 @Component
-class CourseCommentStorageMapper {
+internal class CourseCommentPersistenceMapper {
     fun toDomain(courseCommentJpaEntity: CourseCommentJpaEntity): CourseComment =
         CourseComment(
             id = courseCommentJpaEntity.id,
             userId = courseCommentJpaEntity.userId,
             courseId = courseCommentJpaEntity.courseId,
-            contents = courseCommentJpaEntity.contents,
-            commentDateTime = courseCommentJpaEntity.createdAt,
+            contents = CourseComment.Contents(
+                value = courseCommentJpaEntity.contents,
+            ),
+            createdAt = courseCommentJpaEntity.createdAt,
         )
 
     fun toEntity(courseComment: CourseComment): CourseCommentJpaEntity =
@@ -20,6 +22,6 @@ class CourseCommentStorageMapper {
             id = courseComment.id,
             userId = courseComment.userId,
             courseId = courseComment.courseId,
-            contents = courseComment.contents,
+            contents = courseComment.contents.value,
         )
 }
