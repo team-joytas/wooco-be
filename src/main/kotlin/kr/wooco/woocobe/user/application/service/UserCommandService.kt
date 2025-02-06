@@ -5,6 +5,7 @@ import kr.wooco.woocobe.user.application.port.`in`.WithdrawUserUseCase
 import kr.wooco.woocobe.user.application.port.out.DeleteUserPersistencePort
 import kr.wooco.woocobe.user.application.port.out.LoadUserPersistencePort
 import kr.wooco.woocobe.user.application.port.out.SaveUserPersistencePort
+import kr.wooco.woocobe.user.domain.vo.UserProfile
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,11 +19,12 @@ internal class UserCommandService(
     @Transactional
     override fun updateUserProfile(command: UpdateUserProfileUseCase.Command) {
         val user = loadUserPersistencePort.getByUserId(command.userId)
-        user.updateProfile(
+        val userProfile = UserProfile(
             name = command.name,
             profileUrl = command.profileUrl,
             description = command.description,
         )
+        user.updateProfile(userProfile)
         saveUserPersistencePort.saveUser(user)
     }
 
