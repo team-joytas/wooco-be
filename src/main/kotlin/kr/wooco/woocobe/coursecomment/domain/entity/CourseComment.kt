@@ -3,23 +3,14 @@ package kr.wooco.woocobe.coursecomment.domain.entity
 import kr.wooco.woocobe.coursecomment.domain.exception.InvalidCommentWriterException
 import java.time.LocalDateTime
 
+// TODO: Read model 추가시 createdAt 제거
 class CourseComment(
     val id: Long,
     val userId: Long,
     val courseId: Long,
     var contents: Contents,
-    val createdAt: LocalDateTime, // TODO: Read model 로 분리
+    val createdAt: LocalDateTime,
 ) {
-    constructor(userId: Long, courseId: Long, contents: String) : this(
-        id = 0L,
-        userId = userId,
-        courseId = courseId,
-        contents = Contents(
-            value = contents,
-        ),
-        createdAt = LocalDateTime.now(),
-    )
-
     @JvmInline
     value class Contents(
         val value: String,
@@ -42,5 +33,22 @@ class CourseComment(
 
     fun validateWriter(userId: Long) {
         if (this.userId != userId) throw InvalidCommentWriterException
+    }
+
+    companion object {
+        fun create(
+            userId: Long,
+            courseId: Long,
+            contents: String,
+        ): CourseComment =
+            CourseComment(
+                id = 0L,
+                userId = userId,
+                courseId = courseId,
+                contents = Contents(
+                    value = contents,
+                ),
+                createdAt = LocalDateTime.now(),
+            )
     }
 }

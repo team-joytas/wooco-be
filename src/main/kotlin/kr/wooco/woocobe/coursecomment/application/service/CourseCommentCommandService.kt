@@ -6,6 +6,7 @@ import kr.wooco.woocobe.coursecomment.application.port.`in`.UpdateCourseCommentU
 import kr.wooco.woocobe.coursecomment.application.port.out.DeleteCourseCommentPersistencePort
 import kr.wooco.woocobe.coursecomment.application.port.out.LoadCourseCommentPersistencePort
 import kr.wooco.woocobe.coursecomment.application.port.out.SaveCourseCommentPersistencePort
+import kr.wooco.woocobe.coursecomment.domain.entity.CourseComment
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -20,7 +21,11 @@ internal class CourseCommentCommandService(
     // TODO: 댓글 추가시 이벤트 발생 --> 코스 댓글 수 증가
     @Transactional
     override fun createCourseComment(command: CreateCourseCommentUseCase.Command): Long {
-        val courseComment = command.toCourseComment()
+        val courseComment = CourseComment.create(
+            userId = command.userId,
+            courseId = command.courseId,
+            contents = command.contents,
+        )
         return saveCourseCommentPersistencePort.saveCourseComment(courseComment).id
     }
 
