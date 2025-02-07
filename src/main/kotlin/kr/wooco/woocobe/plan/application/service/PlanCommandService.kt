@@ -40,20 +40,19 @@ internal class PlanCommandService(
     @Transactional
     override fun updatePlan(command: UpdatePlanUseCase.Command) {
         val plan = loadPlanPersistencePort.getByPlanId(command.planId)
-
+        val region = PlanRegion(
+            primaryRegion = command.primaryRegion,
+            secondaryRegion = command.secondaryRegion,
+        )
         plan.update(
             userId = command.userId,
             title = command.title,
             contents = command.contents,
-            region = PlanRegion(
-                primaryRegion = command.primaryRegion,
-                secondaryRegion = command.secondaryRegion,
-            ),
+            region = region,
             visitDate = command.visitDate,
             placeIds = command.placeIds,
             categories = command.categories,
         )
-
         savePlanPersistencePort.savePlan(plan)
     }
 
