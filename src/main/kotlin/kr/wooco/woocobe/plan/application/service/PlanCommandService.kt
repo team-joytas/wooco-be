@@ -42,6 +42,7 @@ internal class PlanCommandService(
         val plan = loadPlanPersistencePort.getByPlanId(command.planId)
 
         plan.update(
+            userId = command.userId,
             title = command.title,
             contents = command.contents,
             region = PlanRegion(

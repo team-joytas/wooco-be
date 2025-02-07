@@ -14,6 +14,7 @@ class Plan(
     var categories: List<PlanCategory>,
 ) {
     fun update(
+        userId: Long,
         title: String,
         contents: String,
         region: PlanRegion,
