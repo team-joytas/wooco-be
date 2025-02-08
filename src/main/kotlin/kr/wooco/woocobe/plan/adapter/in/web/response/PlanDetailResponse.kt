@@ -18,28 +18,22 @@ data class PlanDetailResponse(
         fun from(planResult: PlanResult): PlanDetailResponse {
             val places = planResult.places
             val placeMap = places.associateBy { it.id }
-            return fromPlan(planResult, placeMap)
-        }
-
-        fun listOf(planResults: List<PlanResult>): List<PlanDetailResponse> = planResults.map { plan -> from(plan) }
-
-        private fun fromPlan(
-            plan: PlanResult,
-            placeMap: Map<Long, PlanPlaceResult>,
-        ): PlanDetailResponse =
-            PlanDetailResponse(
-                id = plan.id,
-                title = plan.title,
-                contents = plan.contents,
-                primaryRegion = plan.primaryRegion,
-                secondaryRegion = plan.secondaryRegion,
-                visitDate = plan.visitDate,
-                places = plan.places.map { planPlace ->
+            return PlanDetailResponse(
+                id = planResult.id,
+                title = planResult.title,
+                contents = planResult.contents,
+                primaryRegion = planResult.primaryRegion,
+                secondaryRegion = planResult.secondaryRegion,
+                visitDate = planResult.visitDate,
+                places = planResult.places.map { planPlace ->
                     val place = requireNotNull(placeMap[planPlace.id])
                     PlanPlaceResponse.of(planPlace.order, place)
                 },
-                categories = plan.categories,
+                categories = planResult.categories,
             )
+        }
+
+        fun listOf(planResults: List<PlanResult>): List<PlanDetailResponse> = planResults.map { plan -> from(plan) }
     }
 }
 

@@ -20,22 +20,7 @@ data class PlanResult(
             places: List<Place>,
         ): PlanResult {
             val placeMap = places.associateBy { it.id }
-            return fromPlan(plan, placeMap)
-        }
-
-        fun listOf(
-            plans: List<Plan>,
-            places: List<Place>,
-        ): List<PlanResult> {
-            val placeMap = places.associateBy { it.id }
-            return plans.map { plan -> fromPlan(plan, placeMap) }
-        }
-
-        private fun fromPlan(
-            plan: Plan,
-            placeMap: Map<Long, Place>,
-        ): PlanResult =
-            PlanResult(
+            return PlanResult(
                 id = plan.id,
                 title = plan.title,
                 contents = plan.contents,
@@ -48,6 +33,12 @@ data class PlanResult(
                 },
                 categories = plan.categories.map { it.name },
             )
+        }
+
+        fun listOf(
+            plans: List<Plan>,
+            places: List<Place>,
+        ): List<PlanResult> = plans.map { of(it, places) }
     }
 }
 
