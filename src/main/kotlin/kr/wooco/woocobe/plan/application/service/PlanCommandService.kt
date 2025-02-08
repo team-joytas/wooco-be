@@ -21,7 +21,7 @@ internal class PlanCommandService(
     DeletePlanUseCase {
     @Transactional
     override fun createPlan(command: CreatePlanUseCase.Command): Long {
-        val planRegion = PlanRegion(
+        val planRegion = PlanRegion.create(
             primaryRegion = command.primaryRegion,
             secondaryRegion = command.secondaryRegion,
         )
@@ -40,7 +40,7 @@ internal class PlanCommandService(
     @Transactional
     override fun updatePlan(command: UpdatePlanUseCase.Command) {
         val plan = loadPlanPersistencePort.getByPlanId(command.planId)
-        val region = PlanRegion(
+        val region = PlanRegion.create(
             primaryRegion = command.primaryRegion,
             secondaryRegion = command.secondaryRegion,
         )

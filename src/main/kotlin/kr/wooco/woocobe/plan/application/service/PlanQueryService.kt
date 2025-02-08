@@ -20,7 +20,6 @@ internal class PlanQueryService(
         val plan = loadPlanPersistencePort.getByPlanId(query.planId)
         val placeIds = plan.places.map { it.placeId }
         val places = getAllPlaceUseCase.execute(GetAllPlaceInput(placeIds = placeIds))
-
         return PlanResult.of(plan, places.places)
     }
 
@@ -29,7 +28,6 @@ internal class PlanQueryService(
         val plans = loadPlanPersistencePort.getAllByUserId(query.userId)
         val placeIds = plans.flatMap { it.places }.map { it.placeId }
         val places = getAllPlaceUseCase.execute(GetAllPlaceInput(placeIds = placeIds))
-
         return PlanResult.listOf(plans, places.places)
     }
 }

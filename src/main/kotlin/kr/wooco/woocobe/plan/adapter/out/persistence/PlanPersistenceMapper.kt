@@ -21,7 +21,7 @@ class PlanPersistenceMapper {
             userId = planJpaEntity.userId,
             title = planJpaEntity.title,
             contents = planJpaEntity.contents,
-            region = PlanRegion(
+            region = PlanRegion.create(
                 primaryRegion = planJpaEntity.primaryRegion,
                 secondaryRegion = planJpaEntity.secondaryRegion,
             ),
