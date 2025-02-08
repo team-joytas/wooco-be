@@ -36,8 +36,8 @@ class PlaceReviewCommandService(
     @Transactional
     override fun updatePlaceReview(command: UpdatePlaceReviewUseCase.Command) {
         val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)
-        placeReview.isValidWriter(command.userId)
         placeReview.update(
+            userId = command.userId,
             rating = command.rating,
             contents = command.contents,
             oneLineReviews = command.oneLineReviews,

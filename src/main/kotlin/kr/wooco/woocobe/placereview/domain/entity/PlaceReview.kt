@@ -14,11 +14,14 @@ class PlaceReview(
     var imageUrls: List<String>,
 ) {
     fun update(
+        userId: Long,
         rating: Double,
         contents: String,
         oneLineReviews: List<String>,
         imageUrls: List<String>,
     ) = apply {
+        isValidWriter(userId)
+
         this.rating = rating
         this.contents = contents
         this.oneLineReviews = oneLineReviews.map { PlaceOneLineReview.from(it) }
