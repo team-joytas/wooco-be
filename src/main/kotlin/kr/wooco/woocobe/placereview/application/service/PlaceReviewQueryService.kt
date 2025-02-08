@@ -27,8 +27,9 @@ internal class PlaceReviewQueryService(
     @Transactional(readOnly = true)
     override fun readAllMyPlaceReview(query: ReadAllMyPlaceReviewUseCase.Query): List<PlaceReviewResult> {
         val placeReviews = loadPlaceReviewPersistencePort.getAllByUserId(query.userId)
-        val writer = loadUserPersistencePort.getByUserId(query.userId)
-        return PlaceReviewResult.listOf(placeReviews, listOf(writer))
+        val writerIds = placeReviews.map { it.userId }.distinct()
+        val writers = loadUserPersistencePort.getAllByUserIds(writerIds)
+        return PlaceReviewResult.listOf(placeReviews, writers)
     }
 
     @Transactional(readOnly = true)
