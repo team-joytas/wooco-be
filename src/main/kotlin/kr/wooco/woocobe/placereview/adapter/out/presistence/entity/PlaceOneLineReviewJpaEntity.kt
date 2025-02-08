@@ -12,7 +12,7 @@ import kr.wooco.woocobe.common.infrastructure.storage.entity.BaseTimeEntity
 class PlaceOneLineReviewJpaEntity(
     @Column(name = "contents")
     val contents: String,
-    @Column(name = "place_Review_id")
+    @Column(name = "place_review_id")
     val placeReviewId: Long,
     @Column(name = "place_id")
     val placeId: Long,
