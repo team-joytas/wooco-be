@@ -29,7 +29,6 @@ class PlaceReviewCommandService(
             oneLineReviews = command.oneLineReviews,
             imageUrls = command.imageUrls,
         )
-
         return savePlaceReviewPersistencePort.savePlaceReview(placeReview).id
     }
 
@@ -44,7 +43,6 @@ class PlaceReviewCommandService(
             oneLineReviews = command.oneLineReviews,
             imageUrls = command.imageUrls,
         )
-
         savePlaceReviewPersistencePort.savePlaceReview(placeReview)
     }
 
