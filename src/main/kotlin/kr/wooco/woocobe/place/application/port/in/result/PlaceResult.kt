@@ -14,7 +14,7 @@ data class PlaceResult(
     var reviewCount: Long,
     val phoneNumber: String,
     var thumbnailUrl: String,
-    val placeOneLineReviewStats: List<PlaceOneLineReviewStatResult>, // ✅ 네이밍 개선
+    val placeOneLineReviewStats: List<PlaceOneLineReviewStatResult>,
 ) {
     companion object {
         fun from(place: Place): PlaceResult =
