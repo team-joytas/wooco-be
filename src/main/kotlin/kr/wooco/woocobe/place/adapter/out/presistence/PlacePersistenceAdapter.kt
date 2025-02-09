@@ -13,43 +13,27 @@ import org.springframework.stereotype.Component
 internal class PlacePersistenceAdapter(
     private val placeJpaRepository: PlaceJpaRepository,
     private val placePersistenceMapper: PlacePersistenceMapper,
-    private val placeOneLineReviewStatJpaRepository: PlaceOneLineReviewStatJpaRepository,
 ) : LoadPlacePersistencePort,
     SavePlacePersistencePort {
     override fun savePlace(place: Place): Place {
         val placeEntity = placePersistenceMapper.toEntity(place)
         val savedPlaceEntity = placeJpaRepository.save(placeEntity)
-
-        val placeOneLineReviewStatEntities = place.placeOneLineReviewStats.map {
-            placePersistenceMapper.toEntity(it, savedPlaceEntity.id)
-        }
-        placeOneLineReviewStatJpaRepository.saveAll(placeOneLineReviewStatEntities)
-        return placePersistenceMapper.toDomain(savedPlaceEntity, placeOneLineReviewStatEntities)
+        return placePersistenceMapper.toDomain(savedPlaceEntity)
     }
 
     override fun getByPlaceId(placeId: Long): Place {
         val placeEntity = placeJpaRepository.findByIdOrNull(placeId)
             ?: throw NotExistsPlaceException
-
-        val placeOneLineReviewStats = placeOneLineReviewStatJpaRepository.findAllByPlaceId(placeId)
-        return placePersistenceMapper.toDomain(placeEntity, placeOneLineReviewStats)
+        return placePersistenceMapper.toDomain(placeEntity)
     }
 
     override fun getOrNullByKakaoMapPlaceId(kakaoMapPlaceId: String): Place? {
         val placeEntity = placeJpaRepository.findByKakaoPlaceId(kakaoMapPlaceId)
-        return placeEntity?.let {
-            val placeOneLineReviewStats = placeOneLineReviewStatJpaRepository.findAllByPlaceId(it.id)
-            placePersistenceMapper.toDomain(it, placeOneLineReviewStats)
-        }
+        return placeEntity?.let { placePersistenceMapper.toDomain(it) }
     }
 
     override fun getAllByPlaceIds(placeIds: List<Long>): List<Place> {
         val placeEntities = placeJpaRepository.findAllByIdIn(placeIds)
-        val placeOneLineReviewStatsMap = placeOneLineReviewStatJpaRepository
-            .findAllByPlaceIdIn(placeIds)
-            .groupBy { it.placeId }
-        return placeEntities.map {
-            placePersistenceMapper.toDomain(it, placeOneLineReviewStatsMap[it.id] ?: emptyList())
-        }
+        return placeEntities.map { placePersistenceMapper.toDomain(it) }
     }
 }
