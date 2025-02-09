@@ -1,13 +1,19 @@
-package kr.wooco.woocobe.place.domain.entity
+package kr.wooco.woocobe.placereview.domain.entity
 
 data class PlaceOneLineReviewStat(
+    val id: Long,
     val contents: String,
     var count: Long,
 ) {
-    fun of(
+    fun create(
         contents: String,
         count: Long,
-    ): PlaceOneLineReviewStat = PlaceOneLineReviewStat(contents, count)
+    ): PlaceOneLineReviewStat =
+        PlaceOneLineReviewStat(
+            id = 0L,
+            contents = contents,
+            count = count,
+        )
 
     fun increaseCount() {
         count++
