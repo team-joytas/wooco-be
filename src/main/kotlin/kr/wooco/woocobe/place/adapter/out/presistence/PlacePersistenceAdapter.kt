@@ -1,7 +1,6 @@
 package kr.wooco.woocobe.place.adapter.out.presistence
 
 import kr.wooco.woocobe.place.adapter.out.presistence.repository.PlaceJpaRepository
-import kr.wooco.woocobe.place.adapter.out.presistence.repository.PlaceOneLineReviewStatJpaRepository
 import kr.wooco.woocobe.place.application.port.out.LoadPlacePersistencePort
 import kr.wooco.woocobe.place.application.port.out.SavePlacePersistencePort
 import kr.wooco.woocobe.place.domain.entity.Place
