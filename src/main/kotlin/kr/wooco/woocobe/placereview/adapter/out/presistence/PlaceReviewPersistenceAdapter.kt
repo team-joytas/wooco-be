@@ -2,15 +2,20 @@ package kr.wooco.woocobe.placereview.adapter.out.presistence
 
 import kr.wooco.woocobe.placereview.adapter.out.presistence.entity.PlaceReviewImageJpaEntity
 import kr.wooco.woocobe.placereview.adapter.out.presistence.repository.PlaceOneLineReviewJpaRepository
+import kr.wooco.woocobe.placereview.adapter.out.presistence.repository.PlaceOneLineReviewStatJpaRepository
 import kr.wooco.woocobe.placereview.adapter.out.presistence.repository.PlaceReviewImageJpaRepository
 import kr.wooco.woocobe.placereview.adapter.out.presistence.repository.PlaceReviewJpaRepository
 import kr.wooco.woocobe.placereview.application.port.out.DeletePlaceReviewPersistencePort
+import kr.wooco.woocobe.placereview.application.port.out.LoadPlaceOneLineReviewStatPersistencePort
 import kr.wooco.woocobe.placereview.application.port.out.LoadPlaceReviewPersistencePort
 import kr.wooco.woocobe.placereview.application.port.out.SavePlaceReviewPersistencePort
+import kr.wooco.woocobe.placereview.domain.entity.PlaceOneLineReviewStat
 import kr.wooco.woocobe.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.placereview.domain.exception.NotExistsPlaceReviewException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+
+// TODO: 한줄평 통계 저장 기능 추가 --- 현재 조회만 가능
 
 @Component
 @Suppress("Duplicates")
@@ -20,9 +25,12 @@ internal class PlaceReviewPersistenceAdapter(
     private val placeOneLineReviewJpaRepository: PlaceOneLineReviewJpaRepository,
     private val placeReviewPersistenceMapper: PlaceReviewPersistenceMapper,
     private val placeReviewOneLineReviewPersistenceMapper: PlaceOneLineReviewPersistenceMapper,
+    private val placeOneLineReviewStatJpaRepository: PlaceOneLineReviewStatJpaRepository,
+    private val placeOneLineReviewStatPersistenceMapper: PlaceOneLineReviewStatPersistenceMapper,
 ) : SavePlaceReviewPersistencePort,
     LoadPlaceReviewPersistencePort,
-    DeletePlaceReviewPersistencePort {
+    DeletePlaceReviewPersistencePort,
+    LoadPlaceOneLineReviewStatPersistencePort {
     override fun savePlaceReview(placeReview: PlaceReview): PlaceReview {
         val placeReviewEntity = placeReviewPersistenceMapper.toEntity(placeReview)
         placeReviewJpaRepository.save(placeReviewEntity)
@@ -133,5 +141,25 @@ internal class PlaceReviewPersistenceAdapter(
         placeReviewJpaRepository.deleteById(placeReviewId)
         placeOneLineReviewJpaRepository.deleteAllByPlaceReviewId(placeReviewId)
         placeReviewImageJpaRepository.deleteAllByPlaceReviewId(placeReviewId)
+    }
+
+    override fun getAllStatsByPlaceId(placeId: Long): List<PlaceOneLineReviewStat> {
+        val placeOneLineReviewStatEntities = placeOneLineReviewStatJpaRepository.findAllByPlaceId(placeId)
+
+        return placeOneLineReviewStatEntities.map {
+            placeOneLineReviewStatPersistenceMapper.toDomain(
+                placeOneLineReviewStatJpaEntity = it,
+            )
+        }
+    }
+
+    override fun getAllStatsByPlaceIds(placeIds: List<Long>): List<PlaceOneLineReviewStat> {
+        val placeOneLineReviewStatEntities = placeOneLineReviewStatJpaRepository.findAllByPlaceIdIn(placeIds)
+
+        return placeOneLineReviewStatEntities.map {
+            placeOneLineReviewStatPersistenceMapper.toDomain(
+                placeOneLineReviewStatJpaEntity = it,
+            )
+        }
     }
 }

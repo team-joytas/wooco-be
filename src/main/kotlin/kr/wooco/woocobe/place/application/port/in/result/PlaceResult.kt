@@ -17,7 +17,10 @@ data class PlaceResult(
     val placeOneLineReviewStats: List<PlaceOneLineReviewStatResult>,
 ) {
     companion object {
-        fun from(place: Place): PlaceResult =
+        fun of(
+            place: Place,
+            placeOneLineReviewStats: List<PlaceOneLineReviewStat>,
+        ): PlaceResult =
             PlaceResult(
                 placeId = place.id,
                 placeName = place.name,
@@ -29,10 +32,13 @@ data class PlaceResult(
                 reviewCount = place.reviewCount,
                 phoneNumber = place.phoneNumber,
                 thumbnailUrl = place.thumbnailUrl,
-                placeOneLineReviewStats = PlaceOneLineReviewStatResult.listFrom(place.placeOneLineReviewStats),
+                placeOneLineReviewStats = PlaceOneLineReviewStatResult.listFrom(placeOneLineReviewStats),
             )
 
-        fun listFrom(place: List<Place>): List<PlaceResult> =
+        fun listOf(
+            place: List<Place>,
+            placeOneLineReviewStats: List<PlaceOneLineReviewStat>,
+        ): List<PlaceResult> =
             place.map {
                 PlaceResult(
                     placeId = it.id,
@@ -45,7 +51,7 @@ data class PlaceResult(
                     reviewCount = it.reviewCount,
                     phoneNumber = it.phoneNumber,
                     thumbnailUrl = it.thumbnailUrl,
-                    placeOneLineReviewStats = PlaceOneLineReviewStatResult.listFrom(it.placeOneLineReviewStats),
+                    placeOneLineReviewStats = PlaceOneLineReviewStatResult.listFrom(placeOneLineReviewStats),
                 )
             }
     }
