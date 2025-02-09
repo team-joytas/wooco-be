@@ -1,6 +1,6 @@
-package kr.wooco.woocobe.place.adapter.out.presistence.repository
+package kr.wooco.woocobe.placereview.adapter.out.presistence.repository
 
-import kr.wooco.woocobe.place.adapter.out.presistence.entity.PlaceOneLineReviewStatJpaEntity
+import kr.wooco.woocobe.placereview.adapter.out.presistence.entity.PlaceOneLineReviewStatJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface PlaceOneLineReviewStatJpaRepository : JpaRepository<PlaceOneLineReviewStatJpaEntity, Long> {

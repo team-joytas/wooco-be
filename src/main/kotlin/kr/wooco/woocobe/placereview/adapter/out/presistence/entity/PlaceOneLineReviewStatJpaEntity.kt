@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.place.adapter.out.presistence.entity
+package kr.wooco.woocobe.placereview.adapter.out.presistence.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
