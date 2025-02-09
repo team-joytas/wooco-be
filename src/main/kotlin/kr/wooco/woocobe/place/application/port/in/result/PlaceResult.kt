@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.place.application.port.`in`.result
 
 import kr.wooco.woocobe.place.domain.entity.Place
-import kr.wooco.woocobe.place.domain.entity.PlaceOneLineReviewStat
+import kr.wooco.woocobe.placereview.domain.entity.PlaceOneLineReviewStat
 
 data class PlaceResult(
     val placeId: Long,

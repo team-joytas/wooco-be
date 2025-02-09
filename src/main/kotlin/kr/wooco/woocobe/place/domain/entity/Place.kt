@@ -11,7 +11,6 @@ data class Place(
     var reviewCount: Long,
     val phoneNumber: String,
     var thumbnailUrl: String,
-    val placeOneLineReviewStats: List<PlaceOneLineReviewStat>,
 ) {
     // TODO: 한줄평 통계 로직 필요
 
@@ -55,7 +54,6 @@ data class Place(
                 reviewCount = 0,
                 phoneNumber = phoneNumber,
                 thumbnailUrl = "",
-                placeOneLineReviewStats = emptyList(),
             )
     }
 }
