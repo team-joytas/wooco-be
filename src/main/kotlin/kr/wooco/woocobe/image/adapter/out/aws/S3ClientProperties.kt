@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.image.infrastructure.client
+package kr.wooco.woocobe.image.adapter.out.aws
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import java.time.Duration
@@ -8,5 +8,4 @@ data class S3ClientProperties(
     val bucketName: String,
     val contentType: String,
     val timeout: Duration,
-    val baseImageUrl: String,
 )
