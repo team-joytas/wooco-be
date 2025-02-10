@@ -5,7 +5,7 @@
 // import kr.wooco.woocobe.auth.domain.gateway.AuthUserStorageGateway
 // import kr.wooco.woocobe.auth.domain.gateway.PkceStorageGateway
 // import kr.wooco.woocobe.auth.domain.gateway.TokenProviderGateway
-// import kr.wooco.woocobe.auth.infrastructure.cache.repository.PkceRedisRepository
+// import kr.wooco.woocobe.auth.adapter.out.persistence.repository.PkceRedisRepository
 // import kr.wooco.woocobe.auth.infrastructure.storage.repository.AuthUserJpaRepository
 // import kr.wooco.woocobe.support.IntegrationTest
 // import kr.wooco.woocobe.support.MysqlCleaner
