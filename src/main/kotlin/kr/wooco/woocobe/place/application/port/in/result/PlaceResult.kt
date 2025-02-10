@@ -38,22 +38,7 @@ data class PlaceResult(
         fun listOf(
             place: List<Place>,
             placeOneLineReviewStats: List<PlaceOneLineReviewStat>,
-        ): List<PlaceResult> =
-            place.map {
-                PlaceResult(
-                    placeId = it.id,
-                    placeName = it.name,
-                    latitude = it.latitude,
-                    longitude = it.longitude,
-                    address = it.address,
-                    kakaoPlaceId = it.kakaoPlaceId,
-                    averageRating = it.averageRating,
-                    reviewCount = it.reviewCount,
-                    phoneNumber = it.phoneNumber,
-                    thumbnailUrl = it.thumbnailUrl,
-                    placeOneLineReviewStats = PlaceOneLineReviewStatResult.listFrom(placeOneLineReviewStats),
-                )
-            }
+        ): List<PlaceResult> = place.map { of(it, placeOneLineReviewStats) }
     }
 
     data class PlaceOneLineReviewStatResult(
