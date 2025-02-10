@@ -30,10 +30,10 @@ internal class PlaceReviewPersistenceAdapter(
         val existingOneLineReviews =
             placeOneLineReviewJpaRepository.findAllByPlaceReviewId(placeReviewEntity.id)
         val newOneLineReviews = placeReview.oneLineReviews.filter { newReview ->
-            existingOneLineReviews.none { it.contents == newReview.contents }
+            existingOneLineReviews.none { it.contents == newReview.value }
         }
         val removedOneLineReviews = existingOneLineReviews.filter { existingReview ->
-            placeReview.oneLineReviews.none { it.contents == existingReview.contents }
+            placeReview.oneLineReviews.none { it.value == existingReview.contents }
         }
         placeOneLineReviewJpaRepository.deleteAll(removedOneLineReviews)
 

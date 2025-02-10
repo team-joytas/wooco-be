@@ -3,7 +3,6 @@ package kr.wooco.woocobe.placereview.adapter.out.presistence
 import kr.wooco.woocobe.placereview.adapter.out.presistence.entity.PlaceOneLineReviewJpaEntity
 import kr.wooco.woocobe.placereview.adapter.out.presistence.entity.PlaceReviewImageJpaEntity
 import kr.wooco.woocobe.placereview.adapter.out.presistence.entity.PlaceReviewJpaEntity
-import kr.wooco.woocobe.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.placereview.domain.entity.PlaceReview
 import org.springframework.stereotype.Component
 
@@ -21,7 +20,7 @@ internal class PlaceReviewPersistenceMapper {
             rating = placeReviewJpaEntity.rating,
             contents = placeReviewJpaEntity.contents,
             writeDateTime = placeReviewJpaEntity.createdAt,
-            oneLineReviews = placeOneLineReviewJpaEntities.map { PlaceOneLineReview(contents = it.contents) },
+            oneLineReviews = placeOneLineReviewJpaEntities.map { PlaceReview.OneLineReview(it.contents) },
             imageUrls = placeReviewImageJpaEntities.map { it.imageUrl },
         )
 

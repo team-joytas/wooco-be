@@ -2,9 +2,18 @@ package kr.wooco.woocobe.placereview.domain.entity
 
 data class PlaceOneLineReviewStat(
     val id: Long,
-    val contents: String,
+    val contents: OneLineReview,
     var count: Long,
 ) {
+    @JvmInline
+    value class OneLineReview(
+        val value: String,
+    ) {
+        init {
+            require(value.isNotBlank()) { "한줄평 내용이 없습니다." }
+        }
+    }
+
     init {
         require(count >= 0) { "한줄평 통계의 개수는 0 이상이어야 합니다." }
     }
@@ -25,7 +34,7 @@ data class PlaceOneLineReviewStat(
         ): PlaceOneLineReviewStat =
             PlaceOneLineReviewStat(
                 id = 0L,
-                contents = contents,
+                contents = OneLineReview(contents),
                 count = count,
             )
     }
