@@ -5,6 +5,19 @@ data class PlaceOneLineReviewStat(
     val contents: String,
     var count: Long,
 ) {
+    init {
+        require(count >= 0) { "한줄평 통계의 개수는 0 이상이어야 합니다." }
+    }
+
+    fun increaseCount() {
+        count++
+    }
+
+    fun decreaseCount() {
+        require(count > 0) { "한줄평 통계의 개수는 0 이하로 줄어들 수 없습니다." }
+        count--
+    }
+
     companion object {
         fun create(
             contents: String,
@@ -15,13 +28,5 @@ data class PlaceOneLineReviewStat(
                 contents = contents,
                 count = count,
             )
-    }
-
-    fun increaseCount() {
-        count++
-    }
-
-    fun decreaseCount() {
-        if (count > 0) count--
     }
 }
