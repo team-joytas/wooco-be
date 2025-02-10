@@ -24,11 +24,3 @@ data object NotExistsPlanException : BasePlanException(
 ) {
     private fun readResolve(): Any = NotExistsPlanException
 }
-
-data object UnSupportCategoryException : BasePlanException(
-    code = "UN_SUPPORT_CATEGORY",
-    message = "지원하지 않는 카테고리 형식입니다.",
-    status = HttpStatus.BAD_REQUEST,
-) {
-    private fun readResolve(): Any = UnSupportCategoryException
-}

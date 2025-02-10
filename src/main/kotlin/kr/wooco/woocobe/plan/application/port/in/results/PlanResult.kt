@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.plan.application.port.`in`.results
 
-import kr.wooco.woocobe.place.domain.model.Place
+import kr.wooco.woocobe.place.domain.entity.Place
 import kr.wooco.woocobe.plan.domain.entity.Plan
 import java.time.LocalDate
 
@@ -12,8 +12,39 @@ data class PlanResult(
     val secondaryRegion: String,
     val visitDate: LocalDate,
     val places: List<PlanPlaceResult>,
-    val categories: List<String>,
 ) {
+    data class PlanPlaceResult(
+        val order: Int,
+        val id: Long,
+        val name: String,
+        val latitude: Double,
+        val longitude: Double,
+        val address: String,
+        val thumbnailUrl: String,
+        val kakaoPlaceId: String,
+        val averageRating: Double,
+        val reviewCount: Long,
+    ) {
+        companion object {
+            fun of(
+                order: Int,
+                place: Place,
+            ): PlanPlaceResult =
+                PlanPlaceResult(
+                    order = order,
+                    id = place.id,
+                    name = place.name,
+                    latitude = place.latitude,
+                    longitude = place.longitude,
+                    address = place.address,
+                    thumbnailUrl = place.thumbnailUrl,
+                    kakaoPlaceId = place.kakaoPlaceId,
+                    averageRating = place.averageRating,
+                    reviewCount = place.reviewCount,
+                )
+        }
+    }
+
     companion object {
         fun of(
             plan: Plan,
@@ -31,7 +62,6 @@ data class PlanResult(
                     val place = requireNotNull(placeMap[planPlace.placeId])
                     PlanPlaceResult.of(planPlace.order, place)
                 },
-                categories = plan.categories.map { it.name },
             )
         }
 
@@ -39,37 +69,5 @@ data class PlanResult(
             plans: List<Plan>,
             places: List<Place>,
         ): List<PlanResult> = plans.map { of(it, places) }
-    }
-}
-
-data class PlanPlaceResult(
-    val order: Int,
-    val id: Long,
-    val name: String,
-    val latitude: Double,
-    val longitude: Double,
-    val address: String,
-    val thumbnailUrl: String,
-    val kakaoMapPlaceId: String,
-    val averageRating: Double,
-    val reviewCount: Long,
-) {
-    companion object {
-        fun of(
-            order: Int,
-            place: Place,
-        ): PlanPlaceResult =
-            PlanPlaceResult(
-                order = order,
-                id = place.id,
-                name = place.name,
-                latitude = place.latitude,
-                longitude = place.longitude,
-                address = place.address,
-                thumbnailUrl = place.thumbnailUrl,
-                kakaoMapPlaceId = place.kakaoMapPlaceId,
-                averageRating = place.averageRating,
-                reviewCount = place.reviewCount,
-            )
     }
 }

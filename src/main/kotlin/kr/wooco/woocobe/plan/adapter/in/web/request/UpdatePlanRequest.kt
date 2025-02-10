@@ -10,7 +10,6 @@ data class UpdatePlanRequest(
     val secondaryRegion: String,
     val visitDate: LocalDate,
     val placeIds: List<Long>,
-    val categories: List<String>,
 ) {
     fun toCommand(
         userId: Long,
@@ -25,6 +24,5 @@ data class UpdatePlanRequest(
             secondaryRegion = secondaryRegion,
             visitDate = visitDate,
             placeIds = placeIds,
-            categories = categories,
         )
 }

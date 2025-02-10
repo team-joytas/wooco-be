@@ -2,7 +2,7 @@ package kr.wooco.woocobe.plan.adapter.out.persistence
 
 import kr.wooco.woocobe.plan.adapter.out.persistence.entity.PlanJpaEntity
 import kr.wooco.woocobe.plan.adapter.out.persistence.entity.PlanPlaceJpaEntity
-import kr.wooco.woocobe.plan.domain.entity.PlanPlace
+import kr.wooco.woocobe.plan.domain.vo.PlanPlace
 import org.springframework.stereotype.Component
 
 @Component
