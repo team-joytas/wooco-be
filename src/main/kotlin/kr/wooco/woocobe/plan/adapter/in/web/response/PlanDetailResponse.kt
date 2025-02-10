@@ -43,7 +43,7 @@ data class PlanPlaceResponse(
     val longitude: Double,
     val address: String,
     val thumbnailUrl: String,
-    val kakaoMapPlaceId: String,
+    val kakaoPlaceId: String,
     val averageRating: Double,
     val reviewCount: Long,
 ) {
@@ -60,7 +60,7 @@ data class PlanPlaceResponse(
                 longitude = place.longitude,
                 address = place.address,
                 thumbnailUrl = place.thumbnailUrl,
-                kakaoMapPlaceId = place.kakaoMapPlaceId,
+                kakaoPlaceId = place.kakaoPlaceId,
                 averageRating = place.averageRating,
                 reviewCount = place.reviewCount,
             )
