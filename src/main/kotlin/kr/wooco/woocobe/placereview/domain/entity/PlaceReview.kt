@@ -22,10 +22,6 @@ class PlaceReview(
         }
     }
 
-    init {
-        require(contents.isNotBlank()) { "리뷰 내용이 없습니다." }
-    }
-
     fun update(
         userId: Long,
         rating: Double,
