@@ -49,7 +49,7 @@ data class PlaceResult(
             fun listFrom(stats: List<PlaceOneLineReviewStat>): List<PlaceOneLineReviewStatResult> =
                 stats.map {
                     PlaceOneLineReviewStatResult(
-                        contents = it.contents,
+                        contents = it.contents.value,
                         count = it.count,
                     )
                 }
