@@ -7,7 +7,7 @@ import kr.wooco.woocobe.plan.application.port.out.DeletePlanPersistencePort
 import kr.wooco.woocobe.plan.application.port.out.LoadPlanPersistencePort
 import kr.wooco.woocobe.plan.application.port.out.SavePlanPersistencePort
 import kr.wooco.woocobe.plan.domain.entity.Plan
-import kr.wooco.woocobe.plan.domain.entity.PlanRegion
+import kr.wooco.woocobe.plan.domain.vo.PlanRegion
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,7 +21,7 @@ internal class PlanCommandService(
     DeletePlanUseCase {
     @Transactional
     override fun createPlan(command: CreatePlanUseCase.Command): Long {
-        val planRegion = PlanRegion.create(
+        val planRegion = PlanRegion(
             primaryRegion = command.primaryRegion,
             secondaryRegion = command.secondaryRegion,
         )
@@ -39,7 +39,7 @@ internal class PlanCommandService(
     @Transactional
     override fun updatePlan(command: UpdatePlanUseCase.Command) {
         val plan = loadPlanPersistencePort.getByPlanId(command.planId)
-        val region = PlanRegion.create(
+        val region = PlanRegion(
             primaryRegion = command.primaryRegion,
             secondaryRegion = command.secondaryRegion,
         )

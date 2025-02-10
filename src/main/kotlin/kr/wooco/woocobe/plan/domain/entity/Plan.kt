@@ -1,6 +1,8 @@
 package kr.wooco.woocobe.plan.domain.entity
 
 import kr.wooco.woocobe.plan.domain.exception.InvalidPlanWriterException
+import kr.wooco.woocobe.plan.domain.vo.PlanPlace
+import kr.wooco.woocobe.plan.domain.vo.PlanRegion
 import java.time.LocalDate
 
 class Plan(

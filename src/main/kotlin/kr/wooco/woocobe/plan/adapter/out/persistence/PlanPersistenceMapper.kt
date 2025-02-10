@@ -3,8 +3,8 @@ package kr.wooco.woocobe.plan.adapter.out.persistence
 import kr.wooco.woocobe.plan.adapter.out.persistence.entity.PlanJpaEntity
 import kr.wooco.woocobe.plan.adapter.out.persistence.entity.PlanPlaceJpaEntity
 import kr.wooco.woocobe.plan.domain.entity.Plan
-import kr.wooco.woocobe.plan.domain.entity.PlanPlace
-import kr.wooco.woocobe.plan.domain.entity.PlanRegion
+import kr.wooco.woocobe.plan.domain.vo.PlanPlace
+import kr.wooco.woocobe.plan.domain.vo.PlanRegion
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,7 +18,7 @@ class PlanPersistenceMapper {
             userId = planJpaEntity.userId,
             title = planJpaEntity.title,
             contents = planJpaEntity.contents,
-            region = PlanRegion.create(
+            region = PlanRegion(
                 primaryRegion = planJpaEntity.primaryRegion,
                 secondaryRegion = planJpaEntity.secondaryRegion,
             ),
