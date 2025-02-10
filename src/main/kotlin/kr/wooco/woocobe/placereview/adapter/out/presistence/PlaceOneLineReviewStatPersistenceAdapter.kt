@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 // TODO: 한줄평 통계 저장 기능 추가 --- 현재 조회만 가능
 
 @Component
-internal class PlaceOneLineReviewPersistenceAdapter(
+internal class PlaceOneLineReviewStatPersistenceAdapter(
     private val placeOneLineReviewStatJpaRepository: PlaceOneLineReviewStatJpaRepository,
     private val placeOneLineReviewStatPersistenceMapper: PlaceOneLineReviewStatPersistenceMapper,
 ) : LoadPlaceOneLineReviewStatPersistencePort {
