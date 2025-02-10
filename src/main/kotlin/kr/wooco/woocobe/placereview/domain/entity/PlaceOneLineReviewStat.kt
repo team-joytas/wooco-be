@@ -2,11 +2,11 @@ package kr.wooco.woocobe.placereview.domain.entity
 
 data class PlaceOneLineReviewStat(
     val id: Long,
-    val contents: OneLineReview,
+    val contents: Contents,
     var count: Long,
 ) {
     @JvmInline
-    value class OneLineReview(
+    value class Contents(
         val value: String,
     ) {
         init {
@@ -34,7 +34,7 @@ data class PlaceOneLineReviewStat(
         ): PlaceOneLineReviewStat =
             PlaceOneLineReviewStat(
                 id = 0L,
-                contents = OneLineReview(contents),
+                contents = Contents(contents),
                 count = count,
             )
     }

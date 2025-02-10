@@ -9,7 +9,7 @@ internal class PlaceOneLineReviewStatPersistenceMapper {
     fun toDomain(placeOneLineReviewStatJpaEntity: PlaceOneLineReviewStatJpaEntity): PlaceOneLineReviewStat =
         PlaceOneLineReviewStat(
             id = placeOneLineReviewStatJpaEntity.id,
-            contents = PlaceOneLineReviewStat.OneLineReview(
+            contents = PlaceOneLineReviewStat.Contents(
                 value = placeOneLineReviewStatJpaEntity.contents,
             ),
             count = placeOneLineReviewStatJpaEntity.count,
