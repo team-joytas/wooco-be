@@ -14,19 +14,11 @@ internal class PlaceOneLineReviewPersistenceAdapter(
 ) : LoadPlaceOneLineReviewStatPersistencePort {
     override fun getAllStatsByPlaceId(placeId: Long): List<PlaceOneLineReviewStat> {
         val placeOneLineReviewStatEntities = placeOneLineReviewStatJpaRepository.findAllByPlaceId(placeId)
-        return placeOneLineReviewStatEntities.map {
-            placeOneLineReviewStatPersistenceMapper.toDomain(
-                placeOneLineReviewStatJpaEntity = it,
-            )
-        }
+        return placeOneLineReviewStatEntities.map(placeOneLineReviewStatPersistenceMapper::toDomain)
     }
 
     override fun getAllStatsByPlaceIds(placeIds: List<Long>): List<PlaceOneLineReviewStat> {
         val placeOneLineReviewStatEntities = placeOneLineReviewStatJpaRepository.findAllByPlaceIdIn(placeIds)
-        return placeOneLineReviewStatEntities.map {
-            placeOneLineReviewStatPersistenceMapper.toDomain(
-                placeOneLineReviewStatJpaEntity = it,
-            )
-        }
+        return placeOneLineReviewStatEntities.map(placeOneLineReviewStatPersistenceMapper::toDomain)
     }
 }
