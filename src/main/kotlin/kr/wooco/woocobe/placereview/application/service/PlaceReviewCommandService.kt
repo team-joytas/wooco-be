@@ -18,7 +18,7 @@ class PlaceReviewCommandService(
 ) : CreatePlaceReviewUseCase,
     UpdatePlaceReviewUseCase,
     DeletePlaceReviewUseCase {
-    // TODO : 리뷰 추가시 이벤트 발생 --> 장소 리뷰 수 증가, 장소 평점 업데이트
+    // TODO : 리뷰 추가시 이벤트 발생 --> 장소 리뷰 수 증가, 장소 평점 업데이트, 한줄평 통계 업데이트
     @Transactional
     override fun createPlaceReview(command: CreatePlaceReviewUseCase.Command): Long {
         val placeReview = PlaceReview.create(
@@ -32,7 +32,7 @@ class PlaceReviewCommandService(
         return savePlaceReviewPersistencePort.savePlaceReview(placeReview).id
     }
 
-    // TODO : 리뷰 수정시 이벤트 발생 --> 장소 평점 업데이트
+    // TODO : 리뷰 수정시 이벤트 발생 --> 장소 평점 업데이트, 한줄평 통계 업데이트
     @Transactional
     override fun updatePlaceReview(command: UpdatePlaceReviewUseCase.Command) {
         val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)
@@ -46,7 +46,7 @@ class PlaceReviewCommandService(
         savePlaceReviewPersistencePort.savePlaceReview(placeReview)
     }
 
-    // TODO : 리뷰 삭제시 이벤트 발생 --> 장소 리뷰 수 감소, 장소 평점 업데이트
+    // TODO : 리뷰 삭제시 이벤트 발생 --> 장소 리뷰 수 감소, 장소 평점 업데이트, 한줄평 통계 업데이트
     @Transactional
     override fun deletePlaceReview(command: DeletePlaceReviewUseCase.Command) {
         val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)

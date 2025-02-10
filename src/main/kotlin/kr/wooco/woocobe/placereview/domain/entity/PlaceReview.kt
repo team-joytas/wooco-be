@@ -10,9 +10,18 @@ class PlaceReview(
     val writeDateTime: LocalDateTime,
     var rating: Double,
     var contents: String,
-    var oneLineReviews: List<PlaceOneLineReview>,
+    var oneLineReviews: List<OneLineReview>,
     var imageUrls: List<String>,
 ) {
+    @JvmInline
+    value class OneLineReview(
+        val value: String,
+    ) {
+        init {
+            require(value.isNotBlank()) { "한줄평 내용이 없습니다." }
+        }
+    }
+
     fun update(
         userId: Long,
         rating: Double,
@@ -24,7 +33,7 @@ class PlaceReview(
 
         this.rating = rating
         this.contents = contents
-        this.oneLineReviews = oneLineReviews.map { PlaceOneLineReview.from(it) }
+        this.oneLineReviews = oneLineReviews.map { OneLineReview(it) }
         this.imageUrls = imageUrls
     }
 
@@ -50,7 +59,7 @@ class PlaceReview(
                 writeDateTime = LocalDateTime.now(),
                 rating = rating,
                 contents = contents,
-                oneLineReviews = oneLineReviews.map { PlaceOneLineReview.from(it) },
+                oneLineReviews = oneLineReviews.map { OneLineReview(it) },
                 imageUrls = imageUrls,
             )
     }
