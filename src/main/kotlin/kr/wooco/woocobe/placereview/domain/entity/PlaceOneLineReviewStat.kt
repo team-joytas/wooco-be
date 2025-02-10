@@ -3,7 +3,7 @@ package kr.wooco.woocobe.placereview.domain.entity
 data class PlaceOneLineReviewStat(
     val id: Long,
     val contents: Contents,
-    var count: Long,
+    val count: Long,
 ) {
     @JvmInline
     value class Contents(
@@ -18,14 +18,9 @@ data class PlaceOneLineReviewStat(
         require(count >= 0) { "한줄평 통계의 개수는 0 이상이어야 합니다." }
     }
 
-    fun increaseCount() {
-        count++
-    }
+    fun increaseCount(): PlaceOneLineReviewStat = copy(count = count + 1)
 
-    fun decreaseCount() {
-        require(count > 0) { "한줄평 통계의 개수는 0 이하로 줄어들 수 없습니다." }
-        count--
-    }
+    fun decreaseCount(): PlaceOneLineReviewStat = copy(count = count - 1)
 
     companion object {
         fun create(
