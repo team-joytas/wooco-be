@@ -5,15 +5,17 @@ data class PlaceOneLineReviewStat(
     val contents: String,
     var count: Long,
 ) {
-    fun create(
-        contents: String,
-        count: Long,
-    ): PlaceOneLineReviewStat =
-        PlaceOneLineReviewStat(
-            id = 0L,
-            contents = contents,
-            count = count,
-        )
+    companion object {
+        fun create(
+            contents: String,
+            count: Long,
+        ): PlaceOneLineReviewStat =
+            PlaceOneLineReviewStat(
+                id = 0L,
+                contents = contents,
+                count = count,
+            )
+    }
 
     fun increaseCount() {
         count++
