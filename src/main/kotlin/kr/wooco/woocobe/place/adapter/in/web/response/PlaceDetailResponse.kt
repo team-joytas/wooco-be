@@ -13,7 +13,7 @@ data class PlaceDetailResponse(
     val reviewCount: Long,
     val phoneNumber: String,
     val thumbnailUrl: String,
-    val placeOneLineReviewStats: List<PlaceOneLineReviewStatDetailResponse>, // 🔥 한줄평 통계 추가
+    val placeOneLineReviewStats: List<PlaceOneLineReviewStatDetailResponse>,
 ) {
     companion object {
         fun from(placeResult: PlaceResult): PlaceDetailResponse =
