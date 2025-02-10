@@ -10,7 +10,6 @@ data class CreatePlanRequest(
     val secondaryRegion: String,
     val visitDate: LocalDate,
     val placeIds: List<Long>,
-    val categories: List<String>,
 ) {
     fun toCommand(userId: Long): CreatePlanUseCase.Command =
         CreatePlanUseCase.Command(
@@ -21,6 +20,5 @@ data class CreatePlanRequest(
             secondaryRegion = secondaryRegion,
             visitDate = visitDate,
             placeIds = placeIds,
-            categories = categories,
         )
 }

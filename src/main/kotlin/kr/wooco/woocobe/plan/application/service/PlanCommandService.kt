@@ -31,7 +31,6 @@ internal class PlanCommandService(
             contents = command.contents,
             region = planRegion,
             visitDate = command.visitDate,
-            categories = command.categories,
             placeIds = command.placeIds,
         )
         return savePlanPersistencePort.savePlan(plan).id
@@ -51,7 +50,6 @@ internal class PlanCommandService(
             region = region,
             visitDate = command.visitDate,
             placeIds = command.placeIds,
-            categories = command.categories,
         )
         savePlanPersistencePort.savePlan(plan)
     }

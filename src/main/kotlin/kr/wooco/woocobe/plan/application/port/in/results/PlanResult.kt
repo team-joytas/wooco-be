@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.plan.application.port.`in`.results
 
-import kr.wooco.woocobe.place.domain.model.Place
+import kr.wooco.woocobe.place.domain.entity.Place
 import kr.wooco.woocobe.plan.domain.entity.Plan
 import java.time.LocalDate
 
@@ -12,7 +12,6 @@ data class PlanResult(
     val secondaryRegion: String,
     val visitDate: LocalDate,
     val places: List<PlanPlaceResult>,
-    val categories: List<String>,
 ) {
     companion object {
         fun of(
@@ -31,7 +30,6 @@ data class PlanResult(
                     val place = requireNotNull(placeMap[planPlace.placeId])
                     PlanPlaceResult.of(planPlace.order, place)
                 },
-                categories = plan.categories.map { it.name },
             )
         }
 

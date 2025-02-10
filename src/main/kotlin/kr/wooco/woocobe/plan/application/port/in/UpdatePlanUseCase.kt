@@ -12,7 +12,6 @@ fun interface UpdatePlanUseCase {
         val secondaryRegion: String,
         val visitDate: LocalDate,
         val placeIds: List<Long>,
-        val categories: List<String>,
     )
 
     fun updatePlan(command: Command)

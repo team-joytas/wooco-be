@@ -1,10 +1,8 @@
 package kr.wooco.woocobe.plan.adapter.out.persistence
 
-import kr.wooco.woocobe.plan.adapter.out.persistence.entity.PlanCategoryJpaEntity
 import kr.wooco.woocobe.plan.adapter.out.persistence.entity.PlanJpaEntity
 import kr.wooco.woocobe.plan.adapter.out.persistence.entity.PlanPlaceJpaEntity
 import kr.wooco.woocobe.plan.domain.entity.Plan
-import kr.wooco.woocobe.plan.domain.entity.PlanCategory
 import kr.wooco.woocobe.plan.domain.entity.PlanPlace
 import kr.wooco.woocobe.plan.domain.entity.PlanRegion
 import org.springframework.stereotype.Component
@@ -14,7 +12,6 @@ class PlanPersistenceMapper {
     fun toDomain(
         planJpaEntity: PlanJpaEntity,
         planPlaceJpaEntities: List<PlanPlaceJpaEntity>,
-        planCategoryJpaEntities: List<PlanCategoryJpaEntity>,
     ): Plan =
         Plan(
             id = planJpaEntity.id,
@@ -27,7 +24,6 @@ class PlanPersistenceMapper {
             ),
             visitDate = planJpaEntity.visitDate,
             places = planPlaceJpaEntities.map { PlanPlace(order = it.order, placeId = it.placeId) },
-            categories = planCategoryJpaEntities.map { PlanCategory.from(it.name.uppercase()) },
         )
 
     fun toEntity(plan: Plan): PlanJpaEntity =

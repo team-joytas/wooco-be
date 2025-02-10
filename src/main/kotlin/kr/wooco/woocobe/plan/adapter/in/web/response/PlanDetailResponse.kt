@@ -12,7 +12,6 @@ data class PlanDetailResponse(
     val secondaryRegion: String,
     val visitDate: LocalDate,
     val places: List<PlanPlaceResponse>,
-    val categories: List<String>,
 ) {
     companion object {
         fun from(planResult: PlanResult): PlanDetailResponse {
@@ -29,7 +28,6 @@ data class PlanDetailResponse(
                     val place = requireNotNull(placeMap[planPlace.id])
                     PlanPlaceResponse.of(planPlace.order, place)
                 },
-                categories = planResult.categories,
             )
         }
 

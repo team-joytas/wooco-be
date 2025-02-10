@@ -11,7 +11,6 @@ class Plan(
     var region: PlanRegion,
     var visitDate: LocalDate,
     var places: List<PlanPlace>,
-    var categories: List<PlanCategory>,
 ) {
     fun update(
         userId: Long,
@@ -20,7 +19,6 @@ class Plan(
         region: PlanRegion,
         visitDate: LocalDate,
         placeIds: List<Long>,
-        categories: List<String>,
     ) {
         validateWriter(userId)
 
@@ -29,7 +27,6 @@ class Plan(
         this.region = region
         this.visitDate = visitDate
         this.places = processPlanPlaceOrder(placeIds)
-        this.categories = categories.map { PlanCategory.from(it) }
     }
 
     fun validateWriter(userId: Long) {
@@ -43,7 +40,6 @@ class Plan(
             contents: String,
             region: PlanRegion,
             visitDate: LocalDate,
-            categories: List<String>,
             placeIds: List<Long>,
         ): Plan =
             Plan(
@@ -53,7 +49,6 @@ class Plan(
                 contents = contents,
                 region = region,
                 visitDate = visitDate,
-                categories = categories.map { PlanCategory.from(it) },
                 places = processPlanPlaceOrder(placeIds),
             )
 
