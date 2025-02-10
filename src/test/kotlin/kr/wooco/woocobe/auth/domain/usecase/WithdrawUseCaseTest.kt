@@ -1,7 +1,7 @@
 // package kr.wooco.woocobe.auth.domain.usecase
 //
 // import io.kotest.core.spec.style.BehaviorSpec
-// import kr.wooco.woocobe.auth.infrastructure.cache.repository.AuthTokenRedisRepository
+// import kr.wooco.woocobe.auth.adapter.out.persistence.repository.AuthTokenRedisRepository
 // import kr.wooco.woocobe.auth.infrastructure.storage.repository.AuthUserJpaRepository
 // import kr.wooco.woocobe.support.IntegrationTest
 // import kr.wooco.woocobe.support.MysqlCleaner
