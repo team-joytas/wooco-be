@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.plan.adapter.`in`.web.response
 
-import kr.wooco.woocobe.plan.application.port.`in`.results.PlanPlaceResult
 import kr.wooco.woocobe.plan.application.port.`in`.results.PlanResult
 import java.time.LocalDate
 
@@ -50,7 +49,7 @@ data class PlanPlaceResponse(
     companion object {
         fun of(
             order: Int,
-            place: PlanPlaceResult,
+            place: PlanResult.PlanPlaceResult,
         ): PlanPlaceResponse =
             PlanPlaceResponse(
                 order = order,
