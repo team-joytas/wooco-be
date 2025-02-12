@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":infrastructure:rest"))
     implementation(project(":infrastructure:mysql"))
     implementation(project(":infrastructure:redis"))
+    implementation(project(":infrastructure:firebase"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
