@@ -1,0 +1,6 @@
+app:
+  jwt:
+    signing-key: ${JWT_SECRET_KEY:hong-jun2-eric-erica-jamie-hyden-hong-jun2-eric-erica-jamie-hyden}
+    expiration:
+      access-token: ${ACCESS_TOKEN_EXP:987654321}
+      refresh-token: ${REFRESH_TOKEN_EXP:987654321}

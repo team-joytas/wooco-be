@@ -1,0 +1,7 @@
+app:
+  social:
+    kakao:
+      client-id: ${KAKAO_CLIENT_ID}
+      secret-key: ${KAKAO_SECRET_KEY}
+      grant-type: ${KAKAO_GRANT_TYPE:authorization_code}
+      redirect-uri: ${KAKAO_REDIRECT_URI}

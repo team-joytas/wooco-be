@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: ${LOCAL_DDL_AUTO:update}
+    open-in-view: false
+
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/wooco-local-database?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
+    username: ${MYSQL_USERNAME:wooco-local-user}
+    password: ${MYSQL_PASSWORD:wooco-local-password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
