@@ -1,0 +1,3 @@
+firebase:
+  config:
+    path: "firebase/wooco-firebase-account.json"
