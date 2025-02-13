@@ -11,15 +11,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":support:common"))
 
-    implementation("org.springframework:spring-context")
-
     runtimeOnly("io.jsonwebtoken:jjwt-impl:${property("jjwtVersion")}")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:${property("jjwtVersion")}")
     implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
-}
-
-allOpen {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
 }

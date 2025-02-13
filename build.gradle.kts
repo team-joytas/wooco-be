@@ -16,12 +16,6 @@ allprojects {
     }
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
@@ -34,6 +28,10 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("io.github.oshai:kotlin-logging-jvm:${property("kotlinLoggingVersion")}")
 
+        implementation("org.springframework:spring-context")
+        implementation("org.springframework.boot:spring-boot-autoconfigure")
+        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.springframework.security:spring-security-test")
@@ -45,14 +43,20 @@ subprojects {
         testImplementation("io.mockk:mockk:${property("mockkVersion")}")
     }
 
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    kotlin {
+        compilerOptions {
+            freeCompilerArgs.addAll("-Xjsr305=strict")
+        }
+    }
+
     tasks.withType<Test> {
         useJUnitPlatform()
-    }
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
     }
 }
 
