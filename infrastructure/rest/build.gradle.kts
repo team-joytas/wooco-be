@@ -8,6 +8,7 @@ bootJar.enabled = false
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":support:common"))
 
     // rest
     implementation("org.springframework.boot:spring-boot-starter-web")

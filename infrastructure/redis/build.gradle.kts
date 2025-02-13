@@ -8,6 +8,7 @@ bootJar.enabled = false
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":support:common"))
 
     // redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")

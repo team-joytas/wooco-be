@@ -10,6 +10,7 @@ dependencies {
     apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
 
     implementation(project(":core"))
+    implementation(project(":support:common"))
 
     runtimeOnly("com.mysql:mysql-connector-j")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

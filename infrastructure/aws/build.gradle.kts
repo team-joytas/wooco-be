@@ -8,6 +8,7 @@ bootJar.enabled = false
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":support:common"))
 
     implementation("org.springframework:spring-context")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:${property("awsS3Version")}")
