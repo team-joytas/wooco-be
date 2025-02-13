@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.aws.common
+package kr.wooco.woocobe.aws.common.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import java.time.Duration

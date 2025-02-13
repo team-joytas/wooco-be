@@ -1,21 +1,27 @@
 package kr.wooco.woocobe.api
 
+import kr.wooco.woocobe.aws.common.config.AwsConfig
+import kr.wooco.woocobe.core.common.config.CoreConfig
+import kr.wooco.woocobe.jwt.common.config.JwtConfig
+import kr.wooco.woocobe.mysql.common.config.MysqlConfig
+import kr.wooco.woocobe.redis.common.config.RedisConfig
+import kr.wooco.woocobe.rest.common.config.RestConfig
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.Import
 
-@SpringBootApplication(
-    scanBasePackages = [
-        "kr.wooco.woocobe.common",
-        "kr.wooco.woocobe.api",
-        "kr.wooco.woocobe.core",
-        "kr.wooco.woocobe.jwt",
-        "kr.wooco.woocobe.aws",
-        "kr.wooco.woocobe.mysql",
-        "kr.wooco.woocobe.rest",
-        "kr.wooco.woocobe.redis",
+@Import(
+    value = [
+        CoreConfig::class,
+        AwsConfig::class,
+        JwtConfig::class,
+        MysqlConfig::class,
+        RedisConfig::class,
+        RestConfig::class,
     ],
 )
+@SpringBootApplication
 @ConfigurationPropertiesScan
 class WoocoBeApplication
 

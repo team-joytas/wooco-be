@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.aws.image
 
-import kr.wooco.woocobe.aws.common.S3Properties
+import kr.wooco.woocobe.aws.common.config.S3Properties
 import kr.wooco.woocobe.core.image.application.port.out.UploadClientPort
 import org.springframework.stereotype.Component
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
