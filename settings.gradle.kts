@@ -1,5 +1,18 @@
 rootProject.name = "wooco-be"
 
+include(
+    "core",
+    "bootstrap:api",
+    "support:common",
+    "support:metric",
+    "support:logging",
+    "infrastructure:aws",
+    "infrastructure:jwt",
+    "infrastructure:rest",
+    "infrastructure:mysql",
+    "infrastructure:redis",
+)
+
 pluginManagement {
     val kotlinVersion: String by settings
     val ktlintVersion: String by settings

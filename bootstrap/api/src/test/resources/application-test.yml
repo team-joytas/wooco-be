@@ -1,0 +1,71 @@
+server.shutdown: graceful
+
+spring:
+  cors:
+    allowed-methods: "OPTIONS,GET,POST,PUT,PATCH,DELETE"
+    allowed-origins: "http://localhost:3000,http://localhost:5173"
+    allowed-headers: "*"
+    exposed-headers: "*"
+    allow-credentials: true
+    max-age: 7200
+
+  cookie:
+    path: /
+    max-age: 987654321
+    same-site: Lax
+    domain: localhost
+    secure: false
+    http-only: true
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    show-sql: true
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/wooco-test-database?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: wooco-local-user
+    password: wooco-local-password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      repositories:
+        enabled: false
+
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      credentials:
+        access-key: ABCDEFGHIJKLMNOPQRST
+        secret-key: 1234567890abcdefghijklmnopqrstuvwxyz1234
+      s3:
+        bucket-name: mock-s3
+        content-type: image/webp
+        timeout: 60s
+
+  security:
+    user:
+      name: local
+      password: local
+
+app:
+  jwt:
+    signing-key: hong-jun2-eric-erica-jamie-hong-jun2-eric-erica-jamie
+    expiration:
+      access-token: 987654321
+      refresh-token: 987654321
+
+  social:
+    kakao:
+      client-id: fake-client-id
+      secret-key: fake-secret-key
+      grant-type: authorization_code
+      redirect-uri: fake-redirect-uri
+
+logging.level.root: info

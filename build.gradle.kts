@@ -7,63 +7,57 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
 }
 
-group = "${property("projectGroup")}"
-version = "${property("applicationVersion")}"
+allprojects {
+    group = "${property("projectGroup")}"
+    version = "${property("applicationVersion")}"
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+    repositories {
+        mavenCentral()
     }
 }
 
-repositories {
-    mavenCentral()
-}
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+    apply(plugin = "org.springframework.boot")
+    apply(plugin = "io.spring.dependency-management")
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
-allOpen {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
-}
+    dependencies {
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        implementation("io.github.oshai:kotlin-logging-jvm:${property("kotlinLoggingVersion")}")
 
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.github.f4b6a3:tsid-creator:${property("tsidCreatorVersion")}")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("io.github.oshai:kotlin-logging-jvm:${property("kotlinLoggingVersion")}")
-    implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
-    implementation("com.linecorp.kotlin-jdsl:jpql-dsl:${property("jdslVersion")}")
-    implementation("com.linecorp.kotlin-jdsl:jpql-render:${property("jdslVersion")}")
-    implementation("com.linecorp.kotlin-jdsl:spring-data-jpa-support:${property("jdslVersion")}")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springDocVersion")}")
-    implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:${property("awsS3Version")}")
-    runtimeOnly("com.mysql:mysql-connector-j")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:${property("jjwtVersion")}")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${property("jjwtVersion")}")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.security:spring-security-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:${property("kotestVersion")}")
-    testImplementation("io.kotest:kotest-framework-datatest:${property("kotestVersion")}")
-    testImplementation("io.kotest:kotest-assertions-core:${property("kotestVersion")}")
-    testImplementation("io.kotest.extensions:kotest-extensions-spring:${property("kotestExtensionsVersion")}")
-    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
-}
+        implementation("org.springframework:spring-context")
+        implementation("org.springframework.boot:spring-boot-autoconfigure")
+        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("org.springframework.security:spring-security-test")
+        testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+        testImplementation("io.kotest:kotest-runner-junit5-jvm:${property("kotestVersion")}")
+        testImplementation("io.kotest:kotest-framework-datatest:${property("kotestVersion")}")
+        testImplementation("io.kotest:kotest-assertions-core:${property("kotestVersion")}")
+        testImplementation("io.kotest.extensions:kotest-extensions-spring:${property("kotestExtensionsVersion")}")
+        testImplementation("io.mockk:mockk:${property("mockkVersion")}")
     }
-}
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    kotlin {
+        compilerOptions {
+            freeCompilerArgs.addAll("-Xjsr305=strict")
+        }
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }
 
 tasks.register<Copy>("addGitHooks") {

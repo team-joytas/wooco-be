@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    aws:
+      region:
+        static: ${AWS_STATIC_REGION:ap-northeast-2}
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+        timeout: ${AWS_S3_TIMEOUT:60s}
+        bucket-name: ${AWS_S3_BUCKET_NAME}
+        content-type: ${AWS_S3_CONTENT_TYPE}
