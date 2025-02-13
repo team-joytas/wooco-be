@@ -1,8 +1,9 @@
 server.shutdown: graceful
+server.forward-headers-strategy: native
 
-spring.application.name: wooco-be
+spring.application.name: wooco-be-api
+spring.config.import: optional:file:.env[.properties]
 spring.profiles.active: ${PROFILE:local}
-
 spring.profiles.include:
   - core
   - redis

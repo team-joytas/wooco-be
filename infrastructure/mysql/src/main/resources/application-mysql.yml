@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: ${LOCAL_DDL_AUTO:update}
+      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
     open-in-view: false
 
   datasource:
