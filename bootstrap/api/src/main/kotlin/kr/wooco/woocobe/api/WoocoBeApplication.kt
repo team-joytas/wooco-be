@@ -2,7 +2,7 @@ package kr.wooco.woocobe.api
 
 import kr.wooco.woocobe.aws.common.config.AwsConfig
 import kr.wooco.woocobe.core.common.config.CoreConfig
-import kr.wooco.woocobe.firebase.common.config.FirebaseConfig
+import kr.wooco.woocobe.fcm.common.config.FcmConfig
 import kr.wooco.woocobe.jwt.common.config.JwtConfig
 import kr.wooco.woocobe.mysql.common.config.MysqlConfig
 import kr.wooco.woocobe.redis.common.config.RedisConfig
@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Import
         MysqlConfig::class,
         RedisConfig::class,
         RestConfig::class,
-        FirebaseConfig::class,
+        FcmConfig::class,
     ],
 )
 @SpringBootApplication

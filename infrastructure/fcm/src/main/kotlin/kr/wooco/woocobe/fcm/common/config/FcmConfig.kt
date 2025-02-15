@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.firebase.common.config
+package kr.wooco.woocobe.fcm.common.config
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
@@ -12,19 +12,17 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
 
 @Configuration
-@ComponentScan(basePackages = ["kr.wooco.woocobe.firebase"])
-@ConfigurationPropertiesScan(basePackages = ["kr.wooco.woocobe.firebase"])
-class FirebaseConfig {
-    @Value("\${firebase.config.path}")
-    lateinit var firebaseConfigPath: String
-
+@ComponentScan(basePackages = ["kr.wooco.woocobe.fcm"])
+@ConfigurationPropertiesScan(basePackages = ["kr.wooco.woocobe.fcm"])
+class FcmConfig(
+    @Value("\${fcm.config.path}") private val fcmConfig: String,
+) {
     @Bean
     fun firebaseApp(): FirebaseApp {
-        val resource = ClassPathResource(firebaseConfigPath)
-        val serviceAccount = resource.inputStream
+        val resource = ClassPathResource(fcmConfig)
         val options = FirebaseOptions
             .builder()
-            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+            .setCredentials(GoogleCredentials.fromStream(resource.inputStream))
             .build()
         return FirebaseApp.initializeApp(options)
     }

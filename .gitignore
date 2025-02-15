@@ -44,4 +44,4 @@ out/
 .DS_Store
 
 ### Firebase ###
-/**/src/main/resources/firebase
+wooco-firebase-account.json
