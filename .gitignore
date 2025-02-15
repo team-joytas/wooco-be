@@ -42,3 +42,6 @@ out/
 
 ### Local ###
 .DS_Store
+
+### Firebase ###
+wooco-firebase-account.json

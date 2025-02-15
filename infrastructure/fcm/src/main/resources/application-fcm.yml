@@ -1,0 +1,3 @@
+fcm:
+  config:
+    path: "static/wooco-firebase-account.json"

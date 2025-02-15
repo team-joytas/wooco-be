@@ -11,6 +11,7 @@ include(
     "infrastructure:rest",
     "infrastructure:mysql",
     "infrastructure:redis",
+    "infrastructure:fcm",
 )
 
 pluginManagement {
