@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface PlanJpaRepository : JpaRepository<PlanJpaEntity, Long> {
     fun findAllByUserId(userId: Long): List<PlanJpaEntity>
+
+    fun findAllByIsSharedFalse(): List<PlanJpaEntity>
 }
