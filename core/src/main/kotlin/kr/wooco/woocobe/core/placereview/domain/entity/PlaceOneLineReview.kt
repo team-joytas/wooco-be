@@ -1,9 +1,10 @@
 package kr.wooco.woocobe.core.placereview.domain.entity
 
-data class PlaceOneLineReviewStat(
+data class PlaceOneLineReview(
     val id: Long,
+    val placeReviewId: Long,
+    val placeId: Long,
     val contents: Contents,
-    val count: Long,
 ) {
     @JvmInline
     value class Contents(
@@ -11,26 +12,21 @@ data class PlaceOneLineReviewStat(
     ) {
         init {
             require(value.isNotBlank()) { "한줄평 내용이 없습니다." }
+            require(value.length <= 7) { "한줄평 내용은 7자를 넘을 수 없습니다." }
         }
     }
 
-    init {
-        require(count >= 0) { "한줄평 통계의 개수는 0 이상이어야 합니다." }
-    }
-
-    fun increaseCount(): PlaceOneLineReviewStat = copy(count = count + 1)
-
-    fun decreaseCount(): PlaceOneLineReviewStat = copy(count = count - 1)
-
     companion object {
         fun create(
+            placeId: Long,
+            placeReviewId: Long,
             contents: String,
-            count: Long,
-        ): PlaceOneLineReviewStat =
-            PlaceOneLineReviewStat(
+        ): PlaceOneLineReview =
+            PlaceOneLineReview(
                 id = 0L,
+                placeId = placeId,
+                placeReviewId = placeReviewId,
                 contents = Contents(contents),
-                count = count,
             )
     }
 }
