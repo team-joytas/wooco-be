@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.core.placereview.application.port.`in`.result
 
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.user.domain.entity.User
 import java.time.LocalDateTime
@@ -11,13 +12,14 @@ data class PlaceReviewResult(
     val writerProfileUrl: String,
     val contents: String,
     val rating: Double,
-    val oneLineReviews: List<String>,
+    val oneLineReviews: List<PlaceOneLineReviewResult>,
     val reviewImageUrls: List<String>,
     val createdAt: LocalDateTime,
 ) {
     companion object {
         fun of(
             placeReview: PlaceReview,
+            placeOneLineReviews: List<PlaceOneLineReview>,
             user: User,
         ): PlaceReviewResult =
             PlaceReviewResult(
@@ -27,19 +29,22 @@ data class PlaceReviewResult(
                 writerProfileUrl = user.profile.profileUrl,
                 contents = placeReview.contents,
                 rating = placeReview.rating,
-                oneLineReviews = placeReview.oneLineReviews.map { it.value },
+                oneLineReviews = PlaceOneLineReviewResult.listFrom(placeOneLineReviews),
                 reviewImageUrls = placeReview.imageUrls,
                 createdAt = placeReview.writeDateTime,
             )
 
         fun listOf(
             placeReviews: List<PlaceReview>,
+            placeOneLineReviews: List<PlaceOneLineReview>,
             writers: List<User>,
         ): List<PlaceReviewResult> {
             val writerMap = writers.associateBy { it.id }
+            val oneLineReviewsMap = placeOneLineReviews.groupBy { it.placeReviewId }
 
             return placeReviews.map { placeReview ->
                 val writer = writerMap[placeReview.userId]!!
+                val oneLineReviews = oneLineReviewsMap[placeReview.id] ?: emptyList()
 
                 PlaceReviewResult(
                     placeReviewId = placeReview.id,
@@ -48,11 +53,24 @@ data class PlaceReviewResult(
                     writerProfileUrl = writer.profile.profileUrl,
                     contents = placeReview.contents,
                     rating = placeReview.rating,
-                    oneLineReviews = placeReview.oneLineReviews.map { it.value },
+                    oneLineReviews = PlaceOneLineReviewResult.listFrom(oneLineReviews),
                     reviewImageUrls = placeReview.imageUrls,
                     createdAt = placeReview.writeDateTime,
                 )
             }
+        }
+    }
+
+    data class PlaceOneLineReviewResult(
+        val contents: String,
+    ) {
+        companion object {
+            fun listFrom(contents: List<PlaceOneLineReview>): List<PlaceOneLineReviewResult> =
+                contents.map {
+                    PlaceOneLineReviewResult(
+                        contents = it.contents.value,
+                    )
+                }
         }
     }
 }

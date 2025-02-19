@@ -3,38 +3,27 @@ package kr.wooco.woocobe.core.placereview.domain.entity
 import kr.wooco.woocobe.core.placereview.domain.exception.InvalidPlaceReviewWriterException
 import java.time.LocalDateTime
 
-class PlaceReview(
+data class PlaceReview(
     val id: Long,
     val userId: Long,
     val placeId: Long,
     val writeDateTime: LocalDateTime,
-    var rating: Double,
-    var contents: String,
-    var oneLineReviews: List<OneLineReview>,
-    var imageUrls: List<String>,
+    val rating: Double,
+    val contents: String,
+    val imageUrls: List<String>,
 ) {
-    @JvmInline
-    value class OneLineReview(
-        val value: String,
-    ) {
-        init {
-            require(value.isNotBlank()) { "한줄평 내용이 없습니다." }
-        }
-    }
-
     fun update(
         userId: Long,
         rating: Double,
         contents: String,
-        oneLineReviews: List<String>,
         imageUrls: List<String>,
-    ) = apply {
+    ): PlaceReview {
         isValidWriter(userId)
-
-        this.rating = rating
-        this.contents = contents
-        this.oneLineReviews = oneLineReviews.map { OneLineReview(it) }
-        this.imageUrls = imageUrls
+        return copy(
+            rating = rating,
+            contents = contents,
+            imageUrls = imageUrls,
+        )
     }
 
     fun isValidWriter(userId: Long) {
@@ -49,7 +38,6 @@ class PlaceReview(
             placeId: Long,
             rating: Double,
             contents: String,
-            oneLineReviews: List<String>,
             imageUrls: List<String>,
         ): PlaceReview =
             PlaceReview(
@@ -59,7 +47,6 @@ class PlaceReview(
                 writeDateTime = LocalDateTime.now(),
                 rating = rating,
                 contents = contents,
-                oneLineReviews = oneLineReviews.map { OneLineReview(it) },
                 imageUrls = imageUrls,
             )
     }
