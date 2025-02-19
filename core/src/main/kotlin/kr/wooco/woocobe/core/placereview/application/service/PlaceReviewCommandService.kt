@@ -3,7 +3,7 @@ package kr.wooco.woocobe.core.placereview.application.service
 import kr.wooco.woocobe.core.placereview.application.port.`in`.CreatePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.DeletePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.UpdatePlaceReviewUseCase
-import kr.wooco.woocobe.core.placereview.application.port.out.DeletePlaceOneLineReviewPersistencePort
+import kr.wooco.woocobe.core.placereview.application.port.out.DeleteAllPlaceOneLineReviewPersistencePort
 import kr.wooco.woocobe.core.placereview.application.port.out.DeletePlaceReviewPersistencePort
 import kr.wooco.woocobe.core.placereview.application.port.out.LoadPlaceReviewPersistencePort
 import kr.wooco.woocobe.core.placereview.application.port.out.SaveAllPlaceOneLineReviewPersistencePort
@@ -23,7 +23,7 @@ class PlaceReviewCommandService(
     private val savePlaceReviewPersistencePort: SavePlaceReviewPersistencePort,
     private val deletePlaceReviewPersistencePort: DeletePlaceReviewPersistencePort,
     private val saveAllPlaceOneLineReviewPersistencePort: SaveAllPlaceOneLineReviewPersistencePort,
-    private val deletePlaceOneLineReviewPersistencePort: DeletePlaceOneLineReviewPersistencePort,
+    private val deleteAllPlaceOneLineReviewPersistencePort: DeleteAllPlaceOneLineReviewPersistencePort,
     private val eventPublisher: ApplicationEventPublisher,
 ) : CreatePlaceReviewUseCase,
     UpdatePlaceReviewUseCase,
@@ -69,7 +69,7 @@ class PlaceReviewCommandService(
         )
         savePlaceReviewPersistencePort.savePlaceReview(placeReview)
 
-        deletePlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
+        deleteAllPlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
         val placeOneLineReviews = command.oneLineReviews.map { contents ->
             PlaceOneLineReview.create(
                 placeId = placeReview.placeId,
@@ -92,7 +92,7 @@ class PlaceReviewCommandService(
     override fun deletePlaceReview(command: DeletePlaceReviewUseCase.Command) {
         val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)
         placeReview.isValidWriter(command.userId)
-        deletePlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
+        deleteAllPlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
         deletePlaceReviewPersistencePort.deletePlaceReviewId(command.placeReviewId)
 
         eventPublisher.publishEvent(

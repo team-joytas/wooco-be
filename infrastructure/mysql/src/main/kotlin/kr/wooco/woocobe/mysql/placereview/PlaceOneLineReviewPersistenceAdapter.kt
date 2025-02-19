@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.mysql.placereview
 
-import kr.wooco.woocobe.core.placereview.application.port.out.DeletePlaceOneLineReviewPersistencePort
+import kr.wooco.woocobe.core.placereview.application.port.out.DeleteAllPlaceOneLineReviewPersistencePort
 import kr.wooco.woocobe.core.placereview.application.port.out.LoadPlaceOneLineReviewPersistencePort
 import kr.wooco.woocobe.core.placereview.application.port.out.SaveAllPlaceOneLineReviewPersistencePort
 import kr.wooco.woocobe.core.placereview.application.service.dto.PlaceOneLineReviewStat
@@ -14,7 +14,7 @@ internal class PlaceOneLineReviewPersistenceAdapter(
     private val placeOneLineReviewJpaRepository: PlaceOneLineReviewJpaRepository,
     private val placeOneLineReviewPersistenceMapper: PlaceOneLineReviewPersistenceMapper,
 ) : LoadPlaceOneLineReviewPersistencePort,
-    DeletePlaceOneLineReviewPersistencePort,
+    DeleteAllPlaceOneLineReviewPersistencePort,
     SaveAllPlaceOneLineReviewPersistencePort {
     override fun saveAllPlaceOneLineReview(placeOneLineReview: List<PlaceOneLineReview>): List<PlaceOneLineReview> {
         val placeOneLineReviewStatEntities =
