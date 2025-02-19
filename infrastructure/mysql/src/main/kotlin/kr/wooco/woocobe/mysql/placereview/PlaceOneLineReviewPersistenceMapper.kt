@@ -1,21 +1,25 @@
 package kr.wooco.woocobe.mysql.placereview
 
-import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceOneLineReviewJpaEntity
 import org.springframework.stereotype.Component
 
 @Component
 internal class PlaceOneLineReviewPersistenceMapper {
-    fun toDomain(placeOneLineReviewJpaEntity: PlaceOneLineReviewJpaEntity): PlaceReview.OneLineReview =
-        PlaceReview.OneLineReview(value = placeOneLineReviewJpaEntity.contents)
+    fun toDomain(placeOneLineReviewJpaEntity: PlaceOneLineReviewJpaEntity): PlaceOneLineReview =
+        PlaceOneLineReview(
+            id = placeOneLineReviewJpaEntity.placeReviewId,
+            placeId = placeOneLineReviewJpaEntity.placeId,
+            placeReviewId = placeOneLineReviewJpaEntity.placeReviewId,
+            contents = PlaceOneLineReview.Contents(
+                value = placeOneLineReviewJpaEntity.contents,
+            ),
+        )
 
-    fun toEntity(
-        placeReview: PlaceReview,
-        placeOneLineReview: PlaceReview.OneLineReview,
-    ): PlaceOneLineReviewJpaEntity =
+    fun toEntity(placeOneLineReview: PlaceOneLineReview): PlaceOneLineReviewJpaEntity =
         PlaceOneLineReviewJpaEntity(
-            placeId = placeReview.placeId,
-            placeReviewId = placeReview.id,
-            contents = placeOneLineReview.value,
+            placeId = placeOneLineReview.placeId,
+            placeReviewId = placeOneLineReview.placeReviewId,
+            contents = placeOneLineReview.contents.value,
         )
 }

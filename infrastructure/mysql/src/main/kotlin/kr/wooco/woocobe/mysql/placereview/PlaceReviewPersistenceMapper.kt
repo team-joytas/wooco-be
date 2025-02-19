@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component
 internal class PlaceReviewPersistenceMapper {
     fun toDomain(
         placeReviewJpaEntity: PlaceReviewJpaEntity,
-        placeOneLineReviewJpaEntities: List<PlaceOneLineReviewJpaEntity>,
         placeReviewImageJpaEntities: List<PlaceReviewImageJpaEntity>,
     ): PlaceReview =
         PlaceReview(
@@ -20,7 +19,6 @@ internal class PlaceReviewPersistenceMapper {
             rating = placeReviewJpaEntity.rating,
             contents = placeReviewJpaEntity.contents,
             writeDateTime = placeReviewJpaEntity.createdAt,
-            oneLineReviews = placeOneLineReviewJpaEntities.map { PlaceReview.OneLineReview(it.contents) },
             imageUrls = placeReviewImageJpaEntities.map { it.imageUrl },
         )
 
