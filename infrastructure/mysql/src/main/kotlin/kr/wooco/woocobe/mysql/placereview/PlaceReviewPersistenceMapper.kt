@@ -1,7 +1,6 @@
 package kr.wooco.woocobe.mysql.placereview
 
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
-import kr.wooco.woocobe.mysql.placereview.entity.PlaceOneLineReviewJpaEntity
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewImageJpaEntity
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewJpaEntity
 import org.springframework.stereotype.Component
