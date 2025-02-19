@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.core.place.application.port.`in`.result
 
 import kr.wooco.woocobe.core.place.domain.entity.Place
-import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReviewStat
+import kr.wooco.woocobe.core.placereview.application.service.dto.PlaceOneLineReviewStat
 
 data class PlaceResult(
     val placeId: Long,
@@ -19,7 +19,7 @@ data class PlaceResult(
     companion object {
         fun of(
             place: Place,
-            placeOneLineReviewStats: List<PlaceOneLineReviewStat>,
+            placeOneLineReviewsStats: List<PlaceOneLineReviewStat>,
         ): PlaceResult =
             PlaceResult(
                 placeId = place.id,
@@ -32,13 +32,25 @@ data class PlaceResult(
                 reviewCount = place.reviewCount,
                 phoneNumber = place.phoneNumber,
                 thumbnailUrl = place.thumbnailUrl,
-                placeOneLineReviewStats = PlaceOneLineReviewStatResult.listFrom(placeOneLineReviewStats),
+                placeOneLineReviewStats = PlaceOneLineReviewStatResult.listFrom(placeOneLineReviewsStats),
             )
 
-        fun listOf(
-            place: List<Place>,
-            placeOneLineReviewStats: List<PlaceOneLineReviewStat>,
-        ): List<PlaceResult> = place.map { of(it, placeOneLineReviewStats) }
+        fun listOf(places: List<Place>): List<PlaceResult> =
+            places.map {
+                PlaceResult(
+                    placeId = it.id,
+                    placeName = it.name,
+                    latitude = it.latitude,
+                    longitude = it.longitude,
+                    address = it.address,
+                    kakaoPlaceId = it.kakaoPlaceId,
+                    averageRating = it.averageRating,
+                    reviewCount = it.reviewCount,
+                    phoneNumber = it.phoneNumber,
+                    thumbnailUrl = it.thumbnailUrl,
+                    placeOneLineReviewStats = emptyList(),
+                )
+            }
     }
 
     data class PlaceOneLineReviewStatResult(
@@ -49,7 +61,7 @@ data class PlaceResult(
             fun listFrom(stats: List<PlaceOneLineReviewStat>): List<PlaceOneLineReviewStatResult> =
                 stats.map {
                     PlaceOneLineReviewStatResult(
-                        contents = it.contents.value,
+                        contents = it.contents,
                         count = it.count,
                     )
                 }
