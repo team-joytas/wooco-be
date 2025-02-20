@@ -58,9 +58,9 @@ data class PlaceOneLineReviewResponse(
     val contents: String,
 ) {
     companion object {
-        fun from(oneLineReview: String): PlaceOneLineReviewResponse =
+        fun from(oneLineReview: PlaceReviewResult.PlaceOneLineReviewResult): PlaceOneLineReviewResponse =
             PlaceOneLineReviewResponse(
-                contents = oneLineReview,
+                contents = oneLineReview.contents,
             )
     }
 }

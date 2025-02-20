@@ -1,7 +1,6 @@
 package kr.wooco.woocobe.mysql.placereview
 
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
-import kr.wooco.woocobe.mysql.placereview.entity.PlaceOneLineReviewJpaEntity
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewImageJpaEntity
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewJpaEntity
 import org.springframework.stereotype.Component
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component
 internal class PlaceReviewPersistenceMapper {
     fun toDomain(
         placeReviewJpaEntity: PlaceReviewJpaEntity,
-        placeOneLineReviewJpaEntities: List<PlaceOneLineReviewJpaEntity>,
         placeReviewImageJpaEntities: List<PlaceReviewImageJpaEntity>,
     ): PlaceReview =
         PlaceReview(
@@ -20,7 +18,6 @@ internal class PlaceReviewPersistenceMapper {
             rating = placeReviewJpaEntity.rating,
             contents = placeReviewJpaEntity.contents,
             writeDateTime = placeReviewJpaEntity.createdAt,
-            oneLineReviews = placeOneLineReviewJpaEntities.map { PlaceReview.OneLineReview(it.contents) },
             imageUrls = placeReviewImageJpaEntities.map { it.imageUrl },
         )
 
