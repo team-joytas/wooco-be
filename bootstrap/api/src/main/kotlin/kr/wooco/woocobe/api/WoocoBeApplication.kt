@@ -2,6 +2,7 @@ package kr.wooco.woocobe.api
 
 import kr.wooco.woocobe.aws.common.config.AwsConfig
 import kr.wooco.woocobe.core.common.config.CoreConfig
+import kr.wooco.woocobe.core.common.config.SchedulingConfig
 import kr.wooco.woocobe.fcm.common.config.FcmConfig
 import kr.wooco.woocobe.jwt.common.config.JwtConfig
 import kr.wooco.woocobe.mysql.common.config.MysqlConfig
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.Import
         RedisConfig::class,
         RestConfig::class,
         FcmConfig::class,
+        SchedulingConfig::class,
     ],
 )
 @SpringBootApplication

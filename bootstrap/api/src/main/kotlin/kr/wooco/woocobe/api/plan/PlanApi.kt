@@ -42,4 +42,10 @@ interface PlanApi {
         @AuthenticationPrincipal userId: Long,
         @PathVariable planId: Long,
     ): ResponseEntity<Unit>
+
+    @SecurityRequirement(name = "JWT")
+    fun sharePlan(
+        @AuthenticationPrincipal userId: Long,
+        @PathVariable planId: Long,
+    ): ResponseEntity<Unit>
 }
