@@ -5,8 +5,8 @@ import kr.wooco.woocobe.core.coursecomment.domain.entity.CourseComment
 
 class CourseCommentCreateEvent(
     val courseId: Long,
+    val courseTitle: String,
     val courseWriterId: Long,
-    val courseCommentId: Long,
     val commentWriterId: Long,
 ) {
     companion object {
@@ -16,8 +16,8 @@ class CourseCommentCreateEvent(
         ): CourseCommentCreateEvent =
             CourseCommentCreateEvent(
                 courseId = course.id,
+                courseTitle = course.title,
                 courseWriterId = course.userId,
-                courseCommentId = courseComment.id,
                 commentWriterId = courseComment.userId,
             )
     }
