@@ -15,6 +15,12 @@ spring.profiles.include:
   - fcm
 
 spring:
+  threads:
+    async:
+      pool:
+        max: ${ASYNC_THREADS_MAX_POOL:10}
+        core: ${ASYNC_THREADS_MAX_POOL:5}
+
   cookie:
     path: ${COOKIE_PATH:/}
     max-age: ${COOKIE_MAX_AGE:987654321}
