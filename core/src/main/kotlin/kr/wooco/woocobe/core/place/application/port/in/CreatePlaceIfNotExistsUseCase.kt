@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.core.place.application.port.`in`
 
-fun interface CreatePlaceUseCase {
+fun interface CreatePlaceIfNotExistsUseCase {
     data class Command(
         val name: String,
         val latitude: Double,
@@ -10,5 +10,5 @@ fun interface CreatePlaceUseCase {
         val phoneNumber: String,
     )
 
-    fun createPlace(command: Command): Long
+    fun createPlaceIfNotExists(command: Command): Long
 }
