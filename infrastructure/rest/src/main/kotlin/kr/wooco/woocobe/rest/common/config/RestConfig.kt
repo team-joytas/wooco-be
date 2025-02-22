@@ -2,6 +2,7 @@ package kr.wooco.woocobe.rest.common.config
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kr.wooco.woocobe.rest.auth.kakao.KakaoSocialAuthApiClient
+import kr.wooco.woocobe.rest.place.GooglePlaceApiClient
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -17,11 +18,16 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory
 @ConfigurationPropertiesScan(basePackages = ["kr.wooco.woocobe.rest"])
 class RestConfig {
     @Bean
-    fun kakaoSocialAuthApiClient(): KakaoSocialAuthApiClient =
+    fun googlePlaceApiClient(): GooglePlaceApiClient = createHttpInterface(GooglePlaceApiClient::class.java)
+
+    @Bean
+    fun kakaoSocialAuthApiClient(): KakaoSocialAuthApiClient = createHttpInterface(KakaoSocialAuthApiClient::class.java)
+
+    private fun <T> createHttpInterface(clazz: Class<T>): T =
         HttpServiceProxyFactory
             .builderFor(RestClientAdapter.create(generateRestClient()))
             .build()
-            .createClient(KakaoSocialAuthApiClient::class.java)
+            .createClient(clazz)
 
     private fun generateRestClient(): RestClient =
         RestClient
