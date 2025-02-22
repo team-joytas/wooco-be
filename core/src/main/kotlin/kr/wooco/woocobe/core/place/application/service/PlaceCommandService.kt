@@ -1,8 +1,9 @@
 package kr.wooco.woocobe.core.place.application.service
 
 import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceIfNotExistsUseCase
-import kr.wooco.woocobe.core.place.application.port.`in`.PlaceClientPort
+import kr.wooco.woocobe.core.place.application.port.`in`.UpdatePlaceImageUseCase
 import kr.wooco.woocobe.core.place.application.port.out.LoadPlacePersistencePort
+import kr.wooco.woocobe.core.place.application.port.out.PlaceClientPort
 import kr.wooco.woocobe.core.place.application.port.out.SavePlacePersistencePort
 import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
@@ -16,7 +17,8 @@ internal class PlaceCommandService(
     private val placeClientPort: PlaceClientPort,
     private val savePlacePersistencePort: SavePlacePersistencePort,
     private val loadPlacePersistencePort: LoadPlacePersistencePort,
-) : CreatePlaceIfNotExistsUseCase {
+) : CreatePlaceIfNotExistsUseCase,
+    UpdatePlaceImageUseCase {
     @Transactional
     override fun createPlaceIfNotExists(command: CreatePlaceIfNotExistsUseCase.Command): Long =
         loadPlacePersistencePort.getOrNullByKakaoMapPlaceId(command.kakaoPlaceId)?.id
@@ -35,5 +37,13 @@ internal class PlaceCommandService(
         )
         eventPublisher.publishEvent(PlaceCreateEvent.from(place))
         return place.id
+    }
+
+    // NOTE - Hong: 외부 API 호출이 연동되어있어 Adapter 레이어에서 Transactional 정의
+    override fun updatePlaceImage(command: UpdatePlaceImageUseCase.Command) {
+        val place = loadPlacePersistencePort.getByPlaceId(command.placeId)
+        placeClientPort.fetchPlaceThumbnailUrl(place.name, place.address)?.let {
+            savePlacePersistencePort.savePlace(place.updateThumbnail(it))
+        }
     }
 }
