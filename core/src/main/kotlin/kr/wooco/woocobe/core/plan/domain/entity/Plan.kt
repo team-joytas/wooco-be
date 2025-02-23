@@ -5,12 +5,13 @@ import kr.wooco.woocobe.core.plan.domain.vo.PlanPlace
 import kr.wooco.woocobe.core.plan.domain.vo.PlanRegion
 import java.time.LocalDate
 
-class Plan(
+data class Plan(
     val id: Long,
     val userId: Long,
     var title: String,
     var contents: String,
     var region: PlanRegion,
+    var isShared: Boolean,
     var visitDate: LocalDate,
     var places: List<PlanPlace>,
 ) {
@@ -35,6 +36,10 @@ class Plan(
         if (this.userId != userId) throw InvalidPlanWriterException
     }
 
+    fun share() {
+        if (!isShared) isShared = true
+    }
+
     companion object {
         fun create(
             userId: Long,
@@ -50,6 +55,7 @@ class Plan(
                 title = title,
                 contents = contents,
                 region = region,
+                isShared = false,
                 visitDate = visitDate,
                 places = processPlanPlaceOrder(placeIds),
             )

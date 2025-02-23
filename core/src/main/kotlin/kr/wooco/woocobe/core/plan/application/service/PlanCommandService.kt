@@ -2,6 +2,7 @@ package kr.wooco.woocobe.core.plan.application.service
 
 import kr.wooco.woocobe.core.plan.application.port.`in`.CreatePlanUseCase
 import kr.wooco.woocobe.core.plan.application.port.`in`.DeletePlanUseCase
+import kr.wooco.woocobe.core.plan.application.port.`in`.SharePlanUseCase
 import kr.wooco.woocobe.core.plan.application.port.`in`.UpdatePlanUseCase
 import kr.wooco.woocobe.core.plan.application.port.out.DeletePlanPersistencePort
 import kr.wooco.woocobe.core.plan.application.port.out.LoadPlanPersistencePort
@@ -18,7 +19,8 @@ internal class PlanCommandService(
     private val deletePlanPersistencePort: DeletePlanPersistencePort,
 ) : CreatePlanUseCase,
     UpdatePlanUseCase,
-    DeletePlanUseCase {
+    DeletePlanUseCase,
+    SharePlanUseCase {
     @Transactional
     override fun createPlan(command: CreatePlanUseCase.Command): Long {
         val planRegion = PlanRegion(
@@ -59,5 +61,13 @@ internal class PlanCommandService(
         val plan = loadPlanPersistencePort.getByPlanId(command.planId)
         plan.validateWriter(command.userId)
         deletePlanPersistencePort.deleteByPlanId(plan.id)
+    }
+
+    @Transactional
+    override fun sharePlan(command: SharePlanUseCase.Command) {
+        val plan = loadPlanPersistencePort.getByPlanId(command.planId)
+        plan.validateWriter(command.userId)
+        plan.share()
+        savePlanPersistencePort.savePlan(plan)
     }
 }

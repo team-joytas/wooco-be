@@ -39,6 +39,19 @@ internal class PlanPersistenceAdapter(
         }
     }
 
+    override fun getAllByIsSharedFalse(): List<Plan> {
+        val planEntities = planJpaRepository.findAllByIsSharedFalse()
+        val planIds = planEntities.map { it.id }
+        val planPlaceEntities = planPlaceJpaRepository.findAllByPlanIdIn(planIds)
+
+        return planEntities.map { planJpaEntity ->
+            planPersistenceMapper.toDomain(
+                planJpaEntity = planJpaEntity,
+                planPlaceJpaEntities = planPlaceEntities.filter { it.planId == planJpaEntity.id },
+            )
+        }
+    }
+
     override fun savePlan(plan: Plan): Plan {
         val planEntity = planJpaRepository.save(planPersistenceMapper.toEntity(plan))
 
