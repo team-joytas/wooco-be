@@ -3,7 +3,7 @@ package kr.wooco.woocobe.api.place
 import kr.wooco.woocobe.api.place.request.CreatePlaceRequest
 import kr.wooco.woocobe.api.place.response.CreatePlaceResponse
 import kr.wooco.woocobe.api.place.response.PlaceDetailResponse
-import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceIfNotExistsUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.ReadPlaceUseCase
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/places")
 class PlaceController(
-    private val createPlaceUseCase: CreatePlaceUseCase,
+    private val createPlaceIfNotExistsUseCase: CreatePlaceIfNotExistsUseCase,
     private val readPlaceUseCase: ReadPlaceUseCase,
 ) : PlaceApi {
     @GetMapping("/{placeId}")
@@ -36,7 +36,7 @@ class PlaceController(
         @RequestBody request: CreatePlaceRequest,
     ): ResponseEntity<CreatePlaceResponse> {
         val command = request.toCommand()
-        val result = createPlaceUseCase.createPlace(command)
+        val result = createPlaceIfNotExistsUseCase.createPlaceIfNotExists(command)
         return ResponseEntity.status(HttpStatus.CREATED).body(CreatePlaceResponse(result))
     }
 }
