@@ -9,6 +9,7 @@ on:
 jobs:
   docker-build-and-push:
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
       - name: 리포지토리 체크아웃
@@ -22,7 +23,7 @@ jobs:
 
       - name: DEV 배포 환경변수 설정
         run: |
-          echo "${{ secrets.SPRING_TEST_ENV }}" | base64 -d > bootstrap/api/src/main/resources/.env
+          echo "${{ secrets.SPRING_ENV }}" | base64 -d > bootstrap/api/src/main/resources/.env
 
       - name: Gradle 캐싱
         uses: actions/cache@v4
