@@ -18,11 +18,11 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: ${SHUTDOWN_PHASE_TIMEOUT:20s}
 
-  threads:
-    async:
-      pool:
-        max: ${ASYNC_THREADS_MAX_POOL:10}
-        core: ${ASYNC_THREADS_MAX_POOL:5}
+  async-task-pool:
+    max-size: ${ASYNC_THREADS_MAX_POOL:10}
+    core-size: ${ASYNC_THREADS_MAX_POOL:5}
+    queue-capacity: ${ASYNC_THREAD_QUEUE_CAPACITY:100}
+    await-duration: ${ASYNC_THREADS_AWAIT_DURATION:15s}
 
   cookie:
     path: ${COOKIE_PATH:/}
