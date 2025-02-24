@@ -9,20 +9,20 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.io.ClassPathResource
+import java.io.ByteArrayInputStream
 
 @Configuration
 @ComponentScan(basePackages = ["kr.wooco.woocobe.fcm"])
 @ConfigurationPropertiesScan(basePackages = ["kr.wooco.woocobe.fcm"])
 class FcmConfig(
-    @Value("\${fcm.config.path}") private val fcmConfig: String,
+    @Value("\${fcm.account.credentials}") private val fcmAccountCredentials: String,
 ) {
     @Bean
     fun firebaseApp(): FirebaseApp {
-        val resource = ClassPathResource(fcmConfig)
+        val inputStream = ByteArrayInputStream(fcmAccountCredentials.toByteArray(Charsets.UTF_8))
         val options = FirebaseOptions
             .builder()
-            .setCredentials(GoogleCredentials.fromStream(resource.inputStream))
+            .setCredentials(GoogleCredentials.fromStream(inputStream))
             .build()
         return FirebaseApp.initializeApp(options)
     }
