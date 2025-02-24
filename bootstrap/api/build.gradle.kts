@@ -11,8 +11,9 @@ dependencies {
     apply(plugin = "org.springframework.boot")
 
     implementation(project(":core"))
-    implementation(project(":support:logging"))
+    implementation(project(":support:metric"))
     implementation(project(":support:common"))
+    implementation(project(":support:logging"))
     implementation(project(":infrastructure:aws"))
     implementation(project(":infrastructure:jwt"))
     implementation(project(":infrastructure:rest"))
