@@ -3,7 +3,7 @@ package kr.wooco.woocobe.core.notification.application.handler
 import kr.wooco.woocobe.core.coursecomment.domain.event.CourseCommentCreateEvent
 import kr.wooco.woocobe.core.notification.application.port.`in`.CreateNotificationUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.ReadDeviceTokenUseCase
-import kr.wooco.woocobe.core.notification.application.port.out.SendNotificationPort
+import kr.wooco.woocobe.core.notification.application.port.`in`.SendNotificationUseCase
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
 import kr.wooco.woocobe.core.plan.domain.event.PlanShareRequestEvent
 import org.springframework.scheduling.annotation.Async
@@ -13,9 +13,9 @@ import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class NotificationEventHandler(
-    private val sendNotificationPort: SendNotificationPort,
     private val readDeviceTokenUseCase: ReadDeviceTokenUseCase,
     private val createNotificationUseCase: CreateNotificationUseCase,
+    private val sendNotificationUseCase: SendNotificationUseCase,
 ) {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -45,6 +45,7 @@ class NotificationEventHandler(
         val notification = createNotificationUseCase.createNotification(command)
         val query = ReadDeviceTokenUseCase.Query(notification.userId)
         val deviceToken = readDeviceTokenUseCase.readDeviceToken(query)
-        sendNotificationPort.sendNotification(notification, deviceToken.token)
+        val request = SendNotificationUseCase.Request(notification, deviceToken.token)
+        sendNotificationUseCase.sendNotification(request)
     }
 }
