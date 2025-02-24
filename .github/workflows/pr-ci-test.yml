@@ -51,6 +51,10 @@ jobs:
       - name: Gradle 실행 권한 설정
         run: chmod +x ./gradlew
 
+      - name: 테스트 환경변수 설정
+        run: |
+          echo "${{ secrets.SPRING_TEST_ENV }}" > bootstrap/api/src/main/resources/.env
+
       - name: 테스트 실행
         run: |
           ./gradlew --info test
