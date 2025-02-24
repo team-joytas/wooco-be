@@ -53,7 +53,7 @@ jobs:
 
       - name: 테스트 환경변수 설정
         run: |
-          echo "${{ secrets.SPRING_TEST_ENV }}" | base64 -d > bootstrap/api/src/main/resources/.env
+          echo "${{ secrets.SPRING_ENV }}" | base64 -d > bootstrap/api/src/main/resources/.env
 
       - name: 테스트 실행
         run: |
