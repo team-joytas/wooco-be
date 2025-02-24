@@ -1,0 +1,3 @@
+fcm:
+  account:
+    credentials: ${FCM_ACCOUNT_CREDENTIALS}
