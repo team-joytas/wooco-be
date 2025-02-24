@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.api.place.request
 
-import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceIfNotExistsUseCase
 
 data class CreatePlaceRequest(
     val name: String,
@@ -10,8 +10,8 @@ data class CreatePlaceRequest(
     val kakaoPlaceId: String,
     val phoneNumber: String,
 ) {
-    fun toCommand(): CreatePlaceUseCase.Command =
-        CreatePlaceUseCase.Command(
+    fun toCommand(): CreatePlaceIfNotExistsUseCase.Command =
+        CreatePlaceIfNotExistsUseCase.Command(
             name = name,
             latitude = latitude,
             longitude = longitude,
