@@ -7,7 +7,9 @@ import kr.wooco.woocobe.core.notification.domain.entity.Notification
 import org.springframework.stereotype.Component
 
 @Component
-internal class SendNotificationFcmAdapter : SendNotificationPort {
+internal class SendNotificationFcmAdapter(
+    private val firebaseMessaging: FirebaseMessaging,
+) : SendNotificationPort {
     override fun sendNotification(
         notification: Notification,
         token: String,
@@ -22,6 +24,6 @@ internal class SendNotificationFcmAdapter : SendNotificationPort {
             .putData("type", notification.type.name)
             .putData("isRead", notification.isRead.toString())
             .build()
-        FirebaseMessaging.getInstance().send(message)
+        firebaseMessaging.send(message)
     }
 }
