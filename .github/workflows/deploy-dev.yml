@@ -22,7 +22,7 @@ jobs:
 
       - name: DEV 배포 환경변수 설정
         run: |
-          echo "${{ secrets.SPRING_TEST_ENV }}" > bootstrap/api/src/main/resources/.env
+          echo "${{ secrets.SPRING_TEST_ENV }}" | base64 -d > bootstrap/api/src/main/resources/.env
 
       - name: Gradle 캐싱
         uses: actions/cache@v4
