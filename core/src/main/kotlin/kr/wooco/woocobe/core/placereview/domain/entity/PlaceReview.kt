@@ -12,6 +12,10 @@ data class PlaceReview(
     val contents: String,
     val imageUrls: List<String>,
 ) {
+    init {
+        require(rating in 1.0..5.0) { "평점은 1.0 ~ 5.0 사이여야 합니다." }
+    }
+
     fun update(
         userId: Long,
         rating: Double,
