@@ -50,22 +50,6 @@ internal class PlaceReviewPersistenceAdapter(
         )
     }
 
-    // 지우기
-    override fun getAllByPlaceReviewIds(placeReviewIds: List<Long>): List<PlaceReview> {
-        val placeReviewEntities = placeReviewJpaRepository
-            .findAllByIdInOrderByCreatedAt(placeReviewIds)
-        val placeReviewImageEntities = placeReviewImageJpaRepository
-            .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-
-        return placeReviewEntities.map { placeReviewEntity ->
-            placeReviewPersistenceMapper.toDomain(
-                placeReviewJpaEntity = placeReviewEntity,
-                placeReviewImageJpaEntities = placeReviewImageEntities
-                    .filter { it.placeReviewId == placeReviewEntity.id },
-            )
-        }
-    }
-
     override fun getAllByPlaceId(placeId: Long): List<PlaceReview> {
         val placeReviewEntities = placeReviewJpaRepository.findAllByPlaceIdOrderByCreatedAt(placeId)
         val placeReviewImageEntities = placeReviewImageJpaRepository
