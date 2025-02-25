@@ -86,7 +86,7 @@ class PlaceReviewController(
         @AuthenticationPrincipal userId: Long,
         @PathVariable placeReviewId: Long,
     ): ResponseEntity<Unit> {
-        val command = DeletePlaceReviewUseCase.Command(placeReviewId, userId)
+        val command = DeletePlaceReviewUseCase.Command(userId, placeReviewId)
         deletePlaceReviewUseCase.deletePlaceReview(command)
         return ResponseEntity.ok().build()
     }
