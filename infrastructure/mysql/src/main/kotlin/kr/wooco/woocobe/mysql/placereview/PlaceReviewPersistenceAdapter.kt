@@ -30,6 +30,8 @@ internal class PlaceReviewPersistenceAdapter(
                 imageUrl = it,
             )
         }
+        placeReviewImageJpaRepository.saveAll(placeReviewImageEntities)
+
         return placeReviewPersistenceMapper.toDomain(
             placeReviewEntity,
             placeReviewImageEntities,
@@ -48,6 +50,7 @@ internal class PlaceReviewPersistenceAdapter(
         )
     }
 
+    // 지우기
     override fun getAllByPlaceReviewIds(placeReviewIds: List<Long>): List<PlaceReview> {
         val placeReviewEntities = placeReviewJpaRepository
             .findAllByIdInOrderByCreatedAt(placeReviewIds)
