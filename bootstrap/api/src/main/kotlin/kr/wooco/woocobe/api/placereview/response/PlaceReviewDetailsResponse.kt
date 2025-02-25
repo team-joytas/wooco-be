@@ -10,7 +10,7 @@ data class PlaceReviewDetailsResponse(
     val rating: Double,
     val contents: String,
     val createdAt: LocalDateTime,
-    val oneLineReviews: List<PlaceOneLineReviewResponse>,
+    val oneLineReviews: List<String>,
     val imageUrls: List<String>,
 ) {
     companion object {
@@ -25,10 +25,7 @@ data class PlaceReviewDetailsResponse(
                 rating = placeReviewResult.rating,
                 contents = placeReviewResult.contents,
                 createdAt = placeReviewResult.createdAt,
-                oneLineReviews = placeReviewResult.oneLineReviews
-                    .map { oneLineReview ->
-                        PlaceOneLineReviewResponse.from(oneLineReview)
-                    },
+                oneLineReviews = placeReviewResult.oneLineReviews.map { it.contents },
                 imageUrls = placeReviewResult.reviewImageUrls,
             )
 
@@ -44,24 +41,10 @@ data class PlaceReviewDetailsResponse(
                     rating = it.rating,
                     contents = it.contents,
                     createdAt = it.createdAt,
-                    oneLineReviews = it.oneLineReviews
-                        .map { oneLineReview ->
-                            PlaceOneLineReviewResponse.from(oneLineReview)
-                        },
+                    oneLineReviews = it.oneLineReviews.map { oneLineReview -> oneLineReview.contents },
                     imageUrls = it.reviewImageUrls,
                 )
             }
-    }
-}
-
-data class PlaceOneLineReviewResponse(
-    val contents: String,
-) {
-    companion object {
-        fun from(oneLineReview: PlaceReviewResult.PlaceOneLineReviewResult): PlaceOneLineReviewResponse =
-            PlaceOneLineReviewResponse(
-                contents = oneLineReview.contents,
-            )
     }
 }
 
