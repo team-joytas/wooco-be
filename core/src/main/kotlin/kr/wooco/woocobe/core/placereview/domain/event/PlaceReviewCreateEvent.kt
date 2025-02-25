@@ -1,17 +1,16 @@
 package kr.wooco.woocobe.core.placereview.domain.event
 
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
+
 data class PlaceReviewCreateEvent(
     val placeId: Long,
     val rating: Double,
 ) {
     companion object {
-        fun of(
-            placeId: Long,
-            rating: Double,
-        ): PlaceReviewCreateEvent =
+        fun from(placeReview: PlaceReview): PlaceReviewCreateEvent =
             PlaceReviewCreateEvent(
-                placeId = placeId,
-                rating = rating,
+                placeId = placeReview.id,
+                rating = placeReview.rating,
             )
     }
 }

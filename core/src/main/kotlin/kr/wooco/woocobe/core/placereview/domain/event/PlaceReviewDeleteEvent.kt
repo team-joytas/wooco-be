@@ -1,17 +1,16 @@
 package kr.wooco.woocobe.core.placereview.domain.event
 
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
+
 data class PlaceReviewDeleteEvent(
     val placeId: Long,
     val rating: Double,
 ) {
     companion object {
-        fun of(
-            placeId: Long,
-            rating: Double,
-        ): PlaceReviewDeleteEvent =
+        fun of(placeReview: PlaceReview): PlaceReviewDeleteEvent =
             PlaceReviewDeleteEvent(
-                placeId = placeId,
-                rating = rating,
+                placeId = placeReview.id,
+                rating = placeReview.rating,
             )
     }
 }

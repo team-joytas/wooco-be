@@ -1,5 +1,8 @@
 package kr.wooco.woocobe.core.placereview.domain.event
 
+import kr.wooco.woocobe.core.placereview.application.port.`in`.UpdatePlaceReviewUseCase
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
+
 data class PlaceReviewUpdateEvent(
     val placeId: Long,
     val oldRating: Double,
@@ -7,14 +10,13 @@ data class PlaceReviewUpdateEvent(
 ) {
     companion object {
         fun of(
-            placeId: Long,
-            oldRating: Double,
-            newRating: Double,
+            placeReview: PlaceReview,
+            command: UpdatePlaceReviewUseCase.Command,
         ): PlaceReviewUpdateEvent =
             PlaceReviewUpdateEvent(
-                placeId = placeId,
-                oldRating = oldRating,
-                newRating = newRating,
+                placeId = placeReview.id,
+                oldRating = placeReview.rating,
+                newRating = command.rating,
             )
     }
 }
