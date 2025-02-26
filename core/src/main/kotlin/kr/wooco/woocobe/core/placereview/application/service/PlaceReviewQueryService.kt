@@ -1,8 +1,8 @@
 package kr.wooco.woocobe.core.placereview.application.service
 
 import kr.wooco.woocobe.core.place.application.port.out.LoadPlacePersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllMyPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllPlaceReviewUseCase
+import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllUserPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.result.PlaceReviewWithPlaceResult
 import kr.wooco.woocobe.core.placereview.application.port.`in`.result.PlaceReviewWithWriterResult
@@ -19,7 +19,7 @@ internal class PlaceReviewQueryService(
     private val loadPlaceOneLineReviewPersistencePort: LoadPlaceOneLineReviewPersistencePort,
     private val loadPlacePersistencePort: LoadPlacePersistencePort,
 ) : ReadAllPlaceReviewUseCase,
-    ReadAllMyPlaceReviewUseCase,
+    ReadAllUserPlaceReviewUseCase,
     ReadPlaceReviewUseCase {
     @Transactional(readOnly = true)
     override fun readAllPlaceReview(query: ReadAllPlaceReviewUseCase.Query): List<PlaceReviewWithWriterResult> {
@@ -32,7 +32,7 @@ internal class PlaceReviewQueryService(
     }
 
     @Transactional(readOnly = true)
-    override fun readAllMyPlaceReview(query: ReadAllMyPlaceReviewUseCase.Query): List<PlaceReviewWithPlaceResult> {
+    override fun readAllUserPlaceReview(query: ReadAllUserPlaceReviewUseCase.Query): List<PlaceReviewWithPlaceResult> {
         val placeReviews = loadPlaceReviewPersistencePort.getAllByUserId(query.userId)
         val placeOneLineReviews =
             loadPlaceOneLineReviewPersistencePort.getAllByPlaceReviewIds(placeReviews.map { it.id })

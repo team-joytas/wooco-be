@@ -7,8 +7,8 @@ import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithPlaceDetailsResp
 import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithWriterDetailsResponse
 import kr.wooco.woocobe.core.placereview.application.port.`in`.CreatePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.DeletePlaceReviewUseCase
-import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllMyPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllPlaceReviewUseCase
+import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllUserPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.UpdatePlaceReviewUseCase
 import org.springframework.http.HttpStatus
@@ -29,7 +29,7 @@ class PlaceReviewController(
     private val createPlaceReviewUseCase: CreatePlaceReviewUseCase,
     private val updatePlaceReviewUseCase: UpdatePlaceReviewUseCase,
     private val deletePlaceReviewUseCase: DeletePlaceReviewUseCase,
-    private val readAllMyPlaceReviewUseCase: ReadAllMyPlaceReviewUseCase,
+    private val readAllUserPlaceReviewUseCase: ReadAllUserPlaceReviewUseCase,
     private val readAllPlaceReviewUseCase: ReadAllPlaceReviewUseCase,
     private val readPlaceReviewUseCase: ReadPlaceReviewUseCase,
 ) : PlaceReviewApi {
@@ -52,11 +52,11 @@ class PlaceReviewController(
     }
 
     @GetMapping("/users/{userId}")
-    override fun getAllMyPlaceReview(
+    override fun getAllUserPlaceReview(
         @PathVariable userId: Long,
     ): ResponseEntity<List<PlaceReviewWithPlaceDetailsResponse>> {
-        val query = ReadAllMyPlaceReviewUseCase.Query(userId)
-        val results = readAllMyPlaceReviewUseCase.readAllMyPlaceReview(query)
+        val query = ReadAllUserPlaceReviewUseCase.Query(userId)
+        val results = readAllUserPlaceReviewUseCase.readAllUserPlaceReview(query)
         return ResponseEntity.ok(PlaceReviewWithPlaceDetailsResponse.listFrom(results))
     }
 

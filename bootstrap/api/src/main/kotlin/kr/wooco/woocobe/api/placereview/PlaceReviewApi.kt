@@ -22,7 +22,7 @@ interface PlaceReviewApi {
         @PathVariable placeId: Long,
     ): ResponseEntity<List<PlaceReviewWithWriterDetailsResponse>>
 
-    fun getAllMyPlaceReview(
+    fun getAllUserPlaceReview(
         @PathVariable userId: Long,
     ): ResponseEntity<List<PlaceReviewWithPlaceDetailsResponse>>
 
