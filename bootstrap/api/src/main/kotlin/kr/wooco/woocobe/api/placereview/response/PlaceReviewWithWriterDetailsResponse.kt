@@ -1,10 +1,10 @@
 package kr.wooco.woocobe.api.placereview.response
 
-import kr.wooco.woocobe.core.placereview.application.port.`in`.result.PlaceReviewResult
+import kr.wooco.woocobe.core.placereview.application.port.`in`.result.PlaceReviewWithWriterResult
 import kr.wooco.woocobe.core.user.domain.entity.User
 import java.time.LocalDateTime
 
-data class PlaceReviewDetailsResponse(
+data class PlaceReviewWithWriterDetailsResponse(
     val id: Long,
     val writer: PlaceReviewWriterResponse,
     val rating: Double,
@@ -14,24 +14,24 @@ data class PlaceReviewDetailsResponse(
     val imageUrls: List<String>,
 ) {
     companion object {
-        fun from(placeReviewResult: PlaceReviewResult): PlaceReviewDetailsResponse =
-            PlaceReviewDetailsResponse(
-                id = placeReviewResult.placeReviewId,
+        fun from(placeReviewWithWriterResult: PlaceReviewWithWriterResult): PlaceReviewWithWriterDetailsResponse =
+            PlaceReviewWithWriterDetailsResponse(
+                id = placeReviewWithWriterResult.placeReviewId,
                 writer = PlaceReviewWriterResponse(
-                    id = placeReviewResult.writerId,
-                    name = placeReviewResult.writerName,
-                    profileUrl = placeReviewResult.writerProfileUrl,
+                    id = placeReviewWithWriterResult.writerId,
+                    name = placeReviewWithWriterResult.writerName,
+                    profileUrl = placeReviewWithWriterResult.writerProfileUrl,
                 ),
-                rating = placeReviewResult.rating,
-                contents = placeReviewResult.contents,
-                createdAt = placeReviewResult.createdAt,
-                oneLineReviews = placeReviewResult.oneLineReviews.map { it.contents },
-                imageUrls = placeReviewResult.reviewImageUrls,
+                rating = placeReviewWithWriterResult.rating,
+                contents = placeReviewWithWriterResult.contents,
+                createdAt = placeReviewWithWriterResult.createdAt,
+                oneLineReviews = placeReviewWithWriterResult.oneLineReviews.map { it },
+                imageUrls = placeReviewWithWriterResult.reviewImageUrls,
             )
 
-        fun listFrom(placeReviewResult: List<PlaceReviewResult>): List<PlaceReviewDetailsResponse> =
-            placeReviewResult.map {
-                PlaceReviewDetailsResponse(
+        fun listFrom(placeReviewWithWriterResults: List<PlaceReviewWithWriterResult>): List<PlaceReviewWithWriterDetailsResponse> =
+            placeReviewWithWriterResults.map {
+                PlaceReviewWithWriterDetailsResponse(
                     id = it.placeReviewId,
                     writer = PlaceReviewWriterResponse(
                         id = it.writerId,
@@ -41,7 +41,7 @@ data class PlaceReviewDetailsResponse(
                     rating = it.rating,
                     contents = it.contents,
                     createdAt = it.createdAt,
-                    oneLineReviews = it.oneLineReviews.map { oneLineReview -> oneLineReview.contents },
+                    oneLineReviews = it.oneLineReviews.map { oneLineReview -> oneLineReview },
                     imageUrls = it.reviewImageUrls,
                 )
             }

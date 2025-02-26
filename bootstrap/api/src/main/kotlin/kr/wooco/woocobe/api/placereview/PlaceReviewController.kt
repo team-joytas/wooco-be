@@ -3,7 +3,8 @@ package kr.wooco.woocobe.api.placereview
 import kr.wooco.woocobe.api.placereview.request.CreatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.request.UpdatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.response.CreatePlaceReviewResponse
-import kr.wooco.woocobe.api.placereview.response.PlaceReviewDetailsResponse
+import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithPlaceDetailsResponse
+import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithWriterDetailsResponse
 import kr.wooco.woocobe.core.placereview.application.port.`in`.CreatePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.DeletePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllMyPlaceReviewUseCase
@@ -35,28 +36,28 @@ class PlaceReviewController(
     @GetMapping("/{placeReviewId}")
     override fun getPlaceReviewDetail(
         @PathVariable placeReviewId: Long,
-    ): ResponseEntity<PlaceReviewDetailsResponse> {
+    ): ResponseEntity<PlaceReviewWithWriterDetailsResponse> {
         val query = ReadPlaceReviewUseCase.Query(placeReviewId)
         val results = readPlaceReviewUseCase.readPlaceReview(query)
-        return ResponseEntity.ok(PlaceReviewDetailsResponse.from(results))
+        return ResponseEntity.ok(PlaceReviewWithWriterDetailsResponse.from(results))
     }
 
     @GetMapping("/places/{placeId}")
     override fun getAllPlaceReview(
         @PathVariable placeId: Long,
-    ): ResponseEntity<List<PlaceReviewDetailsResponse>> {
+    ): ResponseEntity<List<PlaceReviewWithWriterDetailsResponse>> {
         val query = ReadAllPlaceReviewUseCase.Query(placeId)
         val results = readAllPlaceReviewUseCase.readAllPlaceReview(query)
-        return ResponseEntity.ok(PlaceReviewDetailsResponse.listFrom(results))
+        return ResponseEntity.ok(PlaceReviewWithWriterDetailsResponse.listFrom(results))
     }
 
     @GetMapping("/users/{userId}")
     override fun getAllMyPlaceReview(
         @PathVariable userId: Long,
-    ): ResponseEntity<List<PlaceReviewDetailsResponse>> {
+    ): ResponseEntity<List<PlaceReviewWithPlaceDetailsResponse>> {
         val query = ReadAllMyPlaceReviewUseCase.Query(userId)
         val results = readAllMyPlaceReviewUseCase.readAllMyPlaceReview(query)
-        return ResponseEntity.ok(PlaceReviewDetailsResponse.listFrom(results))
+        return ResponseEntity.ok(PlaceReviewWithPlaceDetailsResponse.listFrom(results))
     }
 
     @PostMapping("/places/{placeId}")

@@ -5,7 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import kr.wooco.woocobe.api.placereview.request.CreatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.request.UpdatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.response.CreatePlaceReviewResponse
-import kr.wooco.woocobe.api.placereview.response.PlaceReviewDetailsResponse
+import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithPlaceDetailsResponse
+import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithWriterDetailsResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody
 interface PlaceReviewApi {
     fun getPlaceReviewDetail(
         @PathVariable placeReviewId: Long,
-    ): ResponseEntity<PlaceReviewDetailsResponse>
+    ): ResponseEntity<PlaceReviewWithWriterDetailsResponse>
 
     fun getAllPlaceReview(
         @PathVariable placeId: Long,
-    ): ResponseEntity<List<PlaceReviewDetailsResponse>>
+    ): ResponseEntity<List<PlaceReviewWithWriterDetailsResponse>>
 
     fun getAllMyPlaceReview(
         @PathVariable userId: Long,
-    ): ResponseEntity<List<PlaceReviewDetailsResponse>>
+    ): ResponseEntity<List<PlaceReviewWithPlaceDetailsResponse>>
 
     @SecurityRequirement(name = "JWT")
     fun createPlaceReview(
