@@ -8,6 +8,4 @@ interface LoadPlaceReviewPersistencePort {
     fun getAllByPlaceId(placeId: Long): List<PlaceReview>
 
     fun getAllByUserId(userId: Long): List<PlaceReview>
-
-    fun getAllByPlaceReviewIds(placeReviewIds: List<Long>): List<PlaceReview>
 }

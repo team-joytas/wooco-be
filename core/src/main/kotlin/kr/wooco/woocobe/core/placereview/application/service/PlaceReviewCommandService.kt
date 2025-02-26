@@ -48,19 +48,13 @@ class PlaceReviewCommandService(
         }
         saveAllPlaceOneLineReviewPersistencePort.saveAllPlaceOneLineReview(placeOneLineReviews)
 
-        eventPublisher.publishEvent(
-            PlaceReviewCreateEvent(
-                placeId = placeReview.placeId,
-                rating = placeReview.rating,
-            ),
-        )
+        eventPublisher.publishEvent(PlaceReviewCreateEvent.from(placeReview))
         return placeReview.id
     }
 
     @Transactional
     override fun updatePlaceReview(command: UpdatePlaceReviewUseCase.Command) {
         val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)
-
         placeReview.update(
             userId = command.userId,
             rating = command.rating,
@@ -79,13 +73,7 @@ class PlaceReviewCommandService(
         }
         saveAllPlaceOneLineReviewPersistencePort.saveAllPlaceOneLineReview(placeOneLineReviews)
 
-        eventPublisher.publishEvent(
-            PlaceReviewUpdateEvent(
-                placeId = placeReview.placeId,
-                oldRating = placeReview.rating,
-                newRating = command.rating,
-            ),
-        )
+        eventPublisher.publishEvent(PlaceReviewUpdateEvent.of(placeReview, command))
     }
 
     @Transactional
@@ -95,11 +83,6 @@ class PlaceReviewCommandService(
         deleteAllPlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
         deletePlaceReviewPersistencePort.deletePlaceReviewId(command.placeReviewId)
 
-        eventPublisher.publishEvent(
-            PlaceReviewDeleteEvent(
-                placeReview.placeId,
-                placeReview.rating,
-            ),
-        )
+        eventPublisher.publishEvent(PlaceReviewDeleteEvent.from(placeReview))
     }
 }

@@ -12,7 +12,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-@Suppress("Duplicates")
 internal class PlaceReviewPersistenceAdapter(
     private val placeReviewJpaRepository: PlaceReviewJpaRepository,
     private val placeReviewImageJpaRepository: PlaceReviewImageJpaRepository,
@@ -23,13 +22,13 @@ internal class PlaceReviewPersistenceAdapter(
     override fun savePlaceReview(placeReview: PlaceReview): PlaceReview {
         val placeReviewEntity = placeReviewPersistenceMapper.toEntity(placeReview)
         placeReviewJpaRepository.save(placeReviewEntity)
-
         val placeReviewImageEntities = placeReview.imageUrls.map {
             PlaceReviewImageJpaEntity(
                 placeReviewId = placeReviewEntity.id,
                 imageUrl = it,
             )
         }
+        placeReviewImageJpaRepository.saveAll(placeReviewImageEntities)
         return placeReviewPersistenceMapper.toDomain(
             placeReviewEntity,
             placeReviewImageEntities,
@@ -41,33 +40,16 @@ internal class PlaceReviewPersistenceAdapter(
             ?: throw NotExistsPlaceReviewException
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewId(placeReviewEntity.id)
-
         return placeReviewPersistenceMapper.toDomain(
             placeReviewEntity,
             placeReviewImageEntities,
         )
     }
 
-    override fun getAllByPlaceReviewIds(placeReviewIds: List<Long>): List<PlaceReview> {
-        val placeReviewEntities = placeReviewJpaRepository
-            .findAllByIdInOrderByCreatedAt(placeReviewIds)
-        val placeReviewImageEntities = placeReviewImageJpaRepository
-            .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-
-        return placeReviewEntities.map { placeReviewEntity ->
-            placeReviewPersistenceMapper.toDomain(
-                placeReviewJpaEntity = placeReviewEntity,
-                placeReviewImageJpaEntities = placeReviewImageEntities
-                    .filter { it.placeReviewId == placeReviewEntity.id },
-            )
-        }
-    }
-
     override fun getAllByPlaceId(placeId: Long): List<PlaceReview> {
         val placeReviewEntities = placeReviewJpaRepository.findAllByPlaceIdOrderByCreatedAt(placeId)
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-
         return placeReviewEntities.map { placeReviewEntity ->
             placeReviewPersistenceMapper.toDomain(
                 placeReviewJpaEntity = placeReviewEntity,
@@ -81,7 +63,6 @@ internal class PlaceReviewPersistenceAdapter(
         val placeReviewEntities = placeReviewJpaRepository.findAllByUserIdOrderByCreatedAt(userId)
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-
         return placeReviewEntities.map { placeReviewEntity ->
             placeReviewPersistenceMapper.toDomain(
                 placeReviewJpaEntity = placeReviewEntity,

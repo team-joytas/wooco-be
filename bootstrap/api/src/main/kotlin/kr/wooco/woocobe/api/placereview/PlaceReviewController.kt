@@ -3,11 +3,12 @@ package kr.wooco.woocobe.api.placereview
 import kr.wooco.woocobe.api.placereview.request.CreatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.request.UpdatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.response.CreatePlaceReviewResponse
-import kr.wooco.woocobe.api.placereview.response.PlaceReviewDetailsResponse
+import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithPlaceDetailsResponse
+import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithWriterDetailsResponse
 import kr.wooco.woocobe.core.placereview.application.port.`in`.CreatePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.DeletePlaceReviewUseCase
-import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllMyPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllPlaceReviewUseCase
+import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllUserPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.UpdatePlaceReviewUseCase
 import org.springframework.http.HttpStatus
@@ -28,35 +29,35 @@ class PlaceReviewController(
     private val createPlaceReviewUseCase: CreatePlaceReviewUseCase,
     private val updatePlaceReviewUseCase: UpdatePlaceReviewUseCase,
     private val deletePlaceReviewUseCase: DeletePlaceReviewUseCase,
-    private val readAllMyPlaceReviewUseCase: ReadAllMyPlaceReviewUseCase,
+    private val readAllUserPlaceReviewUseCase: ReadAllUserPlaceReviewUseCase,
     private val readAllPlaceReviewUseCase: ReadAllPlaceReviewUseCase,
     private val readPlaceReviewUseCase: ReadPlaceReviewUseCase,
 ) : PlaceReviewApi {
     @GetMapping("/{placeReviewId}")
     override fun getPlaceReviewDetail(
         @PathVariable placeReviewId: Long,
-    ): ResponseEntity<PlaceReviewDetailsResponse> {
+    ): ResponseEntity<PlaceReviewWithWriterDetailsResponse> {
         val query = ReadPlaceReviewUseCase.Query(placeReviewId)
         val results = readPlaceReviewUseCase.readPlaceReview(query)
-        return ResponseEntity.ok(PlaceReviewDetailsResponse.from(results))
+        return ResponseEntity.ok(PlaceReviewWithWriterDetailsResponse.from(results))
     }
 
     @GetMapping("/places/{placeId}")
     override fun getAllPlaceReview(
         @PathVariable placeId: Long,
-    ): ResponseEntity<List<PlaceReviewDetailsResponse>> {
+    ): ResponseEntity<List<PlaceReviewWithWriterDetailsResponse>> {
         val query = ReadAllPlaceReviewUseCase.Query(placeId)
         val results = readAllPlaceReviewUseCase.readAllPlaceReview(query)
-        return ResponseEntity.ok(PlaceReviewDetailsResponse.listFrom(results))
+        return ResponseEntity.ok(PlaceReviewWithWriterDetailsResponse.listFrom(results))
     }
 
     @GetMapping("/users/{userId}")
-    override fun getAllMyPlaceReview(
+    override fun getAllUserPlaceReview(
         @PathVariable userId: Long,
-    ): ResponseEntity<List<PlaceReviewDetailsResponse>> {
-        val query = ReadAllMyPlaceReviewUseCase.Query(userId)
-        val results = readAllMyPlaceReviewUseCase.readAllMyPlaceReview(query)
-        return ResponseEntity.ok(PlaceReviewDetailsResponse.listFrom(results))
+    ): ResponseEntity<List<PlaceReviewWithPlaceDetailsResponse>> {
+        val query = ReadAllUserPlaceReviewUseCase.Query(userId)
+        val results = readAllUserPlaceReviewUseCase.readAllUserPlaceReview(query)
+        return ResponseEntity.ok(PlaceReviewWithPlaceDetailsResponse.listFrom(results))
     }
 
     @PostMapping("/places/{placeId}")
@@ -86,7 +87,7 @@ class PlaceReviewController(
         @AuthenticationPrincipal userId: Long,
         @PathVariable placeReviewId: Long,
     ): ResponseEntity<Unit> {
-        val command = DeletePlaceReviewUseCase.Command(placeReviewId, userId)
+        val command = DeletePlaceReviewUseCase.Command(userId, placeReviewId)
         deletePlaceReviewUseCase.deletePlaceReview(command)
         return ResponseEntity.ok().build()
     }
