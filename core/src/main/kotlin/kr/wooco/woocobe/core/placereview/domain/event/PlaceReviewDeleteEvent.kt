@@ -7,7 +7,7 @@ data class PlaceReviewDeleteEvent(
     val rating: Double,
 ) {
     companion object {
-        fun of(placeReview: PlaceReview): PlaceReviewDeleteEvent =
+        fun from(placeReview: PlaceReview): PlaceReviewDeleteEvent =
             PlaceReviewDeleteEvent(
                 placeId = placeReview.placeId,
                 rating = placeReview.rating,
