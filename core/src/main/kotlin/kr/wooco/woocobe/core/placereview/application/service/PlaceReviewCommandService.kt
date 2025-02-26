@@ -83,6 +83,6 @@ class PlaceReviewCommandService(
         deleteAllPlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
         deletePlaceReviewPersistencePort.deletePlaceReviewId(command.placeReviewId)
 
-        eventPublisher.publishEvent(PlaceReviewDeleteEvent.of(placeReview))
+        eventPublisher.publishEvent(PlaceReviewDeleteEvent.from(placeReview))
     }
 }
