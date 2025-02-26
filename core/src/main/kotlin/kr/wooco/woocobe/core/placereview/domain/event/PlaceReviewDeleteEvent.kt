@@ -9,7 +9,7 @@ data class PlaceReviewDeleteEvent(
     companion object {
         fun of(placeReview: PlaceReview): PlaceReviewDeleteEvent =
             PlaceReviewDeleteEvent(
-                placeId = placeReview.id,
+                placeId = placeReview.placeId,
                 rating = placeReview.rating,
             )
     }

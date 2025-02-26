@@ -9,7 +9,7 @@ data class PlaceReviewCreateEvent(
     companion object {
         fun from(placeReview: PlaceReview): PlaceReviewCreateEvent =
             PlaceReviewCreateEvent(
-                placeId = placeReview.id,
+                placeId = placeReview.placeId,
                 rating = placeReview.rating,
             )
     }

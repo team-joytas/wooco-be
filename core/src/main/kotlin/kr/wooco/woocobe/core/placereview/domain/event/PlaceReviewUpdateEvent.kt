@@ -14,7 +14,7 @@ data class PlaceReviewUpdateEvent(
             command: UpdatePlaceReviewUseCase.Command,
         ): PlaceReviewUpdateEvent =
             PlaceReviewUpdateEvent(
-                placeId = placeReview.id,
+                placeId = placeReview.placeId,
                 oldRating = placeReview.rating,
                 newRating = command.rating,
             )
