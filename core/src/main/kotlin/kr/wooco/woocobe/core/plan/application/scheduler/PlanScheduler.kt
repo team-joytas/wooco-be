@@ -13,7 +13,7 @@ class PlanScheduler(
     private val eventPublisher: ApplicationEventPublisher,
 ) {
     @Transactional
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     fun checkUnsharedPlan() {
         loadPlanPersistencePort
             .getAllByIsSharedFalse()
