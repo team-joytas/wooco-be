@@ -38,8 +38,7 @@ internal class PlaceReviewQueryService(
             loadPlaceOneLineReviewPersistencePort.getAllByPlaceReviewIds(placeReviews.map { it.id })
         val placeIds = placeReviews.map { it.placeId }.distinct()
         val places = loadPlacePersistencePort.getAllByPlaceIds(placeIds)
-        val writer = loadUserPersistencePort.getByUserId(query.userId)
-        return PlaceReviewWithPlaceResult.listOf(placeReviews, placeOneLineReviews, writer, places)
+        return PlaceReviewWithPlaceResult.listOf(placeReviews, placeOneLineReviews, places)
     }
 
     @Transactional(readOnly = true)

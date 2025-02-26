@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 
 data class PlaceReviewWithPlaceDetailsResponse(
     val id: Long,
+    val placeId: Long,
     val placeName: String,
     val rating: Double,
     val contents: String,
@@ -16,8 +17,9 @@ data class PlaceReviewWithPlaceDetailsResponse(
         fun listFrom(placeReviewWithPlaceResults: List<PlaceReviewWithPlaceResult>): List<PlaceReviewWithPlaceDetailsResponse> =
             placeReviewWithPlaceResults.map {
                 PlaceReviewWithPlaceDetailsResponse(
-                    id = it.placeReviewId,
-                    placeName = it.placeName,
+                    id = it.id,
+                    placeId = it.place.id,
+                    placeName = it.place.name,
                     rating = it.rating,
                     contents = it.contents,
                     createdAt = it.createdAt,

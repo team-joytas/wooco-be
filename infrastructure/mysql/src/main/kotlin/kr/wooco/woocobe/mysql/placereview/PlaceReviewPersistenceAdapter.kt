@@ -19,7 +19,6 @@ internal class PlaceReviewPersistenceAdapter(
 ) : SavePlaceReviewPersistencePort,
     LoadPlaceReviewPersistencePort,
     DeletePlaceReviewPersistencePort {
-    // TODO: 최대 이미지 갯수 제한
     override fun savePlaceReview(placeReview: PlaceReview): PlaceReview {
         val placeReviewEntity = placeReviewPersistenceMapper.toEntity(placeReview)
         placeReviewJpaRepository.save(placeReviewEntity)
