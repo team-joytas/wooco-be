@@ -20,10 +20,10 @@ internal class PlaceReviewPersistenceAdapter(
 ) : SavePlaceReviewPersistencePort,
     LoadPlaceReviewPersistencePort,
     DeletePlaceReviewPersistencePort {
+    // TODO: 최대 이미지 갯수 제한
     override fun savePlaceReview(placeReview: PlaceReview): PlaceReview {
         val placeReviewEntity = placeReviewPersistenceMapper.toEntity(placeReview)
         placeReviewJpaRepository.save(placeReviewEntity)
-
         val placeReviewImageEntities = placeReview.imageUrls.map {
             PlaceReviewImageJpaEntity(
                 placeReviewId = placeReviewEntity.id,
@@ -31,7 +31,6 @@ internal class PlaceReviewPersistenceAdapter(
             )
         }
         placeReviewImageJpaRepository.saveAll(placeReviewImageEntities)
-
         return placeReviewPersistenceMapper.toDomain(
             placeReviewEntity,
             placeReviewImageEntities,
@@ -43,7 +42,6 @@ internal class PlaceReviewPersistenceAdapter(
             ?: throw NotExistsPlaceReviewException
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewId(placeReviewEntity.id)
-
         return placeReviewPersistenceMapper.toDomain(
             placeReviewEntity,
             placeReviewImageEntities,
@@ -54,7 +52,6 @@ internal class PlaceReviewPersistenceAdapter(
         val placeReviewEntities = placeReviewJpaRepository.findAllByPlaceIdOrderByCreatedAt(placeId)
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-
         return placeReviewEntities.map { placeReviewEntity ->
             placeReviewPersistenceMapper.toDomain(
                 placeReviewJpaEntity = placeReviewEntity,
@@ -68,7 +65,6 @@ internal class PlaceReviewPersistenceAdapter(
         val placeReviewEntities = placeReviewJpaRepository.findAllByUserIdOrderByCreatedAt(userId)
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-
         return placeReviewEntities.map { placeReviewEntity ->
             placeReviewPersistenceMapper.toDomain(
                 placeReviewJpaEntity = placeReviewEntity,
