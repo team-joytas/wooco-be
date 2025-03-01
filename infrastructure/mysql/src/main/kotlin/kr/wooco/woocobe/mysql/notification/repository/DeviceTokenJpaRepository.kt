@@ -4,9 +4,9 @@ import kr.wooco.woocobe.mysql.notification.entity.DeviceTokenJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface DeviceTokenJpaRepository : JpaRepository<DeviceTokenJpaEntity, Long> {
-    fun findByToken(token: String): DeviceTokenJpaEntity
+    fun findByToken(token: String): DeviceTokenJpaEntity?
 
-    fun findByUserId(userId: Long): DeviceTokenJpaEntity
+    fun findAllByUserId(userId: Long): List<DeviceTokenJpaEntity>
 
     fun deleteByToken(token: String)
 }
