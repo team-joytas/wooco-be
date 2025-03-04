@@ -1,11 +1,21 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+      ddl-auto: ${HIBERNATE_DDL_AUTO:validate}
     open-in-view: false
 
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: ${FLYWAY_BASELINE_ON_MIGRATE:true}
+
   datasource:
-    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/wooco-local-database?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/wooco-local-database}
     username: ${MYSQL_USERNAME:wooco-local-user}
     password: ${MYSQL_PASSWORD:wooco-local-password}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      data-source-properties:
+        profileSQL: ${HIKARI_PROFILE_SQL:false}
+        serverTimezone: Asia/Seoul
+        characterEncoding: UTF-8

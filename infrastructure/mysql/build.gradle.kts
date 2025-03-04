@@ -13,6 +13,8 @@ dependencies {
     implementation(project(":support:common"))
 
     runtimeOnly("com.mysql:mysql-connector-j")
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-mysql")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.github.f4b6a3:tsid-creator:${property("tsidCreatorVersion")}")
     implementation("com.linecorp.kotlin-jdsl:jpql-dsl:${property("jdslVersion")}")

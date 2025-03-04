@@ -1,15 +1,15 @@
-name: Deploy DEV
+name: Deploy PROD
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   docker-build-and-push:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: prod
 
     steps:
       - name: 리포지토리 체크아웃
@@ -21,7 +21,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: DEV 배포 환경변수 설정
+      - name: PROD 배포 환경변수 설정
         run: |
           echo "${{ secrets.SPRING_ENV }}" | base64 -d > bootstrap/api/src/main/resources/.env
 
@@ -58,7 +58,7 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_REPOSITORY }}:${{ secrets.IMAGE_TAG }}
 
   docker-pull-and-run:
-    runs-on: [ self-hosted, Linux, X64, dev ]
+    runs-on: [ self-hosted, Linux, X64, prod ]
     needs: docker-build-and-push
     if: success()
 
