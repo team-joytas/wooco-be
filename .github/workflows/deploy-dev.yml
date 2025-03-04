@@ -55,7 +55,7 @@ jobs:
           file: ./Dockerfile-api
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DEV_DOCKER_HUB_REPOSITORY }}:${{ secrets.DEV_IMAGE_TAG }}
+          tags: ${{ secrets.DOCKER_HUB_REPOSITORY }}:${{ secrets.IMAGE_TAG }}
 
   docker-pull-and-run:
     runs-on: [ self-hosted, Linux, X64, dev ]
@@ -66,7 +66,7 @@ jobs:
       - name: 배포 이미지 가져오기
         run: |
           sudo docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-          sudo docker pull ${{ secrets.DEV_DOCKER_HUB_REPOSITORY }}:${{ secrets.DEV_IMAGE_TAG }}
+          sudo docker pull ${{ secrets.DOCKER_HUB_REPOSITORY }}:${{ secrets.IMAGE_TAG }}
 
       - name: blue green 배포 스크립트 실행
         run: |
