@@ -4,7 +4,9 @@ CREATE TABLE auth_users (
     auth_user_id BIGINT PRIMARY KEY,
     social_type VARCHAR(255) NOT NULL,
     social_id VARCHAR(255) NOT NULL,
-    user_id BIGINT NOT NULL
+    user_id BIGINT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE course_categories (

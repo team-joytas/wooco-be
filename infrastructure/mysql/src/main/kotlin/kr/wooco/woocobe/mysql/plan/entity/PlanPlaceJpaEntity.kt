@@ -17,5 +17,6 @@ class PlanPlaceJpaEntity(
     @Column(name = "place_id")
     val placeId: Long,
     @Id @Tsid
+    @Column(name = "plan_place_id")
     override val id: Long = 0L,
 ) : BaseTimeEntity()
