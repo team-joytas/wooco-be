@@ -1,0 +1,50 @@
+server.shutdown: graceful
+server.forward-headers-strategy: native
+
+spring.application.name: wooco-be-api
+spring.config.import: optional:classpath:.env[.properties]
+spring.profiles.active: ${PROFILE:local}
+spring.profiles.include:
+  - core
+  - redis
+  - mysql
+  - aws
+  - jwt
+  - rest
+  - metric
+  - fcm
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: ${SHUTDOWN_PHASE_TIMEOUT:20s}
+
+  async-task-pool:
+    max-size: ${ASYNC_THREADS_MAX_POOL:10}
+    core-size: ${ASYNC_THREADS_MAX_POOL:5}
+    queue-capacity: ${ASYNC_THREAD_QUEUE_CAPACITY:100}
+    await-duration: ${ASYNC_THREADS_AWAIT_DURATION:15s}
+
+  cookie:
+    path: ${COOKIE_PATH:/}
+    max-age: ${COOKIE_MAX_AGE:987654321}
+    same-site: ${COOKIE_SAME_SITE:Lax}
+    domain: ${COOKIE_DOMAIN:localhost}
+    secure: ${COOKIE_SECURE:false}
+    http-only: true
+
+  cors:
+    allowed-methods: ${CORS_ALLOWED_METHODS:OPTIONS,GET,POST,PUT,PATCH,DELETE}
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:5173}
+    allowed-headers: ${CORS_ALLOWED_HEADERS:*}
+    exposed-headers: ${CORS_EXPOSED_HEADERS:*}
+    allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+    max-age: ${CORS_MAX_AGE:7200}
+
+springdoc:
+  api-docs:
+    path: ${API_DOCS_PATH:/api-docs}
+  swagger-ui:
+    url: ${API_DOCS_PATH:/api-docs}
+    disable-swagger-default-url: true
+
+logging.level.root: info
