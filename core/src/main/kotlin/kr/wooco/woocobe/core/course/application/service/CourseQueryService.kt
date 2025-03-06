@@ -30,7 +30,7 @@ internal class CourseQueryService(
         val placeIds = course.coursePlaces.map { it.placeId }.distinct()
         val places = loadPlacePersistencePort.getAllByPlaceIds(placeIds)
         val isInterest = query.userId?.run {
-            loadInterestCoursePersistencePort.existsByUserIdAndCourseId(course.id, query.userId)
+            loadInterestCoursePersistencePort.existsByUserIdAndCourseId(query.userId, course.id)
         } ?: false
         return CourseResult.of(course, user, places, isInterest)
     }
