@@ -84,7 +84,7 @@ internal class CourseCommandService(
 
     @Transactional
     override fun deleteInterestCourse(command: DeleteInterestCourseUseCase.Command) {
-        val interestCourse = loadInterestCoursePersistencePort.getByUserIdAndCourseId(command.courseId, command.userId)
+        val interestCourse = loadInterestCoursePersistencePort.getByUserIdAndCourseId(command.userId, command.courseId)
         deleteInterestCoursePersistencePort.deleteByInterestCourseId(interestCourse.id)
         val course = loadCoursePersistencePort.getByCourseId(command.courseId)
         course.decreaseInterests()
