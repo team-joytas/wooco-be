@@ -1,7 +1,5 @@
 package kr.wooco.woocobe.core.notification.application.port.`in`
 
-import kr.wooco.woocobe.core.notification.domain.entity.Notification
-
 fun interface CreateNotificationUseCase {
     data class Command(
         val userId: Long,
@@ -10,5 +8,5 @@ fun interface CreateNotificationUseCase {
         val type: String,
     )
 
-    fun createNotification(command: Command): Notification
+    fun createNotification(command: Command): Long
 }
