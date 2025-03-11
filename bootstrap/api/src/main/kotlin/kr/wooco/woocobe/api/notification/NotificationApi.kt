@@ -17,7 +17,7 @@ interface NotificationApi {
     ): ResponseEntity<List<NotificationDetailResponse>>
 
     @SecurityRequirement(name = "JWT")
-    fun updateNotification(
+    fun markAsReadNotification(
         @AuthenticationPrincipal userId: Long,
         @PathVariable notificationId: Long,
     )
