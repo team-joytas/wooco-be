@@ -8,9 +8,9 @@ data class NotificationDetailResponse(
     val userId: Long,
     val targetId: Long,
     val targetName: String,
-    var isRead: Boolean,
     val type: String,
-    val sentAt: LocalDateTime,
+    val createdAt: LocalDateTime,
+    val readStatus: String,
 ) {
     companion object {
         fun from(notificationResult: NotificationResult): NotificationDetailResponse =
@@ -19,9 +19,9 @@ data class NotificationDetailResponse(
                 userId = notificationResult.userId,
                 targetId = notificationResult.targetId,
                 targetName = notificationResult.targetName,
-                isRead = notificationResult.isRead,
                 type = notificationResult.type,
-                sentAt = notificationResult.sentAt,
+                createdAt = notificationResult.createdAt,
+                readStatus = notificationResult.readStatus,
             )
 
         fun listFrom(notificationResults: List<NotificationResult>): List<NotificationDetailResponse> = notificationResults.map { from(it) }
