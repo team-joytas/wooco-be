@@ -2,23 +2,20 @@ package kr.wooco.woocobe.core.notification.application.handler
 
 import kr.wooco.woocobe.core.coursecomment.domain.event.CourseCommentCreateEvent
 import kr.wooco.woocobe.core.notification.application.port.`in`.CreateNotificationUseCase
-import kr.wooco.woocobe.core.notification.application.port.`in`.ReadDeviceTokenUseCase
-import kr.wooco.woocobe.core.notification.application.port.out.SendNotificationPort
+import kr.wooco.woocobe.core.notification.application.port.`in`.SendNotificationUseCase
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
 import kr.wooco.woocobe.core.plan.domain.event.PlanShareRequestEvent
+import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
-import org.springframework.transaction.event.TransactionPhase
-import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class NotificationEventHandler(
-    private val sendNotificationPort: SendNotificationPort,
-    private val readDeviceTokenUseCase: ReadDeviceTokenUseCase,
     private val createNotificationUseCase: CreateNotificationUseCase,
+    private val sendNotificationUseCase: SendNotificationUseCase,
 ) {
     @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @EventListener
     fun handleCourseCommentCreateEvent(event: CourseCommentCreateEvent) {
         val command = CreateNotificationUseCase.Command(
             userId = event.courseWriterId,
@@ -26,11 +23,13 @@ class NotificationEventHandler(
             targetName = event.courseTitle,
             type = NotificationType.COURSE_COMMENT_CREATED.name,
         )
-        sendNotification(command)
+        val notificationId = createNotificationUseCase.createNotification(command)
+        val query = SendNotificationUseCase.Query(notificationId)
+        sendNotificationUseCase.sendNotification(query)
     }
 
     @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @EventListener
     fun handlePlanShareRequestEvent(event: PlanShareRequestEvent) {
         val command = CreateNotificationUseCase.Command(
             userId = event.userId,
@@ -38,13 +37,8 @@ class NotificationEventHandler(
             targetName = event.planTitle,
             type = NotificationType.PLAN_SHARE_REQUEST.name,
         )
-        sendNotification(command)
-    }
-
-    private fun sendNotification(command: CreateNotificationUseCase.Command) {
-        val notification = createNotificationUseCase.createNotification(command)
-        val query = ReadDeviceTokenUseCase.Query(notification.userId)
-        val deviceToken = readDeviceTokenUseCase.readDeviceToken(query)
-        sendNotificationPort.sendNotification(notification, deviceToken.token)
+        val notificationId = createNotificationUseCase.createNotification(command)
+        val query = SendNotificationUseCase.Query(notificationId)
+        sendNotificationUseCase.sendNotification(query)
     }
 }
