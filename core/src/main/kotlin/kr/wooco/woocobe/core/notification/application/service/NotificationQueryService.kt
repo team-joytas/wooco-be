@@ -1,26 +1,30 @@
 package kr.wooco.woocobe.core.notification.application.service
 
 import kr.wooco.woocobe.core.notification.application.port.`in`.ReadAllNotificationUseCase
-import kr.wooco.woocobe.core.notification.application.port.`in`.ReadDeviceTokenUseCase
-import kr.wooco.woocobe.core.notification.application.port.`in`.results.DeviceTokenResult
+import kr.wooco.woocobe.core.notification.application.port.`in`.SendNotificationUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.results.NotificationResult
-import kr.wooco.woocobe.core.notification.application.port.out.LoadDeviceTokenPersistencePort
-import kr.wooco.woocobe.core.notification.application.port.out.LoadNotificationPersistencePort
+import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenQueryPort
+import kr.wooco.woocobe.core.notification.application.port.out.NotificationQueryPort
+import kr.wooco.woocobe.core.notification.application.port.out.NotificationSenderPort
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class NotificationQueryService(
-    private val loadDeviceTokenPersistencePort: LoadDeviceTokenPersistencePort,
-    private val loadNotificationPersistencePort: LoadNotificationPersistencePort,
+    private val notificationQueryPort: NotificationQueryPort,
+    private val deviceTokenQueryPort: DeviceTokenQueryPort,
+    private val notificationSenderPort: NotificationSenderPort,
 ) : ReadAllNotificationUseCase,
-    ReadDeviceTokenUseCase {
+    SendNotificationUseCase {
+    @Transactional(readOnly = true)
     override fun readAllNotification(query: ReadAllNotificationUseCase.Query): List<NotificationResult> {
-        val notifications = loadNotificationPersistencePort.getAllByUserId(query.userId)
+        val notifications = notificationQueryPort.getAllByUserId(query.userId)
         return notifications.map { NotificationResult.from(it) }
     }
 
-    override fun readDeviceToken(query: ReadDeviceTokenUseCase.Query): DeviceTokenResult {
-        val deviceToken = loadDeviceTokenPersistencePort.getByUserId(query.userId)
-        return DeviceTokenResult.from(deviceToken)
+    override fun sendNotification(query: SendNotificationUseCase.Query) {
+        val notification = notificationQueryPort.getByNotificationId(query.notificationId)
+        val tokens = deviceTokenQueryPort.getAllByUserId(notification.userId).map { it.token }
+        notificationSenderPort.sendNotification(notification = notification, tokens = tokens)
     }
 }
