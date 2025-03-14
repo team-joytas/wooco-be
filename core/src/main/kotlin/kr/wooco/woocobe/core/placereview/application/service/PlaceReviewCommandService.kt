@@ -13,6 +13,7 @@ import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreateEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeleteEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdateEvent
+import kr.wooco.woocobe.core.placereview.domain.exception.TooManyImagesException
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -30,6 +31,7 @@ class PlaceReviewCommandService(
     DeletePlaceReviewUseCase {
     @Transactional
     override fun createPlaceReview(command: CreatePlaceReviewUseCase.Command): Long {
+        validateImageCount(command.imageUrls.size)
         val placeReview = savePlaceReviewPersistencePort.savePlaceReview(
             PlaceReview.create(
                 userId = command.userId,
@@ -54,14 +56,16 @@ class PlaceReviewCommandService(
 
     @Transactional
     override fun updatePlaceReview(command: UpdatePlaceReviewUseCase.Command) {
+        validateImageCount(command.imageUrls.size)
         val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)
-        placeReview.update(
-            userId = command.userId,
-            rating = command.rating,
-            contents = command.contents,
-            imageUrls = command.imageUrls,
+        savePlaceReviewPersistencePort.savePlaceReview(
+            placeReview.update(
+                userId = command.userId,
+                rating = command.rating,
+                contents = command.contents,
+                imageUrls = command.imageUrls,
+            ),
         )
-        savePlaceReviewPersistencePort.savePlaceReview(placeReview)
 
         deleteAllPlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
         val placeOneLineReviews = command.oneLineReviews.map { contents ->
@@ -73,7 +77,7 @@ class PlaceReviewCommandService(
         }
         saveAllPlaceOneLineReviewPersistencePort.saveAllPlaceOneLineReview(placeOneLineReviews)
 
-        eventPublisher.publishEvent(PlaceReviewUpdateEvent.of(placeReview, command))
+        eventPublisher.publishEvent(PlaceReviewUpdateEvent.from(placeReview))
     }
 
     @Transactional
@@ -84,5 +88,11 @@ class PlaceReviewCommandService(
         deletePlaceReviewPersistencePort.deletePlaceReviewId(command.placeReviewId)
 
         eventPublisher.publishEvent(PlaceReviewDeleteEvent.from(placeReview))
+    }
+
+    private fun validateImageCount(imageUrlsSize: Int) {
+        if (imageUrlsSize > 10) {
+            throw TooManyImagesException
+        }
     }
 }
