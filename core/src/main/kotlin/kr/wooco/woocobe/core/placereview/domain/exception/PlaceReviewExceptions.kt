@@ -20,3 +20,10 @@ data object NotExistsPlaceReviewException : BasePlaceReviewException(
 ) {
     private fun readResolve(): Any = NotExistsPlaceReviewException
 }
+
+data object TooManyImagesException : BasePlaceReviewException(
+    code = "TOO_MANY_IMAGES",
+    message = "이미지는 최대 10장까지 등록할 수 있습니다.",
+) {
+    private fun readResolve(): Any = TooManyImagesException
+}
