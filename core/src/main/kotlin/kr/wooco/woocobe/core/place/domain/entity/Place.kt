@@ -31,17 +31,10 @@ data class Place(
             thumbnailUrl = thumbnailUrl,
         )
 
-    fun processPlaceStats(
-        currentReviewRate: Double,
-        reviewRate: Double,
-        reviewCountOffset: Long,
-    ): Place {
-        val newAverageRating = when (reviewCount) {
-            0L -> 0.0
-            else -> ((averageRating * (reviewCount - reviewCountOffset)) - currentReviewRate + reviewRate) / reviewCount
-        }
-        return copy(averageRating = newAverageRating)
-    }
+    fun updateAverageRating(averageRating: Double): Place =
+        copy(
+            averageRating = averageRating,
+        )
 
     companion object {
         fun create(

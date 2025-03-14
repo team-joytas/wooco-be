@@ -72,6 +72,8 @@ internal class PlaceReviewPersistenceAdapter(
         }
     }
 
+    override fun getAverageRatingByPlaceId(placeId: Long): Double = placeReviewJpaRepository.findAverageRatingByPlaceId(placeId)
+
     override fun deletePlaceReviewId(placeReviewId: Long) {
         placeReviewJpaRepository.deleteById(placeReviewId)
         placeReviewImageJpaRepository.deleteAllByPlaceReviewId(placeReviewId)
