@@ -26,8 +26,8 @@ internal class PlacePersistenceAdapter(
         return placePersistenceMapper.toDomain(placeEntity)
     }
 
-    override fun getOrNullByKakaoMapPlaceId(kakaoMapPlaceId: String): Place? {
-        val placeEntity = placeJpaRepository.findByKakaoPlaceId(kakaoMapPlaceId)
+    override fun getOrNullByKakaoPlaceId(kakaoPlaceId: String): Place? {
+        val placeEntity = placeJpaRepository.findByKakaoPlaceId(kakaoPlaceId)
         return placeEntity?.let { placePersistenceMapper.toDomain(it) }
     }
 
