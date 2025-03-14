@@ -15,4 +15,9 @@ interface PlaceReviewJpaRepository : JpaRepository<PlaceReviewJpaEntity, Long> {
             "WHERE pr.placeId = :placeId",
     )
     fun findAverageRatingByPlaceId(placeId: Long): Double
+
+    fun existsByPlaceIdAndUserId(
+        placeId: Long,
+        userId: Long,
+    ): Boolean
 }

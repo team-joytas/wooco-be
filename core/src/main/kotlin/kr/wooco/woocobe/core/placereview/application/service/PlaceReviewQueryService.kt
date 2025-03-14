@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.core.placereview.application.service
 
 import kr.wooco.woocobe.core.place.application.port.out.LoadPlacePersistencePort
+import kr.wooco.woocobe.core.placereview.application.port.`in`.ExistsPlaceReviewWriterUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllUserPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadPlaceReviewUseCase
@@ -20,7 +21,8 @@ internal class PlaceReviewQueryService(
     private val loadPlacePersistencePort: LoadPlacePersistencePort,
 ) : ReadAllPlaceReviewUseCase,
     ReadAllUserPlaceReviewUseCase,
-    ReadPlaceReviewUseCase {
+    ReadPlaceReviewUseCase,
+    ExistsPlaceReviewWriterUseCase {
     @Transactional(readOnly = true)
     override fun readAllPlaceReview(query: ReadAllPlaceReviewUseCase.Query): List<PlaceReviewWithWriterResult> {
         val placeReviews = loadPlaceReviewPersistencePort.getAllByPlaceId(query.placeId)
@@ -48,4 +50,7 @@ internal class PlaceReviewQueryService(
         val writer = loadUserPersistencePort.getByUserId(placeReview.userId)
         return PlaceReviewWithWriterResult.of(placeReview, placeOneLineReviews, writer)
     }
+
+    override fun existsPlaceReviewWriter(query: ExistsPlaceReviewWriterUseCase.Query): Boolean =
+        loadPlaceReviewPersistencePort.existsByPlaceIdAndUserId(query.placeId, query.userId)
 }

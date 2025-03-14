@@ -10,4 +10,9 @@ interface LoadPlaceReviewPersistencePort {
     fun getAllByUserId(userId: Long): List<PlaceReview>
 
     fun getAverageRatingByPlaceId(placeId: Long): Double
+
+    fun existsByPlaceIdAndUserId(
+        placeId: Long,
+        userId: Long,
+    ): Boolean
 }
