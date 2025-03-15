@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.mysql.place
 
-import kr.wooco.woocobe.core.place.application.port.out.LoadPlacePersistencePort
-import kr.wooco.woocobe.core.place.application.port.out.SavePlacePersistencePort
+import kr.wooco.woocobe.core.place.application.port.out.PlaceCommandPort
+import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.core.place.domain.exception.NotExistsPlaceException
 import kr.wooco.woocobe.mysql.place.repository.PlaceJpaRepository
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component
 internal class PlacePersistenceAdapter(
     private val placeJpaRepository: PlaceJpaRepository,
     private val placePersistenceMapper: PlacePersistenceMapper,
-) : LoadPlacePersistencePort,
-    SavePlacePersistencePort {
+) : PlaceQueryPort,
+    PlaceCommandPort {
     override fun savePlace(place: Place): Place {
         val placeEntity = placePersistenceMapper.toEntity(place)
         val savedPlaceEntity = placeJpaRepository.save(placeEntity)

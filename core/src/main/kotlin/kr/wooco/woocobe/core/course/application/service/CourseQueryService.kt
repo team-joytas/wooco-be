@@ -9,7 +9,7 @@ import kr.wooco.woocobe.core.course.application.port.out.LoadInterestCoursePersi
 import kr.wooco.woocobe.core.course.application.service.dto.CourseSearchCondition
 import kr.wooco.woocobe.core.course.application.service.dto.InterestCourseSearchCondition
 import kr.wooco.woocobe.core.course.domain.entity.Course
-import kr.wooco.woocobe.core.place.application.port.out.LoadPlacePersistencePort
+import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.user.application.port.out.LoadUserPersistencePort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 internal class CourseQueryService(
     private val loadUserPersistencePort: LoadUserPersistencePort,
-    private val loadPlacePersistencePort: LoadPlacePersistencePort,
+    private val placeQueryPort: PlaceQueryPort,
     private val loadCoursePersistencePort: LoadCoursePersistencePort,
     private val loadInterestCoursePersistencePort: LoadInterestCoursePersistencePort,
 ) : ReadCourseUseCase,
@@ -28,7 +28,7 @@ internal class CourseQueryService(
         val course = loadCoursePersistencePort.getByCourseId(query.courseId)
         val user = loadUserPersistencePort.getByUserId(course.userId)
         val placeIds = course.coursePlaces.map { it.placeId }.distinct()
-        val places = loadPlacePersistencePort.getAllByPlaceIds(placeIds)
+        val places = placeQueryPort.getAllByPlaceIds(placeIds)
         val isInterest = query.userId?.run {
             loadInterestCoursePersistencePort.existsByUserIdAndCourseId(course.id, query.userId)
         } ?: false
@@ -70,7 +70,7 @@ internal class CourseQueryService(
         val userIds = courses.map { it.userId }.distinct()
         val users = loadUserPersistencePort.getAllByUserIds(userIds)
         val placeIds = courses.flatMap { it.coursePlaces }.map { it.placeId }.distinct()
-        val places = loadPlacePersistencePort.getAllByPlaceIds(placeIds)
+        val places = placeQueryPort.getAllByPlaceIds(placeIds)
         val courseIds = courses.map { it.id }
         val interestCourseIds = userId?.run {
             loadInterestCoursePersistencePort.getAllCourseIdByUserIdAndCourseIds(userId, courseIds)

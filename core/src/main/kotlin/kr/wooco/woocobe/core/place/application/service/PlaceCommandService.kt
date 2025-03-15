@@ -4,9 +4,9 @@ import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceIfNotExistsU
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdateAverageRatingUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdatePlaceImageUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdateReviewStatsUseCase
-import kr.wooco.woocobe.core.place.application.port.out.LoadPlacePersistencePort
 import kr.wooco.woocobe.core.place.application.port.out.PlaceClientPort
-import kr.wooco.woocobe.core.place.application.port.out.SavePlacePersistencePort
+import kr.wooco.woocobe.core.place.application.port.out.PlaceCommandPort
+import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
 import kr.wooco.woocobe.core.placereview.application.port.out.LoadPlaceReviewPersistencePort
@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional
 internal class PlaceCommandService(
     private val eventPublisher: ApplicationEventPublisher,
     private val placeClientPort: PlaceClientPort,
-    private val savePlacePersistencePort: SavePlacePersistencePort,
-    private val loadPlacePersistencePort: LoadPlacePersistencePort,
+    private val placeCommandPort: PlaceCommandPort,
+    private val placeQueryPort: PlaceQueryPort,
     private val loadPlaceReviewPersistencePort: LoadPlaceReviewPersistencePort,
 ) : CreatePlaceIfNotExistsUseCase,
     UpdatePlaceImageUseCase,
@@ -27,11 +27,11 @@ internal class PlaceCommandService(
     UpdateAverageRatingUseCase {
     @Transactional
     override fun createPlaceIfNotExists(command: CreatePlaceIfNotExistsUseCase.Command): Long =
-        loadPlacePersistencePort.getOrNullByKakaoPlaceId(command.kakaoPlaceId)?.id
+        placeQueryPort.getOrNullByKakaoPlaceId(command.kakaoPlaceId)?.id
             ?: createPlace(command)
 
     private fun createPlace(command: CreatePlaceIfNotExistsUseCase.Command): Long {
-        val place = savePlacePersistencePort.savePlace(
+        val place = placeCommandPort.savePlace(
             Place.create(
                 name = command.name,
                 kakaoPlaceId = command.kakaoPlaceId,
@@ -46,27 +46,27 @@ internal class PlaceCommandService(
     }
 
     override fun updatePlaceImage(command: UpdatePlaceImageUseCase.Command) {
-        val place = loadPlacePersistencePort.getByPlaceId(command.placeId)
+        val place = placeQueryPort.getByPlaceId(command.placeId)
         placeClientPort.fetchPlaceThumbnailUrl(place.name, place.address)?.let {
-            savePlacePersistencePort.savePlace(place.updateThumbnail(it))
+            placeCommandPort.savePlace(place.updateThumbnail(it))
         }
     }
 
     @Transactional
     override fun updateReviewStats(command: UpdateReviewStatsUseCase.Command) {
         val placeReviewStats = loadPlaceReviewPersistencePort.getPlaceReviewStatsByPlaceId(command.placeId)
-        val place = loadPlacePersistencePort
+        val place = placeQueryPort
             .getByPlaceId(command.placeId)
             .updatePlaceReviewStats(placeReviewStats.averageRating, placeReviewStats.reviewCount)
-        savePlacePersistencePort.savePlace(place)
+        placeCommandPort.savePlace(place)
     }
 
     @Transactional
     override fun updateAverageRating(command: UpdateAverageRatingUseCase.Command) {
         val averageRating = loadPlaceReviewPersistencePort.getAverageRatingByPlaceId(command.placeId)
-        val place = loadPlacePersistencePort
+        val place = placeQueryPort
             .getByPlaceId(command.placeId)
             .updateAverageRating(averageRating)
-        savePlacePersistencePort.savePlace(place)
+        placeCommandPort.savePlace(place)
     }
 }

@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.core.placereview.application.service
 
-import kr.wooco.woocobe.core.place.application.port.out.LoadPlacePersistencePort
+import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ExistsPlaceReviewWriterUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllUserPlaceReviewUseCase
@@ -18,7 +18,7 @@ internal class PlaceReviewQueryService(
     private val loadUserPersistencePort: LoadUserPersistencePort,
     private val loadPlaceReviewPersistencePort: LoadPlaceReviewPersistencePort,
     private val loadPlaceOneLineReviewPersistencePort: LoadPlaceOneLineReviewPersistencePort,
-    private val loadPlacePersistencePort: LoadPlacePersistencePort,
+    private val placeQueryPort: PlaceQueryPort,
 ) : ReadAllPlaceReviewUseCase,
     ReadAllUserPlaceReviewUseCase,
     ReadPlaceReviewUseCase,
@@ -39,7 +39,7 @@ internal class PlaceReviewQueryService(
         val placeOneLineReviews =
             loadPlaceOneLineReviewPersistencePort.getAllByPlaceReviewIds(placeReviews.map { it.id })
         val placeIds = placeReviews.map { it.placeId }.distinct()
-        val places = loadPlacePersistencePort.getAllByPlaceIds(placeIds)
+        val places = placeQueryPort.getAllByPlaceIds(placeIds)
         return PlaceReviewWithPlaceResult.listOf(placeReviews, placeOneLineReviews, places)
     }
 
