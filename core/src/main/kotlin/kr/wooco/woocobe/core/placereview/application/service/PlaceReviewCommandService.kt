@@ -10,7 +10,6 @@ import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreateEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeleteEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdateEvent
-import kr.wooco.woocobe.core.placereview.domain.exception.TooManyImagesException
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -25,7 +24,6 @@ class PlaceReviewCommandService(
     DeletePlaceReviewUseCase {
     @Transactional
     override fun createPlaceReview(command: CreatePlaceReviewUseCase.Command): Long {
-        validateImageCount(command.imageUrls.size)
         val placeReview = placeReviewCommandPort.savePlaceReview(
             PlaceReview.create(
                 userId = command.userId,
@@ -50,7 +48,6 @@ class PlaceReviewCommandService(
 
     @Transactional
     override fun updatePlaceReview(command: UpdatePlaceReviewUseCase.Command) {
-        validateImageCount(command.imageUrls.size)
         val placeReview = placeReviewQueryPort.getByPlaceReviewId(command.placeReviewId)
         placeReviewCommandPort.savePlaceReview(
             placeReview.update(
@@ -82,11 +79,5 @@ class PlaceReviewCommandService(
         placeReviewCommandPort.deletePlaceReviewId(command.placeReviewId)
 
         eventPublisher.publishEvent(PlaceReviewDeleteEvent.from(placeReview))
-    }
-
-    private fun validateImageCount(imageUrlsSize: Int) {
-        if (imageUrlsSize > 10) {
-            throw TooManyImagesException
-        }
     }
 }
