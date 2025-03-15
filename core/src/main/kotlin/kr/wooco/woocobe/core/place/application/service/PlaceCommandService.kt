@@ -1,10 +1,9 @@
 package kr.wooco.woocobe.core.place.application.service
 
 import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceIfNotExistsUseCase
-import kr.wooco.woocobe.core.place.application.port.`in`.DecreaseReviewCountUseCase
-import kr.wooco.woocobe.core.place.application.port.`in`.IncreasePlaceReviewCountUseCase
-import kr.wooco.woocobe.core.place.application.port.`in`.ProcessAverageRatingUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.UpdateAverageRatingUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdatePlaceImageUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.UpdateReviewStatsUseCase
 import kr.wooco.woocobe.core.place.application.port.out.LoadPlacePersistencePort
 import kr.wooco.woocobe.core.place.application.port.out.PlaceClientPort
 import kr.wooco.woocobe.core.place.application.port.out.SavePlacePersistencePort
@@ -24,9 +23,8 @@ internal class PlaceCommandService(
     private val loadPlaceReviewPersistencePort: LoadPlaceReviewPersistencePort,
 ) : CreatePlaceIfNotExistsUseCase,
     UpdatePlaceImageUseCase,
-    IncreasePlaceReviewCountUseCase,
-    ProcessAverageRatingUseCase,
-    DecreaseReviewCountUseCase {
+    UpdateReviewStatsUseCase,
+    UpdateAverageRatingUseCase {
     @Transactional
     override fun createPlaceIfNotExists(command: CreatePlaceIfNotExistsUseCase.Command): Long =
         loadPlacePersistencePort.getOrNullByKakaoPlaceId(command.kakaoPlaceId)?.id
@@ -47,7 +45,6 @@ internal class PlaceCommandService(
         return place.id
     }
 
-    // NOTE - Hong: 외부 API 호출이 연동되어있어 Adapter 레이어에서 Transactional 정의
     override fun updatePlaceImage(command: UpdatePlaceImageUseCase.Command) {
         val place = loadPlacePersistencePort.getByPlaceId(command.placeId)
         placeClientPort.fetchPlaceThumbnailUrl(place.name, place.address)?.let {
@@ -56,27 +53,20 @@ internal class PlaceCommandService(
     }
 
     @Transactional
-    override fun increasePlaceReviewCount(command: IncreasePlaceReviewCountUseCase.Command) {
+    override fun updateReviewStats(command: UpdateReviewStatsUseCase.Command) {
+        val placeReviewStats = loadPlaceReviewPersistencePort.getPlaceReviewStatsByPlaceId(command.placeId)
         val place = loadPlacePersistencePort
             .getByPlaceId(command.placeId)
-            .increaseReviewCounts()
+            .updatePlaceReviewStats(placeReviewStats.averageRating, placeReviewStats.reviewCount)
         savePlacePersistencePort.savePlace(place)
     }
 
     @Transactional
-    override fun processAverageRating(command: ProcessAverageRatingUseCase.Command) {
+    override fun updateAverageRating(command: UpdateAverageRatingUseCase.Command) {
         val averageRating = loadPlaceReviewPersistencePort.getAverageRatingByPlaceId(command.placeId)
         val place = loadPlacePersistencePort
             .getByPlaceId(command.placeId)
             .updateAverageRating(averageRating)
-        savePlacePersistencePort.savePlace(place)
-    }
-
-    @Transactional
-    override fun decreaseReviewCount(command: DecreaseReviewCountUseCase.Command) {
-        val place = loadPlacePersistencePort
-            .getByPlaceId(command.placeId)
-            .decreaseReviewCounts()
         savePlacePersistencePort.savePlace(place)
     }
 }

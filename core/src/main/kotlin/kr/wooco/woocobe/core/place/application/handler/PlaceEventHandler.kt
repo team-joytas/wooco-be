@@ -1,9 +1,8 @@
 package kr.wooco.woocobe.core.place.application.handler
 
-import kr.wooco.woocobe.core.place.application.port.`in`.DecreaseReviewCountUseCase
-import kr.wooco.woocobe.core.place.application.port.`in`.IncreasePlaceReviewCountUseCase
-import kr.wooco.woocobe.core.place.application.port.`in`.ProcessAverageRatingUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.UpdateAverageRatingUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdatePlaceImageUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.UpdateReviewStatsUseCase
 import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreateEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeleteEvent
@@ -16,9 +15,8 @@ import org.springframework.transaction.event.TransactionalEventListener
 @Service
 internal class PlaceEventHandler(
     private val updatePlaceImageUseCase: UpdatePlaceImageUseCase,
-    private val increasePlaceReviewCountUseCase: IncreasePlaceReviewCountUseCase,
-    private val decreaseReviewCountUseCase: DecreaseReviewCountUseCase,
-    private val processAverageRatingUseCase: ProcessAverageRatingUseCase,
+    private val updateReviewStatsUseCase: UpdateReviewStatsUseCase,
+    private val updateAverageRatingUseCase: UpdateAverageRatingUseCase,
 ) {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -28,18 +26,16 @@ internal class PlaceEventHandler(
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun handlePlaceReviewCreateEvent(event: PlaceReviewCreateEvent) {
-        increasePlaceReviewCountUseCase.increasePlaceReviewCount(IncreasePlaceReviewCountUseCase.Command(event.placeId))
-        processAverageRatingUseCase.processAverageRating(ProcessAverageRatingUseCase.Command(event.placeId))
+        updateReviewStatsUseCase.updateReviewStats(UpdateReviewStatsUseCase.Command(event.placeId))
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun handlePlaceReviewUpdateEvent(event: PlaceReviewUpdateEvent) {
-        processAverageRatingUseCase.processAverageRating(ProcessAverageRatingUseCase.Command(event.placeId))
+        updateAverageRatingUseCase.updateAverageRating(UpdateAverageRatingUseCase.Command(event.placeId))
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun handlePlaceReviewDeleteEvent(event: PlaceReviewDeleteEvent) {
-        decreaseReviewCountUseCase.decreaseReviewCount(DecreaseReviewCountUseCase.Command(event.placeId))
-        processAverageRatingUseCase.processAverageRating(ProcessAverageRatingUseCase.Command(event.placeId))
+        updateReviewStatsUseCase.updateReviewStats(UpdateReviewStatsUseCase.Command(event.placeId))
     }
 }

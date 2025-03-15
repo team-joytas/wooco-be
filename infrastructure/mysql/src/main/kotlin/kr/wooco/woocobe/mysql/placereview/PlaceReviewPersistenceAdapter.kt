@@ -3,6 +3,7 @@ package kr.wooco.woocobe.mysql.placereview
 import kr.wooco.woocobe.core.placereview.application.port.out.DeletePlaceReviewPersistencePort
 import kr.wooco.woocobe.core.placereview.application.port.out.LoadPlaceReviewPersistencePort
 import kr.wooco.woocobe.core.placereview.application.port.out.SavePlaceReviewPersistencePort
+import kr.wooco.woocobe.core.placereview.application.service.dto.PlaceReviewStats
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.exception.NotExistsPlaceReviewException
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewImageJpaEntity
@@ -73,6 +74,9 @@ internal class PlaceReviewPersistenceAdapter(
     }
 
     override fun getAverageRatingByPlaceId(placeId: Long): Double = placeReviewJpaRepository.findAverageRatingByPlaceId(placeId)
+
+    override fun getPlaceReviewStatsByPlaceId(placeId: Long): PlaceReviewStats =
+        placeReviewJpaRepository.findPlaceReviewStatsByPlaceId(placeId)
 
     override fun existsByPlaceIdAndUserId(
         placeId: Long,
