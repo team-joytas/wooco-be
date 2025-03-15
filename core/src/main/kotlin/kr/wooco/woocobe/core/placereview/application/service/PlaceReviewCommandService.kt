@@ -3,11 +3,8 @@ package kr.wooco.woocobe.core.placereview.application.service
 import kr.wooco.woocobe.core.placereview.application.port.`in`.CreatePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.DeletePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.UpdatePlaceReviewUseCase
-import kr.wooco.woocobe.core.placereview.application.port.out.DeleteAllPlaceOneLineReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.DeletePlaceReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.LoadPlaceReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.SaveAllPlaceOneLineReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.SavePlaceReviewPersistencePort
+import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewCommandPort
+import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreateEvent
@@ -20,11 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PlaceReviewCommandService(
-    private val loadPlaceReviewPersistencePort: LoadPlaceReviewPersistencePort,
-    private val savePlaceReviewPersistencePort: SavePlaceReviewPersistencePort,
-    private val deletePlaceReviewPersistencePort: DeletePlaceReviewPersistencePort,
-    private val saveAllPlaceOneLineReviewPersistencePort: SaveAllPlaceOneLineReviewPersistencePort,
-    private val deleteAllPlaceOneLineReviewPersistencePort: DeleteAllPlaceOneLineReviewPersistencePort,
+    private val placeReviewQueryPort: PlaceReviewQueryPort,
+    private val placeReviewCommandPort: PlaceReviewCommandPort,
     private val eventPublisher: ApplicationEventPublisher,
 ) : CreatePlaceReviewUseCase,
     UpdatePlaceReviewUseCase,
@@ -32,7 +26,7 @@ class PlaceReviewCommandService(
     @Transactional
     override fun createPlaceReview(command: CreatePlaceReviewUseCase.Command): Long {
         validateImageCount(command.imageUrls.size)
-        val placeReview = savePlaceReviewPersistencePort.savePlaceReview(
+        val placeReview = placeReviewCommandPort.savePlaceReview(
             PlaceReview.create(
                 userId = command.userId,
                 placeId = command.placeId,
@@ -48,7 +42,7 @@ class PlaceReviewCommandService(
                 contents = contents,
             )
         }
-        saveAllPlaceOneLineReviewPersistencePort.saveAllPlaceOneLineReview(placeOneLineReviews)
+        placeReviewCommandPort.saveAllPlaceOneLineReview(placeOneLineReviews)
 
         eventPublisher.publishEvent(PlaceReviewCreateEvent.from(placeReview))
         return placeReview.id
@@ -57,8 +51,8 @@ class PlaceReviewCommandService(
     @Transactional
     override fun updatePlaceReview(command: UpdatePlaceReviewUseCase.Command) {
         validateImageCount(command.imageUrls.size)
-        val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)
-        savePlaceReviewPersistencePort.savePlaceReview(
+        val placeReview = placeReviewQueryPort.getByPlaceReviewId(command.placeReviewId)
+        placeReviewCommandPort.savePlaceReview(
             placeReview.update(
                 userId = command.userId,
                 rating = command.rating,
@@ -67,7 +61,7 @@ class PlaceReviewCommandService(
             ),
         )
 
-        deleteAllPlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
+        placeReviewCommandPort.deleteAllByPlaceReviewId(placeReview.id)
         val placeOneLineReviews = command.oneLineReviews.map { contents ->
             PlaceOneLineReview.create(
                 placeId = placeReview.placeId,
@@ -75,17 +69,17 @@ class PlaceReviewCommandService(
                 contents = contents,
             )
         }
-        saveAllPlaceOneLineReviewPersistencePort.saveAllPlaceOneLineReview(placeOneLineReviews)
+        placeReviewCommandPort.saveAllPlaceOneLineReview(placeOneLineReviews)
 
         eventPublisher.publishEvent(PlaceReviewUpdateEvent.from(placeReview))
     }
 
     @Transactional
     override fun deletePlaceReview(command: DeletePlaceReviewUseCase.Command) {
-        val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)
+        val placeReview = placeReviewQueryPort.getByPlaceReviewId(command.placeReviewId)
         placeReview.isValidWriter(command.userId)
-        deleteAllPlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
-        deletePlaceReviewPersistencePort.deletePlaceReviewId(command.placeReviewId)
+        placeReviewCommandPort.deleteAllByPlaceReviewId(placeReview.id)
+        placeReviewCommandPort.deletePlaceReviewId(command.placeReviewId)
 
         eventPublisher.publishEvent(PlaceReviewDeleteEvent.from(placeReview))
     }

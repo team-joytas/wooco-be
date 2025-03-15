@@ -9,7 +9,7 @@ import kr.wooco.woocobe.core.place.application.port.out.PlaceCommandPort
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
-import kr.wooco.woocobe.core.placereview.application.port.out.LoadPlaceReviewPersistencePort
+import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,7 +20,7 @@ internal class PlaceCommandService(
     private val placeClientPort: PlaceClientPort,
     private val placeCommandPort: PlaceCommandPort,
     private val placeQueryPort: PlaceQueryPort,
-    private val loadPlaceReviewPersistencePort: LoadPlaceReviewPersistencePort,
+    private val placeReviewQueryPort: PlaceReviewQueryPort,
 ) : CreatePlaceIfNotExistsUseCase,
     UpdatePlaceImageUseCase,
     UpdateReviewStatsUseCase,
@@ -54,7 +54,7 @@ internal class PlaceCommandService(
 
     @Transactional
     override fun updateReviewStats(command: UpdateReviewStatsUseCase.Command) {
-        val placeReviewStats = loadPlaceReviewPersistencePort.getPlaceReviewStatsByPlaceId(command.placeId)
+        val placeReviewStats = placeReviewQueryPort.getPlaceReviewStatsByPlaceId(command.placeId)
         val place = placeQueryPort
             .getByPlaceId(command.placeId)
             .updatePlaceReviewStats(placeReviewStats.averageRating, placeReviewStats.reviewCount)
@@ -63,7 +63,7 @@ internal class PlaceCommandService(
 
     @Transactional
     override fun updateAverageRating(command: UpdateAverageRatingUseCase.Command) {
-        val averageRating = loadPlaceReviewPersistencePort.getAverageRatingByPlaceId(command.placeId)
+        val averageRating = placeReviewQueryPort.getAverageRatingByPlaceId(command.placeId)
         val place = placeQueryPort
             .getByPlaceId(command.placeId)
             .updateAverageRating(averageRating)
