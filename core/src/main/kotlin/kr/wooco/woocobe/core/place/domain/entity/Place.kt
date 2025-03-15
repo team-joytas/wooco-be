@@ -16,32 +16,24 @@ data class Place(
         require(reviewCount >= 0) { "리뷰 수는 0 미만으로 설정할 수 없습니다." }
     }
 
-    fun increaseReviewCounts(): Place =
-        copy(
-            reviewCount = reviewCount + 1,
-        )
-
-    fun decreaseReviewCounts(): Place =
-        copy(
-            reviewCount = reviewCount - 1,
-        )
-
     fun updateThumbnail(thumbnailUrl: String): Place =
         copy(
             thumbnailUrl = thumbnailUrl,
         )
 
-    fun processPlaceStats(
-        currentReviewRate: Double,
-        reviewRate: Double,
-        reviewCountOffset: Long,
-    ): Place {
-        val newAverageRating = when (reviewCount) {
-            0L -> 0.0
-            else -> ((averageRating * (reviewCount - reviewCountOffset)) - currentReviewRate + reviewRate) / reviewCount
-        }
-        return copy(averageRating = newAverageRating)
-    }
+    fun updateAverageRating(averageRating: Double): Place =
+        copy(
+            averageRating = averageRating,
+        )
+
+    fun updatePlaceReviewStats(
+        averageRating: Double,
+        reviewCount: Long,
+    ): Place =
+        copy(
+            averageRating = averageRating,
+            reviewCount = reviewCount,
+        )
 
     companion object {
         fun create(

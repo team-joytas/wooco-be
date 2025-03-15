@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.core.plan.application.service
 
-import kr.wooco.woocobe.core.place.application.port.out.LoadPlacePersistencePort
+import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.plan.application.port.`in`.ReadAllPlanUseCase
 import kr.wooco.woocobe.core.plan.application.port.`in`.ReadPlanUseCase
 import kr.wooco.woocobe.core.plan.application.port.`in`.results.PlanResult
@@ -11,14 +11,14 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 internal class PlanQueryService(
     private val loadPlanPersistencePort: LoadPlanPersistencePort,
-    private val loadPlacePersistencePort: LoadPlacePersistencePort,
+    private val placeQueryPort: PlaceQueryPort,
 ) : ReadPlanUseCase,
     ReadAllPlanUseCase {
     @Transactional(readOnly = true)
     override fun readPlan(query: ReadPlanUseCase.Query): PlanResult {
         val plan = loadPlanPersistencePort.getByPlanId(query.planId)
         val placeIds = plan.places.map { it.placeId }
-        val places = loadPlacePersistencePort.getAllByPlaceIds(placeIds)
+        val places = placeQueryPort.getAllByPlaceIds(placeIds)
         return PlanResult.of(plan, places)
     }
 
@@ -26,7 +26,7 @@ internal class PlanQueryService(
     override fun readAllPlan(query: ReadAllPlanUseCase.Query): List<PlanResult> {
         val plans = loadPlanPersistencePort.getAllByUserId(query.userId)
         val placeIds = plans.flatMap { it.places }.map { it.placeId }
-        val places = loadPlacePersistencePort.getAllByPlaceIds(placeIds)
+        val places = placeQueryPort.getAllByPlaceIds(placeIds)
         return PlanResult.listOf(plans, places)
     }
 }
