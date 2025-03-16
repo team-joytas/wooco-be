@@ -14,6 +14,7 @@ data class PlaceReview(
 ) {
     init {
         require(rating in 1.0..5.0) { "평점은 1.0 ~ 5.0 사이여야 합니다." }
+        require(imageUrls.size <= 10) { "이미지는 최대 10개까지 등록할 수 있습니다." }
     }
 
     fun update(
