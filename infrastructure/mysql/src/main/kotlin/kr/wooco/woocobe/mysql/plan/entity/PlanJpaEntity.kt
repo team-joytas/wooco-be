@@ -21,8 +21,6 @@ class PlanJpaEntity(
     val primaryRegion: String,
     @Column(name = "secondary_region")
     val secondaryRegion: String,
-    @Column(name = "is_shared")
-    val isShared: Boolean,
     @Column(name = "visit_date")
     val visitDate: LocalDate,
     @Id @Tsid
