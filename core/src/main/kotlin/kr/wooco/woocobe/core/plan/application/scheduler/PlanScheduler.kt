@@ -5,24 +5,29 @@ import kr.wooco.woocobe.core.plan.domain.event.PlanShareRequestEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Component
 class PlanScheduler(
     private val loadPlanPersistencePort: LoadPlanPersistencePort,
     private val eventPublisher: ApplicationEventPublisher,
 ) {
-    @Transactional
     @Scheduled(cron = "0 0 0 * * ?")
     fun checkUnsharedPlan() {
-        loadPlanPersistencePort
-            .getAllByIsSharedFalse()
-            .map {
-                PlanShareRequestEvent(
-                    userId = it.userId,
-                    planId = it.id,
-                    planTitle = it.title,
-                )
-            }.forEach(eventPublisher::publishEvent)
+        val yesterdayStart = LocalDate.now().minusDays(1).atStartOfDay()
+        val yesterdayEnd = LocalDate.now().atStartOfDay()
+        val plans = loadPlanPersistencePort.getAllByCreatedAtBetween(
+            startDate = yesterdayStart,
+            endDate = yesterdayEnd,
+        )
+
+        plans.forEach {
+            val event = PlanShareRequestEvent(
+                userId = it.userId,
+                planId = it.id,
+                planTitle = it.title,
+            )
+            eventPublisher.publishEvent(event)
+        }
     }
 }
