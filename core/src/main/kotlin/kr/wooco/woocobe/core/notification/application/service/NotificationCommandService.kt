@@ -60,6 +60,6 @@ class NotificationCommandService(
         val token = Token(command.token)
         val deviceToken = deviceTokenQueryPort.getByToken(token)
         deviceToken.validateOwner(command.userId)
-        deviceTokenCommandPort.deleteByToKen(token)
+        deviceTokenCommandPort.deleteByToken(token)
     }
 }

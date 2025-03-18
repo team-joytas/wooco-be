@@ -28,7 +28,7 @@ internal class DeviceTokenPersistenceAdapter(
         return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
     }
 
-    override fun deleteByToKen(token: Token) {
+    override fun deleteByToken(token: Token) {
         deviceTokenJpaRepository.deleteByToken(token.value)
     }
 }
