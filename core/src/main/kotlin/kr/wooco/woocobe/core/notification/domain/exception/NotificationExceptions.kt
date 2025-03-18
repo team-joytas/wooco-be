@@ -15,7 +15,7 @@ data object NotExistsNotificationException : BaseNotificationException(
 }
 
 data object InvalidNotificationOwnerException : BaseNotificationException(
-    code = "INVALID_NOTIFICATION_RECIPIENT_EXCEPTION",
+    code = "INVALID_NOTIFICATION_OWNER_EXCEPTION",
     message = "유효하지 않은 알림 수신자입니다.",
 ) {
     private fun readResolve(): Any = InvalidNotificationOwnerException
