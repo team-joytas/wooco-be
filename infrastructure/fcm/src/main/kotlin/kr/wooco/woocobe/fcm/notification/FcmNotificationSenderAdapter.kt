@@ -9,7 +9,7 @@ import kr.wooco.woocobe.core.notification.domain.vo.Token
 import org.springframework.stereotype.Component
 
 @Component
-internal class NotificationExternalFcmAdapter(
+internal class FcmNotificationSenderAdapter(
     private val firebaseMessaging: FirebaseMessaging,
 ) : NotificationSenderPort {
     override fun sendNotification(
