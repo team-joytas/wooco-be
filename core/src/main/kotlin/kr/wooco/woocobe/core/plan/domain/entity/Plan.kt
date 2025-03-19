@@ -11,7 +11,6 @@ data class Plan(
     var title: String,
     var contents: String,
     var region: PlanRegion,
-    var isShared: Boolean,
     var visitDate: LocalDate,
     var places: List<PlanPlace>,
 ) {
@@ -36,10 +35,6 @@ data class Plan(
         if (this.userId != userId) throw InvalidPlanWriterException
     }
 
-    fun share() {
-        if (!isShared) isShared = true
-    }
-
     companion object {
         fun create(
             userId: Long,
@@ -55,7 +50,6 @@ data class Plan(
                 title = title,
                 contents = contents,
                 region = region,
-                isShared = false,
                 visitDate = visitDate,
                 places = processPlanPlaceOrder(placeIds),
             )

@@ -22,7 +22,6 @@ internal class PlanPersistenceMapper {
                 primaryRegion = planJpaEntity.primaryRegion,
                 secondaryRegion = planJpaEntity.secondaryRegion,
             ),
-            isShared = planJpaEntity.isShared,
             visitDate = planJpaEntity.visitDate,
             places = planPlaceJpaEntities.map { PlanPlace(order = it.order, placeId = it.placeId) },
         )
@@ -35,7 +34,6 @@ internal class PlanPersistenceMapper {
             contents = plan.contents,
             primaryRegion = plan.region.primaryRegion,
             secondaryRegion = plan.region.secondaryRegion,
-            isShared = plan.isShared,
             visitDate = plan.visitDate,
         )
 }

@@ -16,10 +16,10 @@ class NotificationJpaEntity(
     val targetId: Long,
     @Column(name = "target_name")
     val targetName: String,
-    @Column(name = "is_read")
-    val isRead: Boolean,
     @Column(name = "type")
     val type: String,
+    @Column(name = "read_status")
+    val readStatus: String,
     @Id @Tsid
     @Column(name = "notification_id")
     override val id: Long = 0L,

@@ -4,8 +4,8 @@ import kr.wooco.woocobe.api.notification.request.CreateDeviceTokenRequest
 import kr.wooco.woocobe.api.notification.response.NotificationDetailResponse
 import kr.wooco.woocobe.core.notification.application.port.`in`.CreateDeviceTokenUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.DeleteDeviceTokenUseCase
+import kr.wooco.woocobe.core.notification.application.port.`in`.MarkAsReadNotificationUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.ReadAllNotificationUseCase
-import kr.wooco.woocobe.core.notification.application.port.`in`.UpdateNotificationUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/notifications")
 class NotificationController(
     private val readAllNotificationUseCase: ReadAllNotificationUseCase,
-    private val updateNotificationUseCase: UpdateNotificationUseCase,
+    private val markAsReadNotificationUseCase: MarkAsReadNotificationUseCase,
     private val createDeviceTokenUseCase: CreateDeviceTokenUseCase,
     private val deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase,
 ) : NotificationApi {
@@ -35,12 +35,15 @@ class NotificationController(
     }
 
     @PatchMapping("/{notificationId}")
-    override fun updateNotification(
+    override fun markAsReadNotification(
         @AuthenticationPrincipal userId: Long,
         @PathVariable notificationId: Long,
     ) {
-        val command = UpdateNotificationUseCase.Command(notificationId)
-        updateNotificationUseCase.updateNotification(command)
+        val command = MarkAsReadNotificationUseCase.Command(
+            userId = userId,
+            notificationId = notificationId,
+        )
+        markAsReadNotificationUseCase.markAsReadNotification(command)
     }
 
     @PostMapping
@@ -60,7 +63,10 @@ class NotificationController(
         @AuthenticationPrincipal userId: Long,
         @PathVariable token: String,
     ) {
-        val command = DeleteDeviceTokenUseCase.Command(token)
+        val command = DeleteDeviceTokenUseCase.Command(
+            userId = userId,
+            token = token,
+        )
         deleteDeviceTokenUseCase.deleteDeviceToken(command)
     }
 }

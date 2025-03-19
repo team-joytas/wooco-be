@@ -1,9 +1,10 @@
 package kr.wooco.woocobe.core.notification.application.port.`in`
 
-fun interface UpdateNotificationUseCase {
+fun interface MarkAsReadNotificationUseCase {
     data class Command(
+        val userId: Long,
         val notificationId: Long,
     )
 
-    fun updateNotification(command: Command)
+    fun markAsReadNotification(command: Command)
 }

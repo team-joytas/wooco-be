@@ -14,16 +14,23 @@ data object NotExistsNotificationException : BaseNotificationException(
     private fun readResolve(): Any = NotExistsNotificationException
 }
 
-data object ExpiredNotificationException : BaseNotificationException(
-    code = "EXPIRED_NOTIFICATION_EXCEPTION",
-    message = "유효기간이 만료된 알림입니다.",
+data object InvalidNotificationOwnerException : BaseNotificationException(
+    code = "INVALID_NOTIFICATION_OWNER_EXCEPTION",
+    message = "유효하지 않은 알림 수신자입니다.",
 ) {
-    private fun readResolve(): Any = ExpiredNotificationException
+    private fun readResolve(): Any = InvalidNotificationOwnerException
 }
 
-data object InvalidNotificationTypeException : BaseNotificationException(
-    code = "INVALID_NOTIFICATION_TYPE_EXCEPTION",
-    message = "유효하지 않은 알림 타입입니다.",
+data object NotExistsDeviceTokenException : BaseNotificationException(
+    code = "NOT_EXISTS_DEVICE_TOKEN_EXCEPTION",
+    message = "존재하지 않는 디바이스 토큰입니다.",
 ) {
-    private fun readResolve(): Any = InvalidNotificationTypeException
+    private fun readResolve(): Any = NotExistsDeviceTokenException
+}
+
+data object InvalidDeviceTokenOwnerException : BaseNotificationException(
+    code = "INVALID_DEVICE_TOKEN_OWNER_EXCEPTION",
+    message = "유효하지 않은 디바이스 토큰 소유자입니다.",
+) {
+    private fun readResolve(): Any = InvalidDeviceTokenOwnerException
 }
