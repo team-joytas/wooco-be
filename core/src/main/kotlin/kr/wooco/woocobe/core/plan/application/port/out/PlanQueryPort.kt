@@ -3,7 +3,7 @@ package kr.wooco.woocobe.core.plan.application.port.out
 import kr.wooco.woocobe.core.plan.domain.entity.Plan
 import java.time.LocalDateTime
 
-interface LoadPlanPersistencePort {
+interface PlanQueryPort {
     fun getByPlanId(planId: Long): Plan
 
     fun getAllByUserId(userId: Long): List<Plan>
