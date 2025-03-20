@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.core.plan.application.scheduler
 
-import kr.wooco.woocobe.core.plan.application.port.out.LoadPlanPersistencePort
+import kr.wooco.woocobe.core.plan.application.port.out.PlanQueryPort
 import kr.wooco.woocobe.core.plan.domain.event.PlanShareRequestEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Scheduled
@@ -9,14 +9,14 @@ import java.time.LocalDate
 
 @Component
 class PlanScheduler(
-    private val loadPlanPersistencePort: LoadPlanPersistencePort,
+    private val planQueryPort: PlanQueryPort,
     private val eventPublisher: ApplicationEventPublisher,
 ) {
     @Scheduled(cron = "0 0 0 * * ?")
-    fun checkUnsharedPlan() {
+    fun publishEventsForYesterdayPlans() {
         val yesterdayStart = LocalDate.now().minusDays(1).atStartOfDay()
         val yesterdayEnd = LocalDate.now().atStartOfDay()
-        val plans = loadPlanPersistencePort.getAllByCreatedAtBetween(
+        val plans = planQueryPort.getAllByCreatedAtBetween(
             startDate = yesterdayStart,
             endDate = yesterdayEnd,
         )

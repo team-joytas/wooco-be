@@ -8,11 +8,11 @@ import java.time.LocalDate
 data class Plan(
     val id: Long,
     val userId: Long,
-    var title: String,
-    var contents: String,
-    var region: PlanRegion,
-    var visitDate: LocalDate,
-    var places: List<PlanPlace>,
+    val title: String,
+    val contents: String,
+    val region: PlanRegion,
+    val visitDate: LocalDate,
+    val places: List<PlanPlace>,
 ) {
     fun update(
         userId: Long,
@@ -21,14 +21,15 @@ data class Plan(
         region: PlanRegion,
         visitDate: LocalDate,
         placeIds: List<Long>,
-    ) {
+    ): Plan {
         validateWriter(userId)
-
-        this.title = title
-        this.contents = contents
-        this.region = region
-        this.visitDate = visitDate
-        this.places = processPlanPlaceOrder(placeIds)
+        return copy(
+            title = title,
+            contents = contents,
+            region = region,
+            visitDate = visitDate,
+            places = processPlanPlaceOrder(placeIds),
+        )
     }
 
     fun validateWriter(userId: Long) {

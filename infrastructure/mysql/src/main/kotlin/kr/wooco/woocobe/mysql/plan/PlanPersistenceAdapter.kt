@@ -1,8 +1,7 @@
 package kr.wooco.woocobe.mysql.plan
 
-import kr.wooco.woocobe.core.plan.application.port.out.DeletePlanPersistencePort
-import kr.wooco.woocobe.core.plan.application.port.out.LoadPlanPersistencePort
-import kr.wooco.woocobe.core.plan.application.port.out.SavePlanPersistencePort
+import kr.wooco.woocobe.core.plan.application.port.out.PlanCommandPort
+import kr.wooco.woocobe.core.plan.application.port.out.PlanQueryPort
 import kr.wooco.woocobe.core.plan.domain.entity.Plan
 import kr.wooco.woocobe.core.plan.domain.exception.NotExistsPlanException
 import kr.wooco.woocobe.mysql.plan.entity.PlanJpaEntity
@@ -17,16 +16,13 @@ import java.time.LocalDateTime
 internal class PlanPersistenceAdapter(
     private val planJpaRepository: PlanJpaRepository,
     private val planPlaceJpaRepository: PlanPlaceJpaRepository,
-    private val planPersistenceMapper: PlanPersistenceMapper,
-    private val planPlacePersistenceMapper: PlanPlacePersistenceMapper,
-) : LoadPlanPersistencePort,
-    DeletePlanPersistencePort,
-    SavePlanPersistencePort {
+) : PlanQueryPort,
+    PlanCommandPort {
     override fun getByPlanId(planId: Long): Plan {
         val planJpaEntity = planJpaRepository.findByIdOrNull(planId)
             ?: throw NotExistsPlanException
         val planPlaceEntities = planPlaceJpaRepository.findAllByPlanId(planId)
-        return planPersistenceMapper.toDomain(planJpaEntity, planPlaceEntities)
+        return PlanPersistenceMapper.toDomainEntity(planJpaEntity, planPlaceEntities)
     }
 
     override fun getAllByUserId(userId: Long): List<Plan> {
@@ -48,13 +44,13 @@ internal class PlanPersistenceAdapter(
     }
 
     override fun savePlan(plan: Plan): Plan {
-        val planEntity = planJpaRepository.save(planPersistenceMapper.toEntity(plan))
+        val planEntity = planJpaRepository.save(PlanPersistenceMapper.toJpaEntity(plan))
 
         planPlaceJpaRepository.deleteAllByPlanId(planEntity.id)
-        val planPlaceEntities = plan.places.map { planPlacePersistenceMapper.toEntity(planEntity, it) }
+        val planPlaceEntities = plan.places.map { PlanPlacePersistenceMapper.toJpaEntity(planEntity.id, it) }
         planPlaceJpaRepository.saveAll(planPlaceEntities)
 
-        return planPersistenceMapper.toDomain(planEntity, planPlaceEntities)
+        return PlanPersistenceMapper.toDomainEntity(planEntity, planPlaceEntities)
     }
 
     override fun deleteByPlanId(planId: Long) {
@@ -72,7 +68,7 @@ internal class PlanPersistenceAdapter(
         planPlaceEntities: List<PlanPlaceJpaEntity>,
     ): List<Plan> =
         planEntities.map { planJpaEntity ->
-            planPersistenceMapper.toDomain(
+            PlanPersistenceMapper.toDomainEntity(
                 planJpaEntity = planJpaEntity,
                 planPlaceJpaEntities = planPlaceEntities.filter { it.planId == planJpaEntity.id },
             )
