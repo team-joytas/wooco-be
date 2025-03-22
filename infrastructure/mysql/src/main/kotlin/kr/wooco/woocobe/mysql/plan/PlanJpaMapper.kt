@@ -3,10 +3,11 @@ package kr.wooco.woocobe.mysql.plan
 import kr.wooco.woocobe.core.plan.domain.entity.Plan
 import kr.wooco.woocobe.core.plan.domain.vo.PlanPlace
 import kr.wooco.woocobe.core.plan.domain.vo.PlanRegion
+import kr.wooco.woocobe.core.plan.domain.vo.PlanStatus
 import kr.wooco.woocobe.mysql.plan.entity.PlanJpaEntity
 import kr.wooco.woocobe.mysql.plan.entity.PlanPlaceJpaEntity
 
-internal object PlanPersistenceMapper {
+internal object PlanJpaMapper {
     fun toDomainEntity(
         planJpaEntity: PlanJpaEntity,
         planPlaceJpaEntities: List<PlanPlaceJpaEntity>,
@@ -22,6 +23,7 @@ internal object PlanPersistenceMapper {
             ),
             visitDate = planJpaEntity.visitDate,
             places = planPlaceJpaEntities.map { PlanPlace(order = it.order, placeId = it.placeId) },
+            status = PlanStatus(planJpaEntity.status),
         )
 
     fun toJpaEntity(plan: Plan): PlanJpaEntity =
@@ -33,5 +35,6 @@ internal object PlanPersistenceMapper {
             primaryRegion = plan.region.primaryRegion,
             secondaryRegion = plan.region.secondaryRegion,
             visitDate = plan.visitDate,
+            status = plan.status.name,
         )
 }
