@@ -3,6 +3,7 @@ package kr.wooco.woocobe.core.plan.domain.entity
 import kr.wooco.woocobe.core.plan.domain.exception.InvalidPlanWriterException
 import kr.wooco.woocobe.core.plan.domain.vo.PlanPlace
 import kr.wooco.woocobe.core.plan.domain.vo.PlanRegion
+import kr.wooco.woocobe.core.plan.domain.vo.PlanStatus
 import java.time.LocalDate
 
 data class Plan(
@@ -13,6 +14,7 @@ data class Plan(
     val region: PlanRegion,
     val visitDate: LocalDate,
     val places: List<PlanPlace>,
+    val status: PlanStatus,
 ) {
     fun update(
         userId: Long,
@@ -32,7 +34,12 @@ data class Plan(
         )
     }
 
-    fun validateWriter(userId: Long) {
+    fun softDelete(userId: Long): Plan {
+        validateWriter(userId)
+        return copy(status = PlanStatus.DELETED)
+    }
+
+    private fun validateWriter(userId: Long) {
         if (this.userId != userId) throw InvalidPlanWriterException
     }
 
@@ -53,6 +60,7 @@ data class Plan(
                 region = region,
                 visitDate = visitDate,
                 places = processPlanPlaceOrder(placeIds),
+                status = PlanStatus.ACTIVE,
             )
 
         private fun processPlanPlaceOrder(placeIds: List<Long>): List<PlanPlace> =
