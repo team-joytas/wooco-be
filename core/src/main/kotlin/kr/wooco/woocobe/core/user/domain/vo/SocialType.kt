@@ -1,6 +1,6 @@
-package kr.wooco.woocobe.core.auth.domain.vo
+package kr.wooco.woocobe.core.user.domain.vo
 
-enum class OAuthProvider {
+enum class SocialProvider {
     KAKAO,
     ;
 
