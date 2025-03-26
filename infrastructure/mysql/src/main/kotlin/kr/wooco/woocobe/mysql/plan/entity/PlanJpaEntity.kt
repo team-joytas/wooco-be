@@ -23,6 +23,8 @@ class PlanJpaEntity(
     val secondaryRegion: String,
     @Column(name = "visit_date")
     val visitDate: LocalDate,
+    @Column(name = "status")
+    val status: String,
     @Id @Tsid
     @Column(name = "plan_id")
     override val id: Long = 0L,
