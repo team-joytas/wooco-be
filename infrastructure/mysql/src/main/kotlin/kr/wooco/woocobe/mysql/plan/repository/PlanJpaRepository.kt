@@ -7,15 +7,36 @@ import org.springframework.data.repository.query.Param
 import java.time.LocalDateTime
 
 interface PlanJpaRepository : JpaRepository<PlanJpaEntity, Long> {
-    fun findAllByUserId(userId: Long): List<PlanJpaEntity>
+    @Query(
+        """
+            SELECT p FROM PlanJpaEntity p
+            WHERE p.id = :planId
+            AND p.status = 'ACTIVE'
+        """,
+    )
+    fun findActiveById(
+        @Param("planId") planId: Long,
+    ): PlanJpaEntity?
+
+    @Query(
+        """
+            SELECT p FROM PlanJpaEntity p
+            WHERE p.userId = :userId
+            AND p.status = 'ACTIVE'
+        """,
+    )
+    fun findAllActiveByUserId(
+        @Param("userId") userId: Long,
+    ): List<PlanJpaEntity>
 
     @Query(
         """
             SELECT p FROM PlanJpaEntity p
             WHERE p.createdAt BETWEEN :startDate AND :endDate
+            AND p.status = 'ACTIVE'
         """,
     )
-    fun findAllByCreatedAtBetween(
+    fun findAllActiveByCreatedAtBetween(
         @Param("startDate") startDate: LocalDateTime,
         @Param("endDate") endDate: LocalDateTime,
     ): List<PlanJpaEntity>
