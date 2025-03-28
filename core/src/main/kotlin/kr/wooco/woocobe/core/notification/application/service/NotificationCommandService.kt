@@ -31,7 +31,7 @@ class NotificationCommandService(
             userId = command.userId,
             targetId = command.targetId,
             targetName = command.targetName,
-            type = NotificationType.invoke(command.type),
+            type = NotificationType(command.type),
         )
         return notificationCommandPort.saveNotification(notification).id
     }
@@ -39,9 +39,7 @@ class NotificationCommandService(
     @Transactional
     override fun markAsReadNotification(command: MarkAsReadNotificationUseCase.Command) {
         val notification = notificationQueryPort.getByNotificationId(command.notificationId)
-        notification.validateOwner(command.userId)
-
-        val readNotification = notification.markAsRead()
+        val readNotification = notification.markAsRead(command.userId)
         notificationCommandPort.saveNotification(readNotification)
     }
 
@@ -59,7 +57,7 @@ class NotificationCommandService(
     override fun deleteDeviceToken(command: DeleteDeviceTokenUseCase.Command) {
         val token = Token(command.token)
         val deviceToken = deviceTokenQueryPort.getByToken(token)
-        deviceToken.validateOwner(command.userId)
-        deviceTokenCommandPort.deleteByToken(token)
+        val deletedDeviceToken = deviceToken.softDelete(command.userId)
+        deviceTokenCommandPort.saveDeviceToken(deletedDeviceToken)
     }
 }
