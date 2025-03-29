@@ -1,8 +1,7 @@
-package kr.wooco.woocobe.rest.auth
+package kr.wooco.woocobe.rest.user
 
 import kr.wooco.woocobe.core.user.application.port.out.SocialUserClientPort
-import kr.wooco.woocobe.core.user.application.port.out.dto.SocialUserInfo
-import kr.wooco.woocobe.core.user.domain.vo.SocialProvider
+import kr.wooco.woocobe.core.user.domain.vo.SocialType
 import kr.wooco.woocobe.core.user.domain.vo.SocialUser
 import org.springframework.stereotype.Component
 
@@ -10,21 +9,16 @@ import org.springframework.stereotype.Component
 internal class SocialUserClientAdapter(
     private val socialAuthClients: Set<SocialUserClient>,
 ) : SocialUserClientPort {
-    override fun fetchSocialUserInfo(
-        code: String,
-        provider: SocialProvider,
-    ): SocialUserInfo {
-        val socialAuthClient = convertSupportSocialClient(provider)
-        return socialAuthClient.fetchSocialUserInfo(code)
+    override fun revokeSocialUser(
+        socialToken: String,
+        socialUser: SocialUser,
+    ) {
+        val socialAuthClient = convertSupportSocialClient(socialUser.socialType)
+        socialAuthClient.revokeSocialUser(socialToken)
     }
 
-    override fun revokeSocialUser(socialUser: SocialUser) {
-        val socialAuthClient = convertSupportSocialClient(socialUser.provider)
-        socialAuthClient.revokeSocialUser(socialUser.identifier, socialUser.socialToken)
-    }
-
-    private fun convertSupportSocialClient(provider: SocialProvider): SocialUserClient =
-        socialAuthClients.firstOrNull { it.supportProvider(provider) }
+    private fun convertSupportSocialClient(socialType: SocialType): SocialUserClient =
+        socialAuthClients.firstOrNull { it.supportType(socialType) }
             ?: throw UnsupportedOperationException(NOT_IMPLEMENT_SOCIAL_CLIENT)
 
     companion object {

@@ -10,6 +10,10 @@ import kr.wooco.woocobe.mysql.common.utils.Tsid
 @Entity
 @Table(name = "users")
 class UserJpaEntity(
+    @Column(name = "social_type")
+    val socialType: String,
+    @Column(name = "social_id")
+    val socialId: String,
     @Column(name = "status")
     val status: String,
     @Column(name = "description")

@@ -1,15 +1,9 @@
-package kr.wooco.woocobe.rest.auth
+package kr.wooco.woocobe.rest.user
 
-import kr.wooco.woocobe.core.user.application.port.out.dto.SocialUserInfo
-import kr.wooco.woocobe.core.user.domain.vo.SocialProvider
+import kr.wooco.woocobe.core.user.domain.vo.SocialType
 
 interface SocialUserClient {
-    fun supportProvider(provider: SocialProvider): Boolean
+    fun supportType(socialType: SocialType): Boolean
 
-    fun fetchSocialUserInfo(code: String): SocialUserInfo
-
-    fun revokeSocialUser(
-        identifier: String,
-        socialToken: String,
-    )
+    fun revokeSocialUser(accessToken: String)
 }
