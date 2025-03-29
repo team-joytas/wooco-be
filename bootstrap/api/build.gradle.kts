@@ -15,7 +15,6 @@ dependencies {
     implementation(project(":support:common"))
     implementation(project(":support:logging"))
     implementation(project(":infrastructure:aws"))
-    implementation(project(":infrastructure:jwt"))
     implementation(project(":infrastructure:rest"))
     implementation(project(":infrastructure:mysql"))
     implementation(project(":infrastructure:redis"))
