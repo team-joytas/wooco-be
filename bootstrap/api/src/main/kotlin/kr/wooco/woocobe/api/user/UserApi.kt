@@ -6,6 +6,7 @@ import kr.wooco.woocobe.api.user.request.UpdateUserRequest
 import kr.wooco.woocobe.api.user.response.UserDetailResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 
@@ -16,7 +17,6 @@ interface UserApi {
         @AuthenticationPrincipal userId: Long,
     ): ResponseEntity<UserDetailResponse>
 
-    @SecurityRequirement(name = "JWT")
     fun getUser(
         @PathVariable userId: Long,
     ): ResponseEntity<UserDetailResponse>
@@ -25,5 +25,11 @@ interface UserApi {
     fun updateProfile(
         @AuthenticationPrincipal userId: Long,
         @RequestBody request: UpdateUserRequest,
+    ): ResponseEntity<Unit>
+
+    @SecurityRequirement(name = "JWT")
+    fun withdrawUser(
+        @CookieValue socialToken: String,
+        @AuthenticationPrincipal userId: Long,
     ): ResponseEntity<Unit>
 }

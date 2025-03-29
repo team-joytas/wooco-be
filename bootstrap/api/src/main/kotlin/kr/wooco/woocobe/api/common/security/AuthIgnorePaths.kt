@@ -25,8 +25,6 @@ object AuthIgnorePaths {
             append(path = "/api/v1/reviews/places/users/{userId:[0-9]+}", method = HttpMethod.GET),
             // auth
             append(path = "/api/v1/auth/reissue", method = HttpMethod.POST),
-            append(path = "/api/v1/auth/{provider}/social-login", method = HttpMethod.POST),
-            append(path = "/api/v1/auth/{provider}/social-login/url", method = HttpMethod.GET),
             // user
             append(path = "/api/v1/users/{userId:[0-9]+}", method = HttpMethod.GET),
         )

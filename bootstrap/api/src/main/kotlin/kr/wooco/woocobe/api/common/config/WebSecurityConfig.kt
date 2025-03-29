@@ -1,7 +1,11 @@
 package kr.wooco.woocobe.api.common.config
 
 import kr.wooco.woocobe.api.common.security.AuthIgnorePaths
+import kr.wooco.woocobe.api.common.security.CookieOAuthRequestRepository
+import kr.wooco.woocobe.api.common.security.CustomOAuth2UserService
 import kr.wooco.woocobe.api.common.security.JwtAuthenticationFilter
+import kr.wooco.woocobe.api.common.security.OAuthFailureHandler
+import kr.wooco.woocobe.api.common.security.OAuthSuccessHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -16,10 +20,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 class WebSecurityConfig(
     private val corsProperties: CorsProperties,
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val oAuthSuccessHandler: OAuthSuccessHandler,
+    private val oAuthFailureHandler: OAuthFailureHandler,
+    private val customOAuth2UserService: CustomOAuth2UserService,
+    private val cookieOAuthRequestRepository: CookieOAuthRequestRepository,
 ) {
     @Bean
-    fun tokenFilterChain(http: HttpSecurity): SecurityFilterChain =
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
         http
             .cors { it.configurationSource(corsConfigurationSource()) }
             .csrf { it.disable() }
@@ -34,8 +41,22 @@ class WebSecurityConfig(
                     .permitAll()
                     .anyRequest()
                     .authenticated()
-            }.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .build()
+            }.addFilterBefore(
+                JwtAuthenticationFilter(),
+                UsernamePasswordAuthenticationFilter::class.java,
+            ).oauth2Login {
+                it
+                    .authorizationEndpoint { config ->
+                        config.baseUri("/api/v1/oauth2/authorization")
+                    }.redirectionEndpoint { config ->
+                        config.baseUri("/api/v1/oauth2/*/login")
+                    }.authorizationEndpoint { config ->
+                        config.authorizationRequestRepository(cookieOAuthRequestRepository)
+                    }.userInfoEndpoint { config ->
+                        config.userService(customOAuth2UserService)
+                    }.successHandler(oAuthSuccessHandler)
+                    .failureHandler(oAuthFailureHandler)
+            }.build()
 
     @Bean
     fun corsConfigurationSource(): UrlBasedCorsConfigurationSource =
