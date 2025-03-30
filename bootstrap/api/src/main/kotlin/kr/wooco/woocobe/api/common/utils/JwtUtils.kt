@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.JwtParser
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.boot.context.properties.ConfigurationProperties
 import java.security.Key
@@ -33,7 +34,7 @@ object JwtUtils {
     fun createAccessToken(userId: Long): String =
         Jwts
             .builder()
-            .signWith(secretKey)
+            .signWith(secretKey, SignatureAlgorithm.HS256)
             .setSubject(ACCESS_TOKEN_SUBJECT)
             .addClaims(mapOf(USER_ID to userId.toString()))
             .setExpiration(Date.from(Instant.now().plusSeconds(properties.accessExpireIn)))
@@ -53,7 +54,7 @@ object JwtUtils {
     ): String =
         Jwts
             .builder()
-            .signWith(secretKey)
+            .signWith(secretKey, SignatureAlgorithm.HS256)
             .setSubject(REFRESH_TOKEN_SUBJECT)
             .addClaims(
                 mapOf(
@@ -69,40 +70,32 @@ object JwtUtils {
      * @author JiHongKim98
      * @return userId
      */
-    fun extractUserIdInAccessToken(accessToken: String): Long {
+    fun extractAccessToken(accessToken: String): Long {
         val claims = extractClaims(accessToken)
-        if (claims.subject != ACCESS_TOKEN_SUBJECT && claims[USER_ID] == null) {
-            throw JwtException.InvalidTokenException
+        require(claims.subject == ACCESS_TOKEN_SUBJECT)
+
+        return claims[USER_ID].toString().toLongOrNull().let {
+            requireNotNull(it)
         }
-        return claims[USER_ID].toString().toLong()
     }
 
     /**
-     * 리프레쉬 토큰안에서 user_id 값을 추출합니다.
+     * 리프레쉬 토큰안에서 user_id 값과 token_id 값을 추출합니다.
      *
      * @author JiHongKim98
-     * @return userId
+     * @return Pair - 첫번째 값 userId, 두번째 값 tokenId
      */
-    fun extractUserIdInRefreshToken(refreshToken: String): Long {
+    fun extractRefreshToken(refreshToken: String): Pair<Long, Long> {
         val claims = extractClaims(refreshToken)
-        if (claims.subject != REFRESH_TOKEN_SUBJECT && claims[TOKEN_ID] == null) {
-            throw JwtException.InvalidTokenException
-        }
-        return claims[USER_ID].toString().toLong()
-    }
+        require(claims.subject == REFRESH_TOKEN_SUBJECT)
 
-    /**
-     * 리프레쉬 토큰안에서 token_id 값을 추출합니다.
-     *
-     * @author JiHongKim98
-     * @return tokenId
-     */
-    fun extractTokenIdInRefreshToken(refreshToken: String): Long {
-        val claims = jwtParser.parseClaimsJws(refreshToken).body
-        if (claims.subject != REFRESH_TOKEN_SUBJECT && claims[TOKEN_ID] == null) {
-            throw JwtException.InvalidTokenException
+        val userId = claims[USER_ID].toString().toLongOrNull().let {
+            requireNotNull(it)
         }
-        return claims[USER_ID].toString().toLong()
+        val tokenId = claims[TOKEN_ID].toString().toLongOrNull().let {
+            requireNotNull(it)
+        }
+        return Pair(userId, tokenId)
     }
 
     private fun extractClaims(token: String): Claims =

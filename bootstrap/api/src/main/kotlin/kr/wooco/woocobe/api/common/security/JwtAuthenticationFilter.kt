@@ -27,7 +27,7 @@ class JwtAuthenticationFilter : OncePerRequestFilter() {
 
     private fun processAuthentication(accessToken: String) =
         runCatching {
-            val userId = JwtUtils.extractUserIdInAccessToken(accessToken)
+            val userId = JwtUtils.extractAccessToken(accessToken)
             return@runCatching UsernamePasswordAuthenticationToken(userId, null, emptyList())
         }.onSuccess {
             SecurityContextHolder.getContext().apply {
