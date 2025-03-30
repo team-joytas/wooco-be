@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.api.common.config
 
-import kr.wooco.woocobe.api.common.security.AuthIgnorePaths
 import kr.wooco.woocobe.api.common.security.CookieOAuthRequestRepository
 import kr.wooco.woocobe.api.common.security.CustomOAuth2UserService
 import kr.wooco.woocobe.api.common.security.JwtAuthenticationFilter
@@ -8,6 +7,7 @@ import kr.wooco.woocobe.api.common.security.OAuthFailureHandler
 import kr.wooco.woocobe.api.common.security.OAuthSuccessHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -18,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 class WebSecurityConfig(
     private val corsProperties: CorsProperties,
     private val oAuthSuccessHandler: OAuthSuccessHandler,
@@ -35,21 +36,16 @@ class WebSecurityConfig(
             .anonymous { it.disable() }
             .exceptionHandling { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .authorizeHttpRequests {
-                it
-                    .requestMatchers(AuthIgnorePaths.ignoreRequestMatcher)
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
-            }.addFilterBefore(
+            .authorizeHttpRequests { it.anyRequest().permitAll() }
+            .addFilterBefore(
                 JwtAuthenticationFilter(),
                 UsernamePasswordAuthenticationFilter::class.java,
             ).oauth2Login {
                 it
                     .authorizationEndpoint { config ->
-                        config.baseUri("/api/v1/oauth2/authorization")
+                        config.baseUri(AUTHORIZATION_REQUEST_URI)
                     }.redirectionEndpoint { config ->
-                        config.baseUri("/api/v1/oauth2/*/login")
+                        config.baseUri(AUTHORIZATION_RESPONSE_URI)
                     }.authorizationEndpoint { config ->
                         config.authorizationRequestRepository(cookieOAuthRequestRepository)
                     }.userInfoEndpoint { config ->
@@ -76,5 +72,7 @@ class WebSecurityConfig(
 
     companion object {
         private const val MATCH_ALL_PATTERN = "/**"
+        private const val AUTHORIZATION_REQUEST_URI = "/api/v1/oauth2/authorization"
+        private const val AUTHORIZATION_RESPONSE_URI = "/api/v1/oauth2/*/login"
     }
 }

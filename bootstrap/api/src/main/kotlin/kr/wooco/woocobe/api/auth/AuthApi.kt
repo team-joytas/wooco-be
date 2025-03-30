@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import kr.wooco.woocobe.api.auth.response.TokenResponse
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.CookieValue
 
 @Tag(name = "인증 API")
@@ -17,8 +16,7 @@ interface AuthApi {
 
     @SecurityRequirement(name = "JWT")
     fun logout(
-        @AuthenticationPrincipal userId: Long,
-        @CookieValue refreshToken: String,
+        @CookieValue refreshToken: String?,
         response: HttpServletResponse,
     ): ResponseEntity<Unit>
 }
