@@ -8,13 +8,13 @@ import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadPlaceReviewUs
 import kr.wooco.woocobe.core.placereview.application.port.`in`.result.PlaceReviewWithPlaceResult
 import kr.wooco.woocobe.core.placereview.application.port.`in`.result.PlaceReviewWithWriterResult
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
-import kr.wooco.woocobe.core.user.application.port.out.LoadUserPersistencePort
+import kr.wooco.woocobe.core.user.application.port.out.UserQueryPort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 internal class PlaceReviewQueryService(
-    private val loadUserPersistencePort: LoadUserPersistencePort,
+    private val userQueryPort: UserQueryPort,
     private val placeReviewQueryPort: PlaceReviewQueryPort,
     private val placeQueryPort: PlaceQueryPort,
 ) : ReadAllPlaceReviewUseCase,
@@ -27,7 +27,7 @@ internal class PlaceReviewQueryService(
         val placeOneLineReviews =
             placeReviewQueryPort.getAllByPlaceReviewIds(placeReviews.map { it.id })
         val writerIds = placeReviews.map { it.userId }.distinct()
-        val writers = loadUserPersistencePort.getAllByUserIds(writerIds)
+        val writers = userQueryPort.getAllByUserIds(writerIds)
         return PlaceReviewWithWriterResult.listOf(placeReviews, placeOneLineReviews, writers)
     }
 
@@ -45,7 +45,7 @@ internal class PlaceReviewQueryService(
     override fun readPlaceReview(query: ReadPlaceReviewUseCase.Query): PlaceReviewWithWriterResult {
         val placeReview = placeReviewQueryPort.getByPlaceReviewId(query.placeReviewId)
         val placeOneLineReviews = placeReviewQueryPort.getAllByPlaceReviewId(placeReview.id)
-        val writer = loadUserPersistencePort.getByUserId(placeReview.userId)
+        val writer = userQueryPort.getByUserId(placeReview.userId)
         return PlaceReviewWithWriterResult.of(placeReview, placeOneLineReviews, writer)
     }
 

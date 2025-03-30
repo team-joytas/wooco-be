@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.api.notification
 
+import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.notification.request.CreateDeviceTokenRequest
 import kr.wooco.woocobe.api.notification.response.NotificationDetailResponse
 import kr.wooco.woocobe.core.notification.application.port.`in`.CreateDeviceTokenUseCase
@@ -25,6 +26,7 @@ class NotificationController(
     private val createDeviceTokenUseCase: CreateDeviceTokenUseCase,
     private val deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase,
 ) : NotificationApi {
+    @LoginRequired
     @GetMapping
     override fun getAllUserNotification(
         @AuthenticationPrincipal userId: Long,
@@ -34,6 +36,7 @@ class NotificationController(
         return ResponseEntity.ok(NotificationDetailResponse.listFrom(results))
     }
 
+    @LoginRequired
     @PatchMapping("/{notificationId}")
     override fun markAsReadNotification(
         @AuthenticationPrincipal userId: Long,
@@ -46,6 +49,7 @@ class NotificationController(
         markAsReadNotificationUseCase.markAsReadNotification(command)
     }
 
+    @LoginRequired
     @PostMapping
     override fun createDeviceToken(
         @AuthenticationPrincipal userId: Long,
@@ -58,6 +62,7 @@ class NotificationController(
         createDeviceTokenUseCase.createDeviceToken(command)
     }
 
+    @LoginRequired
     @DeleteMapping("/{token}")
     override fun deleteDeviceToken(
         @AuthenticationPrincipal userId: Long,

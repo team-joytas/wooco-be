@@ -9,7 +9,6 @@ spring.profiles.include:
   - redis
   - mysql
   - aws
-  - jwt
   - rest
   - metric
   - fcm
@@ -40,11 +39,35 @@ spring:
     allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
     max-age: ${CORS_MAX_AGE:7200}
 
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_SECRET_KEY}
+            client-authentication-method: client_secret_post
+            redirect-uri: ${KAKAO_REDIRECT_URI}
+            authorization-grant-type: authorization_code
+            client-name: kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
 springdoc:
   api-docs:
     path: ${API_DOCS_PATH:/api-docs}
   swagger-ui:
     url: ${API_DOCS_PATH:/api-docs}
     disable-swagger-default-url: true
+
+app:
+  jwt:
+    signing-key: ${JWT_SECRET_KEY:hong-jun2-eric-erica-jamie-hyden-hong-jun2-eric-erica-jamie-hyden}
+    access-expire-in: ${ACCESS_TOKEN_EXP:987654321}
+    refresh-expire-in: ${REFRESH_TOKEN_EXP:987654321}
 
 logging.level.root: info

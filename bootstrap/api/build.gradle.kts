@@ -15,7 +15,6 @@ dependencies {
     implementation(project(":support:common"))
     implementation(project(":support:logging"))
     implementation(project(":infrastructure:aws"))
-    implementation(project(":infrastructure:jwt"))
     implementation(project(":infrastructure:rest"))
     implementation(project(":infrastructure:mysql"))
     implementation(project(":infrastructure:redis"))
@@ -23,5 +22,11 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:${property("jjwtVersion")}")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${property("jjwtVersion")}")
+    implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
+
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springDocVersion")}")
 }

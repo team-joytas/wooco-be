@@ -1,5 +1,6 @@
 package kr.wooco.woocobe.api.coursecomment
 
+import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.coursecomment.request.CreateCourseCommentRequest
 import kr.wooco.woocobe.api.coursecomment.request.UpdateCourseCommentRequest
 import kr.wooco.woocobe.api.coursecomment.response.CourseCommentDetailResponse
@@ -37,6 +38,7 @@ class CourseCommentController(
         return ResponseEntity.ok(CourseCommentDetailResponse.listFrom(results))
     }
 
+    @LoginRequired
     @PostMapping("/courses/{courseId}")
     override fun createCourseComment(
         @AuthenticationPrincipal userId: Long,
@@ -48,6 +50,7 @@ class CourseCommentController(
         return ResponseEntity.status(HttpStatus.CREATED).body(CreateCourseCommentResponse(results))
     }
 
+    @LoginRequired
     @PatchMapping("/{commentId}")
     override fun updateCourseComment(
         @AuthenticationPrincipal userId: Long,
@@ -59,6 +62,7 @@ class CourseCommentController(
         return ResponseEntity.ok().build()
     }
 
+    @LoginRequired
     @DeleteMapping("/{commentId}")
     override fun deleteCourseComment(
         @AuthenticationPrincipal userId: Long,

@@ -10,13 +10,13 @@ import kr.wooco.woocobe.core.course.application.service.dto.CourseSearchConditio
 import kr.wooco.woocobe.core.course.application.service.dto.InterestCourseSearchCondition
 import kr.wooco.woocobe.core.course.domain.entity.Course
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
-import kr.wooco.woocobe.core.user.application.port.out.LoadUserPersistencePort
+import kr.wooco.woocobe.core.user.application.port.out.UserQueryPort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 internal class CourseQueryService(
-    private val loadUserPersistencePort: LoadUserPersistencePort,
+    private val userQueryPort: UserQueryPort,
     private val placeQueryPort: PlaceQueryPort,
     private val loadCoursePersistencePort: LoadCoursePersistencePort,
     private val loadInterestCoursePersistencePort: LoadInterestCoursePersistencePort,
@@ -26,7 +26,7 @@ internal class CourseQueryService(
     @Transactional(readOnly = true)
     override fun readCourse(query: ReadCourseUseCase.Query): CourseResult {
         val course = loadCoursePersistencePort.getByCourseId(query.courseId)
-        val user = loadUserPersistencePort.getByUserId(course.userId)
+        val user = userQueryPort.getByUserId(course.userId)
         val placeIds = course.coursePlaces.map { it.placeId }.distinct()
         val places = placeQueryPort.getAllByPlaceIds(placeIds)
         val isInterest = query.userId?.run {
@@ -68,7 +68,7 @@ internal class CourseQueryService(
         courses: List<Course>,
     ): List<CourseResult> {
         val userIds = courses.map { it.userId }.distinct()
-        val users = loadUserPersistencePort.getAllByUserIds(userIds)
+        val users = userQueryPort.getAllByUserIds(userIds)
         val placeIds = courses.flatMap { it.coursePlaces }.map { it.placeId }.distinct()
         val places = placeQueryPort.getAllByPlaceIds(placeIds)
         val courseIds = courses.map { it.id }

@@ -3,25 +3,19 @@ package kr.wooco.woocobe.api.common.security
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import kr.wooco.woocobe.core.auth.application.port.`in`.ExtractTokenUseCase
+import kr.wooco.woocobe.api.common.utils.JwtUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
-@Component
-class JwtAuthenticationFilter(
-    private val extractTokenUseCase: ExtractTokenUseCase,
-) : OncePerRequestFilter() {
+class JwtAuthenticationFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
-        extractAccessToken(request)?.let {
-            processAuthentication(it)
-        }
+        extractAccessToken(request)?.let { processAuthentication(it) }
         filterChain.doFilter(request, response)
     }
 
@@ -31,13 +25,15 @@ class JwtAuthenticationFilter(
             ?.takeIf { it.startsWith(BEARER_PREFIX) }
             ?.substring(BEARER_PREFIX.length)
 
-    private fun processAuthentication(accessToken: String) {
-        val userId = extractTokenUseCase.extractToken(accessToken)
-        val authentication = UsernamePasswordAuthenticationToken(userId, null, emptyList())
-        SecurityContextHolder.getContext().apply {
-            this.authentication = authentication
+    private fun processAuthentication(accessToken: String) =
+        runCatching {
+            val userId = JwtUtils.extractAccessToken(accessToken)
+            return@runCatching UsernamePasswordAuthenticationToken(userId, null, emptyList())
+        }.onSuccess {
+            SecurityContextHolder.getContext().apply {
+                this.authentication = it
+            }
         }
-    }
 
     companion object {
         private const val BEARER_PREFIX = "Bearer "
