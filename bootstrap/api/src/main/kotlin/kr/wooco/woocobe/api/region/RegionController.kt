@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.api.region
 
-import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.region.request.CreatePreferenceRegionRequest
 import kr.wooco.woocobe.api.region.response.CreatePreferenceRegionResponse
 import kr.wooco.woocobe.api.region.response.PreferenceDetailResponse
@@ -30,7 +29,6 @@ class RegionController(
     private val addPreferenceRegionUseCase: AddPreferenceRegionUseCase,
     private val deletePreferenceRegionUseCase: DeletePreferenceRegionUseCase,
 ) : RegionApi {
-    @LoginRequired
     @PostMapping("/preferences")
     override fun addPreferenceRegion(
         @AuthenticationPrincipal userId: Long,
@@ -42,7 +40,6 @@ class RegionController(
         return ResponseEntity.ok(response)
     }
 
-    @LoginRequired
     @GetMapping("/preferences/check")
     override fun checkPreferenceRegion(
         @AuthenticationPrincipal userId: Long,
@@ -58,7 +55,6 @@ class RegionController(
         return ResponseEntity.ok(PreferenceDetailResponse.from(results))
     }
 
-    @LoginRequired
     @GetMapping("/preferences")
     override fun getAllMyPreferenceRegion(
         @AuthenticationPrincipal userId: Long,
@@ -69,7 +65,6 @@ class RegionController(
         return ResponseEntity.ok(response)
     }
 
-    @LoginRequired
     @DeleteMapping("/preferences/{preferenceRegionId}")
     override fun deletePreferenceRegion(
         @AuthenticationPrincipal userId: Long,

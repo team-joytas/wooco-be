@@ -2,7 +2,6 @@ package kr.wooco.woocobe.api.auth
 
 import jakarta.servlet.http.HttpServletResponse
 import kr.wooco.woocobe.api.auth.response.TokenResponse
-import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.common.utils.JwtUtils
 import kr.wooco.woocobe.api.common.utils.addCookie
 import kr.wooco.woocobe.api.common.utils.deleteCookie
@@ -38,7 +37,6 @@ class AuthController(
         return ResponseEntity.ok(TokenResponse(accessToken))
     }
 
-    @LoginRequired
     @PostMapping("/logout")
     override fun logout(
         @CookieValue(REFRESH_TOKEN_COOKIE_NAME, required = false) refreshToken: String?,

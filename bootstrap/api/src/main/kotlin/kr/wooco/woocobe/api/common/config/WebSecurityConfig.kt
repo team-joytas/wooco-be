@@ -5,6 +5,7 @@ import kr.wooco.woocobe.api.common.security.CustomOAuth2UserService
 import kr.wooco.woocobe.api.common.security.JwtAuthenticationFilter
 import kr.wooco.woocobe.api.common.security.OAuthFailureHandler
 import kr.wooco.woocobe.api.common.security.OAuthSuccessHandler
+import kr.wooco.woocobe.api.common.security.SecurityIgnorePath
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -36,11 +37,16 @@ class WebSecurityConfig(
             .anonymous { it.disable() }
             .exceptionHandling { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .authorizeHttpRequests { it.anyRequest().permitAll() }
             .addFilterBefore(
                 JwtAuthenticationFilter(),
                 UsernamePasswordAuthenticationFilter::class.java,
-            ).oauth2Login {
+            ).authorizeHttpRequests {
+                it
+                    .requestMatchers(SecurityIgnorePath.ignoreRequestMatcher)
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
+            }.oauth2Login {
                 it
                     .authorizationEndpoint { config ->
                         config.baseUri(AUTHORIZATION_REQUEST_URI)

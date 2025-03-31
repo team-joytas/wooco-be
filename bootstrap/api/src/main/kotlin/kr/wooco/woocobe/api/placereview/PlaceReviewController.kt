@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.api.placereview
 
-import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.placereview.request.CreatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.request.UpdatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.response.CreatePlaceReviewResponse
@@ -64,7 +63,6 @@ class PlaceReviewController(
         return ResponseEntity.ok(PlaceReviewWithPlaceDetailsResponse.listFrom(results))
     }
 
-    @LoginRequired
     @PostMapping("/places/{placeId}")
     override fun createPlaceReview(
         @AuthenticationPrincipal userId: Long,
@@ -76,7 +74,6 @@ class PlaceReviewController(
         return ResponseEntity.status(HttpStatus.CREATED).body(CreatePlaceReviewResponse(results))
     }
 
-    @LoginRequired
     @PatchMapping("/{placeReviewId}")
     override fun updatePlaceReview(
         @AuthenticationPrincipal userId: Long,
@@ -88,7 +85,6 @@ class PlaceReviewController(
         return ResponseEntity.ok().build()
     }
 
-    @LoginRequired
     @DeleteMapping("/{placeReviewId}")
     override fun deletePlaceReview(
         @AuthenticationPrincipal userId: Long,
@@ -99,7 +95,6 @@ class PlaceReviewController(
         return ResponseEntity.ok().build()
     }
 
-    @LoginRequired
     @GetMapping("/places/{placeId}/existence")
     override fun existsByPlaceReviewWriter(
         @PathVariable placeId: Long,

@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.api.image
 
-import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.image.response.ImageUploadUrlResponse
 import kr.wooco.woocobe.core.image.application.port.`in`.ReadUploadImageUrlUseCase
 import org.springframework.http.ResponseEntity
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController
 class ImageController(
     private val readUploadImageUrlUseCase: ReadUploadImageUrlUseCase,
 ) : ImageApi {
-    @LoginRequired
     @GetMapping("/upload/url")
     override fun getUploadUrl(): ResponseEntity<ImageUploadUrlResponse> {
         val results = readUploadImageUrlUseCase.readUploadImageUrl()

@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.api.place
 
-import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.place.request.CreatePlaceRequest
 import kr.wooco.woocobe.api.place.response.CreatePlaceResponse
 import kr.wooco.woocobe.api.place.response.PlaceDetailResponse
@@ -31,7 +30,6 @@ class PlaceController(
         return ResponseEntity.ok(PlaceDetailResponse.from(results))
     }
 
-    @LoginRequired
     @PostMapping
     override fun createPlace(
         @AuthenticationPrincipal userId: Long,
