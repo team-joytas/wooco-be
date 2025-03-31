@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.api.plan
 
-import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.plan.request.CreatePlanRequest
 import kr.wooco.woocobe.api.plan.request.UpdatePlanRequest
 import kr.wooco.woocobe.api.plan.response.CreatePlanResponse
@@ -30,7 +29,6 @@ class PlanController(
     private val readPlanUseCase: ReadPlanUseCase,
     private val readAllPlanUseCase: ReadAllPlanUseCase,
 ) : PlanApi {
-    @LoginRequired
     @PostMapping
     override fun createPlan(
         @AuthenticationPrincipal userId: Long,
@@ -41,7 +39,6 @@ class PlanController(
         return ResponseEntity.ok(CreatePlanResponse(response))
     }
 
-    @LoginRequired
     @GetMapping
     override fun getAllPlanDetail(
         @AuthenticationPrincipal userId: Long,
@@ -51,7 +48,6 @@ class PlanController(
         return ResponseEntity.ok(PlanDetailResponse.listOf(response))
     }
 
-    @LoginRequired
     @GetMapping("/{planId}")
     override fun getPlanDetail(
         @AuthenticationPrincipal userId: Long,
@@ -62,7 +58,6 @@ class PlanController(
         return ResponseEntity.ok(PlanDetailResponse.from(response))
     }
 
-    @LoginRequired
     @PatchMapping("/{planId}")
     override fun updatePlan(
         @AuthenticationPrincipal userId: Long,
@@ -74,7 +69,6 @@ class PlanController(
         return ResponseEntity.ok().build()
     }
 
-    @LoginRequired
     @DeleteMapping("/{planId}")
     override fun deletePlan(
         @AuthenticationPrincipal userId: Long,

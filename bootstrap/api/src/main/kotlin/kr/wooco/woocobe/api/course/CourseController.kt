@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.api.course
 
-import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.course.request.CreateCourseRequest
 import kr.wooco.woocobe.api.course.request.UpdateCourseRequest
 import kr.wooco.woocobe.api.course.response.CourseDetailResponse
@@ -107,7 +106,6 @@ class CourseController(
         return ResponseEntity.ok(CourseDetailResponse.listFrom(results))
     }
 
-    @LoginRequired
     @PostMapping
     override fun createCourse(
         @AuthenticationPrincipal userId: Long,
@@ -118,7 +116,6 @@ class CourseController(
         return ResponseEntity.status(HttpStatus.CREATED).body(CreateCourseResponse(results))
     }
 
-    @LoginRequired
     @PostMapping("/{courseId}/like")
     override fun addCourseLike(
         @AuthenticationPrincipal userId: Long,
@@ -129,7 +126,6 @@ class CourseController(
         return ResponseEntity.ok().build()
     }
 
-    @LoginRequired
     @PatchMapping("/{courseId}")
     override fun updateCourse(
         @AuthenticationPrincipal userId: Long,
@@ -141,7 +137,6 @@ class CourseController(
         return ResponseEntity.ok().build()
     }
 
-    @LoginRequired
     @DeleteMapping("/{courseId}")
     override fun deleteCourse(
         @AuthenticationPrincipal userId: Long,
@@ -152,7 +147,6 @@ class CourseController(
         return ResponseEntity.ok().build()
     }
 
-    @LoginRequired
     @DeleteMapping("/{courseId}/like")
     override fun deleteCourseLike(
         @AuthenticationPrincipal userId: Long,

@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.api.user
 
-import kr.wooco.woocobe.api.common.security.LoginRequired
 import kr.wooco.woocobe.api.user.request.UpdateUserRequest
 import kr.wooco.woocobe.api.user.response.UserDetailResponse
 import kr.wooco.woocobe.core.user.application.port.`in`.ReadUserUseCase
@@ -24,7 +23,6 @@ class UserController(
     private val withdrawUserUseCase: WithdrawUserUseCase,
     private val updateUserProfileUseCase: UpdateUserProfileUseCase,
 ) : UserApi {
-    @LoginRequired
     @GetMapping("/me")
     override fun getCurrentUser(
         @AuthenticationPrincipal userId: Long,
@@ -43,7 +41,6 @@ class UserController(
         return ResponseEntity.ok(UserDetailResponse.from(results))
     }
 
-    @LoginRequired
     @PatchMapping("/profile")
     override fun updateProfile(
         @AuthenticationPrincipal userId: Long,
@@ -54,7 +51,6 @@ class UserController(
         return ResponseEntity.ok().build()
     }
 
-    @LoginRequired
     @DeleteMapping("/withdraw")
     override fun withdrawUser(
         @CookieValue(SOCIAL_TOKEN) socialToken: String,
