@@ -10,7 +10,7 @@ object SecurityIgnorePath {
     private fun initIgnorePaths(): OrRequestMatcher =
         OrRequestMatcher(
             append(path = "/api-docs/**", method = HttpMethod.GET),
-            append(path = "/actuator/health", method = HttpMethod.GET),
+            append(path = "/actuator/**", method = HttpMethod.GET),
             append(path = "/swagger-ui/**", method = HttpMethod.GET),
             // course
             append(path = "/api/v1/courses", method = HttpMethod.GET),
