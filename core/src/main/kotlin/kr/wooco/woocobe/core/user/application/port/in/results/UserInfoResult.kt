@@ -2,7 +2,7 @@ package kr.wooco.woocobe.core.user.application.port.`in`.results
 
 import kr.wooco.woocobe.core.user.domain.entity.User
 
-data class UserResult(
+data class UserInfoResult(
     val id: Long,
     val name: String,
     val profileUrl: String,
@@ -10,8 +10,8 @@ data class UserResult(
     val status: String,
 ) {
     companion object {
-        fun fromUser(user: User): UserResult =
-            UserResult(
+        fun fromUser(user: User): UserInfoResult =
+            UserInfoResult(
                 id = user.id,
                 name = user.profile.name,
                 profileUrl = user.profile.profileUrl,
