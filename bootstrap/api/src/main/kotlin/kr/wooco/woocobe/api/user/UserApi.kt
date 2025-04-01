@@ -3,6 +3,7 @@ package kr.wooco.woocobe.api.user
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.wooco.woocobe.api.user.request.UpdateUserRequest
+import kr.wooco.woocobe.api.user.response.UserDetailsResponse
 import kr.wooco.woocobe.api.user.response.UserInfoResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -20,6 +21,10 @@ interface UserApi {
     fun getUserInfo(
         @PathVariable userId: Long,
     ): ResponseEntity<UserInfoResponse>
+
+    fun getUserDetails(
+        @PathVariable userId: Long,
+    ): ResponseEntity<UserDetailsResponse>
 
     @SecurityRequirement(name = "JWT")
     fun updateProfile(

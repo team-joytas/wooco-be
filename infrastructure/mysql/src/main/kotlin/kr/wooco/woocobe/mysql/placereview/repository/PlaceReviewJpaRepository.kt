@@ -33,4 +33,6 @@ interface PlaceReviewJpaRepository : JpaRepository<PlaceReviewJpaEntity, Long> {
         placeId: Long,
         userId: Long,
     ): Boolean
+
+    fun countByUserId(userId: Long): Long
 }

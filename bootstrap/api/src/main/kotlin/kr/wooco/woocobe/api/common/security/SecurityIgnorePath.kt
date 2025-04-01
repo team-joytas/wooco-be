@@ -29,6 +29,7 @@ object SecurityIgnorePath {
             append(path = "/api/v1/auth/{provider}/social-login/url", method = HttpMethod.GET),
             // user
             append(path = "/api/v1/users/{userId:[0-9]+}", method = HttpMethod.GET),
+            append(path = "/api/v1/users/{userId:[0-9]+}/details", method = HttpMethod.GET),
         )
 
     private fun append(

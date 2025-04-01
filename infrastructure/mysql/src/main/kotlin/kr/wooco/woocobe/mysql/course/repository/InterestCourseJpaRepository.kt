@@ -43,4 +43,6 @@ interface InterestCourseJpaRepository : JpaRepository<InterestCourseJpaEntity, L
         userId: Long,
         pageable: Pageable,
     ): List<InterestCourseJpaEntity>
+
+    fun countByUserId(userId: Long): Long
 }
