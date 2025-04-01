@@ -113,6 +113,8 @@ internal class PlaceReviewPersistenceAdapter(
     override fun getAllPlaceOneLineReviewStatsByPlaceId(placeId: Long): List<PlaceOneLineReviewStat> =
         placeOneLineReviewJpaRepository.findPlaceOneLineReviewStatsByPlaceId(placeId, PageRequest.of(0, 5))
 
+    override fun countByUserId(userId: Long): Long = placeReviewJpaRepository.countByUserId(userId)
+
     override fun deleteAllByPlaceReviewId(placeReviewId: Long) {
         placeOneLineReviewJpaRepository.deleteAllByPlaceReviewId(placeReviewId)
     }

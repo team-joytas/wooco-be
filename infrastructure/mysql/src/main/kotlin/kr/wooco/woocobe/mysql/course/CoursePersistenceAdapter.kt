@@ -62,6 +62,8 @@ internal class CoursePersistenceAdapter(
         }
     }
 
+    override fun countByUserId(userId: Long): Long = courseJpaRepository.countByUserId(userId)
+
     override fun saveCourse(course: Course): Course {
         val courseEntity = coursePersistenceMapper.toEntity(course)
         courseJpaRepository.save(courseEntity)

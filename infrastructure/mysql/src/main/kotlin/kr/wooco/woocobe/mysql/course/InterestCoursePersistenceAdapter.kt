@@ -34,6 +34,8 @@ internal class InterestCoursePersistenceAdapter(
         courseIds: List<Long>,
     ): List<Long> = interestCourseJpaRepository.findCourseIdsByUserIdAndCourseIds(userId, courseIds)
 
+    override fun countByUserId(userId: Long): Long = interestCourseJpaRepository.countByUserId(userId)
+
     override fun saveInterestCourse(interestCourse: InterestCourse): InterestCourse {
         val interestCourseEntity = interestCoursePersistenceMapper.toEntity(interestCourse)
         interestCourseJpaRepository.save(interestCourseEntity)

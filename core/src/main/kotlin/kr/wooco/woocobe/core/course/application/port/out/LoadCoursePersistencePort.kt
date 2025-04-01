@@ -11,4 +11,6 @@ interface LoadCoursePersistencePort {
     fun getAllCourseByCondition(condition: CourseSearchCondition): List<Course>
 
     fun getAllInterestCourseByCondition(condition: InterestCourseSearchCondition): List<Course>
+
+    fun countByUserId(userId: Long): Long
 }

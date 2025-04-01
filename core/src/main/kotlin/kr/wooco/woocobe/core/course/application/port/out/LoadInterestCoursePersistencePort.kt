@@ -17,4 +17,6 @@ interface LoadInterestCoursePersistencePort {
         userId: Long,
         courseIds: List<Long>,
     ): List<Long>
+
+    fun countByUserId(userId: Long): Long
 }
