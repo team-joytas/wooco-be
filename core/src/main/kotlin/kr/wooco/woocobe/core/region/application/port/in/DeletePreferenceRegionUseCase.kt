@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.core.region.application.command.port.`in`
+package kr.wooco.woocobe.core.region.application.port.`in`
 
 data class DeletePreferenceRegionCommand(
     val userId: Long,

@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.api.region.request
 
-import kr.wooco.woocobe.core.region.application.command.port.`in`.AddPreferenceRegionCommand
+import kr.wooco.woocobe.core.region.application.port.`in`.AddPreferenceRegionCommand
 
 data class CreatePreferenceRegionRequest(
     val primaryRegion: String,

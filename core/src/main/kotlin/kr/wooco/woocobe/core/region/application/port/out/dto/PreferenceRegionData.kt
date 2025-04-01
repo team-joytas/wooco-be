@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.core.region.application.query.service.dto
+package kr.wooco.woocobe.core.region.application.port.out.dto
 
 data class PreferenceRegionData(
     val id: Long,

@@ -1,6 +1,6 @@
-package kr.wooco.woocobe.core.region.application.query.port.`in`
+package kr.wooco.woocobe.core.region.application.port.`in`
 
-import kr.wooco.woocobe.core.region.application.query.service.dto.PreferenceRegionData
+import kr.wooco.woocobe.core.region.application.port.out.dto.PreferenceRegionData
 
 data class GetPreferenceRegionQuery(
     val userId: Long,

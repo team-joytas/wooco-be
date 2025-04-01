@@ -1,12 +1,12 @@
-package kr.wooco.woocobe.core.region.application.command.service
+package kr.wooco.woocobe.core.region.application.service
 
-import kr.wooco.woocobe.core.region.application.command.port.`in`.AddPreferenceRegionCommand
-import kr.wooco.woocobe.core.region.application.command.port.`in`.AddPreferenceRegionUseCase
-import kr.wooco.woocobe.core.region.application.command.port.`in`.DeletePreferenceRegionCommand
-import kr.wooco.woocobe.core.region.application.command.port.`in`.DeletePreferenceRegionUseCase
-import kr.wooco.woocobe.core.region.application.command.port.out.DeletePreferenceRegionPort
-import kr.wooco.woocobe.core.region.application.command.port.out.LoadPreferenceRegionPort
-import kr.wooco.woocobe.core.region.application.command.port.out.SavePreferenceRegionPort
+import kr.wooco.woocobe.core.region.application.port.`in`.AddPreferenceRegionCommand
+import kr.wooco.woocobe.core.region.application.port.`in`.AddPreferenceRegionUseCase
+import kr.wooco.woocobe.core.region.application.port.`in`.DeletePreferenceRegionCommand
+import kr.wooco.woocobe.core.region.application.port.`in`.DeletePreferenceRegionUseCase
+import kr.wooco.woocobe.core.region.application.port.out.DeletePreferenceRegionPort
+import kr.wooco.woocobe.core.region.application.port.out.LoadPreferenceRegionPort
+import kr.wooco.woocobe.core.region.application.port.out.SavePreferenceRegionPort
 import kr.wooco.woocobe.core.region.domain.exception.AlreadyPreferenceRegionException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

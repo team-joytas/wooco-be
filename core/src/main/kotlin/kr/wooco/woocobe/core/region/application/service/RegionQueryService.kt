@@ -1,11 +1,11 @@
-package kr.wooco.woocobe.core.region.application.query.service
+package kr.wooco.woocobe.core.region.application.service
 
-import kr.wooco.woocobe.core.region.application.query.port.`in`.GetAllPreferenceRegionQuery
-import kr.wooco.woocobe.core.region.application.query.port.`in`.GetAllPreferenceRegionUseCase
-import kr.wooco.woocobe.core.region.application.query.port.`in`.GetPreferenceRegionQuery
-import kr.wooco.woocobe.core.region.application.query.port.`in`.GetPreferenceRegionUseCase
-import kr.wooco.woocobe.core.region.application.query.port.out.LoadPreferenceRegionDataPort
-import kr.wooco.woocobe.core.region.application.query.service.dto.PreferenceRegionData
+import kr.wooco.woocobe.core.region.application.port.`in`.GetAllPreferenceRegionQuery
+import kr.wooco.woocobe.core.region.application.port.`in`.GetAllPreferenceRegionUseCase
+import kr.wooco.woocobe.core.region.application.port.`in`.GetPreferenceRegionQuery
+import kr.wooco.woocobe.core.region.application.port.`in`.GetPreferenceRegionUseCase
+import kr.wooco.woocobe.core.region.application.port.out.LoadPreferenceRegionDataPort
+import kr.wooco.woocobe.core.region.application.port.out.dto.PreferenceRegionData
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.core.region.application.command.port.out
+package kr.wooco.woocobe.core.region.application.port.out
 
 import kr.wooco.woocobe.core.region.domain.entity.PreferenceRegion
 

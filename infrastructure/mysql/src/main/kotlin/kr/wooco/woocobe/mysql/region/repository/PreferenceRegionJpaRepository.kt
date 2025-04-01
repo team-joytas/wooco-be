@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.mysql.region.repository
 
-import kr.wooco.woocobe.core.region.application.query.service.dto.PreferenceRegionData
+import kr.wooco.woocobe.core.region.application.port.out.dto.PreferenceRegionData
 import kr.wooco.woocobe.mysql.region.entity.PreferenceRegionJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query

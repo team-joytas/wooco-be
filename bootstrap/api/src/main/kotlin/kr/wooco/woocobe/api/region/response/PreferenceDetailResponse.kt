@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.api.region.response
 
-import kr.wooco.woocobe.core.region.application.query.service.dto.PreferenceRegionData
+import kr.wooco.woocobe.core.region.application.port.out.dto.PreferenceRegionData
 
 data class PreferenceDetailResponse(
     val id: Long,

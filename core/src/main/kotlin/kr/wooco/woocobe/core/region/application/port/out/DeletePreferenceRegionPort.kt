@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.core.region.application.command.port.out
+package kr.wooco.woocobe.core.region.application.port.out
 
 interface DeletePreferenceRegionPort {
     fun deleteByPreferenceRegionId(preferenceRegionId: Long)

@@ -1,10 +1,10 @@
 package kr.wooco.woocobe.mysql.region
 
-import kr.wooco.woocobe.core.region.application.command.port.out.DeletePreferenceRegionPort
-import kr.wooco.woocobe.core.region.application.command.port.out.LoadPreferenceRegionPort
-import kr.wooco.woocobe.core.region.application.command.port.out.SavePreferenceRegionPort
-import kr.wooco.woocobe.core.region.application.query.port.out.LoadPreferenceRegionDataPort
-import kr.wooco.woocobe.core.region.application.query.service.dto.PreferenceRegionData
+import kr.wooco.woocobe.core.region.application.port.out.DeletePreferenceRegionPort
+import kr.wooco.woocobe.core.region.application.port.out.LoadPreferenceRegionDataPort
+import kr.wooco.woocobe.core.region.application.port.out.LoadPreferenceRegionPort
+import kr.wooco.woocobe.core.region.application.port.out.SavePreferenceRegionPort
+import kr.wooco.woocobe.core.region.application.port.out.dto.PreferenceRegionData
 import kr.wooco.woocobe.core.region.domain.entity.PreferenceRegion
 import kr.wooco.woocobe.core.region.domain.exception.NotExistsPreferenceRegionException
 import kr.wooco.woocobe.mysql.region.repository.PreferenceRegionJpaRepository

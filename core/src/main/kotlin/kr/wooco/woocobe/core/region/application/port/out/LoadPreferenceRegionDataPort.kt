@@ -1,6 +1,6 @@
-package kr.wooco.woocobe.core.region.application.query.port.out
+package kr.wooco.woocobe.core.region.application.port.out
 
-import kr.wooco.woocobe.core.region.application.query.service.dto.PreferenceRegionData
+import kr.wooco.woocobe.core.region.application.port.out.dto.PreferenceRegionData
 
 interface LoadPreferenceRegionDataPort {
     fun getByUserIdAndRegion(
