@@ -34,7 +34,7 @@ data class Plan(
         )
     }
 
-    fun softDelete(userId: Long): Plan {
+    fun delete(userId: Long): Plan {
         validateWriter(userId)
         return copy(status = PlanStatus.DELETED)
     }
