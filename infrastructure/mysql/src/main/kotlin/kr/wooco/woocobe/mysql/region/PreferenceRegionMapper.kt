@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.mysql.region
 
 import kr.wooco.woocobe.core.region.domain.entity.PreferenceRegion
+import kr.wooco.woocobe.core.region.domain.vo.Region
 import kr.wooco.woocobe.mysql.region.entity.PreferenceRegionJpaEntity
 import org.springframework.stereotype.Component
 
@@ -10,7 +11,7 @@ internal class PreferenceRegionMapper {
         PreferenceRegion(
             id = preferenceRegionJpaEntity.id,
             userId = preferenceRegionJpaEntity.userId,
-            region = PreferenceRegion.Region(
+            region = Region(
                 primaryRegion = preferenceRegionJpaEntity.primaryRegion,
                 secondaryRegion = preferenceRegionJpaEntity.secondaryRegion,
             ),

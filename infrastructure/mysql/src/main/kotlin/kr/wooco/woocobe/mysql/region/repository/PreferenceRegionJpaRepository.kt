@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.mysql.region.repository
 
-import kr.wooco.woocobe.core.region.application.port.out.dto.PreferenceRegionData
 import kr.wooco.woocobe.mysql.region.entity.PreferenceRegionJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -34,11 +33,19 @@ interface PreferenceRegionJpaRepository : JpaRepository<PreferenceRegionJpaEntit
         preferenceRegionId: Long,
     ): PreferenceRegionJpaEntity?
 
-    fun findByUserIdAndPrimaryRegionAndSecondaryRegion(
+    @Query(
+        """
+            SELECT pr FROM PreferenceRegionJpaEntity pr
+            WHERE pr.userId = :userId 
+                AND pr.primaryRegion = :primaryRegion
+                AND pr.secondaryRegion = :secondaryRegion
+        """,
+    )
+    fun findByUserIdAndRegion(
         userId: Long,
         primaryRegion: String,
         secondaryRegion: String,
-    ): PreferenceRegionData?
+    ): PreferenceRegionJpaEntity?
 
-    fun findAllByUserId(userId: Long): List<PreferenceRegionData>
+    fun findAllByUserId(userId: Long): List<PreferenceRegionJpaEntity>
 }

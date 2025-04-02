@@ -1,41 +1,39 @@
 package kr.wooco.woocobe.core.region.application.service
 
-import kr.wooco.woocobe.core.region.application.port.`in`.AddPreferenceRegionCommand
-import kr.wooco.woocobe.core.region.application.port.`in`.AddPreferenceRegionUseCase
-import kr.wooco.woocobe.core.region.application.port.`in`.DeletePreferenceRegionCommand
+import kr.wooco.woocobe.core.region.application.port.`in`.CreatePreferenceRegionUseCase
 import kr.wooco.woocobe.core.region.application.port.`in`.DeletePreferenceRegionUseCase
-import kr.wooco.woocobe.core.region.application.port.out.DeletePreferenceRegionPort
-import kr.wooco.woocobe.core.region.application.port.out.LoadPreferenceRegionPort
-import kr.wooco.woocobe.core.region.application.port.out.SavePreferenceRegionPort
+import kr.wooco.woocobe.core.region.application.port.out.PreferenceRegionCommandPort
+import kr.wooco.woocobe.core.region.application.port.out.PreferenceRegionQueryPort
+import kr.wooco.woocobe.core.region.domain.entity.PreferenceRegion
 import kr.wooco.woocobe.core.region.domain.exception.AlreadyPreferenceRegionException
+import kr.wooco.woocobe.core.region.domain.vo.Region
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 internal class RegionCommandService(
-    private val loadPreferenceRegionPort: LoadPreferenceRegionPort,
-    private val savePreferenceRegionPort: SavePreferenceRegionPort,
-    private val deletePreferenceRegionPort: DeletePreferenceRegionPort,
-) : AddPreferenceRegionUseCase,
+    private val preferenceRegionQueryPort: PreferenceRegionQueryPort,
+    private val preferenceRegionCommandPort: PreferenceRegionCommandPort,
+) : CreatePreferenceRegionUseCase,
     DeletePreferenceRegionUseCase {
     @Transactional
-    override fun addPreferenceRegion(command: AddPreferenceRegionCommand): Long {
-        val isExists = loadPreferenceRegionPort.existsByUserIdAndRegion(
+    override fun createPreferenceRegion(command: CreatePreferenceRegionUseCase.Command): Long {
+        val region = Region(primaryRegion = command.primaryRegion, command.secondaryRegion)
+        val isExists = preferenceRegionQueryPort.existsByUserIdAndRegion(
             userId = command.userId,
-            primaryRegion = command.primaryRegion,
-            secondaryRegion = command.secondaryRegion,
+            region = region,
         )
         if (isExists) throw AlreadyPreferenceRegionException
-        val preferenceRegion = savePreferenceRegionPort.save(command.toPreferenceRegion())
-        return preferenceRegion.id
+        val preferenceRegion = PreferenceRegion.create(userId = command.userId, region = region)
+        return preferenceRegionCommandPort.savePreferenceRegion(preferenceRegion).id
     }
 
     @Transactional
-    override fun deletePreferenceRegion(command: DeletePreferenceRegionCommand) {
-        val preferenceRegion = loadPreferenceRegionPort.getByUserIdAndPreferenceRegionId(
+    override fun deletePreferenceRegion(command: DeletePreferenceRegionUseCase.Command) {
+        val preferenceRegion = preferenceRegionQueryPort.getByUserIdAndPreferenceRegionId(
             userId = command.userId,
             preferenceRegionId = command.preferenceRegionId,
         )
-        deletePreferenceRegionPort.deleteByPreferenceRegionId(preferenceRegion.id)
+        preferenceRegionCommandPort.deletePreferenceRegion(preferenceRegion)
     }
 }
