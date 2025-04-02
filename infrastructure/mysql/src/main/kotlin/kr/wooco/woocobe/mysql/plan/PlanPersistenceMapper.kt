@@ -7,7 +7,7 @@ import kr.wooco.woocobe.core.plan.domain.vo.PlanStatus
 import kr.wooco.woocobe.mysql.plan.entity.PlanJpaEntity
 import kr.wooco.woocobe.mysql.plan.entity.PlanPlaceJpaEntity
 
-internal object PlanJpaMapper {
+internal object PlanPersistenceMapper {
     fun toDomainEntity(
         planJpaEntity: PlanJpaEntity,
         planPlaceJpaEntities: List<PlanPlaceJpaEntity>,

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
 @Component
-internal class PlanJpaAdapter(
+internal class PlanPersistenceAdapter(
     private val planJpaRepository: PlanJpaRepository,
     private val planPlaceJpaRepository: PlanPlaceJpaRepository,
 ) : PlanQueryPort,
@@ -21,7 +21,7 @@ internal class PlanJpaAdapter(
         val planJpaEntity = planJpaRepository.findActiveById(planId)
             ?: throw NotExistsPlanException
         val planPlaceEntities = planPlaceJpaRepository.findAllByPlanId(planId)
-        return PlanJpaMapper.toDomainEntity(planJpaEntity, planPlaceEntities)
+        return PlanPersistenceMapper.toDomainEntity(planJpaEntity, planPlaceEntities)
     }
 
     override fun getAllByUserId(userId: Long): List<Plan> {
@@ -43,13 +43,13 @@ internal class PlanJpaAdapter(
     }
 
     override fun savePlan(plan: Plan): Plan {
-        val planEntity = planJpaRepository.save(PlanJpaMapper.toJpaEntity(plan))
+        val planEntity = planJpaRepository.save(PlanPersistenceMapper.toJpaEntity(plan))
 
         planPlaceJpaRepository.deleteAllByPlanId(planEntity.id)
-        val planPlaceEntities = plan.places.map { PlanJpaMapper.toPlanPlaceJpaEntity(planEntity.id, it) }
+        val planPlaceEntities = plan.places.map { PlanPersistenceMapper.toPlanPlaceJpaEntity(planEntity.id, it) }
         planPlaceJpaRepository.saveAll(planPlaceEntities)
 
-        return PlanJpaMapper.toDomainEntity(planEntity, planPlaceEntities)
+        return PlanPersistenceMapper.toDomainEntity(planEntity, planPlaceEntities)
     }
 
     override fun deleteAllPlanPlaceByPlanId(planId: Long) {
@@ -66,7 +66,7 @@ internal class PlanJpaAdapter(
         planPlaceEntities: List<PlanPlaceJpaEntity>,
     ): List<Plan> =
         planEntities.map { planJpaEntity ->
-            PlanJpaMapper.toDomainEntity(
+            PlanPersistenceMapper.toDomainEntity(
                 planJpaEntity = planJpaEntity,
                 planPlaceJpaEntities = planPlaceEntities.filter { it.planId == planJpaEntity.id },
             )
