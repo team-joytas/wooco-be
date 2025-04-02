@@ -19,11 +19,9 @@ internal class RegionCommandService(
     @Transactional
     override fun createPreferenceRegion(command: CreatePreferenceRegionUseCase.Command): Long {
         val region = Region(primaryRegion = command.primaryRegion, command.secondaryRegion)
-        val isExists = preferenceRegionQueryPort.existsByUserIdAndRegion(
-            userId = command.userId,
-            region = region,
-        )
-        if (isExists) throw AlreadyPreferenceRegionException
+        if (preferenceRegionQueryPort.existsByUserIdAndRegion(userId = command.userId, region = region)) {
+            throw AlreadyPreferenceRegionException
+        }
         val preferenceRegion = PreferenceRegion.create(userId = command.userId, region = region)
         return preferenceRegionCommandPort.savePreferenceRegion(preferenceRegion).id
     }
