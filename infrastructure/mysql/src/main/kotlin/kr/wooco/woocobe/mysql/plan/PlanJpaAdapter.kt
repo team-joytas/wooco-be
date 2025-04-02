@@ -46,7 +46,7 @@ internal class PlanJpaAdapter(
         val planEntity = planJpaRepository.save(PlanJpaMapper.toJpaEntity(plan))
 
         planPlaceJpaRepository.deleteAllByPlanId(planEntity.id)
-        val planPlaceEntities = plan.places.map { PlanPlaceJpaMapper.toJpaEntity(planEntity.id, it) }
+        val planPlaceEntities = plan.places.map { PlanJpaMapper.toPlanPlaceJpaEntity(planEntity.id, it) }
         planPlaceJpaRepository.saveAll(planPlaceEntities)
 
         return PlanJpaMapper.toDomainEntity(planEntity, planPlaceEntities)

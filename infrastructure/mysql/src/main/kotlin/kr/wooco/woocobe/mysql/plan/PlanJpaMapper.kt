@@ -37,4 +37,15 @@ internal object PlanJpaMapper {
             visitDate = plan.visitDate,
             status = plan.status.name,
         )
+
+    // TODO: 추후 분리 고려
+    fun toPlanPlaceJpaEntity(
+        planId: Long,
+        planPlace: PlanPlace,
+    ): PlanPlaceJpaEntity =
+        PlanPlaceJpaEntity(
+            order = planPlace.order,
+            planId = planId,
+            placeId = planPlace.placeId,
+        )
 }
