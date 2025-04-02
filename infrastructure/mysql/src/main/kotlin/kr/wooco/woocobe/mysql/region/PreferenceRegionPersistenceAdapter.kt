@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component
 
 @Component
 internal class PreferenceRegionPersistenceAdapter(
-    private val preferenceRegionMapper: PreferenceRegionMapper,
     private val preferenceRegionJpaRepository: PreferenceRegionJpaRepository,
 ) : PreferenceRegionQueryPort,
     PreferenceRegionCommandPort {
@@ -23,7 +22,7 @@ internal class PreferenceRegionPersistenceAdapter(
             primaryRegion = region.primaryRegion,
             secondaryRegion = region.secondaryRegion,
         ) ?: throw NotExistsPreferenceRegionException
-        return preferenceRegionMapper.toDomain(preferenceRegionJpaEntity)
+        return PreferenceRegionPersistenceMapper.toDomainEntity(preferenceRegionJpaEntity)
     }
 
     override fun getByUserIdAndPreferenceRegionId(
@@ -34,12 +33,12 @@ internal class PreferenceRegionPersistenceAdapter(
             userId = userId,
             preferenceRegionId = preferenceRegionId,
         ) ?: throw NotExistsPreferenceRegionException
-        return preferenceRegionMapper.toDomain(preferenceRegionJpaEntity)
+        return PreferenceRegionPersistenceMapper.toDomainEntity(preferenceRegionJpaEntity)
     }
 
     override fun getAllByUserId(userId: Long): List<PreferenceRegion> {
         val preferenceRegionJpaEntities = preferenceRegionJpaRepository.findAllByUserId(userId)
-        return preferenceRegionJpaEntities.map { preferenceRegionMapper.toDomain(it) }
+        return preferenceRegionJpaEntities.map { PreferenceRegionPersistenceMapper.toDomainEntity(it) }
     }
 
     override fun existsByUserIdAndRegion(
@@ -54,8 +53,8 @@ internal class PreferenceRegionPersistenceAdapter(
 
     override fun savePreferenceRegion(preferenceRegion: PreferenceRegion): PreferenceRegion {
         val preferenceRegionEntity =
-            preferenceRegionJpaRepository.save(preferenceRegionMapper.toEntity(preferenceRegion))
-        return preferenceRegionMapper.toDomain(preferenceRegionEntity)
+            preferenceRegionJpaRepository.save(PreferenceRegionPersistenceMapper.toJpaEntity(preferenceRegion))
+        return PreferenceRegionPersistenceMapper.toDomainEntity(preferenceRegionEntity)
     }
 
     override fun deletePreferenceRegion(preferenceRegion: PreferenceRegion) {
