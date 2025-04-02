@@ -55,7 +55,8 @@ internal class PlanCommandService(
     @Transactional
     override fun deletePlan(command: DeletePlanUseCase.Command) {
         val plan = planQueryPort.getByPlanId(command.planId)
-        plan.validateWriter(command.userId)
-        planCommandPort.deleteByPlanId(plan.id)
+        val deletedPlan = plan.softDelete(command.userId)
+        planCommandPort.savePlan(deletedPlan)
+        planCommandPort.deleteAllPlanPlaceByPlanId(plan.id)
     }
 }

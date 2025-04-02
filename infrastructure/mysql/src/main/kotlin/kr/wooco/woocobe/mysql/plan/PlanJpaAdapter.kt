@@ -8,25 +8,24 @@ import kr.wooco.woocobe.mysql.plan.entity.PlanJpaEntity
 import kr.wooco.woocobe.mysql.plan.entity.PlanPlaceJpaEntity
 import kr.wooco.woocobe.mysql.plan.repository.PlanJpaRepository
 import kr.wooco.woocobe.mysql.plan.repository.PlanPlaceJpaRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
 @Component
-internal class PlanPersistenceAdapter(
+internal class PlanJpaAdapter(
     private val planJpaRepository: PlanJpaRepository,
     private val planPlaceJpaRepository: PlanPlaceJpaRepository,
 ) : PlanQueryPort,
     PlanCommandPort {
     override fun getByPlanId(planId: Long): Plan {
-        val planJpaEntity = planJpaRepository.findByIdOrNull(planId)
+        val planJpaEntity = planJpaRepository.findActiveById(planId)
             ?: throw NotExistsPlanException
         val planPlaceEntities = planPlaceJpaRepository.findAllByPlanId(planId)
-        return PlanPersistenceMapper.toDomainEntity(planJpaEntity, planPlaceEntities)
+        return PlanJpaMapper.toDomainEntity(planJpaEntity, planPlaceEntities)
     }
 
     override fun getAllByUserId(userId: Long): List<Plan> {
-        val planEntities = planJpaRepository.findAllByUserId(userId)
+        val planEntities = planJpaRepository.findAllActiveByUserId(userId)
         val planPlaceEntities = getPlanPlaceEntities(planEntities)
         return getPlansWithPlanPlaces(planEntities, planPlaceEntities)
     }
@@ -35,7 +34,7 @@ internal class PlanPersistenceAdapter(
         startDate: LocalDateTime,
         endDate: LocalDateTime,
     ): List<Plan> {
-        val planEntities = planJpaRepository.findAllByCreatedAtBetween(
+        val planEntities = planJpaRepository.findAllActiveByCreatedAtBetween(
             startDate = startDate,
             endDate = endDate,
         )
@@ -44,17 +43,16 @@ internal class PlanPersistenceAdapter(
     }
 
     override fun savePlan(plan: Plan): Plan {
-        val planEntity = planJpaRepository.save(PlanPersistenceMapper.toJpaEntity(plan))
+        val planEntity = planJpaRepository.save(PlanJpaMapper.toJpaEntity(plan))
 
         planPlaceJpaRepository.deleteAllByPlanId(planEntity.id)
-        val planPlaceEntities = plan.places.map { PlanPlacePersistenceMapper.toJpaEntity(planEntity.id, it) }
+        val planPlaceEntities = plan.places.map { PlanPlaceJpaMapper.toJpaEntity(planEntity.id, it) }
         planPlaceJpaRepository.saveAll(planPlaceEntities)
 
-        return PlanPersistenceMapper.toDomainEntity(planEntity, planPlaceEntities)
+        return PlanJpaMapper.toDomainEntity(planEntity, planPlaceEntities)
     }
 
-    override fun deleteByPlanId(planId: Long) {
-        planJpaRepository.deleteById(planId)
+    override fun deleteAllPlanPlaceByPlanId(planId: Long) {
         planPlaceJpaRepository.deleteAllByPlanId(planId)
     }
 
@@ -68,7 +66,7 @@ internal class PlanPersistenceAdapter(
         planPlaceEntities: List<PlanPlaceJpaEntity>,
     ): List<Plan> =
         planEntities.map { planJpaEntity ->
-            PlanPersistenceMapper.toDomainEntity(
+            PlanJpaMapper.toDomainEntity(
                 planJpaEntity = planJpaEntity,
                 planPlaceJpaEntities = planPlaceEntities.filter { it.planId == planJpaEntity.id },
             )

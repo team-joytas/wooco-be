@@ -1,14 +1,21 @@
 package kr.wooco.woocobe.core.notification.domain.entity
 
 import kr.wooco.woocobe.core.notification.domain.exception.InvalidDeviceTokenOwnerException
+import kr.wooco.woocobe.core.notification.domain.vo.DeviceTokenStatus
 import kr.wooco.woocobe.core.notification.domain.vo.Token
 
 data class DeviceToken(
     val id: Long,
     val userId: Long,
     val token: Token,
+    val status: DeviceTokenStatus,
 ) {
-    fun validateOwner(userId: Long) {
+    fun softDelete(userId: Long): DeviceToken {
+        validateOwner(userId)
+        return copy(status = DeviceTokenStatus.DELETED)
+    }
+
+    private fun validateOwner(userId: Long) {
         if (this.userId != userId) throw InvalidDeviceTokenOwnerException
     }
 
@@ -21,6 +28,7 @@ data class DeviceToken(
                 id = 0L,
                 userId = userId,
                 token = token,
+                status = DeviceTokenStatus.ACTIVE,
             )
     }
 }

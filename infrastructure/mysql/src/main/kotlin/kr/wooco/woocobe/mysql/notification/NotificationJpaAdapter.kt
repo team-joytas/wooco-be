@@ -5,26 +5,25 @@ import kr.wooco.woocobe.core.notification.application.port.out.NotificationQuery
 import kr.wooco.woocobe.core.notification.domain.entity.Notification
 import kr.wooco.woocobe.core.notification.domain.exception.NotExistsNotificationException
 import kr.wooco.woocobe.mysql.notification.repository.NotificationJpaRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-internal class NotificationPersistenceAdapter(
+internal class NotificationJpaAdapter(
     private val notificationJpaRepository: NotificationJpaRepository,
 ) : NotificationQueryPort,
     NotificationCommandPort {
     override fun getByNotificationId(id: Long): Notification {
-        val notificationJpaEntity = notificationJpaRepository.findByIdOrNull(id)
+        val notificationJpaEntity = notificationJpaRepository.findActiveById(id)
             ?: throw NotExistsNotificationException
-        return NotificationPersistenceMapper.toDomainEntity(notificationJpaEntity)
+        return NotificationJpaMapper.toDomainEntity(notificationJpaEntity)
     }
 
     override fun getAllByUserId(userId: Long): List<Notification> =
-        notificationJpaRepository.findAllByUserId(userId).map { NotificationPersistenceMapper.toDomainEntity(it) }
+        notificationJpaRepository.findAllActiveByUserId(userId).map { NotificationJpaMapper.toDomainEntity(it) }
 
     override fun saveNotification(notification: Notification): Notification {
-        val notificationJpaEntity = NotificationPersistenceMapper.toJpaEntity(notification)
+        val notificationJpaEntity = NotificationJpaMapper.toJpaEntity(notification)
         notificationJpaRepository.save(notificationJpaEntity)
-        return NotificationPersistenceMapper.toDomainEntity(notificationJpaEntity)
+        return NotificationJpaMapper.toDomainEntity(notificationJpaEntity)
     }
 }

@@ -18,6 +18,8 @@ class NotificationJpaEntity(
     val targetName: String,
     @Column(name = "type")
     val type: String,
+    @Column(name = "status")
+    val status: String,
     @Column(name = "read_status")
     val readStatus: String,
     @Id @Tsid

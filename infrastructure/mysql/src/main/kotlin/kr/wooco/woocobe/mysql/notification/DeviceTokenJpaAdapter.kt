@@ -9,26 +9,22 @@ import kr.wooco.woocobe.mysql.notification.repository.DeviceTokenJpaRepository
 import org.springframework.stereotype.Component
 
 @Component
-internal class DeviceTokenPersistenceAdapter(
+internal class DeviceTokenJpaAdapter(
     private val deviceTokenJpaRepository: DeviceTokenJpaRepository,
 ) : DeviceTokenQueryPort,
     DeviceTokenCommandPort {
     override fun getByToken(token: Token): DeviceToken {
-        val deviceTokenJpaEntity = deviceTokenJpaRepository.findByToken(token.value)
+        val deviceTokenJpaEntity = deviceTokenJpaRepository.findActiveByToken(token.value)
             ?: throw NotExistsDeviceTokenException
-        return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
+        return DeviceTokenJpaMapper.toDomainEntity(deviceTokenJpaEntity)
     }
 
     override fun getAllByUserId(userId: Long): List<DeviceToken> =
-        deviceTokenJpaRepository.findAllByUserId(userId).map { DeviceTokenPersistenceMapper.toDomainEntity(it) }
+        deviceTokenJpaRepository.findAllActiveByUserId(userId).map { DeviceTokenJpaMapper.toDomainEntity(it) }
 
     override fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken {
-        val deviceTokenJpaEntity = DeviceTokenPersistenceMapper.toJpaEntity(deviceToken)
+        val deviceTokenJpaEntity = DeviceTokenJpaMapper.toJpaEntity(deviceToken)
         deviceTokenJpaRepository.save(deviceTokenJpaEntity)
-        return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
-    }
-
-    override fun deleteByToken(token: Token) {
-        deviceTokenJpaRepository.deleteByToken(token.value)
+        return DeviceTokenJpaMapper.toDomainEntity(deviceTokenJpaEntity)
     }
 }

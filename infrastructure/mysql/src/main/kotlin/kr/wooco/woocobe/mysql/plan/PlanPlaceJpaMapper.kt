@@ -3,7 +3,7 @@ package kr.wooco.woocobe.mysql.plan
 import kr.wooco.woocobe.core.plan.domain.vo.PlanPlace
 import kr.wooco.woocobe.mysql.plan.entity.PlanPlaceJpaEntity
 
-internal object PlanPlacePersistenceMapper {
+internal object PlanPlaceJpaMapper {
     fun toJpaEntity(
         planId: Long,
         planPlace: PlanPlace,
