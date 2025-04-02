@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.wooco.woocobe.api.region.request.CreatePreferenceRegionRequest
 import kr.wooco.woocobe.api.region.response.CreatePreferenceRegionResponse
-import kr.wooco.woocobe.api.region.response.PreferenceDetailResponse
+import kr.wooco.woocobe.api.region.response.PreferenceRegionResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PathVariable
@@ -24,12 +24,12 @@ interface RegionApi {
         @AuthenticationPrincipal userId: Long,
         @RequestParam(name = "primary_region") primaryRegion: String,
         @RequestParam(name = "secondary_region") secondaryRegion: String,
-    ): ResponseEntity<PreferenceDetailResponse>
+    ): ResponseEntity<PreferenceRegionResponse>
 
     @SecurityRequirement(name = "JWT")
     fun getAllMyPreferenceRegion(
         @AuthenticationPrincipal userId: Long,
-    ): ResponseEntity<List<PreferenceDetailResponse>>
+    ): ResponseEntity<List<PreferenceRegionResponse>>
 
     @SecurityRequirement(name = "JWT")
     fun deletePreferenceRegion(
