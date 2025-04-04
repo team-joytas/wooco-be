@@ -52,10 +52,6 @@ internal class PlanPersistenceAdapter(
         return PlanPersistenceMapper.toDomainEntity(planEntity, planPlaceEntities)
     }
 
-    override fun deleteAllPlanPlaceByPlanId(planId: Long) {
-        planPlaceJpaRepository.deleteAllByPlanId(planId)
-    }
-
     private fun getPlanPlaceEntities(planEntities: List<PlanJpaEntity>): List<PlanPlaceJpaEntity> {
         val planIds = planEntities.map { it.id }
         return planPlaceJpaRepository.findAllByPlanIdIn(planIds)

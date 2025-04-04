@@ -57,6 +57,5 @@ internal class PlanCommandService(
         val plan = planQueryPort.getByPlanId(command.planId)
         val deletedPlan = plan.delete(command.userId)
         planCommandPort.savePlan(deletedPlan)
-        planCommandPort.deleteAllPlanPlaceByPlanId(plan.id)
     }
 }
