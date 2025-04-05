@@ -21,7 +21,7 @@ data class Notification(
         return copy(readStatus = NotificationReadStatus.READ)
     }
 
-    fun softDelete(userId: Long): Notification {
+    fun delete(userId: Long): Notification {
         validateOwner(userId)
         return copy(status = NotificationStatus.DELETED)
     }
