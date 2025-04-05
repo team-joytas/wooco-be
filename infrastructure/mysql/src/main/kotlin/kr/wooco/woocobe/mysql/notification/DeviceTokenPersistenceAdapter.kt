@@ -9,22 +9,22 @@ import kr.wooco.woocobe.mysql.notification.repository.DeviceTokenJpaRepository
 import org.springframework.stereotype.Component
 
 @Component
-internal class DeviceTokenJpaAdapter(
+internal class DeviceTokenPersistenceAdapter(
     private val deviceTokenJpaRepository: DeviceTokenJpaRepository,
 ) : DeviceTokenQueryPort,
     DeviceTokenCommandPort {
     override fun getByToken(token: Token): DeviceToken {
         val deviceTokenJpaEntity = deviceTokenJpaRepository.findActiveByToken(token.value)
             ?: throw NotExistsDeviceTokenException
-        return DeviceTokenJpaMapper.toDomainEntity(deviceTokenJpaEntity)
+        return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
     }
 
     override fun getAllByUserId(userId: Long): List<DeviceToken> =
-        deviceTokenJpaRepository.findAllActiveByUserId(userId).map { DeviceTokenJpaMapper.toDomainEntity(it) }
+        deviceTokenJpaRepository.findAllActiveByUserId(userId).map { DeviceTokenPersistenceMapper.toDomainEntity(it) }
 
     override fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken {
-        val deviceTokenJpaEntity = DeviceTokenJpaMapper.toJpaEntity(deviceToken)
+        val deviceTokenJpaEntity = DeviceTokenPersistenceMapper.toJpaEntity(deviceToken)
         deviceTokenJpaRepository.save(deviceTokenJpaEntity)
-        return DeviceTokenJpaMapper.toDomainEntity(deviceTokenJpaEntity)
+        return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
     }
 }
