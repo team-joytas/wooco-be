@@ -42,6 +42,7 @@ internal class PlanPersistenceAdapter(
         return getPlansWithPlanPlaces(planEntities, planPlaceEntities)
     }
 
+    // TODO: 애그리거트 루트 도입 후 리팩토링
     override fun savePlan(plan: Plan): Plan {
         val planEntity = planJpaRepository.save(PlanPersistenceMapper.toJpaEntity(plan))
 
