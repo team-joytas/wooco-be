@@ -1,6 +1,8 @@
 package kr.wooco.woocobe.core.notification.domain.entity
 
+import kr.wooco.woocobe.core.notification.domain.exception.AlreadyDeletedNotificationException
 import kr.wooco.woocobe.core.notification.domain.exception.InvalidNotificationOwnerException
+import kr.wooco.woocobe.core.notification.domain.exception.NotExistsNotificationException
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationReadStatus
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationStatus
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
@@ -17,17 +19,19 @@ data class Notification(
     val readStatus: NotificationReadStatus,
 ) {
     fun markAsRead(userId: Long): Notification {
-        validateOwner(userId)
+        when {
+            this.userId != userId -> throw InvalidNotificationOwnerException
+            this.status != NotificationStatus.ACTIVE -> throw NotExistsNotificationException
+        }
         return copy(readStatus = NotificationReadStatus.READ)
     }
 
     fun delete(userId: Long): Notification {
-        validateOwner(userId)
+        when {
+            this.userId != userId -> throw InvalidNotificationOwnerException
+            this.status != NotificationStatus.ACTIVE -> throw AlreadyDeletedNotificationException
+        }
         return copy(status = NotificationStatus.DELETED)
-    }
-
-    private fun validateOwner(userId: Long) {
-        if (this.userId != userId) throw InvalidNotificationOwnerException
     }
 
     companion object {
