@@ -34,3 +34,10 @@ data object InvalidDeviceTokenOwnerException : BaseNotificationException(
 ) {
     private fun readResolve(): Any = InvalidDeviceTokenOwnerException
 }
+
+data object AlreadyDeletedDeviceTokenException : BaseNotificationException(
+    code = "ALREADY_DELETED_DEVICE_TOKEN_EXCEPTION",
+    message = "이미 삭제된 디바이스 토큰입니다.",
+) {
+    private fun readResolve(): Any = AlreadyDeletedDeviceTokenException
+}
