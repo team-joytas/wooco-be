@@ -3,7 +3,6 @@ package kr.wooco.woocobe.mysql.notification.repository
 import kr.wooco.woocobe.mysql.notification.entity.DeviceTokenJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import org.springframework.data.repository.query.Param
 
 interface DeviceTokenJpaRepository : JpaRepository<DeviceTokenJpaEntity, Long> {
     @Query(
@@ -22,7 +21,5 @@ interface DeviceTokenJpaRepository : JpaRepository<DeviceTokenJpaEntity, Long> {
             AND d.status = 'ACTIVE'
         """,
     )
-    fun findAllActiveByUserId(
-        @Param("userId") userId: Long,
-    ): List<DeviceTokenJpaEntity>
+    fun findAllActiveByUserId(userId: Long): List<DeviceTokenJpaEntity>
 }
