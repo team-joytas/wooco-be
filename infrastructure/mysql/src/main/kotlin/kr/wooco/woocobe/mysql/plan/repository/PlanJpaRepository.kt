@@ -3,7 +3,6 @@ package kr.wooco.woocobe.mysql.plan.repository
 import kr.wooco.woocobe.mysql.plan.entity.PlanJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import org.springframework.data.repository.query.Param
 import java.time.LocalDateTime
 
 interface PlanJpaRepository : JpaRepository<PlanJpaEntity, Long> {
@@ -14,9 +13,7 @@ interface PlanJpaRepository : JpaRepository<PlanJpaEntity, Long> {
             AND p.status = 'ACTIVE'
         """,
     )
-    fun findActiveById(
-        @Param("planId") planId: Long,
-    ): PlanJpaEntity?
+    fun findActiveById(planId: Long): PlanJpaEntity?
 
     @Query(
         """
@@ -25,9 +22,7 @@ interface PlanJpaRepository : JpaRepository<PlanJpaEntity, Long> {
             AND p.status = 'ACTIVE'
         """,
     )
-    fun findAllActiveByUserId(
-        @Param("userId") userId: Long,
-    ): List<PlanJpaEntity>
+    fun findAllActiveByUserId(userId: Long): List<PlanJpaEntity>
 
     @Query(
         """
@@ -37,7 +32,7 @@ interface PlanJpaRepository : JpaRepository<PlanJpaEntity, Long> {
         """,
     )
     fun findAllActiveByCreatedAtBetween(
-        @Param("startDate") startDate: LocalDateTime,
-        @Param("endDate") endDate: LocalDateTime,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
     ): List<PlanJpaEntity>
 }
