@@ -1,6 +1,8 @@
 package kr.wooco.woocobe.core.plan.domain.entity
 
+import kr.wooco.woocobe.core.plan.domain.exception.AlreadyDeletedPlanException
 import kr.wooco.woocobe.core.plan.domain.exception.InvalidPlanWriterException
+import kr.wooco.woocobe.core.plan.domain.exception.NotExistsPlanException
 import kr.wooco.woocobe.core.plan.domain.vo.PlanPlace
 import kr.wooco.woocobe.core.plan.domain.vo.PlanRegion
 import kr.wooco.woocobe.core.plan.domain.vo.PlanStatus
@@ -24,7 +26,10 @@ data class Plan(
         visitDate: LocalDate,
         placeIds: List<Long>,
     ): Plan {
-        validateWriter(userId)
+        when {
+            this.userId != userId -> throw InvalidPlanWriterException
+            this.status != PlanStatus.ACTIVE -> throw NotExistsPlanException
+        }
         return copy(
             title = title,
             contents = contents,
@@ -35,12 +40,11 @@ data class Plan(
     }
 
     fun delete(userId: Long): Plan {
-        validateWriter(userId)
+        when {
+            this.userId != userId -> throw InvalidPlanWriterException
+            this.status != PlanStatus.ACTIVE -> throw AlreadyDeletedPlanException
+        }
         return copy(status = PlanStatus.DELETED)
-    }
-
-    private fun validateWriter(userId: Long) {
-        if (this.userId != userId) throw InvalidPlanWriterException
     }
 
     companion object {
