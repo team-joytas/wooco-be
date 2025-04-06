@@ -16,7 +16,7 @@ class PlanScheduler(
     fun publishEventsForYesterdayPlans() {
         val yesterdayStart = LocalDate.now().minusDays(1).atStartOfDay()
         val yesterdayEnd = LocalDate.now().atStartOfDay()
-        val plans = planQueryPort.getAllByCreatedAtBetween(
+        val plans = planQueryPort.getAllByCreatedAtBetweenWithActive(
             startDate = yesterdayStart,
             endDate = yesterdayEnd,
         )

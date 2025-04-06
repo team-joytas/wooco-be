@@ -6,7 +6,7 @@ import kr.wooco.woocobe.core.notification.domain.vo.NotificationStatus
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
 import kr.wooco.woocobe.mysql.notification.entity.NotificationJpaEntity
 
-internal object NotificationJpaMapper {
+internal object NotificationPersistenceMapper {
     fun toDomainEntity(notificationJpaEntity: NotificationJpaEntity): Notification =
         Notification(
             id = notificationJpaEntity.id,

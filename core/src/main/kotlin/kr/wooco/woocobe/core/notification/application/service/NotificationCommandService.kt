@@ -57,7 +57,7 @@ class NotificationCommandService(
     override fun deleteDeviceToken(command: DeleteDeviceTokenUseCase.Command) {
         val token = Token(command.token)
         val deviceToken = deviceTokenQueryPort.getByToken(token)
-        val deletedDeviceToken = deviceToken.softDelete(command.userId)
+        val deletedDeviceToken = deviceToken.delete(command.userId)
         deviceTokenCommandPort.saveDeviceToken(deletedDeviceToken)
     }
 }

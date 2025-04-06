@@ -7,7 +7,7 @@ import kr.wooco.woocobe.core.plan.domain.vo.PlanStatus
 import kr.wooco.woocobe.mysql.plan.entity.PlanJpaEntity
 import kr.wooco.woocobe.mysql.plan.entity.PlanPlaceJpaEntity
 
-internal object PlanJpaMapper {
+internal object PlanPersistenceMapper {
     fun toDomainEntity(
         planJpaEntity: PlanJpaEntity,
         planPlaceJpaEntities: List<PlanPlaceJpaEntity>,
@@ -36,5 +36,16 @@ internal object PlanJpaMapper {
             secondaryRegion = plan.region.secondaryRegion,
             visitDate = plan.visitDate,
             status = plan.status.name,
+        )
+
+    // TODO: 추후 분리 고려
+    fun toPlanPlaceJpaEntity(
+        planId: Long,
+        planPlace: PlanPlace,
+    ): PlanPlaceJpaEntity =
+        PlanPlaceJpaEntity(
+            order = planPlace.order,
+            planId = planId,
+            placeId = planPlace.placeId,
         )
 }

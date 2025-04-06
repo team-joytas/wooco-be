@@ -16,7 +16,7 @@ internal class PlanQueryService(
     ReadAllPlanUseCase {
     @Transactional(readOnly = true)
     override fun readPlan(query: ReadPlanUseCase.Query): PlanResult {
-        val plan = planQueryPort.getByPlanId(query.planId)
+        val plan = planQueryPort.getByPlanIdWithActive(query.planId)
         val placeIds = plan.places.map { it.placeId }
         val places = placeQueryPort.getAllByPlaceIds(placeIds)
         return PlanResult.of(plan, places)
@@ -24,7 +24,7 @@ internal class PlanQueryService(
 
     @Transactional(readOnly = true)
     override fun readAllPlan(query: ReadAllPlanUseCase.Query): List<PlanResult> {
-        val plans = planQueryPort.getAllByUserId(query.userId)
+        val plans = planQueryPort.getAllByUserIdWithActive(query.userId)
         val placeIds = plans.flatMap { it.places }.map { it.placeId }
         val places = placeQueryPort.getAllByPlaceIds(placeIds)
         return PlanResult.listOf(plans, places)

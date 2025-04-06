@@ -18,13 +18,13 @@ class NotificationQueryService(
     SendNotificationUseCase {
     @Transactional(readOnly = true)
     override fun readAllNotification(query: ReadAllNotificationUseCase.Query): List<NotificationResult> {
-        val notifications = notificationQueryPort.getAllByUserId(query.userId)
+        val notifications = notificationQueryPort.getAllByUserIdWithActive(query.userId)
         return notifications.map { NotificationResult.from(it) }
     }
 
     override fun sendNotification(query: SendNotificationUseCase.Query) {
-        val notification = notificationQueryPort.getByNotificationId(query.notificationId)
-        val tokens = deviceTokenQueryPort.getAllByUserId(notification.userId).map { it.token }
+        val notification = notificationQueryPort.getByNotificationIdWithActive(query.notificationId)
+        val tokens = deviceTokenQueryPort.getAllByUserIdWithActive(notification.userId).map { it.token }
         notificationSenderPort.sendNotification(notification = notification, tokens = tokens)
     }
 }

@@ -6,5 +6,5 @@ import kr.wooco.woocobe.core.notification.domain.vo.Token
 interface DeviceTokenQueryPort {
     fun getByToken(token: Token): DeviceToken
 
-    fun getAllByUserId(userId: Long): List<DeviceToken>
+    fun getAllByUserIdWithActive(userId: Long): List<DeviceToken>
 }

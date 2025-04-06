@@ -5,7 +5,7 @@ import kr.wooco.woocobe.core.notification.domain.vo.DeviceTokenStatus
 import kr.wooco.woocobe.core.notification.domain.vo.Token
 import kr.wooco.woocobe.mysql.notification.entity.DeviceTokenJpaEntity
 
-internal object DeviceTokenJpaMapper {
+internal object DeviceTokenPersistenceMapper {
     fun toDomainEntity(deviceTokenJpaEntity: DeviceTokenJpaEntity): DeviceToken =
         DeviceToken(
             id = deviceTokenJpaEntity.id,
