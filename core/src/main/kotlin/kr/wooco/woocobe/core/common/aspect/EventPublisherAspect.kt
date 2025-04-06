@@ -41,15 +41,15 @@ class EventPublisherAspect(
     fun execute(joinPoint: ProceedingJoinPoint): Any? {
         EventContext.clearEvents()
 
-        return runCatching {
-            joinPoint.proceed()
-        }.onSuccess {
+        try {
+            val result = joinPoint.proceed()
             EventContext.raiseEvents { event ->
                 applicationEventPublisher.publishEvent(event)
             }
-        }.onFailure { throwable ->
+            return result
+        } catch (e: Throwable) {
             EventContext.clearEvents()
-            throw throwable
+            throw e
         }
     }
 }
