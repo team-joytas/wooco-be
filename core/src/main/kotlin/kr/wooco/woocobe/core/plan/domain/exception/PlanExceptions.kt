@@ -20,3 +20,10 @@ data object NotExistsPlanException : BasePlanException(
 ) {
     private fun readResolve(): Any = NotExistsPlanException
 }
+
+data object AlreadyDeletedPlanException : BasePlanException(
+    code = "ALREADY_DELETED_PLAN_EXCEPTION",
+    message = "이미 삭제된 플랜입니다.",
+) {
+    private fun readResolve(): Any = AlreadyDeletedPlanException
+}
