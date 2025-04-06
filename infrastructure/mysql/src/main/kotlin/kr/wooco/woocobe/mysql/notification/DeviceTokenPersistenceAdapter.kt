@@ -4,6 +4,7 @@ import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenComman
 import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenQueryPort
 import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken
 import kr.wooco.woocobe.core.notification.domain.exception.NotExistsDeviceTokenException
+import kr.wooco.woocobe.core.notification.domain.vo.DeviceTokenStatus
 import kr.wooco.woocobe.core.notification.domain.vo.Token
 import kr.wooco.woocobe.mysql.notification.repository.DeviceTokenJpaRepository
 import org.springframework.stereotype.Component
@@ -14,13 +15,15 @@ internal class DeviceTokenPersistenceAdapter(
 ) : DeviceTokenQueryPort,
     DeviceTokenCommandPort {
     override fun getByToken(token: Token): DeviceToken {
-        val deviceTokenJpaEntity = deviceTokenJpaRepository.findActiveByToken(token.value)
+        val deviceTokenJpaEntity = deviceTokenJpaRepository.findByToken(token.value)
             ?: throw NotExistsDeviceTokenException
         return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
     }
 
-    override fun getAllByUserId(userId: Long): List<DeviceToken> =
-        deviceTokenJpaRepository.findAllActiveByUserId(userId).map { DeviceTokenPersistenceMapper.toDomainEntity(it) }
+    override fun getAllActiveByUserId(userId: Long): List<DeviceToken> =
+        deviceTokenJpaRepository
+            .findAllByUserIdAndStatus(userId, DeviceTokenStatus.ACTIVE.name)
+            .map { DeviceTokenPersistenceMapper.toDomainEntity(it) }
 
     override fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken {
         val deviceTokenJpaEntity = DeviceTokenPersistenceMapper.toJpaEntity(deviceToken)

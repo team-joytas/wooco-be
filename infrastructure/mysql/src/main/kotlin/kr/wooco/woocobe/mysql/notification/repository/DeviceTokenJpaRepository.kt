@@ -5,21 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 interface DeviceTokenJpaRepository : JpaRepository<DeviceTokenJpaEntity, Long> {
-    @Query(
-        """
-            SELECT d FROM DeviceTokenJpaEntity d
-            WHERE d.token = :token
-            AND d.status = 'ACTIVE'
-        """,
-    )
-    fun findActiveByToken(token: String): DeviceTokenJpaEntity?
+    fun findByToken(token: String): DeviceTokenJpaEntity?
 
     @Query(
         """
             SELECT d FROM DeviceTokenJpaEntity d
             WHERE d.userId = :userId
-            AND d.status = 'ACTIVE'
+            AND d.status = :status
         """,
     )
-    fun findAllActiveByUserId(userId: Long): List<DeviceTokenJpaEntity>
+    fun findAllByUserIdAndStatus(
+        userId: Long,
+        status: String,
+    ): List<DeviceTokenJpaEntity>
 }

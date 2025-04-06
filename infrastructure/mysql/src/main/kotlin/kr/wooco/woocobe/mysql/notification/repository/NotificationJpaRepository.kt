@@ -8,18 +8,24 @@ interface NotificationJpaRepository : JpaRepository<NotificationJpaEntity, Long>
     @Query(
         """
             SELECT n FROM NotificationJpaEntity n
-            WHERE n.id = :notificationId
-            AND n.status = 'ACTIVE'
+            WHERE n.id = :id
+            AND n.status = :status
         """,
     )
-    fun findActiveById(notificationId: Long): NotificationJpaEntity?
+    fun findByIdAndStatus(
+        id: Long,
+        status: String,
+    ): NotificationJpaEntity?
 
     @Query(
         """
             SELECT n FROM NotificationJpaEntity n
             WHERE n.userId = :userId
-            AND n.status = 'ACTIVE'
+            AND n.status = :status
         """,
     )
-    fun findAllActiveByUserId(userId: Long): List<NotificationJpaEntity>
+    fun findAllByUserIdAndStatus(
+        userId: Long,
+        status: String,
+    ): List<NotificationJpaEntity>
 }

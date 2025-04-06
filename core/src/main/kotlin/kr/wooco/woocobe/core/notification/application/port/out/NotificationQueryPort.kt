@@ -5,5 +5,7 @@ import kr.wooco.woocobe.core.notification.domain.entity.Notification
 interface NotificationQueryPort {
     fun getByNotificationId(id: Long): Notification
 
-    fun getAllByUserId(userId: Long): List<Notification>
+    fun getActiveByNotificationId(id: Long): Notification
+
+    fun getAllActiveByUserId(userId: Long): List<Notification>
 }
