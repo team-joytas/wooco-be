@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.api.common.config
 
 import org.slf4j.MDC
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.task.TaskDecorator
 import org.springframework.scheduling.annotation.AsyncConfigurer
@@ -13,19 +13,16 @@ import java.util.concurrent.Executor
 @EnableAsync
 @Configuration
 class AsyncConfig(
-    @Value("\${spring.async-task-pool.max-size}") private val asyncThreadMaxPoolSize: Int,
-    @Value("\${spring.async-task-pool.core-size}") private val asyncThreadCorePoolSize: Int,
-    @Value("\${spring.async-task-pool.queue-capacity}") private val asyncThreadQueueCapacity: Int,
-    @Value("\${spring.async-task-pool.await-duration}") private val asyncAwaitTerminationDuration: Duration,
+    private val asyncProperties: AsyncProperties,
 ) : AsyncConfigurer {
     override fun getAsyncExecutor(): Executor =
         ThreadPoolTaskExecutor().apply {
-            maxPoolSize = asyncThreadMaxPoolSize
-            corePoolSize = asyncThreadCorePoolSize
-            queueCapacity = asyncThreadQueueCapacity
+            maxPoolSize = asyncProperties.maxSize
+            corePoolSize = asyncProperties.coreSize
+            queueCapacity = asyncProperties.queueCapacity
             setThreadNamePrefix(ASYNC_THREAD_PREFIX)
             setWaitForTasksToCompleteOnShutdown(true)
-            setAwaitTerminationSeconds(asyncAwaitTerminationDuration.toSeconds().toInt())
+            setAwaitTerminationSeconds(asyncProperties.awaitDuration.toSeconds().toInt())
             setTaskDecorator(MdcDecorator)
             initialize()
         }
@@ -34,15 +31,25 @@ class AsyncConfig(
         private const val ASYNC_THREAD_PREFIX = "async-task-"
 
         object MdcDecorator : TaskDecorator {
-            override fun decorate(runnable: Runnable): Runnable =
-                Runnable {
+            override fun decorate(runnable: Runnable): Runnable {
+                val contextMap = MDC.getCopyOfContextMap()
+                return Runnable {
                     try {
-                        MDC.getCopyOfContextMap()?.let(MDC::setContextMap)
+                        contextMap?.let(MDC::setContextMap)
                         runnable.run()
                     } finally {
                         MDC.clear()
                     }
                 }
+            }
         }
+
+        @ConfigurationProperties(prefix = "spring.async-task-pool")
+        data class AsyncProperties(
+            val maxSize: Int,
+            val coreSize: Int,
+            val queueCapacity: Int,
+            val awaitDuration: Duration,
+        )
     }
 }
