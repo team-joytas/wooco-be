@@ -20,7 +20,7 @@ internal class DeviceTokenPersistenceAdapter(
         return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
     }
 
-    override fun getAllActiveByUserId(userId: Long): List<DeviceToken> =
+    override fun getAllByUserIdWithActive(userId: Long): List<DeviceToken> =
         deviceTokenJpaRepository
             .findAllByUserIdAndStatus(userId, DeviceTokenStatus.ACTIVE.name)
             .map { DeviceTokenPersistenceMapper.toDomainEntity(it) }

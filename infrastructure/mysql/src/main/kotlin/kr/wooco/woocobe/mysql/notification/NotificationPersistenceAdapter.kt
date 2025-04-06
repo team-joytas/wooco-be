@@ -20,14 +20,14 @@ internal class NotificationPersistenceAdapter(
         return NotificationPersistenceMapper.toDomainEntity(notificationJpaEntity)
     }
 
-    override fun getActiveByNotificationId(notificationId: Long): Notification {
+    override fun getByNotificationIdWithActive(notificationId: Long): Notification {
         val notificationJpaEntity =
             notificationJpaRepository.findByIdAndStatus(notificationId, NotificationStatus.ACTIVE.name)
                 ?: throw NotExistsNotificationException
         return NotificationPersistenceMapper.toDomainEntity(notificationJpaEntity)
     }
 
-    override fun getAllActiveByUserId(userId: Long): List<Notification> =
+    override fun getAllByUserIdWithActive(userId: Long): List<Notification> =
         notificationJpaRepository
             .findAllByUserIdAndStatus(userId, NotificationStatus.ACTIVE.name)
             .map { NotificationPersistenceMapper.toDomainEntity(it) }

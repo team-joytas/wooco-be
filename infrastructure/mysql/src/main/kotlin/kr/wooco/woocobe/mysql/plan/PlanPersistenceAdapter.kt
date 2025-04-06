@@ -26,20 +26,20 @@ internal class PlanPersistenceAdapter(
         return PlanPersistenceMapper.toDomainEntity(planJpaEntity, planPlaceEntities)
     }
 
-    override fun getActiveByPlanId(planId: Long): Plan {
+    override fun getByPlanIdWithActive(planId: Long): Plan {
         val planJpaEntity = planJpaRepository.findByIdAndStatus(planId, PlanStatus.ACTIVE.name)
             ?: throw NotExistsPlanException
         val planPlaceEntities = planPlaceJpaRepository.findAllByPlanId(planId)
         return PlanPersistenceMapper.toDomainEntity(planJpaEntity, planPlaceEntities)
     }
 
-    override fun getAllActiveByUserId(userId: Long): List<Plan> {
+    override fun getAllByUserIdWithActive(userId: Long): List<Plan> {
         val planEntities = planJpaRepository.findAllByUserIdAndStatus(userId, PlanStatus.ACTIVE.name)
         val planPlaceEntities = getPlanPlaceEntities(planEntities)
         return getPlansWithPlanPlaces(planEntities, planPlaceEntities)
     }
 
-    override fun getAllActiveByCreatedAtBetween(
+    override fun getAllByCreatedAtBetweenWithActive(
         startDate: LocalDateTime,
         endDate: LocalDateTime,
     ): List<Plan> {
