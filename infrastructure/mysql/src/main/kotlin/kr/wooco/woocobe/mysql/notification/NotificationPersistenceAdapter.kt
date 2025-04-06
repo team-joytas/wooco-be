@@ -14,15 +14,16 @@ internal class NotificationPersistenceAdapter(
     private val notificationJpaRepository: NotificationJpaRepository,
 ) : NotificationQueryPort,
     NotificationCommandPort {
-    override fun getByNotificationId(id: Long): Notification {
-        val notificationJpaEntity = notificationJpaRepository.findByIdOrNull(id)
+    override fun getByNotificationId(notificationId: Long): Notification {
+        val notificationJpaEntity = notificationJpaRepository.findByIdOrNull(notificationId)
             ?: throw NotExistsNotificationException
         return NotificationPersistenceMapper.toDomainEntity(notificationJpaEntity)
     }
 
-    override fun getActiveByNotificationId(id: Long): Notification {
-        val notificationJpaEntity = notificationJpaRepository.findByIdAndStatus(id, NotificationStatus.ACTIVE.name)
-            ?: throw NotExistsNotificationException
+    override fun getActiveByNotificationId(notificationId: Long): Notification {
+        val notificationJpaEntity =
+            notificationJpaRepository.findByIdAndStatus(notificationId, NotificationStatus.ACTIVE.name)
+                ?: throw NotExistsNotificationException
         return NotificationPersistenceMapper.toDomainEntity(notificationJpaEntity)
     }
 
