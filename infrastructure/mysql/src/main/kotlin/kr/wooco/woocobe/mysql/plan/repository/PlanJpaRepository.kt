@@ -9,30 +9,37 @@ interface PlanJpaRepository : JpaRepository<PlanJpaEntity, Long> {
     @Query(
         """
             SELECT p FROM PlanJpaEntity p
-            WHERE p.id = :planId
-            AND p.status = 'ACTIVE'
+            WHERE p.id = :id
+            AND p.status = :status
         """,
     )
-    fun findActiveById(planId: Long): PlanJpaEntity?
+    fun findByIdAndStatus(
+        id: Long,
+        status: String,
+    ): PlanJpaEntity?
 
     @Query(
         """
             SELECT p FROM PlanJpaEntity p
             WHERE p.userId = :userId
-            AND p.status = 'ACTIVE'
+            AND p.status = :status
         """,
     )
-    fun findAllActiveByUserId(userId: Long): List<PlanJpaEntity>
+    fun findAllByUserIdAndStatus(
+        userId: Long,
+        status: String,
+    ): List<PlanJpaEntity>
 
     @Query(
         """
             SELECT p FROM PlanJpaEntity p
             WHERE p.createdAt BETWEEN :startDate AND :endDate
-            AND p.status = 'ACTIVE'
+            AND p.status = :status
         """,
     )
-    fun findAllActiveByCreatedAtBetween(
+    fun findAllByCreatedAtBetweenAndStatus(
         startDate: LocalDateTime,
         endDate: LocalDateTime,
+        status: String,
     ): List<PlanJpaEntity>
 }

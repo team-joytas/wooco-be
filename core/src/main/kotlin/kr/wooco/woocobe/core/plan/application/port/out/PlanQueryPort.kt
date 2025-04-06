@@ -6,9 +6,11 @@ import java.time.LocalDateTime
 interface PlanQueryPort {
     fun getByPlanId(planId: Long): Plan
 
-    fun getAllByUserId(userId: Long): List<Plan>
+    fun getActiveByPlanId(planId: Long): Plan
 
-    fun getAllByCreatedAtBetween(
+    fun getAllActiveByUserId(userId: Long): List<Plan>
+
+    fun getAllActiveByCreatedAtBetween(
         startDate: LocalDateTime,
         endDate: LocalDateTime,
     ): List<Plan>
