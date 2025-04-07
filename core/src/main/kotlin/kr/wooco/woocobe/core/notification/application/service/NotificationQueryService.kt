@@ -25,6 +25,8 @@ class NotificationQueryService(
     override fun sendNotification(query: SendNotificationUseCase.Query) {
         val notification = notificationQueryPort.getByNotificationIdWithActive(query.notificationId)
         val tokens = deviceTokenQueryPort.getAllByUserIdWithActive(notification.userId).map { it.token }
-        notificationSenderPort.sendNotification(notification = notification, tokens = tokens)
+        if (tokens.isNotEmpty()) {
+            notificationSenderPort.sendNotification(notification = notification, tokens = tokens)
+        }
     }
 }
