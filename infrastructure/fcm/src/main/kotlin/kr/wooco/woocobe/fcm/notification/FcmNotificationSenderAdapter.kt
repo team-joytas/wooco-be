@@ -16,10 +16,6 @@ internal class FcmNotificationSenderAdapter(
         notification: Notification,
         tokens: List<Token>,
     ) {
-        if (tokens.isEmpty()) {
-            log.warn { "FCM token is empty, userId: ${notification.userId}" }
-            return
-        }
         val messages = MulticastMessage
             .builder()
             .addAllTokens(tokens.map { it.value })
