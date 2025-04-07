@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.core.coursecomment.application.service
 
-import kr.wooco.woocobe.core.course.application.port.out.LoadCoursePersistencePort
-import kr.wooco.woocobe.core.course.application.port.out.SaveCoursePersistencePort
+import kr.wooco.woocobe.core.course.application.port.out.CourseCommandPort
+import kr.wooco.woocobe.core.course.application.port.out.CourseQueryPort
 import kr.wooco.woocobe.core.coursecomment.application.port.`in`.CreateCourseCommentUseCase
 import kr.wooco.woocobe.core.coursecomment.application.port.`in`.DeleteCourseCommentUseCase
 import kr.wooco.woocobe.core.coursecomment.application.port.`in`.UpdateCourseCommentUseCase
@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 internal class CourseCommentCommandService(
     private val eventPublisher: ApplicationEventPublisher,
-    private val loadCoursePersistencePort: LoadCoursePersistencePort,
-    private val saveCoursePersistencePort: SaveCoursePersistencePort,
+    private val courseQueryPort: CourseQueryPort,
+    private val courseCommandPort: CourseCommandPort,
     private val loadCourseCommentPersistencePort: LoadCourseCommentPersistencePort,
     private val saveCourseCommentPersistencePort: SaveCourseCommentPersistencePort,
     private val deleteCourseCommentPersistencePort: DeleteCourseCommentPersistencePort,
@@ -28,7 +28,7 @@ internal class CourseCommentCommandService(
     // TODO: 로직 개선이 필요함 :: 로직간 강결합 문제
     @Transactional
     override fun createCourseComment(command: CreateCourseCommentUseCase.Command): Long {
-        val course = loadCoursePersistencePort.getByCourseId(command.courseId)
+        val course = courseQueryPort.getByCourseId(command.courseId)
         val courseComment = saveCourseCommentPersistencePort.saveCourseComment(
             CourseComment.create(
                 userId = command.userId,
@@ -37,7 +37,7 @@ internal class CourseCommentCommandService(
             ),
         )
         course.increaseComments()
-        saveCoursePersistencePort.saveCourse(course)
+        courseCommandPort.saveCourse(course)
         eventPublisher.publishEvent(CourseCommentCreateEvent.of(course, courseComment))
         return courseComment.id
     }

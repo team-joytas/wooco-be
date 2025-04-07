@@ -7,11 +7,9 @@ import kr.wooco.woocobe.core.course.domain.vo.CourseRegion
 import kr.wooco.woocobe.mysql.course.entity.CourseCategoryJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CourseJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CoursePlaceJpaEntity
-import org.springframework.stereotype.Component
 
-@Component
-internal class CoursePersistenceMapper {
-    fun toDomain(
+internal object CoursePersistenceMapper {
+    fun toDomainEntity(
         courseJpaEntity: CourseJpaEntity,
         coursePlaceJpaEntities: List<CoursePlaceJpaEntity>,
         courseCategoryJpaEntities: List<CourseCategoryJpaEntity>,
@@ -34,7 +32,7 @@ internal class CoursePersistenceMapper {
             writeDateTime = courseJpaEntity.createdAt,
         )
 
-    fun toEntity(course: Course): CourseJpaEntity =
+    fun toJpaEntity(course: Course): CourseJpaEntity =
         CourseJpaEntity(
             id = course.id,
             userId = course.userId,

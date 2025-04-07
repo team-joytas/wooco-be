@@ -1,8 +1,8 @@
 package kr.wooco.woocobe.mysql.course.repository
 
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
-import kr.wooco.woocobe.core.course.application.service.dto.CourseSearchCondition
-import kr.wooco.woocobe.core.course.application.service.dto.InterestCourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.dto.CourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.dto.InterestCourseSearchCondition
 import kr.wooco.woocobe.mysql.course.entity.CourseCategoryJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CourseJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.InterestCourseJpaEntity

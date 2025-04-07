@@ -4,10 +4,10 @@ import kr.wooco.woocobe.core.course.application.port.`in`.ReadAllCourseUseCase
 import kr.wooco.woocobe.core.course.application.port.`in`.ReadAllInterestCourseUseCase
 import kr.wooco.woocobe.core.course.application.port.`in`.ReadCourseUseCase
 import kr.wooco.woocobe.core.course.application.port.`in`.results.CourseResult
-import kr.wooco.woocobe.core.course.application.port.out.LoadCoursePersistencePort
+import kr.wooco.woocobe.core.course.application.port.out.CourseQueryPort
 import kr.wooco.woocobe.core.course.application.port.out.LoadInterestCoursePersistencePort
-import kr.wooco.woocobe.core.course.application.service.dto.CourseSearchCondition
-import kr.wooco.woocobe.core.course.application.service.dto.InterestCourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.dto.CourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.dto.InterestCourseSearchCondition
 import kr.wooco.woocobe.core.course.domain.entity.Course
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.user.application.port.out.UserQueryPort
@@ -18,14 +18,14 @@ import org.springframework.transaction.annotation.Transactional
 internal class CourseQueryService(
     private val userQueryPort: UserQueryPort,
     private val placeQueryPort: PlaceQueryPort,
-    private val loadCoursePersistencePort: LoadCoursePersistencePort,
+    private val courseQueryPort: CourseQueryPort,
     private val loadInterestCoursePersistencePort: LoadInterestCoursePersistencePort,
 ) : ReadCourseUseCase,
     ReadAllCourseUseCase,
     ReadAllInterestCourseUseCase {
     @Transactional(readOnly = true)
     override fun readCourse(query: ReadCourseUseCase.Query): CourseResult {
-        val course = loadCoursePersistencePort.getByCourseId(query.courseId)
+        val course = courseQueryPort.getByCourseId(query.courseId)
         val user = userQueryPort.getByUserId(course.userId)
         val placeIds = course.coursePlaces.map { it.placeId }.distinct()
         val places = placeQueryPort.getAllByPlaceIds(placeIds)
@@ -45,7 +45,7 @@ internal class CourseQueryService(
             limit = query.limit,
             sort = query.sort,
         )
-        val courses = loadCoursePersistencePort.getAllCourseByCondition(condition)
+        val courses = courseQueryPort.getAllCourseByCondition(condition)
         return fetchCourseDetails(query.userId, courses)
     }
 
@@ -59,7 +59,7 @@ internal class CourseQueryService(
             limit = query.limit,
             sort = query.sort,
         )
-        val courses = loadCoursePersistencePort.getAllInterestCourseByCondition(condition)
+        val courses = courseQueryPort.getAllInterestCourseByCondition(condition)
         return fetchCourseDetails(query.userId, courses)
     }
 

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component
 @Component
 internal class InterestCoursePersistenceAdapter(
     private val interestCourseJpaRepository: InterestCourseJpaRepository,
-    private val interestCoursePersistenceMapper: InterestCoursePersistenceMapper,
 ) : LoadInterestCoursePersistencePort,
     SaveInterestCoursePersistencePort,
     DeleteInterestCoursePersistencePort {
@@ -19,9 +18,9 @@ internal class InterestCoursePersistenceAdapter(
         userId: Long,
         courseId: Long,
     ): InterestCourse {
-        val interestCourseEntity = interestCourseJpaRepository.findByUserIdAndCourseId(userId, courseId)
+        val interestCourseJpaEntity = interestCourseJpaRepository.findByUserIdAndCourseId(userId, courseId)
             ?: throw NotExistsInterestCourseException
-        return interestCoursePersistenceMapper.toDomain(interestCourseEntity)
+        return InterestCoursePersistenceMapper.toDomainEntity(interestCourseJpaEntity)
     }
 
     override fun existsByUserIdAndCourseId(
@@ -37,9 +36,9 @@ internal class InterestCoursePersistenceAdapter(
     override fun countByUserId(userId: Long): Long = interestCourseJpaRepository.countByUserId(userId)
 
     override fun saveInterestCourse(interestCourse: InterestCourse): InterestCourse {
-        val interestCourseEntity = interestCoursePersistenceMapper.toEntity(interestCourse)
-        interestCourseJpaRepository.save(interestCourseEntity)
-        return interestCoursePersistenceMapper.toDomain(interestCourseEntity)
+        val interestCourseJpaEntity = InterestCoursePersistenceMapper.toJpaEntity(interestCourse)
+        interestCourseJpaRepository.save(interestCourseJpaEntity)
+        return InterestCoursePersistenceMapper.toDomainEntity(interestCourseJpaEntity)
     }
 
     override fun deleteByInterestCourseId(interestCourseId: Long) {

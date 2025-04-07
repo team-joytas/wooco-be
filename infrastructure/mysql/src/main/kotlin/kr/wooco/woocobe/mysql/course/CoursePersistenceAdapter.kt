@@ -1,10 +1,9 @@
 package kr.wooco.woocobe.mysql.course
 
-import kr.wooco.woocobe.core.course.application.port.out.DeleteCoursePersistencePort
-import kr.wooco.woocobe.core.course.application.port.out.LoadCoursePersistencePort
-import kr.wooco.woocobe.core.course.application.port.out.SaveCoursePersistencePort
-import kr.wooco.woocobe.core.course.application.service.dto.CourseSearchCondition
-import kr.wooco.woocobe.core.course.application.service.dto.InterestCourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.CourseCommandPort
+import kr.wooco.woocobe.core.course.application.port.out.CourseQueryPort
+import kr.wooco.woocobe.core.course.application.port.out.dto.CourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.dto.InterestCourseSearchCondition
 import kr.wooco.woocobe.core.course.domain.entity.Course
 import kr.wooco.woocobe.core.course.domain.exception.NotExistsCourseException
 import kr.wooco.woocobe.mysql.course.repository.CourseCategoryJpaRepository
@@ -18,46 +17,42 @@ internal class CoursePersistenceAdapter(
     private val courseJpaRepository: CourseJpaRepository,
     private val coursePlaceJpaRepository: CoursePlaceJpaRepository,
     private val courseCategoryJpaRepository: CourseCategoryJpaRepository,
-    private val coursePersistenceMapper: CoursePersistenceMapper,
-    private val coursePlacePersistenceMapper: CoursePlacePersistenceMapper,
-    private val courseCategoryPersistenceMapper: CourseCategoryPersistenceMapper,
-) : LoadCoursePersistencePort,
-    SaveCoursePersistencePort,
-    DeleteCoursePersistencePort {
+) : CourseQueryPort,
+    CourseCommandPort {
     override fun getByCourseId(courseId: Long): Course {
-        val courseEntity = courseJpaRepository.findByIdOrNull(courseId)
+        val courseJpaEntity = courseJpaRepository.findByIdOrNull(courseId)
             ?: throw NotExistsCourseException
-        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseId(courseEntity.id)
+        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseId(courseJpaEntity.id)
         val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseId(courseId)
-        return coursePersistenceMapper.toDomain(courseEntity, coursePlaceEntities, courseCategoryEntities)
+        return CoursePersistenceMapper.toDomainEntity(courseJpaEntity, coursePlaceEntities, courseCategoryEntities)
     }
 
     @Suppress("Duplicates") // TODO: JDSL
     override fun getAllCourseByCondition(condition: CourseSearchCondition): List<Course> {
-        val courseEntities = courseJpaRepository.findAllCourseByCondition(condition)
-        val courseIds = courseEntities.map { it.id }
-        val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseIdIn(courseIds)
-        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseEntities.map { it.id })
-        return courseEntities.map { courseJpaEntity ->
-            coursePersistenceMapper.toDomain(
+        val courseJpaEntities = courseJpaRepository.findAllCourseByCondition(condition)
+        val courseIds = courseJpaEntities.map { it.id }
+        val coursePlaceJpaEntities = coursePlaceJpaRepository.findAllByCourseIdIn(courseIds)
+        val courseCategoryJpaEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseJpaEntities.map { it.id })
+        return courseJpaEntities.map { courseJpaEntity ->
+            CoursePersistenceMapper.toDomainEntity(
                 courseJpaEntity = courseJpaEntity,
-                coursePlaceJpaEntities = coursePlaceEntities.filter { it.courseId == courseJpaEntity.id },
-                courseCategoryJpaEntities = courseCategoryEntities.filter { it.courseId == courseJpaEntity.id },
+                coursePlaceJpaEntities = coursePlaceJpaEntities.filter { it.courseId == courseJpaEntity.id },
+                courseCategoryJpaEntities = courseCategoryJpaEntities.filter { it.courseId == courseJpaEntity.id },
             )
         }
     }
 
     @Suppress("Duplicates") // TODO: JDSL
     override fun getAllInterestCourseByCondition(condition: InterestCourseSearchCondition): List<Course> {
-        val courseEntities = courseJpaRepository.findAllInterestCourseByCondition(condition)
-        val courseIds = courseEntities.map { it.id }
-        val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseIdIn(courseIds)
-        val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseEntities.map { it.id })
-        return courseEntities.map { courseJpaEntity ->
-            coursePersistenceMapper.toDomain(
+        val courseJpaEntities = courseJpaRepository.findAllInterestCourseByCondition(condition)
+        val courseIds = courseJpaEntities.map { it.id }
+        val coursePlaceJpaEntities = coursePlaceJpaRepository.findAllByCourseIdIn(courseIds)
+        val courseCategoryJpaEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseJpaEntities.map { it.id })
+        return courseJpaEntities.map { courseJpaEntity ->
+            CoursePersistenceMapper.toDomainEntity(
                 courseJpaEntity = courseJpaEntity,
-                coursePlaceJpaEntities = coursePlaceEntities.filter { it.courseId == courseJpaEntity.id },
-                courseCategoryJpaEntities = courseCategoryEntities.filter { it.courseId == courseJpaEntity.id },
+                coursePlaceJpaEntities = coursePlaceJpaEntities.filter { it.courseId == courseJpaEntity.id },
+                courseCategoryJpaEntities = courseCategoryJpaEntities.filter { it.courseId == courseJpaEntity.id },
             )
         }
     }
@@ -65,19 +60,24 @@ internal class CoursePersistenceAdapter(
     override fun countByUserId(userId: Long): Long = courseJpaRepository.countByUserId(userId)
 
     override fun saveCourse(course: Course): Course {
-        val courseEntity = coursePersistenceMapper.toEntity(course)
-        courseJpaRepository.save(courseEntity)
+        val courseJpaEntity = CoursePersistenceMapper.toJpaEntity(course)
+        courseJpaRepository.save(courseJpaEntity)
 
-        coursePlaceJpaRepository.deleteAllByCourseId(courseEntity.id)
-        val coursePlaceEntities = course.coursePlaces.map { coursePlacePersistenceMapper.toEntity(courseEntity, it) }
-        coursePlaceJpaRepository.saveAll(coursePlaceEntities)
+        coursePlaceJpaRepository.deleteAllByCourseId(courseJpaEntity.id)
+        val coursePlaceJpaEntities =
+            course.coursePlaces.map { CoursePlacePersistenceMapper.toEntity(courseJpaEntity, it) }
+        coursePlaceJpaRepository.saveAll(coursePlaceJpaEntities)
 
-        courseCategoryJpaRepository.deleteAllByCourseId(courseEntity.id)
-        val courseCategoryEntities =
-            course.categories.map { courseCategoryPersistenceMapper.toEntity(courseEntity, it) }
-        courseCategoryJpaRepository.saveAll(courseCategoryEntities)
+        courseCategoryJpaRepository.deleteAllByCourseId(courseJpaEntity.id)
+        val courseCategoryJpaEntities =
+            course.categories.map { CourseCategoryPersistenceMapper.toJpaEntity(courseJpaEntity, it) }
+        courseCategoryJpaRepository.saveAll(courseCategoryJpaEntities)
 
-        return coursePersistenceMapper.toDomain(courseEntity, coursePlaceEntities, courseCategoryEntities)
+        return CoursePersistenceMapper.toDomainEntity(
+            courseJpaEntity,
+            coursePlaceJpaEntities,
+            courseCategoryJpaEntities,
+        )
     }
 
     override fun deleteByCourseId(courseId: Long) {

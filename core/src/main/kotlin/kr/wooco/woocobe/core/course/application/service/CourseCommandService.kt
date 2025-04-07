@@ -5,11 +5,10 @@ import kr.wooco.woocobe.core.course.application.port.`in`.CreateInterestCourseUs
 import kr.wooco.woocobe.core.course.application.port.`in`.DeleteCourseUseCase
 import kr.wooco.woocobe.core.course.application.port.`in`.DeleteInterestCourseUseCase
 import kr.wooco.woocobe.core.course.application.port.`in`.UpdateCourseUseCase
-import kr.wooco.woocobe.core.course.application.port.out.DeleteCoursePersistencePort
+import kr.wooco.woocobe.core.course.application.port.out.CourseCommandPort
+import kr.wooco.woocobe.core.course.application.port.out.CourseQueryPort
 import kr.wooco.woocobe.core.course.application.port.out.DeleteInterestCoursePersistencePort
-import kr.wooco.woocobe.core.course.application.port.out.LoadCoursePersistencePort
 import kr.wooco.woocobe.core.course.application.port.out.LoadInterestCoursePersistencePort
-import kr.wooco.woocobe.core.course.application.port.out.SaveCoursePersistencePort
 import kr.wooco.woocobe.core.course.application.port.out.SaveInterestCoursePersistencePort
 import kr.wooco.woocobe.core.course.domain.entity.Course
 import kr.wooco.woocobe.core.course.domain.entity.InterestCourse
@@ -20,9 +19,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 internal class CourseCommandService(
-    private val loadCoursePersistencePort: LoadCoursePersistencePort,
-    private val saveCoursePersistencePort: SaveCoursePersistencePort,
-    private val deleteCoursePersistencePort: DeleteCoursePersistencePort,
+    private val courseQueryPort: CourseQueryPort,
+    private val courseCommandPort: CourseCommandPort,
     private val loadInterestCoursePersistencePort: LoadInterestCoursePersistencePort,
     private val saveInterestCoursePersistencePort: SaveInterestCoursePersistencePort,
     private val deleteInterestCoursePersistencePort: DeleteInterestCoursePersistencePort,
@@ -46,12 +44,12 @@ internal class CourseCommandService(
             contents = command.contents,
             visitDate = command.visitDate,
         )
-        return saveCoursePersistencePort.saveCourse(course).id
+        return courseCommandPort.saveCourse(course).id
     }
 
     @Transactional
     override fun updateCourse(command: UpdateCourseUseCase.Command) {
-        val course = loadCoursePersistencePort.getByCourseId(command.courseId)
+        val course = courseQueryPort.getByCourseId(command.courseId)
         course.update(
             userId = command.userId,
             title = command.title,
@@ -60,14 +58,14 @@ internal class CourseCommandService(
             placeIds = command.placeIds,
             visitDate = command.visitDate,
         )
-        saveCoursePersistencePort.saveCourse(course)
+        courseCommandPort.saveCourse(course)
     }
 
     @Transactional
     override fun deleteCourse(command: DeleteCourseUseCase.Command) {
-        val course = loadCoursePersistencePort.getByCourseId(command.courseId)
+        val course = courseQueryPort.getByCourseId(command.courseId)
         course.isValidWriter(command.userId)
-        deleteCoursePersistencePort.deleteByCourseId(command.courseId)
+        courseCommandPort.deleteByCourseId(command.courseId)
     }
 
     @Transactional
@@ -77,17 +75,17 @@ internal class CourseCommandService(
         }
         val interestCourse = InterestCourse.create(command.userId, command.courseId)
         saveInterestCoursePersistencePort.saveInterestCourse(interestCourse)
-        val course = loadCoursePersistencePort.getByCourseId(command.courseId)
+        val course = courseQueryPort.getByCourseId(command.courseId)
         course.increaseInterests()
-        saveCoursePersistencePort.saveCourse(course)
+        courseCommandPort.saveCourse(course)
     }
 
     @Transactional
     override fun deleteInterestCourse(command: DeleteInterestCourseUseCase.Command) {
         val interestCourse = loadInterestCoursePersistencePort.getByUserIdAndCourseId(command.userId, command.courseId)
         deleteInterestCoursePersistencePort.deleteByInterestCourseId(interestCourse.id)
-        val course = loadCoursePersistencePort.getByCourseId(command.courseId)
+        val course = courseQueryPort.getByCourseId(command.courseId)
         course.decreaseInterests()
-        saveCoursePersistencePort.saveCourse(course)
+        courseCommandPort.saveCourse(course)
     }
 }

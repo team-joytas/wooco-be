@@ -6,7 +6,7 @@ import kr.wooco.woocobe.mysql.course.entity.CoursePlaceJpaEntity
 import org.springframework.stereotype.Component
 
 @Component
-internal class CoursePlacePersistenceMapper {
+internal object CoursePlacePersistenceMapper {
     fun toDomain(coursePlaceJpaEntity: CoursePlaceJpaEntity): CoursePlace =
         CoursePlace(
             order = coursePlaceJpaEntity.order,
