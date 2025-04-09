@@ -1,13 +1,12 @@
 package kr.wooco.woocobe.mysql.placereview
 
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReviewRating
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewImageJpaEntity
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewJpaEntity
-import org.springframework.stereotype.Component
 
-@Component
-internal class PlaceReviewPersistenceMapper {
-    fun toDomain(
+internal object PlaceReviewPersistenceMapper {
+    fun toDomainEntity(
         placeReviewJpaEntity: PlaceReviewJpaEntity,
         placeReviewImageJpaEntities: List<PlaceReviewImageJpaEntity>,
     ): PlaceReview =
@@ -15,18 +14,18 @@ internal class PlaceReviewPersistenceMapper {
             id = placeReviewJpaEntity.id,
             userId = placeReviewJpaEntity.userId,
             placeId = placeReviewJpaEntity.placeId,
-            rating = placeReviewJpaEntity.rating,
+            rating = PlaceReviewRating(placeReviewJpaEntity.rating),
             contents = placeReviewJpaEntity.contents,
             writeDateTime = placeReviewJpaEntity.createdAt,
             imageUrls = placeReviewImageJpaEntities.map { it.imageUrl },
         )
 
-    fun toEntity(placeReview: PlaceReview): PlaceReviewJpaEntity =
+    fun toJpaEntity(placeReview: PlaceReview): PlaceReviewJpaEntity =
         PlaceReviewJpaEntity(
             id = placeReview.id,
             userId = placeReview.userId,
             placeId = placeReview.placeId,
-            rating = placeReview.rating,
+            rating = placeReview.rating.score,
             contents = placeReview.contents,
         )
 }
