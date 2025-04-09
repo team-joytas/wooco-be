@@ -7,6 +7,7 @@ import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewCommand
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReviewRating
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreateEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeleteEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdateEvent
@@ -28,19 +29,18 @@ class PlaceReviewCommandService(
             PlaceReview.create(
                 userId = command.userId,
                 placeId = command.placeId,
-                rating = command.rating,
+                rating = PlaceReviewRating(command.rating),
                 contents = command.contents,
                 imageUrls = command.imageUrls,
             ),
         )
-        val placeOneLineReviews = command.oneLineReviews.map { contents ->
+        placeReviewCommandPort.saveAllPlaceOneLineReview(
             PlaceOneLineReview.create(
                 placeId = command.placeId,
                 placeReviewId = placeReview.id,
-                contents = contents,
-            )
-        }
-        placeReviewCommandPort.saveAllPlaceOneLineReview(placeOneLineReviews)
+                contentsList = command.oneLineReviews,
+            ),
+        )
 
         eventPublisher.publishEvent(PlaceReviewCreateEvent.from(placeReview))
         return placeReview.id
@@ -52,21 +52,20 @@ class PlaceReviewCommandService(
         placeReviewCommandPort.savePlaceReview(
             placeReview.update(
                 userId = command.userId,
-                rating = command.rating,
+                rating = PlaceReviewRating(command.rating),
                 contents = command.contents,
                 imageUrls = command.imageUrls,
             ),
         )
 
         placeReviewCommandPort.deleteAllByPlaceReviewId(placeReview.id)
-        val placeOneLineReviews = command.oneLineReviews.map { contents ->
+        placeReviewCommandPort.saveAllPlaceOneLineReview(
             PlaceOneLineReview.create(
                 placeId = placeReview.placeId,
                 placeReviewId = placeReview.id,
-                contents = contents,
-            )
-        }
-        placeReviewCommandPort.saveAllPlaceOneLineReview(placeOneLineReviews)
+                contentsList = command.oneLineReviews,
+            ),
+        )
 
         eventPublisher.publishEvent(PlaceReviewUpdateEvent.from(placeReview))
     }
