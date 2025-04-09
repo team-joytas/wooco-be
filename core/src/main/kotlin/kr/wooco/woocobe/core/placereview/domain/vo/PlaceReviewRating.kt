@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.core.placereview.domain.entity
+package kr.wooco.woocobe.core.placereview.domain.vo
 
 enum class PlaceReviewRating(
     val score: Double,

@@ -7,10 +7,10 @@ import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewCommand
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
-import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReviewRating
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreateEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeleteEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdateEvent
+import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

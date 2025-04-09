@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.core.placereview.domain.entity
 
 import kr.wooco.woocobe.core.placereview.domain.exception.InvalidPlaceReviewWriterException
+import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 import java.time.LocalDateTime
 
 data class PlaceReview(
