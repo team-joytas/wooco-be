@@ -11,28 +11,27 @@ import org.springframework.stereotype.Component
 @Component
 internal class PlacePersistenceAdapter(
     private val placeJpaRepository: PlaceJpaRepository,
-    private val placePersistenceMapper: PlacePersistenceMapper,
 ) : PlaceQueryPort,
     PlaceCommandPort {
     override fun savePlace(place: Place): Place {
-        val placeEntity = placePersistenceMapper.toEntity(place)
+        val placeEntity = PlacePersistenceMapper.toJpaEntity(place)
         val savedPlaceEntity = placeJpaRepository.save(placeEntity)
-        return placePersistenceMapper.toDomain(savedPlaceEntity)
+        return PlacePersistenceMapper.toDomainEntity(savedPlaceEntity)
     }
 
     override fun getByPlaceId(placeId: Long): Place {
         val placeEntity = placeJpaRepository.findByIdOrNull(placeId)
             ?: throw NotExistsPlaceException
-        return placePersistenceMapper.toDomain(placeEntity)
+        return PlacePersistenceMapper.toDomainEntity(placeEntity)
     }
 
     override fun getOrNullByKakaoPlaceId(kakaoPlaceId: String): Place? {
         val placeEntity = placeJpaRepository.findByKakaoPlaceId(kakaoPlaceId)
-        return placeEntity?.let { placePersistenceMapper.toDomain(it) }
+        return placeEntity?.let { PlacePersistenceMapper.toDomainEntity(it) }
     }
 
     override fun getAllByPlaceIds(placeIds: List<Long>): List<Place> {
         val placeEntities = placeJpaRepository.findAllByIdIn(placeIds)
-        return placeEntities.map { placePersistenceMapper.toDomain(it) }
+        return placeEntities.map { PlacePersistenceMapper.toDomainEntity(it) }
     }
 }

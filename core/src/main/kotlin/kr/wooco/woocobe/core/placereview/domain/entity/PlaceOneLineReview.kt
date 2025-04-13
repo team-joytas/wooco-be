@@ -17,16 +17,24 @@ data class PlaceOneLineReview(
     }
 
     companion object {
+        private fun isDuplicateContent(contentsList: List<String>) {
+            require(contentsList.distinct().size == contentsList.size) { "중복된 한줄평이 존재합니다." }
+        }
+
         fun create(
             placeId: Long,
             placeReviewId: Long,
-            contents: String,
-        ): PlaceOneLineReview =
-            PlaceOneLineReview(
-                id = 0L,
-                placeId = placeId,
-                placeReviewId = placeReviewId,
-                contents = Contents(contents),
-            )
+            contentsList: List<String>,
+        ): List<PlaceOneLineReview> {
+            isDuplicateContent(contentsList)
+            return contentsList.map {
+                PlaceOneLineReview(
+                    id = 0L,
+                    placeId = placeId,
+                    placeReviewId = placeReviewId,
+                    contents = Contents(it),
+                )
+            }
+        }
     }
 }

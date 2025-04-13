@@ -2,11 +2,9 @@ package kr.wooco.woocobe.mysql.place
 
 import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.mysql.place.entity.PlaceJpaEntity
-import org.springframework.stereotype.Component
 
-@Component
-internal class PlacePersistenceMapper {
-    fun toDomain(placeJpaEntity: PlaceJpaEntity): Place =
+internal object PlacePersistenceMapper {
+    fun toDomainEntity(placeJpaEntity: PlaceJpaEntity): Place =
         Place(
             id = placeJpaEntity.id,
             name = placeJpaEntity.name,
@@ -20,7 +18,7 @@ internal class PlacePersistenceMapper {
             phoneNumber = placeJpaEntity.phoneNumber,
         )
 
-    fun toEntity(place: Place): PlaceJpaEntity =
+    fun toJpaEntity(place: Place): PlaceJpaEntity =
         PlaceJpaEntity(
             id = place.id,
             name = place.name,
