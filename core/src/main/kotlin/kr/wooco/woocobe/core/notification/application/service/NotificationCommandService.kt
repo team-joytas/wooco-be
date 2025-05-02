@@ -46,14 +46,14 @@ class NotificationCommandService(
     @Transactional
     override fun registerDeviceToken(command: RegisterDeviceTokenUseCase.Command) {
         val token = Token(command.token)
+
+        if (deviceTokenQueryPort.existsByToken(token)) return
+
         val deviceToken = DeviceToken.create(
             userId = command.userId,
             token = token,
         )
-        val isExistsToken = deviceTokenQueryPort.existsByToken(token)
-        if (!isExistsToken) {
-            deviceTokenCommandPort.saveDeviceToken(deviceToken)
-        }
+        deviceTokenCommandPort.saveDeviceToken(deviceToken)
     }
 
     @Transactional
