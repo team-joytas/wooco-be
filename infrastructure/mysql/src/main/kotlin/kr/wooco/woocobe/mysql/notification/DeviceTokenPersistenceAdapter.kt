@@ -30,4 +30,6 @@ internal class DeviceTokenPersistenceAdapter(
         deviceTokenJpaRepository.save(deviceTokenJpaEntity)
         return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
     }
+
+    override fun existsByToken(token: Token): Boolean = deviceTokenJpaRepository.existsByToken(token.value)
 }

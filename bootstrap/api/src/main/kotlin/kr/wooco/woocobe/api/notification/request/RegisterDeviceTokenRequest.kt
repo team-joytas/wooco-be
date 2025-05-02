@@ -1,5 +1,5 @@
 package kr.wooco.woocobe.api.notification.request
 
-data class CreateDeviceTokenRequest(
+data class RegisterDeviceTokenRequest(
     val token: String,
 )
