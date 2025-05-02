@@ -50,7 +50,7 @@ class NotificationCommandService(
             userId = command.userId,
             token = token,
         )
-        deviceTokenCommandPort.saveDeviceToken(deviceToken)
+        deviceTokenCommandPort.saveDeviceTokenIfAbsent(deviceToken)
     }
 
     @Transactional

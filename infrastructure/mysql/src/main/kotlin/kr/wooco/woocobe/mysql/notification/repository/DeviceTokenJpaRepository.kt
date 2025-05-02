@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query
 interface DeviceTokenJpaRepository : JpaRepository<DeviceTokenJpaEntity, Long> {
     fun findByToken(token: String): DeviceTokenJpaEntity?
 
+    fun existsByToken(token: String): Boolean
+
     @Query(
         """
             SELECT d FROM DeviceTokenJpaEntity d

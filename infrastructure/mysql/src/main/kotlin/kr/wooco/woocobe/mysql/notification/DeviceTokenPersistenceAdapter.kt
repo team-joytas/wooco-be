@@ -30,4 +30,13 @@ internal class DeviceTokenPersistenceAdapter(
         deviceTokenJpaRepository.save(deviceTokenJpaEntity)
         return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
     }
+
+    override fun saveDeviceTokenIfAbsent(deviceToken: DeviceToken): DeviceToken {
+        val deviceTokenJpaEntity = DeviceTokenPersistenceMapper.toJpaEntity(deviceToken)
+        val token = deviceToken.token.value
+        if (!deviceTokenJpaRepository.existsByToken(token)) {
+            deviceTokenJpaRepository.save(deviceTokenJpaEntity)
+        }
+        return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
+    }
 }
