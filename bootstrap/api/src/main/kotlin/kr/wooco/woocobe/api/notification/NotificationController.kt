@@ -1,11 +1,11 @@
 package kr.wooco.woocobe.api.notification
 
-import kr.wooco.woocobe.api.notification.request.CreateDeviceTokenRequest
+import kr.wooco.woocobe.api.notification.request.RegisterDeviceTokenRequest
 import kr.wooco.woocobe.api.notification.response.NotificationDetailResponse
-import kr.wooco.woocobe.core.notification.application.port.`in`.CreateDeviceTokenUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.DeleteDeviceTokenUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.MarkAsReadNotificationUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.ReadAllNotificationUseCase
+import kr.wooco.woocobe.core.notification.application.port.`in`.RegisterDeviceTokenUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 class NotificationController(
     private val readAllNotificationUseCase: ReadAllNotificationUseCase,
     private val markAsReadNotificationUseCase: MarkAsReadNotificationUseCase,
-    private val createDeviceTokenUseCase: CreateDeviceTokenUseCase,
+    private val registerDeviceTokenUseCase: RegisterDeviceTokenUseCase,
     private val deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase,
 ) : NotificationApi {
     @GetMapping
@@ -47,15 +47,15 @@ class NotificationController(
     }
 
     @PostMapping
-    override fun createDeviceToken(
+    override fun registerDeviceToken(
         @AuthenticationPrincipal userId: Long,
-        @RequestBody request: CreateDeviceTokenRequest,
+        @RequestBody request: RegisterDeviceTokenRequest,
     ) {
-        val command = CreateDeviceTokenUseCase.Command(
+        val command = RegisterDeviceTokenUseCase.Command(
             userId = userId,
             token = request.token,
         )
-        createDeviceTokenUseCase.createDeviceToken(command)
+        registerDeviceTokenUseCase.registerDeviceToken(command)
     }
 
     @DeleteMapping("/{token}")

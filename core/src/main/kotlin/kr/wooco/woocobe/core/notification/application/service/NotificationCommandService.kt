@@ -1,9 +1,9 @@
 package kr.wooco.woocobe.core.notification.application.service
 
-import kr.wooco.woocobe.core.notification.application.port.`in`.CreateDeviceTokenUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.CreateNotificationUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.DeleteDeviceTokenUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.MarkAsReadNotificationUseCase
+import kr.wooco.woocobe.core.notification.application.port.`in`.RegisterDeviceTokenUseCase
 import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenCommandPort
 import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenQueryPort
 import kr.wooco.woocobe.core.notification.application.port.out.NotificationCommandPort
@@ -23,7 +23,7 @@ class NotificationCommandService(
     private val deviceTokenCommandPort: DeviceTokenCommandPort,
 ) : CreateNotificationUseCase,
     MarkAsReadNotificationUseCase,
-    CreateDeviceTokenUseCase,
+    RegisterDeviceTokenUseCase,
     DeleteDeviceTokenUseCase {
     @Transactional
     override fun createNotification(command: CreateNotificationUseCase.Command): Long {
@@ -44,13 +44,16 @@ class NotificationCommandService(
     }
 
     @Transactional
-    override fun createDeviceToken(command: CreateDeviceTokenUseCase.Command) {
+    override fun registerDeviceToken(command: RegisterDeviceTokenUseCase.Command) {
         val token = Token(command.token)
         val deviceToken = DeviceToken.create(
             userId = command.userId,
             token = token,
         )
-        deviceTokenCommandPort.saveDeviceTokenIfAbsent(deviceToken)
+        val isExistsToken = deviceTokenQueryPort.existsByToken(token)
+        if (!isExistsToken) {
+            deviceTokenCommandPort.saveDeviceToken(deviceToken)
+        }
     }
 
     @Transactional

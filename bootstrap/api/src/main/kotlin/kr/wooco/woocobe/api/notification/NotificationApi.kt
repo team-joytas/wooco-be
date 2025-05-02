@@ -2,7 +2,7 @@ package kr.wooco.woocobe.api.notification
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import kr.wooco.woocobe.api.notification.request.CreateDeviceTokenRequest
+import kr.wooco.woocobe.api.notification.request.RegisterDeviceTokenRequest
 import kr.wooco.woocobe.api.notification.response.NotificationDetailResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -23,9 +23,9 @@ interface NotificationApi {
     )
 
     @SecurityRequirement(name = "JWT")
-    fun createDeviceToken(
+    fun registerDeviceToken(
         @AuthenticationPrincipal userId: Long,
-        @RequestBody request: CreateDeviceTokenRequest,
+        @RequestBody request: RegisterDeviceTokenRequest,
     )
 
     @SecurityRequirement(name = "JWT")

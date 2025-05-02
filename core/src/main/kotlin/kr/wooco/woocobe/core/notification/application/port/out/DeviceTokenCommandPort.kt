@@ -4,6 +4,4 @@ import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken
 
 interface DeviceTokenCommandPort {
     fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken
-
-    fun saveDeviceTokenIfAbsent(deviceToken: DeviceToken): DeviceToken
 }
