@@ -23,8 +23,8 @@ internal class PlaceReviewPersistenceAdapter(
 ) : PlaceReviewCommandPort,
     PlaceReviewQueryPort {
     override fun savePlaceReview(placeReview: PlaceReview): PlaceReview {
-        val placeReviewEntity = PlaceReviewPersistenceMapper.toJpaEntity(placeReview)
-        placeReviewJpaRepository.save(placeReviewEntity)
+        val placeReviewEntity = placeReviewJpaRepository.save(PlaceReviewPersistenceMapper.toJpaEntity(placeReview))
+        placeReviewImageJpaRepository.deleteAllByPlaceReviewId(placeReviewEntity.id)
         val placeReviewImageEntities = placeReview.imageUrls.map {
             PlaceReviewImageJpaEntity(
                 placeReviewId = placeReviewEntity.id,
