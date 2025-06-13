@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.core.course.application.port.`in`.results
 
-import kr.wooco.woocobe.core.course.domain.entity.Course
+import kr.wooco.woocobe.core.course.application.port.out.dto.CourseView
 import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.core.user.domain.entity.User
 import java.time.LocalDate
@@ -42,30 +42,30 @@ data class CourseResult(
 
     companion object {
         fun of(
-            course: Course,
+            courseView: CourseView,
             user: User,
             places: List<Place>,
             isInterest: Boolean,
         ): CourseResult {
             val placeMap = places.associateBy { it.id }
             return CourseResult(
-                id = course.id,
-                title = course.title,
-                primaryRegion = course.region.primaryRegion,
-                secondaryRegion = course.region.secondaryRegion,
-                categories = course.categories.map { it.name },
-                contents = course.contents,
-                visitDate = course.visitDate,
-                comments = course.comments,
-                interests = course.interests,
-                createdAt = course.writeDateTime,
+                id = courseView.id,
+                title = courseView.title,
+                primaryRegion = courseView.primaryRegion,
+                secondaryRegion = courseView.secondaryRegion,
+                categories = courseView.categories,
+                contents = courseView.contents,
+                visitDate = courseView.visitDate,
+                comments = courseView.comments,
+                interests = courseView.likes,
+                createdAt = courseView.createdAt,
                 isInterest = isInterest,
                 writer = CourseWriterResult(
                     id = user.id,
                     name = user.profile.name,
                     profileUrl = user.profile.profileUrl,
                 ),
-                places = course.coursePlaces.map { coursePlace ->
+                places = courseView.coursePlaces.map { coursePlace ->
                     val place = requireNotNull(placeMap[coursePlace.placeId])
                     CoursePlaceResult(
                         order = coursePlace.order,
@@ -84,19 +84,19 @@ data class CourseResult(
         }
 
         fun listOf(
-            courses: List<Course>,
+            courseViews: List<CourseView>,
             users: List<User>,
             places: List<Place>,
             interestCourseIds: List<Long>,
         ): List<CourseResult> {
             val userMap = users.associateBy { it.id }
-            return courses.map { course ->
-                val user = requireNotNull(userMap[course.userId])
+            return courseViews.map { courseView ->
+                val user = requireNotNull(userMap[courseView.userId])
                 of(
-                    course,
+                    courseView,
                     user,
                     places,
-                    interestCourseIds.contains(course.id),
+                    interestCourseIds.contains(courseView.id),
                 )
             }
         }

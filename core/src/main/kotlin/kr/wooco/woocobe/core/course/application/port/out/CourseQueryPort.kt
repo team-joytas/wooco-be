@@ -1,16 +1,27 @@
 package kr.wooco.woocobe.core.course.application.port.out
 
 import kr.wooco.woocobe.core.course.application.port.out.dto.CourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.dto.CourseView
 import kr.wooco.woocobe.core.course.application.port.out.dto.InterestCourseSearchCondition
-import kr.wooco.woocobe.core.course.domain.entity.Course
 
+// TODO: 네이밍 변경(View prefix 제거) & adapter 분리(command 와 query) 해야할듯?
 interface CourseQueryPort {
-    fun getByCourseId(courseId: Long): Course
+    fun getViewByCourseId(courseId: Long): CourseView
 
-    // TODO: Read model 분리
-    fun getAllCourseByCondition(condition: CourseSearchCondition): List<Course>
+    fun getViewAllCourseByCondition(condition: CourseSearchCondition): List<CourseView>
 
-    fun getAllInterestCourseByCondition(condition: InterestCourseSearchCondition): List<Course>
+    fun getAllViewInterestCourseByCondition(condition: InterestCourseSearchCondition): List<CourseView>
 
     fun countByUserId(userId: Long): Long
+
+    fun existsByCourseId(courseId: Long): Boolean
+
+    // Projection 전용
+    fun increaseComments(courseId: Long)
+
+    fun decreaseComments(courseId: Long)
+
+    fun increaseLikes(courseId: Long)
+
+    fun decreaseLikes(courseId: Long)
 }

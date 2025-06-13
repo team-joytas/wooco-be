@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.core.user.application.service
 
+import kr.wooco.woocobe.core.course.application.port.out.CourseLikeQueryPort
 import kr.wooco.woocobe.core.course.application.port.out.CourseQueryPort
-import kr.wooco.woocobe.core.course.application.port.out.LoadInterestCoursePersistencePort
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
 import kr.wooco.woocobe.core.user.application.port.`in`.ReadUserDetailsUseCase
 import kr.wooco.woocobe.core.user.application.port.`in`.ReadUserInfoUseCase
@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional
 internal class UserQueryService(
     private val userQueryPort: UserQueryPort,
     private val courseQueryPort: CourseQueryPort,
+    private val courseLikeQueryPort: CourseLikeQueryPort,
     private val placeReviewQueryPort: PlaceReviewQueryPort,
-    private val loadInterestCoursePersistencePort: LoadInterestCoursePersistencePort,
 ) : ReadUserInfoUseCase,
     ReadUserDetailsUseCase {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -32,7 +32,7 @@ internal class UserQueryService(
         val user = userQueryPort.getByUserId(query.userId)
         val reviewCount = placeReviewQueryPort.countByUserId(query.userId)
         val courseCount = courseQueryPort.countByUserId(query.userId)
-        val interestCourseCount = loadInterestCoursePersistencePort.countByUserId(query.userId)
-        return UserDetailsResult.of(user, reviewCount, courseCount, interestCourseCount)
+        val likeCount = courseLikeQueryPort.countByUserId(query.userId)
+        return UserDetailsResult.of(user, reviewCount, courseCount, likeCount)
     }
 }

@@ -1,30 +1,24 @@
 package kr.wooco.woocobe.core.course.application.port.`in`
 
-import kr.wooco.woocobe.core.course.domain.command.CreateCourseCommand
+import kr.wooco.woocobe.core.course.domain.command.UpdateCourseInfoCommand
 import kr.wooco.woocobe.core.course.domain.entity.Course
 import kr.wooco.woocobe.core.course.domain.vo.CourseCategory
 import kr.wooco.woocobe.core.course.domain.vo.CourseContent
-import kr.wooco.woocobe.core.course.domain.vo.CourseRegion
 import java.time.LocalDate
 
-fun interface CreateCourseUseCase {
+fun interface UpdateCourseInfoUseCase {
     data class Command(
         val userId: Long,
-        val primaryRegion: String,
-        val secondaryRegion: String,
-        val categories: List<String>,
+        val courseId: Long,
         val title: String,
         val contents: String,
         val placeIds: List<Long>,
         val visitDate: LocalDate,
+        val categories: List<String>,
     ) {
-        fun toCreateCommand(): CreateCourseCommand =
-            CreateCourseCommand(
+        fun toUpdateInfoCommand(): UpdateCourseInfoCommand =
+            UpdateCourseInfoCommand(
                 userId = userId,
-                region = CourseRegion(
-                    primaryRegion = primaryRegion,
-                    secondaryRegion = secondaryRegion,
-                ),
                 content = CourseContent(
                     title = title,
                     contents = contents,
@@ -35,5 +29,5 @@ fun interface CreateCourseUseCase {
             )
     }
 
-    fun createCourse(command: Command): Long
+    fun updateCourseInfo(command: Command)
 }
