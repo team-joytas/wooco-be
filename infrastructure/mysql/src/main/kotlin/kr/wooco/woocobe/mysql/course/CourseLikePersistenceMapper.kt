@@ -1,22 +1,22 @@
 package kr.wooco.woocobe.mysql.course
 
-import kr.wooco.woocobe.core.course.domain.entity.LikeCourse
-import kr.wooco.woocobe.mysql.course.entity.LikeCourseJpaEntity
+import kr.wooco.woocobe.core.course.domain.entity.CourseLike
+import kr.wooco.woocobe.mysql.course.entity.CourseLikeJpaEntity
 
-internal object InterestCoursePersistenceMapper {
-    fun toDomainEntity(likeCourseJpaEntity: LikeCourseJpaEntity): LikeCourse =
-        LikeCourse(
-            id = likeCourseJpaEntity.id,
-            userId = likeCourseJpaEntity.userId,
-            courseId = likeCourseJpaEntity.courseId,
-            status = LikeCourse.Status.valueOf(likeCourseJpaEntity.status),
+internal object CourseLikePersistenceMapper {
+    fun toDomainEntity(courseLikeJpaEntity: CourseLikeJpaEntity): CourseLike =
+        CourseLike(
+            id = courseLikeJpaEntity.id,
+            userId = courseLikeJpaEntity.userId,
+            courseId = courseLikeJpaEntity.courseId,
+            status = CourseLike.Status.valueOf(courseLikeJpaEntity.status),
         )
 
-    fun toJpaEntity(likeCourse: LikeCourse): LikeCourseJpaEntity =
-        LikeCourseJpaEntity(
-            id = likeCourse.id,
-            userId = likeCourse.userId,
-            courseId = likeCourse.courseId,
-            status = likeCourse.status.name,
+    fun toJpaEntity(courseLike: CourseLike): CourseLikeJpaEntity =
+        CourseLikeJpaEntity(
+            id = courseLike.id,
+            userId = courseLike.userId,
+            courseId = courseLike.courseId,
+            status = courseLike.status.name,
         )
 }

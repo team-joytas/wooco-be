@@ -5,7 +5,7 @@ import kr.wooco.woocobe.core.course.application.port.out.dto.CourseSearchConditi
 import kr.wooco.woocobe.core.course.application.port.out.dto.InterestCourseSearchCondition
 import kr.wooco.woocobe.mysql.course.entity.CourseCategoryJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CourseJpaEntity
-import kr.wooco.woocobe.mysql.course.entity.InterestCourseJpaEntity
+import kr.wooco.woocobe.mysql.course.entity.CourseLikeJpaEntity
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -39,7 +39,7 @@ class CourseCustomRepositoryImpl(
                     },
                 ).orderBy(
                     when (condition.sort) {
-                        "POPULAR" -> path(CourseJpaEntity::interestCount).desc()
+                        "POPULAR" -> path(CourseJpaEntity::likeCount).desc()
                         else -> path(CourseJpaEntity::createdAt).desc()
                     },
                 )
@@ -52,8 +52,8 @@ class CourseCustomRepositoryImpl(
                     entity(CourseJpaEntity::class),
                 ).from(
                     entity(CourseJpaEntity::class),
-                    leftJoin(InterestCourseJpaEntity::class).on(
-                        path(CourseJpaEntity::id).eq(path(InterestCourseJpaEntity::courseId)),
+                    leftJoin(CourseLikeJpaEntity::class).on(
+                        path(CourseJpaEntity::id).eq(path(CourseLikeJpaEntity::courseId)),
                     ),
                     condition.category?.let {
                         leftJoin(CourseCategoryJpaEntity::class).on(
@@ -62,7 +62,7 @@ class CourseCustomRepositoryImpl(
                     },
                 ).whereAnd(
                     condition.targetUserId?.let {
-                        path(InterestCourseJpaEntity::userId).eq(it)
+                        path(CourseLikeJpaEntity::userId).eq(it)
                     },
                     condition.primaryRegion?.let {
                         path(CourseJpaEntity::primaryRegion).eq(it)
@@ -75,7 +75,7 @@ class CourseCustomRepositoryImpl(
                     },
                 ).orderBy(
                     when (condition.sort) {
-                        "POPULAR" -> path(CourseJpaEntity::interestCount).desc()
+                        "POPULAR" -> path(CourseJpaEntity::likeCount).desc()
                         else -> path(CourseJpaEntity::createdAt).desc()
                     },
                 )

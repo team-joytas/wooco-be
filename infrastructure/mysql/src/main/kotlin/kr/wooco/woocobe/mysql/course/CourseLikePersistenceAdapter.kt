@@ -1,51 +1,51 @@
 package kr.wooco.woocobe.mysql.course
 
-import kr.wooco.woocobe.core.course.application.port.out.LikeCourseCommandPort
-import kr.wooco.woocobe.core.course.application.port.out.LikeCourseQueryPort
-import kr.wooco.woocobe.core.course.domain.entity.LikeCourse
+import kr.wooco.woocobe.core.course.application.port.out.CourseLikeCommandPort
+import kr.wooco.woocobe.core.course.application.port.out.CourseLikeQueryPort
+import kr.wooco.woocobe.core.course.domain.entity.CourseLike
 import kr.wooco.woocobe.core.course.domain.exception.NotExistsInterestCourseException
-import kr.wooco.woocobe.mysql.course.repository.InterestCourseJpaRepository
+import kr.wooco.woocobe.mysql.course.repository.CourseLikeJpaRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-internal class InterestCoursePersistenceAdapter(
-    private val interestCourseJpaRepository: InterestCourseJpaRepository,
-) : LikeCourseQueryPort,
-    LikeCourseCommandPort {
-    override fun countByUserId(userId: Long): Long = interestCourseJpaRepository.countByUserIdAndActive(userId)
+internal class CourseLikePersistenceAdapter(
+    private val courseLikeJpaRepository: CourseLikeJpaRepository,
+) : CourseLikeQueryPort,
+    CourseLikeCommandPort {
+    override fun countByUserId(userId: Long): Long = courseLikeJpaRepository.countByUserIdAndActive(userId)
 
     override fun getAllCourseIdByUserIdAndCourseIds(
         userId: Long,
         courseIds: List<Long>,
-    ): List<Long> = interestCourseJpaRepository.findCourseIdsByUserIdAndCourseIdsAndActive(userId, courseIds)
+    ): List<Long> = courseLikeJpaRepository.findCourseIdsByUserIdAndCourseIdsAndActive(userId, courseIds)
 
     override fun existsByUserIdAndCourseId(
         userId: Long,
         courseId: Long,
-    ): Boolean = interestCourseJpaRepository.existsByCourseIdAndUserIdAndActive(courseId, userId)
+    ): Boolean = courseLikeJpaRepository.existsByCourseIdAndUserIdAndActive(courseId, userId)
 
     override fun getByUserIdAndCourseId(
         userId: Long,
         courseId: Long,
-    ): LikeCourse {
-        val interestCourseJpaEntity = interestCourseJpaRepository.findByUserIdAndCourseId(userId, courseId)
+    ): CourseLike {
+        val interestCourseJpaEntity = courseLikeJpaRepository.findByUserIdAndCourseId(userId, courseId)
             ?: throw NotExistsInterestCourseException
-        return InterestCoursePersistenceMapper.toDomainEntity(interestCourseJpaEntity)
+        return CourseLikePersistenceMapper.toDomainEntity(interestCourseJpaEntity)
     }
 
     override fun getOrNullByUserIdAndCourseId(
         userId: Long,
         courseId: Long,
-    ): LikeCourse? =
-        interestCourseJpaRepository.findByUserIdAndCourseId(userId, courseId)?.let {
-            InterestCoursePersistenceMapper.toDomainEntity(it)
+    ): CourseLike? =
+        courseLikeJpaRepository.findByUserIdAndCourseId(userId, courseId)?.let {
+            CourseLikePersistenceMapper.toDomainEntity(it)
         }
 
     @Transactional
-    override fun saveLikeCourse(likeCourse: LikeCourse): Long {
-        val interestCourseJpaEntity = InterestCoursePersistenceMapper.toJpaEntity(likeCourse)
-        return interestCourseJpaRepository.save(interestCourseJpaEntity).id
+    override fun saveLikeCourse(courseLike: CourseLike): Long {
+        val interestCourseJpaEntity = CourseLikePersistenceMapper.toJpaEntity(courseLike)
+        return courseLikeJpaRepository.save(interestCourseJpaEntity).id
     }
 
 //    override fun saveInterestCourse(interestCourse: InterestCourse): InterestCourse {

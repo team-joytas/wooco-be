@@ -7,6 +7,4 @@ interface CoursePlaceJpaRepository : JpaRepository<CoursePlaceJpaEntity, Long> {
     fun findAllByCourseId(courseId: Long): List<CoursePlaceJpaEntity>
 
     fun findAllByCourseIdIn(courseIds: List<Long>): List<CoursePlaceJpaEntity>
-
-    fun deleteAllByCourseId(courseId: Long)
 }

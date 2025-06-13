@@ -1,23 +1,23 @@
 package kr.wooco.woocobe.mysql.course.repository
 
-import kr.wooco.woocobe.mysql.course.entity.LikeCourseJpaEntity
+import kr.wooco.woocobe.mysql.course.entity.CourseLikeJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface InterestCourseJpaRepository : JpaRepository<LikeCourseJpaEntity, Long> {
+interface CourseLikeJpaRepository : JpaRepository<CourseLikeJpaEntity, Long> {
     fun findByUserIdAndCourseId(
         userId: Long,
         courseId: Long,
-    ): LikeCourseJpaEntity?
+    ): CourseLikeJpaEntity?
 
     @Query(
         """
             SELECT CASE WHEN EXISTS (
                 SELECT 1
-                FROM LikeCourseJpaEntity lc
-                WHERE lc.courseId = :courseId
-                    AND lc.userId = :userId
-                    AND lc.status = 'ACTIVE'
+                FROM CourseLikeJpaEntity cl
+                WHERE cl.courseId = :courseId
+                    AND cl.userId = :userId
+                    AND cl.status = 'ACTIVE'
             ) THEN true ELSE false END
         """,
     )
@@ -28,11 +28,11 @@ interface InterestCourseJpaRepository : JpaRepository<LikeCourseJpaEntity, Long>
 
     @Query(
         """
-           SELECT lc.courseId
-           FROM LikeCourseJpaEntity lc
-           WHERE lc.userId = :userId
-                AND lc.status = 'ACTIVE'
-                AND lc.courseId IN :courseIds
+           SELECT cl.courseId
+           FROM CourseLikeJpaEntity cl
+           WHERE cl.userId = :userId
+                AND cl.status = 'ACTIVE'
+                AND cl.courseId IN :courseIds
         """,
     )
     fun findCourseIdsByUserIdAndCourseIdsAndActive(
@@ -42,9 +42,9 @@ interface InterestCourseJpaRepository : JpaRepository<LikeCourseJpaEntity, Long>
 
     @Query(
         """
-           SELECT COUNT (lc.id)
-           FROM LikeCourseJpaEntity lc
-           WHERE lc.status = 'ACTIVE'
+           SELECT COUNT (cl.id)
+           FROM CourseLikeJpaEntity cl
+           WHERE cl.status = 'ACTIVE'
         """,
     )
     fun countByUserIdAndActive(userId: Long): Long
