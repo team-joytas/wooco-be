@@ -17,7 +17,7 @@ internal class CourseCommentPersistenceAdapter(
 ) : CourseCommentQueryPort,
     CourseCommentCommandPort {
     override fun getAllViewByCourseId(courseId: Long): List<CourseCommentView> {
-        val courseCommentJpaEntities = courseCommentJpaRepository.findAllByCourseId(courseId)
+        val courseCommentJpaEntities = courseCommentJpaRepository.findAllByCourseIdAndActive(courseId)
         return courseCommentJpaEntities.map { courseCommentPersistenceMapper.toReadModel(it) }
     }
 
