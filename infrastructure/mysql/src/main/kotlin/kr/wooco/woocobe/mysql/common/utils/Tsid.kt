@@ -18,7 +18,6 @@ internal class TsidIdentifierGenerator : IdentifierGenerator {
     }
 }
 
-@Deprecated(message = "엔티티의 식별자 생성 전략은 domain 엔티티 측으로 옮겨주세요.")
 @IdGeneratorType(TsidIdentifierGenerator::class)
 @Target(AnnotationTarget.FIELD, AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
