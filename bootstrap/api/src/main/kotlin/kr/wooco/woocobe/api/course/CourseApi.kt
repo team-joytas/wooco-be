@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import kr.wooco.woocobe.api.course.request.CreateCourseRequest
-import kr.wooco.woocobe.api.course.request.UpdateCourseRequest
+import kr.wooco.woocobe.api.course.request.UpdateCourseInfoRequest
 import kr.wooco.woocobe.api.course.response.CourseDetailResponse
 import kr.wooco.woocobe.api.course.response.CreateCourseResponse
 import org.springframework.http.ResponseEntity
@@ -94,10 +94,10 @@ interface CourseApi {
     ): ResponseEntity<Unit>
 
     @SecurityRequirement(name = "JWT")
-    fun updateCourse(
+    fun updateCourseInfo(
         @AuthenticationPrincipal userId: Long,
         @PathVariable courseId: Long,
-        @RequestBody request: UpdateCourseRequest,
+        @RequestBody request: UpdateCourseInfoRequest,
     ): ResponseEntity<Unit>
 
     @SecurityRequirement(name = "JWT")

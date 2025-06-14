@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.api.course
 
 import kr.wooco.woocobe.api.course.request.CreateCourseRequest
-import kr.wooco.woocobe.api.course.request.UpdateCourseRequest
+import kr.wooco.woocobe.api.course.request.UpdateCourseInfoRequest
 import kr.wooco.woocobe.api.course.response.CourseDetailResponse
 import kr.wooco.woocobe.api.course.response.CreateCourseResponse
 import kr.wooco.woocobe.core.course.application.port.`in`.CreateCourseUseCase
@@ -11,7 +11,7 @@ import kr.wooco.woocobe.core.course.application.port.`in`.DeleteInterestCourseUs
 import kr.wooco.woocobe.core.course.application.port.`in`.ReadAllCourseUseCase
 import kr.wooco.woocobe.core.course.application.port.`in`.ReadAllInterestCourseUseCase
 import kr.wooco.woocobe.core.course.application.port.`in`.ReadCourseUseCase
-import kr.wooco.woocobe.core.course.application.port.`in`.UpdateCourseUseCase
+import kr.wooco.woocobe.core.course.application.port.`in`.UpdateCourseInfoUseCase
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController
 class CourseController(
     private val readCourseUseCase: ReadCourseUseCase,
     private val createCourseUseCase: CreateCourseUseCase,
-    private val updateCourseUseCase: UpdateCourseUseCase,
+    private val updateCourseInfoUseCase: UpdateCourseInfoUseCase,
     private val deleteCourseUseCase: DeleteCourseUseCase,
     private val readAllCourseUseCase: ReadAllCourseUseCase,
     private val createInterestCourseUseCase: CreateInterestCourseUseCase,
@@ -116,6 +116,17 @@ class CourseController(
         return ResponseEntity.status(HttpStatus.CREATED).body(CreateCourseResponse(results))
     }
 
+    @PatchMapping("/{courseId}")
+    override fun updateCourseInfo(
+        @AuthenticationPrincipal userId: Long,
+        @PathVariable courseId: Long,
+        @RequestBody request: UpdateCourseInfoRequest,
+    ): ResponseEntity<Unit> {
+        val command = request.toCommand(userId = userId, courseId = courseId)
+        updateCourseInfoUseCase.updateCourseInfo(command)
+        return ResponseEntity.ok().build()
+    }
+
     @PostMapping("/{courseId}/like")
     override fun addCourseLike(
         @AuthenticationPrincipal userId: Long,
@@ -123,17 +134,6 @@ class CourseController(
     ): ResponseEntity<Unit> {
         val command = CreateInterestCourseUseCase.Command(userId, courseId)
         createInterestCourseUseCase.createInterestCourse(command)
-        return ResponseEntity.ok().build()
-    }
-
-    @PatchMapping("/{courseId}")
-    override fun updateCourse(
-        @AuthenticationPrincipal userId: Long,
-        @PathVariable courseId: Long,
-        @RequestBody request: UpdateCourseRequest,
-    ): ResponseEntity<Unit> {
-        val command = request.toCommand(userId, courseId)
-        updateCourseUseCase.updateCourse(command)
         return ResponseEntity.ok().build()
     }
 

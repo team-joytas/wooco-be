@@ -1,9 +1,9 @@
 package kr.wooco.woocobe.api.course.request
 
-import kr.wooco.woocobe.core.course.application.port.`in`.UpdateCourseUseCase
+import kr.wooco.woocobe.core.course.application.port.`in`.UpdateCourseInfoUseCase
 import java.time.LocalDate
 
-data class UpdateCourseRequest(
+data class UpdateCourseInfoRequest(
     val title: String,
     val contents: String,
     val categories: List<String>,
@@ -13,8 +13,8 @@ data class UpdateCourseRequest(
     fun toCommand(
         userId: Long,
         courseId: Long,
-    ): UpdateCourseUseCase.Command =
-        UpdateCourseUseCase.Command(
+    ): UpdateCourseInfoUseCase.Command =
+        UpdateCourseInfoUseCase.Command(
             userId = userId,
             courseId = courseId,
             title = title,

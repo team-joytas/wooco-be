@@ -8,13 +8,15 @@ import kr.wooco.woocobe.mysql.common.entity.BaseEntity
 import kr.wooco.woocobe.mysql.common.utils.Tsid
 
 @Entity
-@Table(name = "interest_courses")
-class InterestCourseJpaEntity(
+@Table(name = "course_likes")
+class CourseLikeJpaEntity(
+    @Column(name = "like_status")
+    val status: String,
     @Column(name = "course_id")
     val courseId: Long,
-    @Column(name = "interest_user_id")
+    @Column(name = "like_user_id")
     val userId: Long,
     @Id @Tsid
-    @Column(name = "interest_course_id")
+    @Column(name = "course_like_id")
     override val id: Long = 0L,
 ) : BaseEntity()

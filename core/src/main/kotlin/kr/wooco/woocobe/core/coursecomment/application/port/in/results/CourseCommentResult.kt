@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.core.coursecomment.application.port.`in`.results
 
-import kr.wooco.woocobe.core.coursecomment.domain.entity.CourseComment
+import kr.wooco.woocobe.core.coursecomment.application.port.out.dto.CourseCommentView
 import kr.wooco.woocobe.core.user.domain.entity.User
 import java.time.LocalDateTime
 
@@ -14,7 +14,7 @@ data class CourseCommentResult(
 ) {
     companion object {
         fun listOf(
-            courseComments: List<CourseComment>,
+            courseComments: List<CourseCommentView>,
             writers: List<User>,
         ): List<CourseCommentResult> {
             val writerMap = writers.associateBy { it.id }
@@ -24,7 +24,7 @@ data class CourseCommentResult(
 
                 CourseCommentResult(
                     commentId = courseComment.id,
-                    contents = courseComment.contents.value,
+                    contents = courseComment.contents,
                     createdAt = courseComment.createdAt,
                     writerId = writer.id,
                     writerName = writer.profile.name,

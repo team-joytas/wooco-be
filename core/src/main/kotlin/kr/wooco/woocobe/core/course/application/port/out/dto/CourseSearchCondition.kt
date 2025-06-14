@@ -1,7 +1,7 @@
-package kr.wooco.woocobe.core.course.application.service.dto
+package kr.wooco.woocobe.core.course.application.port.out.dto
 
-data class InterestCourseSearchCondition(
-    val targetUserId: Long?,
+data class CourseSearchCondition(
+    val writerId: Long?,
     val category: String?,
     val primaryRegion: String?,
     val secondaryRegion: String?,
