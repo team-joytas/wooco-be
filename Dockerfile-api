@@ -1,4 +1,4 @@
-FROM amazoncorretto:17-alpine-jdk
+FROM amazoncorretto:21-alpine-jdk
 
 WORKDIR /app
 COPY ./build/libs/api-*.jar /app/wooco-be.jar
