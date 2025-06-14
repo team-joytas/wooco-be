@@ -24,7 +24,7 @@ data class PlaceDetailResponse(
                 longitude = placeResult.longitude,
                 address = placeResult.address,
                 kakaoPlaceId = placeResult.kakaoPlaceId,
-                averageRating = placeResult.averageRating,
+                averageRating = String.format("%.2f", placeResult.averageRating).toDouble(),
                 reviewCount = placeResult.reviewCount,
                 phoneNumber = placeResult.phoneNumber,
                 thumbnailUrl = placeResult.thumbnailUrl,

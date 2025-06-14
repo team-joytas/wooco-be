@@ -8,7 +8,6 @@ import kr.wooco.woocobe.core.plan.application.port.`in`.CreatePlanUseCase
 import kr.wooco.woocobe.core.plan.application.port.`in`.DeletePlanUseCase
 import kr.wooco.woocobe.core.plan.application.port.`in`.ReadAllPlanUseCase
 import kr.wooco.woocobe.core.plan.application.port.`in`.ReadPlanUseCase
-import kr.wooco.woocobe.core.plan.application.port.`in`.SharePlanUseCase
 import kr.wooco.woocobe.core.plan.application.port.`in`.UpdatePlanUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -29,7 +28,6 @@ class PlanController(
     private val deletePlanUseCase: DeletePlanUseCase,
     private val readPlanUseCase: ReadPlanUseCase,
     private val readAllPlanUseCase: ReadAllPlanUseCase,
-    private val sharePlanUseCase: SharePlanUseCase,
 ) : PlanApi {
     @PostMapping
     override fun createPlan(
@@ -78,16 +76,6 @@ class PlanController(
     ): ResponseEntity<Unit> {
         val command = DeletePlanUseCase.Command(userId = userId, planId = planId)
         deletePlanUseCase.deletePlan(command)
-        return ResponseEntity.ok().build()
-    }
-
-    @PatchMapping("/{planId}/share")
-    override fun sharePlan(
-        @AuthenticationPrincipal userId: Long,
-        @PathVariable planId: Long,
-    ): ResponseEntity<Unit> {
-        val command = SharePlanUseCase.Command(userId = userId, planId = planId)
-        sharePlanUseCase.sharePlan(command)
         return ResponseEntity.ok().build()
     }
 }

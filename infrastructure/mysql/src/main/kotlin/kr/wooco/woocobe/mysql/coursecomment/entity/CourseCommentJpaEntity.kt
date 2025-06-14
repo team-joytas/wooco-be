@@ -10,6 +10,8 @@ import kr.wooco.woocobe.mysql.common.utils.Tsid
 @Entity
 @Table(name = "course_comments")
 class CourseCommentJpaEntity(
+    @Column(name = "comment_status")
+    val status: String,
     @Column(columnDefinition = "text")
     val contents: String,
     @Column(name = "course_id")

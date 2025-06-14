@@ -7,7 +7,6 @@ include(
     "support:metric",
     "support:logging",
     "infrastructure:aws",
-    "infrastructure:jwt",
     "infrastructure:rest",
     "infrastructure:mysql",
     "infrastructure:redis",

@@ -1,6 +1,5 @@
 package kr.wooco.woocobe.core.user.domain.vo
 
-// TODO: value class 추가
 data class UserProfile(
     val name: String,
     val profileUrl: String,

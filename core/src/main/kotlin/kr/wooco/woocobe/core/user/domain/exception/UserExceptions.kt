@@ -9,7 +9,14 @@ sealed class BaseUserException(
 
 data object NotExistsUserException : BaseUserException(
     code = "NOT_EXISTS_USER",
-    message = "not exists user",
+    message = "존재하지 않는 사용자입니다.",
 ) {
     private fun readResolve(): Any = NotExistsUserException
+}
+
+data object InActiveUserException : BaseUserException(
+    code = "INACTIVE_USER",
+    message = "비활성화된 사용자입니다.",
+) {
+    private fun readResolve(): Any = InActiveUserException
 }

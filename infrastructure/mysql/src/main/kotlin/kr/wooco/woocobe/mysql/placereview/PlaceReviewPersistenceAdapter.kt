@@ -1,13 +1,17 @@
 package kr.wooco.woocobe.mysql.placereview
 
-import kr.wooco.woocobe.core.placereview.application.port.out.DeletePlaceReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.LoadPlaceReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.SavePlaceReviewPersistencePort
+import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewCommandPort
+import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
+import kr.wooco.woocobe.core.placereview.application.service.dto.PlaceOneLineReviewStat
+import kr.wooco.woocobe.core.placereview.application.service.dto.PlaceReviewStats
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.exception.NotExistsPlaceReviewException
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewImageJpaEntity
+import kr.wooco.woocobe.mysql.placereview.repository.PlaceOneLineReviewJpaRepository
 import kr.wooco.woocobe.mysql.placereview.repository.PlaceReviewImageJpaRepository
 import kr.wooco.woocobe.mysql.placereview.repository.PlaceReviewJpaRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
@@ -15,13 +19,12 @@ import org.springframework.stereotype.Component
 internal class PlaceReviewPersistenceAdapter(
     private val placeReviewJpaRepository: PlaceReviewJpaRepository,
     private val placeReviewImageJpaRepository: PlaceReviewImageJpaRepository,
-    private val placeReviewPersistenceMapper: PlaceReviewPersistenceMapper,
-) : SavePlaceReviewPersistencePort,
-    LoadPlaceReviewPersistencePort,
-    DeletePlaceReviewPersistencePort {
+    private val placeOneLineReviewJpaRepository: PlaceOneLineReviewJpaRepository,
+) : PlaceReviewCommandPort,
+    PlaceReviewQueryPort {
     override fun savePlaceReview(placeReview: PlaceReview): PlaceReview {
-        val placeReviewEntity = placeReviewPersistenceMapper.toEntity(placeReview)
-        placeReviewJpaRepository.save(placeReviewEntity)
+        val placeReviewEntity = placeReviewJpaRepository.save(PlaceReviewPersistenceMapper.toJpaEntity(placeReview))
+        placeReviewImageJpaRepository.deleteAllByPlaceReviewId(placeReviewEntity.id)
         val placeReviewImageEntities = placeReview.imageUrls.map {
             PlaceReviewImageJpaEntity(
                 placeReviewId = placeReviewEntity.id,
@@ -29,7 +32,7 @@ internal class PlaceReviewPersistenceAdapter(
             )
         }
         placeReviewImageJpaRepository.saveAll(placeReviewImageEntities)
-        return placeReviewPersistenceMapper.toDomain(
+        return PlaceReviewPersistenceMapper.toDomainEntity(
             placeReviewEntity,
             placeReviewImageEntities,
         )
@@ -40,7 +43,7 @@ internal class PlaceReviewPersistenceAdapter(
             ?: throw NotExistsPlaceReviewException
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewId(placeReviewEntity.id)
-        return placeReviewPersistenceMapper.toDomain(
+        return PlaceReviewPersistenceMapper.toDomainEntity(
             placeReviewEntity,
             placeReviewImageEntities,
         )
@@ -51,7 +54,7 @@ internal class PlaceReviewPersistenceAdapter(
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
         return placeReviewEntities.map { placeReviewEntity ->
-            placeReviewPersistenceMapper.toDomain(
+            PlaceReviewPersistenceMapper.toDomainEntity(
                 placeReviewJpaEntity = placeReviewEntity,
                 placeReviewImageJpaEntities = placeReviewImageEntities
                     .filter { it.placeReviewId == placeReviewEntity.id },
@@ -64,7 +67,7 @@ internal class PlaceReviewPersistenceAdapter(
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
         return placeReviewEntities.map { placeReviewEntity ->
-            placeReviewPersistenceMapper.toDomain(
+            PlaceReviewPersistenceMapper.toDomainEntity(
                 placeReviewJpaEntity = placeReviewEntity,
                 placeReviewImageJpaEntities = placeReviewImageEntities
                     .filter { it.placeReviewId == placeReviewEntity.id },
@@ -72,8 +75,45 @@ internal class PlaceReviewPersistenceAdapter(
         }
     }
 
+    override fun getAverageRatingByPlaceId(placeId: Long): Double = placeReviewJpaRepository.findAverageRatingByPlaceId(placeId)
+
+    override fun getPlaceReviewStatsByPlaceId(placeId: Long): PlaceReviewStats =
+        placeReviewJpaRepository.findPlaceReviewStatsByPlaceId(placeId)
+
+    override fun existsByPlaceIdAndUserId(
+        placeId: Long,
+        userId: Long,
+    ): Boolean = placeReviewJpaRepository.existsByPlaceIdAndUserId(placeId, userId)
+
     override fun deletePlaceReviewId(placeReviewId: Long) {
         placeReviewJpaRepository.deleteById(placeReviewId)
         placeReviewImageJpaRepository.deleteAllByPlaceReviewId(placeReviewId)
+    }
+
+    override fun saveAllPlaceOneLineReview(placeOneLineReview: List<PlaceOneLineReview>): List<PlaceOneLineReview> {
+        val placeOneLineReviewStatEntities =
+            placeOneLineReview.map(PlaceOneLineReviewPersistenceMapper::toJpaEntity)
+        val savedEntities = placeOneLineReviewJpaRepository.saveAll(placeOneLineReviewStatEntities)
+        return savedEntities.map(PlaceOneLineReviewPersistenceMapper::toDomainEntity)
+    }
+
+    override fun getAllByPlaceReviewId(placeReviewId: Long): List<PlaceOneLineReview> {
+        val placeOneLineReviewEntities = placeOneLineReviewJpaRepository.findAllByPlaceReviewId(placeReviewId)
+        return placeOneLineReviewEntities.map(PlaceOneLineReviewPersistenceMapper::toDomainEntity)
+    }
+
+    override fun getAllByPlaceReviewIds(placeReviewIds: List<Long>): List<PlaceOneLineReview> {
+        val placeOneLineReviewEntities =
+            placeOneLineReviewJpaRepository.findAllByPlaceReviewIdInOrderByCreatedAt(placeReviewIds)
+        return placeOneLineReviewEntities.map(PlaceOneLineReviewPersistenceMapper::toDomainEntity)
+    }
+
+    override fun getAllPlaceOneLineReviewStatsByPlaceId(placeId: Long): List<PlaceOneLineReviewStat> =
+        placeOneLineReviewJpaRepository.findPlaceOneLineReviewStatsByPlaceId(placeId, PageRequest.of(0, 5))
+
+    override fun countByUserId(userId: Long): Long = placeReviewJpaRepository.countByUserId(userId)
+
+    override fun deleteAllByPlaceReviewId(placeReviewId: Long) {
+        placeOneLineReviewJpaRepository.deleteAllByPlaceReviewId(placeReviewId)
     }
 }

@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.api.common.utils
 
 import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.boot.context.properties.ConfigurationProperties
 
@@ -9,6 +10,8 @@ private const val SAME_SITE = "sameSite"
 private val properties: CookieProperties by lazy {
     SpringContextLoader.getBean(CookieProperties::class.java)
 }
+
+fun HttpServletRequest.getCookie(name: String): Cookie? = cookies?.find { it.name.equals(name) }
 
 fun HttpServletResponse.addCookie(
     name: String,

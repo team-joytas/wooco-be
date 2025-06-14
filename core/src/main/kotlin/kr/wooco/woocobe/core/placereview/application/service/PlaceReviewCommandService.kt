@@ -3,50 +3,44 @@ package kr.wooco.woocobe.core.placereview.application.service
 import kr.wooco.woocobe.core.placereview.application.port.`in`.CreatePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.DeletePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.UpdatePlaceReviewUseCase
-import kr.wooco.woocobe.core.placereview.application.port.out.DeleteAllPlaceOneLineReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.DeletePlaceReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.LoadPlaceReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.SaveAllPlaceOneLineReviewPersistencePort
-import kr.wooco.woocobe.core.placereview.application.port.out.SavePlaceReviewPersistencePort
+import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewCommandPort
+import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreateEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeleteEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdateEvent
+import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PlaceReviewCommandService(
-    private val loadPlaceReviewPersistencePort: LoadPlaceReviewPersistencePort,
-    private val savePlaceReviewPersistencePort: SavePlaceReviewPersistencePort,
-    private val deletePlaceReviewPersistencePort: DeletePlaceReviewPersistencePort,
-    private val saveAllPlaceOneLineReviewPersistencePort: SaveAllPlaceOneLineReviewPersistencePort,
-    private val deleteAllPlaceOneLineReviewPersistencePort: DeleteAllPlaceOneLineReviewPersistencePort,
+    private val placeReviewQueryPort: PlaceReviewQueryPort,
+    private val placeReviewCommandPort: PlaceReviewCommandPort,
     private val eventPublisher: ApplicationEventPublisher,
 ) : CreatePlaceReviewUseCase,
     UpdatePlaceReviewUseCase,
     DeletePlaceReviewUseCase {
     @Transactional
     override fun createPlaceReview(command: CreatePlaceReviewUseCase.Command): Long {
-        val placeReview = savePlaceReviewPersistencePort.savePlaceReview(
+        val placeReview = placeReviewCommandPort.savePlaceReview(
             PlaceReview.create(
                 userId = command.userId,
                 placeId = command.placeId,
-                rating = command.rating,
+                rating = PlaceReviewRating(command.rating),
                 contents = command.contents,
                 imageUrls = command.imageUrls,
             ),
         )
-        val placeOneLineReviews = command.oneLineReviews.map { contents ->
+        placeReviewCommandPort.saveAllPlaceOneLineReview(
             PlaceOneLineReview.create(
                 placeId = command.placeId,
                 placeReviewId = placeReview.id,
-                contents = contents,
-            )
-        }
-        saveAllPlaceOneLineReviewPersistencePort.saveAllPlaceOneLineReview(placeOneLineReviews)
+                contentsList = command.oneLineReviews,
+            ),
+        )
 
         eventPublisher.publishEvent(PlaceReviewCreateEvent.from(placeReview))
         return placeReview.id
@@ -54,34 +48,34 @@ class PlaceReviewCommandService(
 
     @Transactional
     override fun updatePlaceReview(command: UpdatePlaceReviewUseCase.Command) {
-        val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)
-        placeReview.update(
-            userId = command.userId,
-            rating = command.rating,
-            contents = command.contents,
-            imageUrls = command.imageUrls,
+        val placeReview = placeReviewQueryPort.getByPlaceReviewId(command.placeReviewId)
+        placeReviewCommandPort.savePlaceReview(
+            placeReview.update(
+                userId = command.userId,
+                rating = PlaceReviewRating(command.rating),
+                contents = command.contents,
+                imageUrls = command.imageUrls,
+            ),
         )
-        savePlaceReviewPersistencePort.savePlaceReview(placeReview)
 
-        deleteAllPlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
-        val placeOneLineReviews = command.oneLineReviews.map { contents ->
+        placeReviewCommandPort.deleteAllByPlaceReviewId(placeReview.id)
+        placeReviewCommandPort.saveAllPlaceOneLineReview(
             PlaceOneLineReview.create(
                 placeId = placeReview.placeId,
                 placeReviewId = placeReview.id,
-                contents = contents,
-            )
-        }
-        saveAllPlaceOneLineReviewPersistencePort.saveAllPlaceOneLineReview(placeOneLineReviews)
+                contentsList = command.oneLineReviews,
+            ),
+        )
 
-        eventPublisher.publishEvent(PlaceReviewUpdateEvent.of(placeReview, command))
+        eventPublisher.publishEvent(PlaceReviewUpdateEvent.from(placeReview))
     }
 
     @Transactional
     override fun deletePlaceReview(command: DeletePlaceReviewUseCase.Command) {
-        val placeReview = loadPlaceReviewPersistencePort.getByPlaceReviewId(command.placeReviewId)
+        val placeReview = placeReviewQueryPort.getByPlaceReviewId(command.placeReviewId)
         placeReview.isValidWriter(command.userId)
-        deleteAllPlaceOneLineReviewPersistencePort.deleteAllByPlaceReviewId(placeReview.id)
-        deletePlaceReviewPersistencePort.deletePlaceReviewId(command.placeReviewId)
+        placeReviewCommandPort.deleteAllByPlaceReviewId(placeReview.id)
+        placeReviewCommandPort.deletePlaceReviewId(command.placeReviewId)
 
         eventPublisher.publishEvent(PlaceReviewDeleteEvent.from(placeReview))
     }

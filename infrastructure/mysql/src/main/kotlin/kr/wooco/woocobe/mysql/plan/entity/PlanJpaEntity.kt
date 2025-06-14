@@ -21,10 +21,10 @@ class PlanJpaEntity(
     val primaryRegion: String,
     @Column(name = "secondary_region")
     val secondaryRegion: String,
-    @Column(name = "is_shared")
-    val isShared: Boolean,
     @Column(name = "visit_date")
     val visitDate: LocalDate,
+    @Column(name = "status")
+    val status: String,
     @Id @Tsid
     @Column(name = "plan_id")
     override val id: Long = 0L,

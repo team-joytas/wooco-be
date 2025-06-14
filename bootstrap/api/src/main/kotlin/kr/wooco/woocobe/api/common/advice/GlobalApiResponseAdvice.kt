@@ -9,12 +9,6 @@ import org.springframework.http.server.ServerHttpResponse
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
 
-internal data class ApiResponse(
-    val path: String,
-    val results: Any? = null,
-    val timestamp: Long = System.currentTimeMillis(),
-)
-
 @RestControllerAdvice
 class GlobalApiResponseAdvice(
     private val objectMapper: ObjectMapper,
@@ -39,10 +33,10 @@ class GlobalApiResponseAdvice(
 
             body is String -> {
                 response.headers.contentType = MediaType.APPLICATION_JSON
-                objectMapper.writeValueAsString(ApiResponse(path = path, results = body))
+                objectMapper.writeValueAsString(BaseApiResponse(path = path, results = body))
             }
 
-            else -> ApiResponse(path = path, results = body)
+            else -> BaseApiResponse(path = path, results = body)
         }
     }
 

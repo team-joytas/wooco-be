@@ -14,8 +14,8 @@ class DeviceTokenJpaEntity(
     val token: String,
     @Column(name = "user_id")
     val userId: Long,
-    @Column(name = "is_active")
-    val isActive: Boolean,
+    @Column(name = "status")
+    val status: String,
     @Id @Tsid
     @Column(name = "device_token_id")
     override val id: Long = 0L,

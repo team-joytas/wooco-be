@@ -3,10 +3,12 @@ package kr.wooco.woocobe.api.placereview
 import kr.wooco.woocobe.api.placereview.request.CreatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.request.UpdatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.response.CreatePlaceReviewResponse
+import kr.wooco.woocobe.api.placereview.response.ExistsPlaceReviewWriterResponse
 import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithPlaceDetailsResponse
 import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithWriterDetailsResponse
 import kr.wooco.woocobe.core.placereview.application.port.`in`.CreatePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.DeletePlaceReviewUseCase
+import kr.wooco.woocobe.core.placereview.application.port.`in`.ExistsPlaceReviewWriterUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadAllUserPlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.`in`.ReadPlaceReviewUseCase
@@ -32,6 +34,7 @@ class PlaceReviewController(
     private val readAllUserPlaceReviewUseCase: ReadAllUserPlaceReviewUseCase,
     private val readAllPlaceReviewUseCase: ReadAllPlaceReviewUseCase,
     private val readPlaceReviewUseCase: ReadPlaceReviewUseCase,
+    private val existsPlaceReviewWriterUseCase: ExistsPlaceReviewWriterUseCase,
 ) : PlaceReviewApi {
     @GetMapping("/{placeReviewId}")
     override fun getPlaceReviewDetail(
@@ -90,5 +93,15 @@ class PlaceReviewController(
         val command = DeletePlaceReviewUseCase.Command(userId, placeReviewId)
         deletePlaceReviewUseCase.deletePlaceReview(command)
         return ResponseEntity.ok().build()
+    }
+
+    @GetMapping("/places/{placeId}/existence")
+    override fun existsByPlaceReviewWriter(
+        @PathVariable placeId: Long,
+        @AuthenticationPrincipal userId: Long,
+    ): ResponseEntity<ExistsPlaceReviewWriterResponse> {
+        val query = ExistsPlaceReviewWriterUseCase.Query(placeId, userId)
+        val results = existsPlaceReviewWriterUseCase.existsPlaceReviewWriter(query)
+        return ResponseEntity.ok(ExistsPlaceReviewWriterResponse(results))
     }
 }

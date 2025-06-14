@@ -4,7 +4,6 @@ import kr.wooco.woocobe.aws.common.config.AwsConfig
 import kr.wooco.woocobe.core.common.config.CoreConfig
 import kr.wooco.woocobe.core.common.config.SchedulingConfig
 import kr.wooco.woocobe.fcm.common.config.FcmConfig
-import kr.wooco.woocobe.jwt.common.config.JwtConfig
 import kr.wooco.woocobe.mysql.common.config.MysqlConfig
 import kr.wooco.woocobe.redis.common.config.RedisConfig
 import kr.wooco.woocobe.rest.common.config.RestConfig
@@ -17,7 +16,6 @@ import org.springframework.context.annotation.Import
     value = [
         CoreConfig::class,
         AwsConfig::class,
-        JwtConfig::class,
         MysqlConfig::class,
         RedisConfig::class,
         RestConfig::class,

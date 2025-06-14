@@ -3,6 +3,10 @@ spring:
     hibernate:
       ddl-auto: ${HIBERNATE_DDL_AUTO:validate}
     open-in-view: false
+    properties:
+      hibernate.jdbc.batch_size: ${HIBERNATE_BATCH_SIZE:100}
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
 
   flyway:
     enabled: true
@@ -19,3 +23,4 @@ spring:
         profileSQL: ${HIKARI_PROFILE_SQL:false}
         serverTimezone: Asia/Seoul
         characterEncoding: UTF-8
+        rewriteBatchedStatements: true

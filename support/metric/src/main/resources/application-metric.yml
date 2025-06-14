@@ -1,5 +1,6 @@
 management:
+  server.port: 9000
   endpoints:
     web:
       exposure:
-        include: "health"
+        include: ${ACTUATOR_INCLUDE:health,prometheus}

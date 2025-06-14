@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import kr.wooco.woocobe.api.placereview.request.CreatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.request.UpdatePlaceReviewRequest
 import kr.wooco.woocobe.api.placereview.response.CreatePlaceReviewResponse
+import kr.wooco.woocobe.api.placereview.response.ExistsPlaceReviewWriterResponse
 import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithPlaceDetailsResponse
 import kr.wooco.woocobe.api.placereview.response.PlaceReviewWithWriterDetailsResponse
 import org.springframework.http.ResponseEntity
@@ -45,4 +46,10 @@ interface PlaceReviewApi {
         @AuthenticationPrincipal userId: Long,
         @PathVariable placeReviewId: Long,
     ): ResponseEntity<Unit>
+
+    @SecurityRequirement(name = "JWT")
+    fun existsByPlaceReviewWriter(
+        @PathVariable placeId: Long,
+        @AuthenticationPrincipal userId: Long,
+    ): ResponseEntity<ExistsPlaceReviewWriterResponse>
 }

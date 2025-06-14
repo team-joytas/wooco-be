@@ -1,19 +1,22 @@
 package kr.wooco.woocobe.core.plan.domain.entity
 
+import kr.wooco.woocobe.core.plan.domain.exception.AlreadyDeletedPlanException
 import kr.wooco.woocobe.core.plan.domain.exception.InvalidPlanWriterException
+import kr.wooco.woocobe.core.plan.domain.exception.NotExistsPlanException
 import kr.wooco.woocobe.core.plan.domain.vo.PlanPlace
 import kr.wooco.woocobe.core.plan.domain.vo.PlanRegion
+import kr.wooco.woocobe.core.plan.domain.vo.PlanStatus
 import java.time.LocalDate
 
 data class Plan(
     val id: Long,
     val userId: Long,
-    var title: String,
-    var contents: String,
-    var region: PlanRegion,
-    var isShared: Boolean,
-    var visitDate: LocalDate,
-    var places: List<PlanPlace>,
+    val title: String,
+    val contents: String,
+    val region: PlanRegion,
+    val visitDate: LocalDate,
+    val places: List<PlanPlace>,
+    val status: PlanStatus,
 ) {
     fun update(
         userId: Long,
@@ -22,22 +25,26 @@ data class Plan(
         region: PlanRegion,
         visitDate: LocalDate,
         placeIds: List<Long>,
-    ) {
-        validateWriter(userId)
-
-        this.title = title
-        this.contents = contents
-        this.region = region
-        this.visitDate = visitDate
-        this.places = processPlanPlaceOrder(placeIds)
+    ): Plan {
+        when {
+            this.userId != userId -> throw InvalidPlanWriterException
+            this.status != PlanStatus.ACTIVE -> throw NotExistsPlanException
+        }
+        return copy(
+            title = title,
+            contents = contents,
+            region = region,
+            visitDate = visitDate,
+            places = processPlanPlaceOrder(placeIds),
+        )
     }
 
-    fun validateWriter(userId: Long) {
-        if (this.userId != userId) throw InvalidPlanWriterException
-    }
-
-    fun share() {
-        if (!isShared) isShared = true
+    fun delete(userId: Long): Plan {
+        when {
+            this.userId != userId -> throw InvalidPlanWriterException
+            this.status != PlanStatus.ACTIVE -> throw AlreadyDeletedPlanException
+        }
+        return copy(status = PlanStatus.DELETED)
     }
 
     companion object {
@@ -55,9 +62,9 @@ data class Plan(
                 title = title,
                 contents = contents,
                 region = region,
-                isShared = false,
                 visitDate = visitDate,
                 places = processPlanPlaceOrder(placeIds),
+                status = PlanStatus.ACTIVE,
             )
 
         private fun processPlanPlaceOrder(placeIds: List<Long>): List<PlanPlace> =

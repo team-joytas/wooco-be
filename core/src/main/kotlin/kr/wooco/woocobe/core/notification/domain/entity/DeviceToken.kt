@@ -1,23 +1,34 @@
 package kr.wooco.woocobe.core.notification.domain.entity
 
+import kr.wooco.woocobe.core.notification.domain.exception.AlreadyDeletedDeviceTokenException
+import kr.wooco.woocobe.core.notification.domain.exception.InvalidDeviceTokenOwnerException
+import kr.wooco.woocobe.core.notification.domain.vo.DeviceTokenStatus
+import kr.wooco.woocobe.core.notification.domain.vo.Token
+
 data class DeviceToken(
     val id: Long,
     val userId: Long,
-    val token: String,
-    var isActive: Boolean,
+    val token: Token,
+    val status: DeviceTokenStatus,
 ) {
-    fun disable() = apply { if (isActive) isActive = false }
+    fun delete(userId: Long): DeviceToken {
+        when {
+            this.userId != userId -> throw InvalidDeviceTokenOwnerException
+            this.status != DeviceTokenStatus.ACTIVE -> throw AlreadyDeletedDeviceTokenException
+        }
+        return copy(status = DeviceTokenStatus.DELETED)
+    }
 
     companion object {
         fun create(
             userId: Long,
-            token: String,
+            token: Token,
         ): DeviceToken =
             DeviceToken(
                 id = 0L,
                 userId = userId,
-                isActive = true,
                 token = token,
+                status = DeviceTokenStatus.ACTIVE,
             )
     }
 }

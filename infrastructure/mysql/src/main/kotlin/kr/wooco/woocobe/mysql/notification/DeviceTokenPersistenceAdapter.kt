@@ -1,41 +1,35 @@
 package kr.wooco.woocobe.mysql.notification
 
-import kr.wooco.woocobe.core.notification.application.port.out.DeleteDeviceTokenPersistencePort
-import kr.wooco.woocobe.core.notification.application.port.out.LoadDeviceTokenPersistencePort
-import kr.wooco.woocobe.core.notification.application.port.out.SaveDeviceTokenPersistencePort
+import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenCommandPort
+import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenQueryPort
 import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken
+import kr.wooco.woocobe.core.notification.domain.exception.NotExistsDeviceTokenException
+import kr.wooco.woocobe.core.notification.domain.vo.DeviceTokenStatus
+import kr.wooco.woocobe.core.notification.domain.vo.Token
 import kr.wooco.woocobe.mysql.notification.repository.DeviceTokenJpaRepository
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 internal class DeviceTokenPersistenceAdapter(
     private val deviceTokenJpaRepository: DeviceTokenJpaRepository,
-    private val deviceTokenPersistenceMapper: DeviceTokenPersistenceMapper,
-) : LoadDeviceTokenPersistencePort,
-    SaveDeviceTokenPersistencePort,
-    DeleteDeviceTokenPersistencePort {
-    @Transactional(readOnly = true)
-    override fun getByDeviceToken(token: String): DeviceToken {
-        val deviceTokenJpaEntity = deviceTokenJpaRepository.findByToken(token)
-        return deviceTokenPersistenceMapper.toDomain(deviceTokenJpaEntity)
+) : DeviceTokenQueryPort,
+    DeviceTokenCommandPort {
+    override fun getByToken(token: Token): DeviceToken {
+        val deviceTokenJpaEntity = deviceTokenJpaRepository.findByToken(token.value)
+            ?: throw NotExistsDeviceTokenException
+        return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
     }
 
-    @Transactional(readOnly = true)
-    override fun getByUserId(userId: Long): DeviceToken {
-        val deviceTokenJpaEntity = deviceTokenJpaRepository.findByUserId(userId)
-        return deviceTokenPersistenceMapper.toDomain(deviceTokenJpaEntity)
-    }
+    override fun getAllByUserIdWithActive(userId: Long): List<DeviceToken> =
+        deviceTokenJpaRepository
+            .findAllByUserIdAndStatus(userId, DeviceTokenStatus.ACTIVE.name)
+            .map { DeviceTokenPersistenceMapper.toDomainEntity(it) }
 
-    @Transactional(readOnly = true)
     override fun saveDeviceToken(deviceToken: DeviceToken): DeviceToken {
-        val deviceTokenJpaEntity = deviceTokenPersistenceMapper.toEntity(deviceToken)
+        val deviceTokenJpaEntity = DeviceTokenPersistenceMapper.toJpaEntity(deviceToken)
         deviceTokenJpaRepository.save(deviceTokenJpaEntity)
-        return deviceTokenPersistenceMapper.toDomain(deviceTokenJpaEntity)
+        return DeviceTokenPersistenceMapper.toDomainEntity(deviceTokenJpaEntity)
     }
 
-    @Transactional(readOnly = true)
-    override fun deleteDeviceToKen(token: String) {
-        deviceTokenJpaRepository.deleteByToken(token)
-    }
+    override fun existsByToken(token: Token): Boolean = deviceTokenJpaRepository.existsByToken(token.value)
 }

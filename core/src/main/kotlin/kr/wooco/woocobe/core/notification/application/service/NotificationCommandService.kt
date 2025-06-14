@@ -1,59 +1,66 @@
 package kr.wooco.woocobe.core.notification.application.service
 
-import kr.wooco.woocobe.core.notification.application.port.`in`.CreateDeviceTokenUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.CreateNotificationUseCase
 import kr.wooco.woocobe.core.notification.application.port.`in`.DeleteDeviceTokenUseCase
-import kr.wooco.woocobe.core.notification.application.port.`in`.UpdateNotificationUseCase
-import kr.wooco.woocobe.core.notification.application.port.out.DeleteDeviceTokenPersistencePort
-import kr.wooco.woocobe.core.notification.application.port.out.LoadNotificationPersistencePort
-import kr.wooco.woocobe.core.notification.application.port.out.SaveDeviceTokenPersistencePort
-import kr.wooco.woocobe.core.notification.application.port.out.SaveNotificationPersistencePort
+import kr.wooco.woocobe.core.notification.application.port.`in`.MarkAsReadNotificationUseCase
+import kr.wooco.woocobe.core.notification.application.port.`in`.RegisterDeviceTokenUseCase
+import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenCommandPort
+import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenQueryPort
+import kr.wooco.woocobe.core.notification.application.port.out.NotificationCommandPort
+import kr.wooco.woocobe.core.notification.application.port.out.NotificationQueryPort
 import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken
 import kr.wooco.woocobe.core.notification.domain.entity.Notification
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
+import kr.wooco.woocobe.core.notification.domain.vo.Token
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class NotificationCommandService(
-    private val loadNotificationPersistencePort: LoadNotificationPersistencePort,
-    private val saveNotificationPersistencePort: SaveNotificationPersistencePort,
-    private val saveDeviceTokenPersistencePort: SaveDeviceTokenPersistencePort,
-    private val deleteDeviceTokenPersistencePort: DeleteDeviceTokenPersistencePort,
+    private val notificationQueryPort: NotificationQueryPort,
+    private val notificationCommandPort: NotificationCommandPort,
+    private val deviceTokenQueryPort: DeviceTokenQueryPort,
+    private val deviceTokenCommandPort: DeviceTokenCommandPort,
 ) : CreateNotificationUseCase,
-    UpdateNotificationUseCase,
-    CreateDeviceTokenUseCase,
+    MarkAsReadNotificationUseCase,
+    RegisterDeviceTokenUseCase,
     DeleteDeviceTokenUseCase {
     @Transactional
-    override fun createNotification(command: CreateNotificationUseCase.Command): Notification {
+    override fun createNotification(command: CreateNotificationUseCase.Command): Long {
         val notification = Notification.create(
             userId = command.userId,
             targetId = command.targetId,
             targetName = command.targetName,
-            type = NotificationType.invoke(command.type),
+            type = NotificationType(command.type),
         )
-        val savedNotification = saveNotificationPersistencePort.saveNotification(notification)
-        return savedNotification
+        return notificationCommandPort.saveNotification(notification).id
     }
 
     @Transactional
-    override fun updateNotification(command: UpdateNotificationUseCase.Command) {
-        val notification = loadNotificationPersistencePort.getByNotificationId(command.notificationId)
-        notification.read()
-        saveNotificationPersistencePort.saveNotification(notification)
+    override fun markAsReadNotification(command: MarkAsReadNotificationUseCase.Command) {
+        val notification = notificationQueryPort.getByNotificationId(command.notificationId)
+        val readNotification = notification.markAsRead(command.userId)
+        notificationCommandPort.saveNotification(readNotification)
     }
 
     @Transactional
-    override fun createDeviceToken(command: CreateDeviceTokenUseCase.Command) {
+    override fun registerDeviceToken(command: RegisterDeviceTokenUseCase.Command) {
+        val token = Token(command.token)
+
+        if (deviceTokenQueryPort.existsByToken(token)) return
+
         val deviceToken = DeviceToken.create(
             userId = command.userId,
-            token = command.token,
+            token = token,
         )
-        saveDeviceTokenPersistencePort.saveDeviceToken(deviceToken)
+        deviceTokenCommandPort.saveDeviceToken(deviceToken)
     }
 
     @Transactional
     override fun deleteDeviceToken(command: DeleteDeviceTokenUseCase.Command) {
-        deleteDeviceTokenPersistencePort.deleteDeviceToKen(command.token)
+        val token = Token(command.token)
+        val deviceToken = deviceTokenQueryPort.getByToken(token)
+        val deletedDeviceToken = deviceToken.delete(command.userId)
+        deviceTokenCommandPort.saveDeviceToken(deletedDeviceToken)
     }
 }
