@@ -1,16 +1,17 @@
 package kr.wooco.woocobe.core.notification.domain.entity
 
+import kr.wooco.woocobe.core.common.domain.entity.AggregateRoot
 import kr.wooco.woocobe.core.notification.domain.exception.AlreadyDeletedDeviceTokenException
 import kr.wooco.woocobe.core.notification.domain.exception.InvalidDeviceTokenOwnerException
 import kr.wooco.woocobe.core.notification.domain.vo.DeviceTokenStatus
 import kr.wooco.woocobe.core.notification.domain.vo.Token
 
 data class DeviceToken(
-    val id: Long,
+    override val id: Long,
     val userId: Long,
     val token: Token,
     val status: DeviceTokenStatus,
-) {
+) : AggregateRoot() {
     fun delete(userId: Long): DeviceToken {
         when {
             this.userId != userId -> throw InvalidDeviceTokenOwnerException
