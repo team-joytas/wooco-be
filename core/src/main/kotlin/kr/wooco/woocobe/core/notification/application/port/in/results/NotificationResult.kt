@@ -16,8 +16,8 @@ data class NotificationResult(
         fun from(notification: Notification): NotificationResult =
             NotificationResult(
                 id = notification.id,
-                targetId = notification.targetId,
-                targetName = notification.targetName,
+                targetId = notification.target.targetId,
+                targetName = notification.target.targetName,
                 userId = notification.userId,
                 type = notification.type.name,
                 createdAt = notification.createdAt,
