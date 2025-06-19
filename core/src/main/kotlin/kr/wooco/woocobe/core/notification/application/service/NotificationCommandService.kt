@@ -11,6 +11,7 @@ import kr.wooco.woocobe.core.notification.application.port.out.NotificationQuery
 import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken
 import kr.wooco.woocobe.core.notification.domain.entity.Notification
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
+import kr.wooco.woocobe.core.notification.domain.vo.Target
 import kr.wooco.woocobe.core.notification.domain.vo.Token
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -27,10 +28,10 @@ class NotificationCommandService(
     DeleteDeviceTokenUseCase {
     @Transactional
     override fun createNotification(command: CreateNotificationUseCase.Command): Long {
+        val target = Target(targetId = command.targetId, targetName = command.targetName)
         val notification = Notification.create(
             userId = command.userId,
-            targetId = command.targetId,
-            targetName = command.targetName,
+            target = target,
             type = NotificationType(command.type),
         )
         return notificationCommandPort.saveNotification(notification).id
