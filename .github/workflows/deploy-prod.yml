@@ -59,6 +59,7 @@ jobs:
 
   docker-pull-and-run:
     runs-on: [ self-hosted, Linux, X64, prod ]
+    environment: prod
     needs: docker-build-and-push
     if: success()
 
