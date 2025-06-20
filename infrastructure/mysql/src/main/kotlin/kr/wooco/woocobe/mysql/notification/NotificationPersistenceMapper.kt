@@ -3,8 +3,8 @@ package kr.wooco.woocobe.mysql.notification
 import kr.wooco.woocobe.core.notification.domain.entity.Notification
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationReadStatus
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationStatus
+import kr.wooco.woocobe.core.notification.domain.vo.NotificationTarget
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
-import kr.wooco.woocobe.core.notification.domain.vo.Target
 import kr.wooco.woocobe.mysql.notification.entity.NotificationJpaEntity
 
 internal object NotificationPersistenceMapper {
@@ -12,7 +12,7 @@ internal object NotificationPersistenceMapper {
         Notification(
             id = notificationJpaEntity.id,
             userId = notificationJpaEntity.userId,
-            target = Target(
+            target = NotificationTarget(
                 targetId = notificationJpaEntity.targetId,
                 targetName = notificationJpaEntity.targetName,
             ),

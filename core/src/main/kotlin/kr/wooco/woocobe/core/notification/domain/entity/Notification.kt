@@ -6,14 +6,14 @@ import kr.wooco.woocobe.core.notification.domain.exception.InvalidNotificationOw
 import kr.wooco.woocobe.core.notification.domain.exception.NotExistsNotificationException
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationReadStatus
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationStatus
+import kr.wooco.woocobe.core.notification.domain.vo.NotificationTarget
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
-import kr.wooco.woocobe.core.notification.domain.vo.Target
 import java.time.LocalDateTime
 
 data class Notification(
     override val id: Long,
     val userId: Long,
-    val target: Target,
+    val target: NotificationTarget,
     val type: NotificationType,
     val createdAt: LocalDateTime,
     val status: NotificationStatus,
@@ -38,13 +38,13 @@ data class Notification(
     companion object {
         fun create(
             userId: Long,
-            target: Target,
+            notificationTarget: NotificationTarget,
             type: NotificationType,
         ): Notification =
             Notification(
                 id = 0L,
                 userId = userId,
-                target = target,
+                target = notificationTarget,
                 type = type,
                 createdAt = LocalDateTime.now(),
                 status = NotificationStatus.ACTIVE,
