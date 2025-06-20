@@ -28,9 +28,9 @@ interface CourseLikeJpaRepository : JpaRepository<CourseLikeJpaEntity, Long> {
 
     @Query(
         """
-           SELECT cl.courseId
-           FROM CourseLikeJpaEntity cl
-           WHERE cl.userId = :userId
+            SELECT cl.courseId
+            FROM CourseLikeJpaEntity cl
+            WHERE cl.userId = :userId
                 AND cl.status = 'ACTIVE'
                 AND cl.courseId IN :courseIds
         """,
@@ -42,9 +42,10 @@ interface CourseLikeJpaRepository : JpaRepository<CourseLikeJpaEntity, Long> {
 
     @Query(
         """
-           SELECT COUNT (cl.id)
-           FROM CourseLikeJpaEntity cl
-           WHERE cl.status = 'ACTIVE'
+            SELECT COUNT (cl.id)
+            FROM CourseLikeJpaEntity cl
+            WHERE cl.userId = :userId
+                AND cl.status = 'ACTIVE'
         """,
     )
     fun countByUserIdAndActive(userId: Long): Long
