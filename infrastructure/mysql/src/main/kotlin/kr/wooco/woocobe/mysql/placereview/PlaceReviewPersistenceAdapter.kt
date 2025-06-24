@@ -31,21 +31,6 @@ internal class PlaceReviewPersistenceAdapter(
         } else {
             updatePlaceReview(placeReview)
         }
-//    override fun savePlaceReview(placeReview: PlaceReview): PlaceReview {
-//        val placeReviewEntity = placeReviewJpaRepository.save(PlaceReviewPersistenceMapper.toJpaEntity(placeReview))
-//        placeReviewImageJpaRepository.deleteAllByPlaceReviewId(placeReviewEntity.id)
-//        val placeReviewImageEntities = placeReview.imageUrls.map {
-//            PlaceReviewImageJpaEntity(
-//                placeReviewId = placeReviewEntity.id,
-//                imageUrl = it,
-//            )
-//        }
-//        placeReviewImageJpaRepository.saveAll(placeReviewImageEntities)
-//        return PlaceReviewPersistenceMapper.toDomainEntity(
-//            placeReviewEntity,
-//            placeReviewImageEntities,
-//        )
-//    }
 
     fun createNew(placeReview: PlaceReview): Long {
         val placeReviewJpaEntity = placeReviewJpaRepository.save(PlaceReviewJpaEntity.create(placeReview))
@@ -57,7 +42,6 @@ internal class PlaceReviewPersistenceAdapter(
             )
         }
         placeReviewImageJpaRepository.saveAll(placeReviewImageEntities)
-
         return placeReviewJpaEntity.id
     }
 
@@ -74,7 +58,6 @@ internal class PlaceReviewPersistenceAdapter(
             )
         }
         placeReviewImageJpaRepository.saveAll(placeReviewImageEntities)
-
         return placeReviewJpaEntity.id
     }
 
