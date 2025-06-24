@@ -9,8 +9,8 @@ internal object PlaceOneLineReviewPersistenceMapper {
             id = placeOneLineReviewJpaEntity.placeReviewId,
             placeId = placeOneLineReviewJpaEntity.placeId,
             placeReviewId = placeOneLineReviewJpaEntity.placeReviewId,
-            contents = PlaceOneLineReview.Contents(
-                value = placeOneLineReviewJpaEntity.contents,
+            content = PlaceOneLineReview.Content(
+                value = placeOneLineReviewJpaEntity.content,
             ),
         )
 
@@ -18,6 +18,6 @@ internal object PlaceOneLineReviewPersistenceMapper {
         PlaceOneLineReviewJpaEntity(
             placeId = placeOneLineReview.placeId,
             placeReviewId = placeOneLineReview.placeReviewId,
-            contents = placeOneLineReview.contents.value,
+            content = placeOneLineReview.content.value,
         )
 }
