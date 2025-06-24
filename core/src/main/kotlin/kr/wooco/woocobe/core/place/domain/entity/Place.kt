@@ -1,7 +1,10 @@
 package kr.wooco.woocobe.core.place.domain.entity
 
+import kr.wooco.woocobe.core.common.domain.entity.AggregateRoot
+import kr.wooco.woocobe.core.place.domain.command.CreatePlaceCommand
+
 data class Place(
-    val id: Long,
+    override val id: Long,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -11,7 +14,8 @@ data class Place(
     val reviewCount: Long,
     val phoneNumber: String,
     val thumbnailUrl: String,
-) {
+    // TODO: 썸네일 처리 기능 구현 예정
+) : AggregateRoot() {
     init {
         require(reviewCount >= 0) { "리뷰 수는 0 미만으로 설정할 수 없습니다." }
     }
@@ -37,24 +41,22 @@ data class Place(
 
     companion object {
         fun create(
-            name: String,
-            latitude: Double,
-            longitude: Double,
-            address: String,
-            kakaoPlaceId: String,
-            phoneNumber: String,
+            command: CreatePlaceCommand,
+            identifier: (Place) -> Long,
         ): Place =
             Place(
                 id = 0L,
-                name = name,
-                latitude = latitude,
-                longitude = longitude,
-                address = address,
-                kakaoPlaceId = kakaoPlaceId,
+                name = command.name,
+                latitude = command.latitude,
+                longitude = command.longitude,
+                address = command.address,
+                kakaoPlaceId = command.kakaoPlaceId,
                 averageRating = 0.0,
                 reviewCount = 0,
-                phoneNumber = phoneNumber,
+                phoneNumber = command.phoneNumber,
                 thumbnailUrl = "",
-            )
+            ).let {
+                it.copy(id = identifier.invoke(it))
+            }
     }
 }

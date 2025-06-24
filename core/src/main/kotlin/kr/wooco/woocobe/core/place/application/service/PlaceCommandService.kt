@@ -31,16 +31,10 @@ internal class PlaceCommandService(
             ?: createPlace(command)
 
     private fun createPlace(command: CreatePlaceIfNotExistsUseCase.Command): Long {
-        val place = placeCommandPort.savePlace(
-            Place.create(
-                name = command.name,
-                kakaoPlaceId = command.kakaoPlaceId,
-                address = command.address,
-                latitude = command.latitude,
-                longitude = command.longitude,
-                phoneNumber = command.phoneNumber,
-            ),
-        )
+        val place = Place.create(command.toCreateCommand()) { place ->
+            placeCommandPort.savePlace(place)
+        }
+
         eventPublisher.publishEvent(PlaceCreateEvent.from(place))
         return place.id
     }
