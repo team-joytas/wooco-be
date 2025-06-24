@@ -4,7 +4,7 @@ import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 
 interface PlaceReviewCommandPort {
-    fun savePlaceReview(placeReview: PlaceReview): PlaceReview
+    fun savePlaceReview(placeReview: PlaceReview): Long
 
     fun deletePlaceReviewId(placeReviewId: Long)
 

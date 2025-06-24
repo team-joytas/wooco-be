@@ -20,3 +20,10 @@ data object NotExistsPlaceReviewException : BasePlaceReviewException(
 ) {
     private fun readResolve(): Any = NotExistsPlaceReviewException
 }
+
+data object NotExistPlaceReviewException : BasePlaceReviewException(
+    code = "NOT_EXIST_PLACE_REVIEW",
+    message = "존재하지 않는 장소 리뷰입니다.",
+) {
+    private fun readResolve(): Any = NotExistPlaceReviewException
+}

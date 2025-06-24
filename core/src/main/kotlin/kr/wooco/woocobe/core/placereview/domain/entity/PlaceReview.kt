@@ -1,58 +1,88 @@
 package kr.wooco.woocobe.core.placereview.domain.entity
 
-import kr.wooco.woocobe.core.placereview.domain.exception.InvalidPlaceReviewWriterException
+import kr.wooco.woocobe.core.common.domain.entity.AggregateRoot
+import kr.wooco.woocobe.core.course.domain.exception.InvalidCourseWriterException
+import kr.wooco.woocobe.core.placereview.domain.command.CreatePlaceReviewCommand
+import kr.wooco.woocobe.core.placereview.domain.command.DeletePlaceReviewCommand
+import kr.wooco.woocobe.core.placereview.domain.command.UpdatePlaceReviewCommand
+import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreateEvent
+import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeleteEvent
+import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdateEvent
+import kr.wooco.woocobe.core.placereview.domain.exception.NotExistsPlaceReviewException
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 import java.time.LocalDateTime
 
 data class PlaceReview(
-    val id: Long,
+    override val id: Long,
     val userId: Long,
     val placeId: Long,
     val writeDateTime: LocalDateTime,
     val rating: PlaceReviewRating,
-    val contents: String,
+    val content: String,
     val imageUrls: List<String>,
-) {
+    val status: Status,
+    // TODO: 썸네일 처리 기능 구현 예정
+) : AggregateRoot() {
     init {
         require(imageUrls.size <= 10) { "이미지는 최대 10개까지 등록할 수 있습니다." }
     }
 
-    fun update(
-        userId: Long,
-        rating: PlaceReviewRating,
-        contents: String,
-        imageUrls: List<String>,
-    ): PlaceReview {
-        isValidWriter(userId)
-        return copy(
-            rating = rating,
-            contents = contents,
-            imageUrls = imageUrls,
-        )
+    enum class Status {
+        ACTIVE,
+        DELETED,
     }
 
-    fun isValidWriter(userId: Long) {
-        if (this.userId != userId) {
-            throw InvalidPlaceReviewWriterException
+    fun update(command: UpdatePlaceReviewCommand): PlaceReview {
+        validate(command.userId)
+        return copy(
+            rating = command.rating,
+            content = command.content,
+            imageUrls = command.imageUrls,
+        ).also {
+            it.registerEvent(
+                PlaceReviewUpdateEvent.from(placeReview = it),
+            )
+        }
+    }
+
+    fun delete(command: DeletePlaceReviewCommand): PlaceReview {
+        validate(command.userId)
+        return copy(
+            status = Status.DELETED,
+        ).also {
+            it.registerEvent(
+                PlaceReviewDeleteEvent.from(placeReview = it),
+            )
+        }
+    }
+
+    private fun validate(userId: Long) {
+        when {
+            this.status == Status.DELETED -> throw NotExistsPlaceReviewException
+            this.userId != userId -> throw InvalidCourseWriterException
         }
     }
 
     companion object {
         fun create(
-            userId: Long,
-            placeId: Long,
-            rating: PlaceReviewRating,
-            contents: String,
-            imageUrls: List<String>,
+            command: CreatePlaceReviewCommand,
+            identifier: (PlaceReview) -> Long,
         ): PlaceReview =
             PlaceReview(
                 id = 0L,
-                userId = userId,
-                placeId = placeId,
+                userId = command.userId,
+                placeId = command.placeId,
                 writeDateTime = LocalDateTime.now(),
-                rating = rating,
-                contents = contents,
-                imageUrls = imageUrls,
-            )
+                rating = command.rating,
+                content = command.content,
+                imageUrls = command.imageUrls,
+                status = Status.ACTIVE,
+            ).let {
+                it.copy(id = identifier.invoke(it))
+            }.also {
+                it.registerEvent(
+                    PlaceReviewCreateEvent.from(placeReview = it),
+                )
+            }
     }
 }
