@@ -15,9 +15,10 @@ internal object PlaceReviewPersistenceMapper {
             userId = placeReviewJpaEntity.userId,
             placeId = placeReviewJpaEntity.placeId,
             rating = PlaceReviewRating(placeReviewJpaEntity.rating),
-            contents = placeReviewJpaEntity.contents,
+            content = placeReviewJpaEntity.content,
             writeDateTime = placeReviewJpaEntity.createdAt,
             imageUrls = placeReviewImageJpaEntities.map { it.imageUrl },
+            status = PlaceReview.Status.valueOf(placeReviewJpaEntity.status),
         )
 
     fun toJpaEntity(placeReview: PlaceReview): PlaceReviewJpaEntity =
@@ -26,6 +27,7 @@ internal object PlaceReviewPersistenceMapper {
             userId = placeReview.userId,
             placeId = placeReview.placeId,
             rating = placeReview.rating.score,
-            contents = placeReview.contents,
+            content = placeReview.content,
+            status = placeReview.status.name,
         )
 }

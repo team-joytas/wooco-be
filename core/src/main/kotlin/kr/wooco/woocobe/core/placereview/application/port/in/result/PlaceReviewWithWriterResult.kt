@@ -27,9 +27,9 @@ data class PlaceReviewWithWriterResult(
                 writerId = user.id,
                 writerName = user.profile.name,
                 writerProfileUrl = user.profile.profileUrl,
-                contents = placeReview.contents,
+                contents = placeReview.content,
                 rating = placeReview.rating.score,
-                oneLineReviews = placeOneLineReviews.map { it.contents.value },
+                oneLineReviews = placeOneLineReviews.map { it.content.value },
                 reviewImageUrls = placeReview.imageUrls,
                 createdAt = placeReview.writeDateTime,
             )
@@ -49,9 +49,9 @@ data class PlaceReviewWithWriterResult(
                     writerId = writer.id,
                     writerName = writer.profile.name,
                     writerProfileUrl = writer.profile.profileUrl,
-                    contents = placeReview.contents,
+                    contents = placeReview.content,
                     rating = placeReview.rating.score,
-                    oneLineReviews = oneLineReviews.map { it.contents.value },
+                    oneLineReviews = oneLineReviews.map { it.content.value },
                     reviewImageUrls = placeReview.imageUrls,
                     createdAt = placeReview.writeDateTime,
                 )
