@@ -9,13 +9,11 @@ import kr.wooco.woocobe.core.place.application.port.out.PlaceCommandPort
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 internal class PlaceCommandService(
-    private val eventPublisher: ApplicationEventPublisher,
     private val placeClientPort: PlaceClientPort,
     private val placeCommandPort: PlaceCommandPort,
     private val placeQueryPort: PlaceQueryPort,
