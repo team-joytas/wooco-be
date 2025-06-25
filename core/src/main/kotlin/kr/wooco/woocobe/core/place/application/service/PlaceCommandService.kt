@@ -8,7 +8,6 @@ import kr.wooco.woocobe.core.place.application.port.out.PlaceClientPort
 import kr.wooco.woocobe.core.place.application.port.out.PlaceCommandPort
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.place.domain.entity.Place
-import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -34,8 +33,6 @@ internal class PlaceCommandService(
         val place = Place.create(command.toCreateCommand()) { place ->
             placeCommandPort.savePlace(place)
         }
-
-        eventPublisher.publishEvent(PlaceCreateEvent.from(place))
         return place.id
     }
 

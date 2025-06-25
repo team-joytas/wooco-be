@@ -2,6 +2,7 @@ package kr.wooco.woocobe.core.place.domain.entity
 
 import kr.wooco.woocobe.core.common.domain.entity.AggregateRoot
 import kr.wooco.woocobe.core.place.domain.command.CreatePlaceCommand
+import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
 
 data class Place(
     override val id: Long,
@@ -57,6 +58,10 @@ data class Place(
                 thumbnailUrl = "",
             ).let {
                 it.copy(id = identifier.invoke(it))
+            }.also {
+                it.registerEvent(
+                    PlaceCreateEvent.from(place = it),
+                )
             }
     }
 }
