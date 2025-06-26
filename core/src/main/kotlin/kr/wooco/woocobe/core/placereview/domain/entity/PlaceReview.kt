@@ -18,7 +18,7 @@ data class PlaceReview(
     val placeId: Long,
     val writeDateTime: LocalDateTime,
     val rating: PlaceReviewRating,
-    val content: String,
+    val contents: String,
     val imageUrls: List<String>,
     val status: Status,
     // TODO: 썸네일 처리 기능 구현 예정
@@ -36,7 +36,7 @@ data class PlaceReview(
         validate(command.userId)
         return copy(
             rating = command.rating,
-            content = command.content,
+            contents = command.contents,
             imageUrls = command.imageUrls,
         ).also {
             it.registerEvent(
@@ -74,7 +74,7 @@ data class PlaceReview(
                 placeId = command.placeId,
                 writeDateTime = LocalDateTime.now(),
                 rating = command.rating,
-                content = command.content,
+                contents = command.content,
                 imageUrls = command.imageUrls,
                 status = Status.ACTIVE,
             ).let {

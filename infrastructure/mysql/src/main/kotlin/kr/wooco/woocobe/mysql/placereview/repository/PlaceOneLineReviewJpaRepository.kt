@@ -12,12 +12,12 @@ interface PlaceOneLineReviewJpaRepository : JpaRepository<PlaceOneLineReviewJpaE
     @Query(
         """
     SELECT new kr.wooco.woocobe.core.placereview.application.service.dto.PlaceOneLineReviewStat(
-        polr.content, COUNT(polr.content)
+        polr.contents, COUNT(polr.contents)
     )
     FROM PlaceOneLineReviewJpaEntity polr
     WHERE polr.placeId = :placeId
-    GROUP BY polr.content
-    ORDER BY COUNT(polr.content) DESC
+    GROUP BY polr.contents
+    ORDER BY COUNT(polr.contents) DESC
 """,
     )
     fun findPlaceOneLineReviewStatsByPlaceId(

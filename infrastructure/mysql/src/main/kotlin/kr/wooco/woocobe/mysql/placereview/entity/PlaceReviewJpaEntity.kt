@@ -14,7 +14,7 @@ data class PlaceReviewJpaEntity(
     @Column(name = "placeReview_status")
     val status: String,
     @Column(name = "contents")
-    val content: String,
+    val contents: String,
     @Column(name = "rating")
     val rating: Double,
     @Column(name = "user_id")
@@ -28,7 +28,7 @@ data class PlaceReviewJpaEntity(
     fun applyUpdate(placeReview: PlaceReview): PlaceReviewJpaEntity =
         copy(
             rating = placeReview.rating.score,
-            content = placeReview.content,
+            contents = placeReview.contents,
             status = placeReview.status.name,
         )
 
@@ -38,7 +38,7 @@ data class PlaceReviewJpaEntity(
                 placeId = placeReview.placeId,
                 userId = placeReview.userId,
                 rating = placeReview.rating.score,
-                content = placeReview.content,
+                contents = placeReview.contents,
                 status = placeReview.status.name,
             )
     }

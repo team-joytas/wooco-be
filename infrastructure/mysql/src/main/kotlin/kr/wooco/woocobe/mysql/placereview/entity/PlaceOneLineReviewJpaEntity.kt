@@ -11,7 +11,7 @@ import kr.wooco.woocobe.mysql.common.utils.Tsid
 @Table(name = "place_one_line_reviews")
 data class PlaceOneLineReviewJpaEntity(
     @Column(name = "contents")
-    val content: String,
+    val contents: String,
     @Column(name = "place_review_id")
     val placeReviewId: Long,
     @Column(name = "place_id")

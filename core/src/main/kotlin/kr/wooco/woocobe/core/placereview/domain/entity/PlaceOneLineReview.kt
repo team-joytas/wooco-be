@@ -6,10 +6,10 @@ data class PlaceOneLineReview(
     override val id: Long,
     val placeReviewId: Long,
     val placeId: Long,
-    val content: Content,
+    val contents: Contents,
 ) : AggregateRoot() {
     @JvmInline
-    value class Content(
+    value class Contents(
         val value: String,
     ) {
         init {
@@ -19,23 +19,23 @@ data class PlaceOneLineReview(
     }
 
     companion object {
-        private fun isDuplicateContent(contents: List<String>) {
-            require(contents.distinct().size == contents.size) { "중복된 한줄평이 존재합니다." }
+        private fun isDuplicateContent(contentsList: List<String>) {
+            require(contentsList.distinct().size == contentsList.size) { "중복된 한줄평이 존재합니다." } // init 블록에 넣기
         }
 
         // TODO: 한줄평 애거리거트 식별자 생성 위임 예정
         fun create(
             placeId: Long,
             placeReviewId: Long,
-            contents: List<String>,
+            contentsList: List<String>,
         ): List<PlaceOneLineReview> {
-            isDuplicateContent(contents)
-            return contents.map { content ->
+            isDuplicateContent(contentsList)
+            return contentsList.map { content ->
                 PlaceOneLineReview(
                     id = 0L,
                     placeId = placeId,
                     placeReviewId = placeReviewId,
-                    content = Content(content),
+                    contents = Contents(content),
                 )
             }
         }

@@ -16,7 +16,7 @@ fun interface UpdatePlaceReviewUseCase {
             UpdatePlaceReviewCommand(
                 userId = userId,
                 rating = PlaceReviewRating(rating),
-                content = content,
+                contents = content,
                 imageUrls = imageUrls,
             )
     }

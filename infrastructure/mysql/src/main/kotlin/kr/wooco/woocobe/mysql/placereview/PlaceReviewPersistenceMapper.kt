@@ -15,7 +15,7 @@ internal object PlaceReviewPersistenceMapper {
             userId = placeReviewJpaEntity.userId,
             placeId = placeReviewJpaEntity.placeId,
             rating = PlaceReviewRating(placeReviewJpaEntity.rating),
-            content = placeReviewJpaEntity.content,
+            contents = placeReviewJpaEntity.contents,
             writeDateTime = placeReviewJpaEntity.createdAt,
             imageUrls = placeReviewImageJpaEntities.map { it.imageUrl },
             status = PlaceReview.Status.valueOf(placeReviewJpaEntity.status),
@@ -27,7 +27,7 @@ internal object PlaceReviewPersistenceMapper {
             userId = placeReview.userId,
             placeId = placeReview.placeId,
             rating = placeReview.rating.score,
-            content = placeReview.content,
+            contents = placeReview.contents,
             status = placeReview.status.name,
         )
 }

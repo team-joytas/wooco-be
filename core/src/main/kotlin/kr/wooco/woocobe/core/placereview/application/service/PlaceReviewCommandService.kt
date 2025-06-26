@@ -26,7 +26,7 @@ class PlaceReviewCommandService(
             PlaceOneLineReview.create(
                 placeId = command.placeId,
                 placeReviewId = placeReview.id,
-                contents = command.oneLineReviews,
+                contentsList = command.oneLineReviews,
             ),
         )
         return placeReview.id
@@ -43,7 +43,7 @@ class PlaceReviewCommandService(
             PlaceOneLineReview.create(
                 placeId = placeReview.placeId,
                 placeReviewId = placeReview.id,
-                contents = command.oneLineReviews,
+                contentsList = command.oneLineReviews,
             ),
         )
     }
