@@ -5,9 +5,9 @@ import kr.wooco.woocobe.core.course.domain.exception.InvalidCourseWriterExceptio
 import kr.wooco.woocobe.core.placereview.domain.command.CreatePlaceReviewCommand
 import kr.wooco.woocobe.core.placereview.domain.command.DeletePlaceReviewCommand
 import kr.wooco.woocobe.core.placereview.domain.command.UpdatePlaceReviewCommand
-import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreateEvent
-import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeleteEvent
-import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdateEvent
+import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreatedEvent
+import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeletedEvent
+import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdatedEvent
 import kr.wooco.woocobe.core.placereview.domain.exception.NotExistsPlaceReviewException
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 import java.time.LocalDateTime
@@ -40,7 +40,7 @@ data class PlaceReview(
             imageUrls = command.imageUrls,
         ).also {
             it.registerEvent(
-                PlaceReviewUpdateEvent.from(placeReview = it),
+                PlaceReviewUpdatedEvent.from(placeReview = it),
             )
         }
     }
@@ -51,7 +51,7 @@ data class PlaceReview(
             status = Status.DELETED,
         ).also {
             it.registerEvent(
-                PlaceReviewDeleteEvent.from(placeReview = it),
+                PlaceReviewDeletedEvent.from(placeReview = it),
             )
         }
     }
@@ -81,7 +81,7 @@ data class PlaceReview(
                 it.copy(id = identifier.invoke(it))
             }.also {
                 it.registerEvent(
-                    PlaceReviewCreateEvent.from(placeReview = it),
+                    PlaceReviewCreatedEvent.from(placeReview = it),
                 )
             }
     }

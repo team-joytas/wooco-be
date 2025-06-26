@@ -3,13 +3,13 @@ package kr.wooco.woocobe.core.placereview.domain.event
 import kr.wooco.woocobe.core.common.domain.event.DomainEvent
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 
-data class PlaceReviewCreateEvent(
+data class PlaceReviewUpdatedEvent(
     override val aggregateId: Long,
     val placeId: Long,
 ) : DomainEvent() {
     companion object {
-        fun from(placeReview: PlaceReview): PlaceReviewCreateEvent =
-            PlaceReviewCreateEvent(
+        fun from(placeReview: PlaceReview): PlaceReviewUpdatedEvent =
+            PlaceReviewUpdatedEvent(
                 aggregateId = placeReview.id,
                 placeId = placeReview.placeId,
             )
