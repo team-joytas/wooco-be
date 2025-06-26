@@ -50,7 +50,7 @@ internal class PlaceReviewPersistenceAdapter(
     }
 
     override fun getAllByPlaceId(placeId: Long): List<PlaceReview> {
-        val placeReviewEntities = placeReviewJpaRepository.findAllByPlaceIdOrderByCreatedAt(placeId)
+        val placeReviewEntities = placeReviewJpaRepository.findAllByPlaceId(placeId)
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
         return placeReviewEntities.map { placeReviewEntity ->
@@ -63,7 +63,7 @@ internal class PlaceReviewPersistenceAdapter(
     }
 
     override fun getAllByUserId(userId: Long): List<PlaceReview> {
-        val placeReviewEntities = placeReviewJpaRepository.findAllByUserIdOrderByCreatedAt(userId)
+        val placeReviewEntities = placeReviewJpaRepository.findAllByUserId(userId)
         val placeReviewImageEntities = placeReviewImageJpaRepository
             .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
         return placeReviewEntities.map { placeReviewEntity ->
