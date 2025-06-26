@@ -104,7 +104,7 @@ internal class PlaceReviewPersistenceAdapter(
 
     override fun getAllByPlaceReviewIds(placeReviewIds: List<Long>): List<PlaceOneLineReview> {
         val placeOneLineReviewEntities =
-            placeOneLineReviewJpaRepository.findAllByPlaceReviewIdInOrderByCreatedAt(placeReviewIds)
+            placeOneLineReviewJpaRepository.findAllByPlaceReviewIdIn(placeReviewIds)
         return placeOneLineReviewEntities.map(PlaceOneLineReviewPersistenceMapper::toDomainEntity)
     }
 
