@@ -8,7 +8,6 @@ import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.exception.NotExistsPlaceReviewException
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewImageJpaEntity
-import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewJpaEntity
 import kr.wooco.woocobe.mysql.placereview.repository.PlaceOneLineReviewJpaRepository
 import kr.wooco.woocobe.mysql.placereview.repository.PlaceReviewImageJpaRepository
 import kr.wooco.woocobe.mysql.placereview.repository.PlaceReviewJpaRepository
@@ -25,39 +24,17 @@ internal class PlaceReviewPersistenceAdapter(
 ) : PlaceReviewCommandPort,
     PlaceReviewQueryPort {
     @Transactional
-    override fun savePlaceReview(placeReview: PlaceReview): Long =
-        if (placeReview.id == 0L) {
-            createNew(placeReview)
-        } else {
-            updatePlaceReview(placeReview)
-        }
-
-    fun createNew(placeReview: PlaceReview): Long {
-        val placeReviewJpaEntity = placeReviewJpaRepository.save(PlaceReviewJpaEntity.create(placeReview))
-
-        val placeReviewImageEntities = placeReview.imageUrls.map {
-            PlaceReviewImageJpaEntity(
-                placeReviewId = placeReviewJpaEntity.id,
-                imageUrl = it,
-            )
-        }
-        placeReviewImageJpaRepository.saveAll(placeReviewImageEntities)
-        return placeReviewJpaEntity.id
-    }
-
-    fun updatePlaceReview(placeReview: PlaceReview): Long {
-        val placeReviewJpaEntity = placeReviewJpaRepository.findByIdOrNull(placeReview.id)!!.let {
-            placeReviewJpaRepository.save(it.applyUpdate(placeReview))
-        }
+    override fun savePlaceReview(placeReview: PlaceReview): Long {
+        val placeReviewJpaEntity = placeReviewJpaRepository.save(PlaceReviewPersistenceMapper.toJpaEntity(placeReview))
 
         placeReviewImageJpaRepository.deleteAllByPlaceReviewId(placeReviewJpaEntity.id)
-        val placeReviewImageEntities = placeReview.imageUrls.map {
+        val placeReviewImageJpaEntities = placeReview.imageUrls.map {
             PlaceReviewImageJpaEntity(
                 placeReviewId = placeReviewJpaEntity.id,
                 imageUrl = it,
             )
         }
-        placeReviewImageJpaRepository.saveAll(placeReviewImageEntities)
+        placeReviewImageJpaRepository.saveAll(placeReviewImageJpaEntities)
         return placeReviewJpaEntity.id
     }
 
