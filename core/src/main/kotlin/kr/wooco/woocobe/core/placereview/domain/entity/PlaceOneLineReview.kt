@@ -30,12 +30,12 @@ data class PlaceOneLineReview(
             contentsList: List<String>,
         ): List<PlaceOneLineReview> {
             isDuplicateContent(contentsList)
-            return contentsList.map { content ->
+            return contentsList.map { contents ->
                 PlaceOneLineReview(
                     id = 0L,
                     placeId = placeId,
                     placeReviewId = placeReviewId,
-                    contents = Contents(content),
+                    contents = Contents(contents),
                 )
             }
         }
