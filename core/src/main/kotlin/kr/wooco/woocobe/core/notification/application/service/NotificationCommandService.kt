@@ -9,10 +9,10 @@ import kr.wooco.woocobe.core.notification.application.port.out.DeviceTokenQueryP
 import kr.wooco.woocobe.core.notification.application.port.out.NotificationCommandPort
 import kr.wooco.woocobe.core.notification.application.port.out.NotificationQueryPort
 import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken
+import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken.Token
 import kr.wooco.woocobe.core.notification.domain.entity.Notification
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationTarget
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
-import kr.wooco.woocobe.core.notification.domain.vo.Token
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -28,11 +28,14 @@ class NotificationCommandService(
     DeleteDeviceTokenUseCase {
     @Transactional
     override fun createNotification(command: CreateNotificationUseCase.Command): Long {
-        val notificationTarget = NotificationTarget(targetId = command.targetId, targetName = command.targetName)
+        val notificationTarget = NotificationTarget(
+            targetId = command.targetId,
+            targetName = command.targetName,
+            type = NotificationType(command.type),
+        )
         val notification = Notification.create(
             userId = command.userId,
             notificationTarget = notificationTarget,
-            type = NotificationType(command.type),
         )
         return notificationCommandPort.saveNotification(notification).id
     }

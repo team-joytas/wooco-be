@@ -4,8 +4,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.MulticastMessage
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kr.wooco.woocobe.core.notification.application.port.out.NotificationSenderPort
+import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken.Token
 import kr.wooco.woocobe.core.notification.domain.entity.Notification
-import kr.wooco.woocobe.core.notification.domain.vo.Token
 import org.springframework.stereotype.Component
 
 @Component
@@ -23,7 +23,7 @@ internal class FcmNotificationSenderAdapter(
             .putData("user_id", notification.userId.toString())
             .putData("target_id", notification.target.targetId.toString())
             .putData("target_name", notification.target.targetName)
-            .putData("type", notification.type.name)
+            .putData("type", notification.target.type.name)
             .build()
         return sendWithLogging(messages)
     }

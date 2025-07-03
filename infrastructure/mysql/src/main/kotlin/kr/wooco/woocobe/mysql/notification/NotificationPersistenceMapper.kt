@@ -15,8 +15,8 @@ internal object NotificationPersistenceMapper {
             target = NotificationTarget(
                 targetId = notificationJpaEntity.targetId,
                 targetName = notificationJpaEntity.targetName,
+                type = NotificationType(notificationJpaEntity.type),
             ),
-            type = NotificationType(notificationJpaEntity.type),
             createdAt = notificationJpaEntity.createdAt,
             status = NotificationStatus(notificationJpaEntity.status),
             readStatus = NotificationReadStatus(notificationJpaEntity.readStatus),
@@ -28,7 +28,7 @@ internal object NotificationPersistenceMapper {
             userId = notification.userId,
             targetId = notification.target.targetId,
             targetName = notification.target.targetName,
-            type = notification.type.name,
+            type = notification.target.type.name,
             status = notification.status.name,
             readStatus = notification.readStatus.name,
         )

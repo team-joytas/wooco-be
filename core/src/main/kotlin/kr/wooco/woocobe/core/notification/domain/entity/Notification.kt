@@ -7,15 +7,13 @@ import kr.wooco.woocobe.core.notification.domain.exception.NotExistsNotification
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationReadStatus
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationStatus
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationTarget
-import kr.wooco.woocobe.core.notification.domain.vo.NotificationType
 import java.time.LocalDateTime
 
 data class Notification(
     override val id: Long,
     val userId: Long,
     val target: NotificationTarget,
-    val type: NotificationType,
-    val createdAt: LocalDateTime,
+    val createdAt: LocalDateTime, // TODO: View Model 분리
     val status: NotificationStatus,
     val readStatus: NotificationReadStatus,
 ) : AggregateRoot() {
@@ -39,13 +37,11 @@ data class Notification(
         fun create(
             userId: Long,
             notificationTarget: NotificationTarget,
-            type: NotificationType,
         ): Notification =
             Notification(
                 id = 0L,
                 userId = userId,
                 target = notificationTarget,
-                type = type,
                 createdAt = LocalDateTime.now(),
                 status = NotificationStatus.ACTIVE,
                 readStatus = NotificationReadStatus.UNREAD,
