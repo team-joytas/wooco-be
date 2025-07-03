@@ -27,3 +27,10 @@ data object NotExistPlaceReviewException : BasePlaceReviewException(
 ) {
     private fun readResolve(): Any = NotExistPlaceReviewException
 }
+
+data object DuplicateOneLineReviewException : BasePlaceReviewException(
+    code = "DUPLICATE_ONE_LINE_REVIEW",
+    message = "중복된 한줄평은 허용되지 않습니다.",
+) {
+    private fun readResolve(): Any = DuplicateOneLineReviewException
+}

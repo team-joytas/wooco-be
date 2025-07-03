@@ -4,7 +4,6 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.mysql.common.entity.BaseTimeEntity
 import kr.wooco.woocobe.mysql.common.utils.Tsid
 
@@ -32,25 +31,4 @@ data class PlaceJpaEntity(
     @Id @Tsid
     @Column(name = "place_id")
     override val id: Long = 0L,
-) : BaseTimeEntity() {
-    fun applyUpdate(place: Place): PlaceJpaEntity =
-        copy(
-            averageRating = place.averageRating,
-            reviewCount = place.reviewCount,
-        )
-
-    companion object {
-        fun create(place: Place): PlaceJpaEntity =
-            PlaceJpaEntity(
-                name = place.name,
-                address = place.address,
-                latitude = place.latitude,
-                longitude = place.longitude,
-                kakaoPlaceId = place.kakaoPlaceId,
-                averageRating = place.averageRating,
-                reviewCount = place.reviewCount,
-                thumbnailUrl = place.thumbnailUrl,
-                phoneNumber = place.phoneNumber,
-            )
-    }
-}
+) : BaseTimeEntity()

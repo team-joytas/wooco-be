@@ -5,7 +5,6 @@ import kr.wooco.woocobe.core.placereview.application.port.`in`.DeletePlaceReview
 import kr.wooco.woocobe.core.placereview.application.port.`in`.UpdatePlaceReviewUseCase
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewCommandPort
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
-import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,13 +21,6 @@ class PlaceReviewCommandService(
         val placeReview = PlaceReview.create(command.toCreateCommand()) { placeReview ->
             placeReviewCommandPort.savePlaceReview(placeReview)
         }
-        placeReviewCommandPort.saveAllPlaceOneLineReview(
-            PlaceOneLineReview.create(
-                placeId = command.placeId,
-                placeReviewId = placeReview.id,
-                contentsList = command.oneLineReviews,
-            ),
-        )
         return placeReview.id
     }
 
@@ -37,15 +29,6 @@ class PlaceReviewCommandService(
         val placeReview = placeReviewQueryPort.getByPlaceReviewId(command.placeReviewId)
         val updatedPlaceReview = placeReview.update(command.toUpdateCommand())
         placeReviewCommandPort.savePlaceReview(updatedPlaceReview)
-
-        placeReviewCommandPort.deleteAllByPlaceReviewId(placeReview.id)
-        placeReviewCommandPort.saveAllPlaceOneLineReview(
-            PlaceOneLineReview.create(
-                placeId = placeReview.placeId,
-                placeReviewId = placeReview.id,
-                contentsList = command.oneLineReviews,
-            ),
-        )
     }
 
     @Transactional

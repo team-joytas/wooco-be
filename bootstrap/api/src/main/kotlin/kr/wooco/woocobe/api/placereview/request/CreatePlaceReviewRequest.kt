@@ -16,7 +16,7 @@ data class CreatePlaceReviewRequest(
             userId = userId,
             placeId = placeId,
             rating = rating,
-            content = contents,
+            contents = contents,
             oneLineReviews = oneLineReviews,
             imageUrls = imageUrls,
         )
