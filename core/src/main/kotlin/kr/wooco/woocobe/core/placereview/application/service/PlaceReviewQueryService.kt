@@ -24,29 +24,24 @@ internal class PlaceReviewQueryService(
     @Transactional(readOnly = true)
     override fun readAllPlaceReview(query: ReadAllPlaceReviewUseCase.Query): List<PlaceReviewWithWriterResult> {
         val placeReviews = placeReviewQueryPort.getAllByPlaceId(query.placeId)
-        val placeOneLineReviews =
-            placeReviewQueryPort.getAllByPlaceReviewIds(placeReviews.map { it.id })
         val writerIds = placeReviews.map { it.userId }.distinct()
         val writers = userQueryPort.getAllByUserIds(writerIds)
-        return PlaceReviewWithWriterResult.listOf(placeReviews, placeOneLineReviews, writers)
+        return PlaceReviewWithWriterResult.listOf(placeReviews, writers)
     }
 
     @Transactional(readOnly = true)
     override fun readAllUserPlaceReview(query: ReadAllUserPlaceReviewUseCase.Query): List<PlaceReviewWithPlaceResult> {
         val placeReviews = placeReviewQueryPort.getAllByUserId(query.userId)
-        val placeOneLineReviews =
-            placeReviewQueryPort.getAllByPlaceReviewIds(placeReviews.map { it.id })
         val placeIds = placeReviews.map { it.placeId }.distinct()
         val places = placeQueryPort.getAllByPlaceIds(placeIds)
-        return PlaceReviewWithPlaceResult.listOf(placeReviews, placeOneLineReviews, places)
+        return PlaceReviewWithPlaceResult.listOf(placeReviews, places)
     }
 
     @Transactional(readOnly = true)
     override fun readPlaceReview(query: ReadPlaceReviewUseCase.Query): PlaceReviewWithWriterResult {
         val placeReview = placeReviewQueryPort.getByPlaceReviewId(query.placeReviewId)
-        val placeOneLineReviews = placeReviewQueryPort.getAllByPlaceReviewId(placeReview.id)
         val writer = userQueryPort.getByUserId(placeReview.userId)
-        return PlaceReviewWithWriterResult.of(placeReview, placeOneLineReviews, writer)
+        return PlaceReviewWithWriterResult.of(placeReview, writer)
     }
 
     override fun existsPlaceReviewWriter(query: ExistsPlaceReviewWriterUseCase.Query): Boolean =
