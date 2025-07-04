@@ -45,7 +45,7 @@ data class PlaceReview(
             imageUrls = command.imageUrls,
         ).also {
             it.registerEvent(
-                PlaceReviewUpdatedEvent.from(placeReview = it),
+                PlaceReviewUpdatedEvent.from(it),
             )
         }
     }
@@ -56,7 +56,7 @@ data class PlaceReview(
             status = Status.DELETED,
         ).also {
             it.registerEvent(
-                PlaceReviewDeletedEvent.from(placeReview = it),
+                PlaceReviewDeletedEvent.from(it),
             )
         }
     }
@@ -94,7 +94,7 @@ data class PlaceReview(
                 it.copy(id = identifier.invoke(it))
             }.also {
                 it.registerEvent(
-                    PlaceReviewCreatedEvent.from(placeReview = it),
+                    PlaceReviewCreatedEvent.from(it),
                 )
             }
     }

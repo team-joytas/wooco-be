@@ -4,6 +4,7 @@ import kr.wooco.woocobe.core.common.domain.entity.AggregateRoot
 import kr.wooco.woocobe.core.place.domain.command.CreatePlaceCommand
 import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
 
+// TODO: 썸네일 처리 기능 개선, 통계성 데이터로 따로 빼기
 data class Place(
     override val id: Long,
     val name: String,
@@ -11,16 +12,16 @@ data class Place(
     val longitude: Double,
     val address: String,
     val kakaoPlaceId: String,
-    val averageRating: Double,
+    val averageRating: Double, //
     val reviewCount: Long,
     val phoneNumber: String,
     val thumbnailUrl: String,
-    // TODO: 썸네일 처리 기능 구현 예정
 ) : AggregateRoot() {
     init {
         require(reviewCount >= 0) { "리뷰 수는 0 미만으로 설정할 수 없습니다." }
     }
 
+    // TODO: ReadModel 로 리팩토링 예정
     fun updateThumbnail(thumbnailUrl: String): Place =
         copy(
             thumbnailUrl = thumbnailUrl,
@@ -60,7 +61,7 @@ data class Place(
                 it.copy(id = identifier.invoke(it))
             }.also {
                 it.registerEvent(
-                    PlaceCreateEvent.from(place = it),
+                    PlaceCreateEvent.from(it),
                 )
             }
     }
