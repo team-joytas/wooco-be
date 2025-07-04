@@ -8,20 +8,20 @@ import org.springframework.data.jpa.repository.Query
 interface PlaceReviewJpaRepository : JpaRepository<PlaceReviewJpaEntity, Long> {
     @Query(
         """
-        SELECT pr
-        FROM PlaceReviewJpaEntity pr
-        WHERE pr.placeId = :placeId
-          AND pr.status   = 'ACTIVE'
+            SELECT pr
+            FROM PlaceReviewJpaEntity pr
+            WHERE pr.placeId = :placeId
+              AND pr.status  = 'ACTIVE'
         """,
     )
     fun findAllByPlaceId(placeId: Long): List<PlaceReviewJpaEntity>
 
     @Query(
         """
-        SELECT pr
-        FROM PlaceReviewJpaEntity pr
-        WHERE pr.userId   = :userId
-          AND pr.status   = 'ACTIVE'
+            SELECT pr
+            FROM PlaceReviewJpaEntity pr
+            WHERE pr.userId  = :userId
+              AND pr.status  = 'ACTIVE'
         """,
     )
     fun findAllByUserId(userId: Long): List<PlaceReviewJpaEntity>
@@ -38,10 +38,11 @@ interface PlaceReviewJpaRepository : JpaRepository<PlaceReviewJpaEntity, Long> {
     @Query(
         """
             SELECT new kr.wooco.woocobe.core.placereview.application.service.dto.PlaceReviewStats(
-            COALESCE(AVG(pr.rating), 0.0), COUNT(*))
+            COALESCE(AVG(pr.rating), 0.0), 
+            COUNT(*))
             FROM PlaceReviewJpaEntity pr 
             WHERE pr.placeId = :placeId 
-            AND pr.status = 'ACTIVE'
+              AND pr.status = 'ACTIVE'
         """,
     )
     fun findPlaceReviewStatsByPlaceId(placeId: Long): PlaceReviewStats
