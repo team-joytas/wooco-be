@@ -31,6 +31,7 @@ interface PlaceReviewJpaRepository : JpaRepository<PlaceReviewJpaEntity, Long> {
             SELECT COALESCE(AVG(pr.rating), 0.0)
             FROM PlaceReviewJpaEntity pr 
             WHERE pr.placeId = :placeId
+                AND pr.status = 'ACTIVE'
         """,
     )
     fun findAverageRatingByPlaceId(placeId: Long): Double

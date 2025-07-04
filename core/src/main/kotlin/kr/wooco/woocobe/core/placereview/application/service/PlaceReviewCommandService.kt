@@ -36,6 +36,5 @@ class PlaceReviewCommandService(
         val placeReview = placeReviewQueryPort.getByPlaceReviewId(command.placeReviewId)
         val deletePlaceReview = placeReview.delete(command.toDeleteCommand())
         placeReviewCommandPort.savePlaceReview(deletePlaceReview)
-        placeReviewCommandPort.deleteAllByPlaceReviewId(placeReview.id)
     }
 }

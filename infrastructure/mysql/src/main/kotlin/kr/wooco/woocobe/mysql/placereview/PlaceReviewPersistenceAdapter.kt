@@ -23,6 +23,7 @@ internal class PlaceReviewPersistenceAdapter(
     private val placeOneLineReviewJpaRepository: PlaceOneLineReviewJpaRepository,
 ) : PlaceReviewCommandPort,
     PlaceReviewQueryPort {
+    // TODO: savePlaceReview 최적화 필요
     @Transactional
     override fun savePlaceReview(placeReview: PlaceReview): Long {
         val placeReviewJpaEntity = placeReviewJpaRepository.save(PlaceReviewPersistenceMapper.toJpaEntity(placeReview))

@@ -11,14 +11,17 @@ interface PlaceOneLineReviewJpaRepository : JpaRepository<PlaceOneLineReviewJpaE
 
     @Query(
         """
-    SELECT new kr.wooco.woocobe.core.placereview.application.service.dto.PlaceOneLineReviewStat(
-        polr.contents, COUNT(polr.contents)
-    )
-    FROM PlaceOneLineReviewJpaEntity polr
-    WHERE polr.placeId = :placeId
-    GROUP BY polr.contents
-    ORDER BY COUNT(polr.contents) DESC
-""",
+            SELECT new kr.wooco.woocobe.core.placereview.application.service.dto.PlaceOneLineReviewStat(
+                polr.contents, COUNT(polr.contents)
+            )
+            FROM PlaceOneLineReviewJpaEntity polr
+            JOIN PlaceReviewJpaEntity pr 
+              ON pr.id = polr.placeReviewId
+            WHERE pr.status = 'ACTIVE'
+              AND pr.placeId = :placeId
+            GROUP BY polr.contents
+            ORDER BY COUNT(polr.contents) DESC
+        """,
     )
     fun findPlaceOneLineReviewStatsByPlaceId(
         placeId: Long,
