@@ -16,7 +16,7 @@ data class UpdatePlaceReviewRequest(
             userId = userId,
             placeReviewId = placeReviewId,
             rating = rating,
-            content = contents,
+            contents = contents,
             oneLineReviews = oneLineReviews,
             imageUrls = imageUrls,
         )

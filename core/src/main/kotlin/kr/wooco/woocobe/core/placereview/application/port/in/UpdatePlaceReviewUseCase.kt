@@ -9,7 +9,7 @@ fun interface UpdatePlaceReviewUseCase {
         val placeReviewId: Long,
         val userId: Long,
         val rating: Double,
-        val content: String,
+        val contents: String,
         val oneLineReviews: List<String>,
         val imageUrls: List<String>,
     ) {
@@ -17,7 +17,7 @@ fun interface UpdatePlaceReviewUseCase {
             UpdatePlaceReviewCommand(
                 userId = userId,
                 rating = PlaceReviewRating(rating),
-                contents = content,
+                contents = contents,
                 oneLineReviews = oneLineReviews.map { PlaceOneLineReview(it) },
                 imageUrls = imageUrls,
             )
