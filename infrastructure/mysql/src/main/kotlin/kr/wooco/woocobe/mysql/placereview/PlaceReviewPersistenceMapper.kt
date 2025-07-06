@@ -1,8 +1,6 @@
 package kr.wooco.woocobe.mysql.placereview
 
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
-import kr.wooco.woocobe.core.placereview.domain.vo.PlaceOneLineReview
-import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewContent
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceOneLineReviewJpaEntity
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewImageJpaEntity
@@ -19,13 +17,9 @@ internal object PlaceReviewPersistenceMapper {
             userId = placeReviewJpaEntity.userId,
             placeId = placeReviewJpaEntity.placeId,
             rating = PlaceReviewRating(placeReviewJpaEntity.rating),
-            contents = PlaceReviewContent(placeReviewJpaEntity.contents),
+            contents = PlaceReview.Contents(placeReviewJpaEntity.contents),
             writeDateTime = placeReviewJpaEntity.createdAt,
-            oneLineReviews = placeOneLineReviewJpaEntities.map {
-                PlaceOneLineReview(
-                    contents = it.contents,
-                )
-            },
+            oneLineReviews = placeOneLineReviewJpaEntities.map { PlaceReview.OneLineReview(it.contents) },
             imageUrls = placeReviewImageJpaEntities.map { it.imageUrl },
             status = PlaceReview.Status.valueOf(placeReviewJpaEntity.status),
         )
@@ -36,7 +30,7 @@ internal object PlaceReviewPersistenceMapper {
             userId = placeReview.userId,
             placeId = placeReview.placeId,
             rating = placeReview.rating.score,
-            contents = placeReview.contents.contents,
+            contents = placeReview.contents.value,
             status = placeReview.status.name,
         )
 }
