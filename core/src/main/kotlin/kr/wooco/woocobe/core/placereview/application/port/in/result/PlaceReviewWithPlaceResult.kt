@@ -34,7 +34,7 @@ data class PlaceReviewWithPlaceResult(
                         id = place.id,
                         name = place.name,
                     ),
-                    contents = placeReview.contents,
+                    contents = placeReview.contents.contents,
                     rating = placeReview.rating.score,
                     oneLineReviews = placeReview.oneLineReviews.map { it.contents },
                     reviewImageUrls = placeReview.imageUrls,

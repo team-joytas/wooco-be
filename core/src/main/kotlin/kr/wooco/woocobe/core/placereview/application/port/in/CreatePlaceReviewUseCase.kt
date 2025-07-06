@@ -2,6 +2,7 @@ package kr.wooco.woocobe.core.placereview.application.port.`in`
 
 import kr.wooco.woocobe.core.placereview.domain.command.CreatePlaceReviewCommand
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceOneLineReview
+import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewContent
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 
 fun interface CreatePlaceReviewUseCase {
@@ -18,7 +19,7 @@ fun interface CreatePlaceReviewUseCase {
                 userId = userId,
                 placeId = placeId,
                 rating = PlaceReviewRating(rating),
-                contents = contents,
+                contents = PlaceReviewContent(contents),
                 oneLineReviews = oneLineReviews.map { PlaceOneLineReview(it) },
                 imageUrls = imageUrls,
             )

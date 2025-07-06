@@ -7,10 +7,10 @@ import kr.wooco.woocobe.core.placereview.domain.command.UpdatePlaceReviewCommand
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreatedEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeletedEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdatedEvent
-import kr.wooco.woocobe.core.placereview.domain.exception.DuplicateOneLineReviewException
 import kr.wooco.woocobe.core.placereview.domain.exception.InvalidPlaceReviewWriterException
 import kr.wooco.woocobe.core.placereview.domain.exception.NotExistsPlaceReviewException
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceOneLineReview
+import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewContent
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 import java.time.LocalDateTime
 
@@ -20,7 +20,7 @@ data class PlaceReview(
     val placeId: Long,
     val writeDateTime: LocalDateTime,
     val rating: PlaceReviewRating,
-    val contents: String,
+    val contents: PlaceReviewContent,
     val oneLineReviews: List<PlaceOneLineReview>,
     val imageUrls: List<String>,
     val status: Status,
@@ -28,7 +28,6 @@ data class PlaceReview(
 ) : AggregateRoot() {
     init {
         require(imageUrls.size <= 10) { "이미지는 최대 10개까지 등록할 수 있습니다." }
-        validateOneLineReviews()
     }
 
     enum class Status {
@@ -41,7 +40,7 @@ data class PlaceReview(
         return copy(
             rating = command.rating,
             contents = command.contents,
-            oneLineReviews = command.oneLineReviews,
+            oneLineReviews = command.oneLineReviews.distinctBy { it.contents },
             imageUrls = command.imageUrls,
         ).also {
             it.registerEvent(
@@ -68,13 +67,6 @@ data class PlaceReview(
         }
     }
 
-    private fun validateOneLineReviews() {
-        val values = oneLineReviews.map { it.contents }
-        if (values.size != values.distinct().size) {
-            throw DuplicateOneLineReviewException
-        }
-    }
-
     companion object {
         fun create(
             command: CreatePlaceReviewCommand,
@@ -87,7 +79,7 @@ data class PlaceReview(
                 writeDateTime = LocalDateTime.now(),
                 rating = command.rating,
                 contents = command.contents,
-                oneLineReviews = command.oneLineReviews,
+                oneLineReviews = command.oneLineReviews.distinctBy { it.contents },
                 imageUrls = command.imageUrls,
                 status = Status.ACTIVE,
             ).let {

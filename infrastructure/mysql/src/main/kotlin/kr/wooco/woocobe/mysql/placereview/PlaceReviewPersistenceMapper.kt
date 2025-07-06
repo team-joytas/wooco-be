@@ -2,6 +2,7 @@ package kr.wooco.woocobe.mysql.placereview
 
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceOneLineReview
+import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewContent
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceOneLineReviewJpaEntity
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewImageJpaEntity
@@ -18,7 +19,7 @@ internal object PlaceReviewPersistenceMapper {
             userId = placeReviewJpaEntity.userId,
             placeId = placeReviewJpaEntity.placeId,
             rating = PlaceReviewRating(placeReviewJpaEntity.rating),
-            contents = placeReviewJpaEntity.contents,
+            contents = PlaceReviewContent(placeReviewJpaEntity.contents),
             writeDateTime = placeReviewJpaEntity.createdAt,
             oneLineReviews = placeOneLineReviewJpaEntities.map {
                 PlaceOneLineReview(
@@ -35,7 +36,7 @@ internal object PlaceReviewPersistenceMapper {
             userId = placeReview.userId,
             placeId = placeReview.placeId,
             rating = placeReview.rating.score,
-            contents = placeReview.contents,
+            contents = placeReview.contents.contents,
             status = placeReview.status.name,
         )
 }
