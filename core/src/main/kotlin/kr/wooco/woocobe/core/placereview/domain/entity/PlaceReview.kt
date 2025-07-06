@@ -14,6 +14,7 @@ import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewContent
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 import java.time.LocalDateTime
 
+// TODO: 썸네일 처리 기능 구현 예정
 data class PlaceReview(
     override val id: Long,
     val userId: Long,
@@ -24,7 +25,6 @@ data class PlaceReview(
     val oneLineReviews: List<PlaceOneLineReview>,
     val imageUrls: List<String>,
     val status: Status,
-    // TODO: 썸네일 처리 기능 구현 예정
 ) : AggregateRoot() {
     init {
         require(imageUrls.size <= 10) { "이미지는 최대 10개까지 등록할 수 있습니다." }
