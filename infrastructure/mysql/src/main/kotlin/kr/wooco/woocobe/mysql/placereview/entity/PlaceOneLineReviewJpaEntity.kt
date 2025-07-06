@@ -30,7 +30,7 @@ class PlaceOneLineReviewJpaEntity(
                 PlaceOneLineReviewJpaEntity(
                     placeId = placeReviewJpaEntity.placeId,
                     placeReviewId = placeReviewJpaEntity.id,
-                    contents = oneLineReview.contents,
+                    contents = oneLineReview.value,
                 )
             }
     }
