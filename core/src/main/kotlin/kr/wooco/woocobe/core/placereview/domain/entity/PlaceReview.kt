@@ -43,9 +43,7 @@ data class PlaceReview(
             oneLineReviews = command.oneLineReviews.distinctBy { it.contents },
             imageUrls = command.imageUrls,
         ).also {
-            it.registerEvent(
-                PlaceReviewUpdatedEvent.from(it),
-            )
+            registerEvent(PlaceReviewUpdatedEvent.from(it))
         }
     }
 
@@ -54,9 +52,7 @@ data class PlaceReview(
         return copy(
             status = Status.DELETED,
         ).also {
-            it.registerEvent(
-                PlaceReviewDeletedEvent.from(it),
-            )
+            registerEvent(PlaceReviewDeletedEvent.from(it))
         }
     }
 
@@ -85,9 +81,7 @@ data class PlaceReview(
             ).let {
                 it.copy(id = identifier.invoke(it))
             }.also {
-                it.registerEvent(
-                    PlaceReviewCreatedEvent.from(it),
-                )
+                it.registerEvent(PlaceReviewCreatedEvent.from(it))
             }
     }
 }

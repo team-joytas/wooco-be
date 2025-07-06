@@ -60,9 +60,7 @@ data class Place(
             ).let {
                 it.copy(id = identifier.invoke(it))
             }.also {
-                it.registerEvent(
-                    PlaceCreatedEvent.from(it),
-                )
+                it.registerEvent(PlaceCreatedEvent.from(it))
             }
     }
 }
