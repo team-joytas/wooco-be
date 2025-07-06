@@ -10,6 +10,8 @@ import kr.wooco.woocobe.mysql.common.utils.Tsid
 @Entity
 @Table(name = "place_reviews")
 class PlaceReviewJpaEntity(
+    @Column(name = "place_review_status")
+    val status: String,
     @Column(name = "contents")
     val contents: String,
     @Column(name = "rating")
