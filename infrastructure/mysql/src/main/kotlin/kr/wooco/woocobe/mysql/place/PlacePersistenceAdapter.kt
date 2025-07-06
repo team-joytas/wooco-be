@@ -7,16 +7,18 @@ import kr.wooco.woocobe.core.place.domain.exception.NotExistsPlaceException
 import kr.wooco.woocobe.mysql.place.repository.PlaceJpaRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 internal class PlacePersistenceAdapter(
     private val placeJpaRepository: PlaceJpaRepository,
 ) : PlaceQueryPort,
     PlaceCommandPort {
-    override fun savePlace(place: Place): Place {
+    @Transactional
+    override fun savePlace(place: Place): Long {
         val placeEntity = PlacePersistenceMapper.toJpaEntity(place)
         val savedPlaceEntity = placeJpaRepository.save(placeEntity)
-        return PlacePersistenceMapper.toDomainEntity(savedPlaceEntity)
+        return savedPlaceEntity.id
     }
 
     override fun getByPlaceId(placeId: Long): Place {

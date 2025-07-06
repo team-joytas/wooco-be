@@ -2,7 +2,6 @@ package kr.wooco.woocobe.core.placereview.application.port.out
 
 import kr.wooco.woocobe.core.placereview.application.service.dto.PlaceOneLineReviewStat
 import kr.wooco.woocobe.core.placereview.application.service.dto.PlaceReviewStats
-import kr.wooco.woocobe.core.placereview.domain.entity.PlaceOneLineReview
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 
 interface PlaceReviewQueryPort {
@@ -20,10 +19,6 @@ interface PlaceReviewQueryPort {
         placeId: Long,
         userId: Long,
     ): Boolean
-
-    fun getAllByPlaceReviewId(placeReviewId: Long): List<PlaceOneLineReview>
-
-    fun getAllByPlaceReviewIds(placeReviewIds: List<Long>): List<PlaceOneLineReview>
 
     fun getAllPlaceOneLineReviewStatsByPlaceId(placeId: Long): List<PlaceOneLineReviewStat>
 

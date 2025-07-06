@@ -8,15 +8,12 @@ import kr.wooco.woocobe.core.place.application.port.out.PlaceClientPort
 import kr.wooco.woocobe.core.place.application.port.out.PlaceCommandPort
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.place.domain.entity.Place
-import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 internal class PlaceCommandService(
-    private val eventPublisher: ApplicationEventPublisher,
     private val placeClientPort: PlaceClientPort,
     private val placeCommandPort: PlaceCommandPort,
     private val placeQueryPort: PlaceQueryPort,
@@ -31,17 +28,9 @@ internal class PlaceCommandService(
             ?: createPlace(command)
 
     private fun createPlace(command: CreatePlaceIfNotExistsUseCase.Command): Long {
-        val place = placeCommandPort.savePlace(
-            Place.create(
-                name = command.name,
-                kakaoPlaceId = command.kakaoPlaceId,
-                address = command.address,
-                latitude = command.latitude,
-                longitude = command.longitude,
-                phoneNumber = command.phoneNumber,
-            ),
-        )
-        eventPublisher.publishEvent(PlaceCreateEvent.from(place))
+        val place = Place.create(command.toCreateCommand()) { place ->
+            placeCommandPort.savePlace(place)
+        }
         return place.id
     }
 

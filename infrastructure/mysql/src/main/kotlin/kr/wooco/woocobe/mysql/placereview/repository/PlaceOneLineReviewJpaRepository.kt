@@ -7,18 +7,21 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 interface PlaceOneLineReviewJpaRepository : JpaRepository<PlaceOneLineReviewJpaEntity, Long> {
-    fun findAllByPlaceReviewIdInOrderByCreatedAt(placeReviewIds: List<Long>): List<PlaceOneLineReviewJpaEntity>
+    fun findAllByPlaceReviewIdIn(placeReviewIds: List<Long>): List<PlaceOneLineReviewJpaEntity>
 
     @Query(
         """
-    SELECT new kr.wooco.woocobe.core.placereview.application.service.dto.PlaceOneLineReviewStat(
-        polr.contents, COUNT(polr.contents)
-    )
-    FROM PlaceOneLineReviewJpaEntity polr
-    WHERE polr.placeId = :placeId
-    GROUP BY polr.contents
-    ORDER BY COUNT(polr.contents) DESC
-""",
+            SELECT new kr.wooco.woocobe.core.placereview.application.service.dto.PlaceOneLineReviewStat(
+                polr.contents, COUNT(polr.contents)
+            )
+            FROM PlaceOneLineReviewJpaEntity polr
+            JOIN PlaceReviewJpaEntity pr 
+              ON pr.id = polr.placeReviewId
+            WHERE pr.status = 'ACTIVE'
+              AND pr.placeId = :placeId
+            GROUP BY polr.contents
+            ORDER BY COUNT(polr.contents) DESC
+        """,
     )
     fun findPlaceOneLineReviewStatsByPlaceId(
         placeId: Long,

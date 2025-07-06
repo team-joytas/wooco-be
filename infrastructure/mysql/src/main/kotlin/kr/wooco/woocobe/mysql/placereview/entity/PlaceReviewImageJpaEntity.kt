@@ -4,6 +4,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.mysql.common.entity.BaseTimeEntity
 import kr.wooco.woocobe.mysql.common.utils.Tsid
 
@@ -17,4 +18,17 @@ class PlaceReviewImageJpaEntity(
     @Id @Tsid
     @Column(name = "place_review_images_id")
     override val id: Long = 0L,
-) : BaseTimeEntity()
+) : BaseTimeEntity() {
+    companion object {
+        fun listOf(
+            placeReview: PlaceReview,
+            placeReviewJpaEntity: PlaceReviewJpaEntity,
+        ): List<PlaceReviewImageJpaEntity> =
+            placeReview.imageUrls.map { imageUrl ->
+                PlaceReviewImageJpaEntity(
+                    placeReviewId = placeReviewJpaEntity.id,
+                    imageUrl = imageUrl,
+                )
+            }
+    }
+}
