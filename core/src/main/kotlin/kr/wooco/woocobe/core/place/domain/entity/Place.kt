@@ -2,9 +2,10 @@ package kr.wooco.woocobe.core.place.domain.entity
 
 import kr.wooco.woocobe.core.common.domain.entity.AggregateRoot
 import kr.wooco.woocobe.core.place.domain.command.CreatePlaceCommand
-import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
+import kr.wooco.woocobe.core.place.domain.event.PlaceCreatedEvent
 
 // TODO: 썸네일 처리 기능 개선, 통계성 데이터로 따로 빼기
+// TODO: Place VO 값으로 개선 필요 (placeInfo, placeGeoLocation)
 data class Place(
     override val id: Long,
     val name: String,
@@ -12,7 +13,7 @@ data class Place(
     val longitude: Double,
     val address: String,
     val kakaoPlaceId: String,
-    val averageRating: Double, //
+    val averageRating: Double,
     val reviewCount: Long,
     val phoneNumber: String,
     val thumbnailUrl: String,
@@ -21,7 +22,6 @@ data class Place(
         require(reviewCount >= 0) { "리뷰 수는 0 미만으로 설정할 수 없습니다." }
     }
 
-    // TODO: ReadModel 로 리팩토링 예정
     fun updateThumbnail(thumbnailUrl: String): Place =
         copy(
             thumbnailUrl = thumbnailUrl,
@@ -61,7 +61,7 @@ data class Place(
                 it.copy(id = identifier.invoke(it))
             }.also {
                 it.registerEvent(
-                    PlaceCreateEvent.from(it),
+                    PlaceCreatedEvent.from(it),
                 )
             }
     }

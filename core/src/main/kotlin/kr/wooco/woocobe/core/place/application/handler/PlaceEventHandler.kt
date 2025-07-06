@@ -3,7 +3,7 @@ package kr.wooco.woocobe.core.place.application.handler
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdateAverageRatingUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdatePlaceImageUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdateReviewStatsUseCase
-import kr.wooco.woocobe.core.place.domain.event.PlaceCreateEvent
+import kr.wooco.woocobe.core.place.domain.event.PlaceCreatedEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewCreatedEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewDeletedEvent
 import kr.wooco.woocobe.core.placereview.domain.event.PlaceReviewUpdatedEvent
@@ -20,7 +20,7 @@ internal class PlaceEventHandler(
 ) {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    fun handlePlaceCreateEvent(event: PlaceCreateEvent) {
+    fun handlePlaceCreateEvent(event: PlaceCreatedEvent) {
         updatePlaceImageUseCase.updatePlaceImage(UpdatePlaceImageUseCase.Command(event.placeId))
     }
 
