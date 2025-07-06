@@ -8,6 +8,7 @@ import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.exception.NotExistsPlaceReviewException
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceOneLineReviewJpaEntity
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewImageJpaEntity
+import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewJpaEntity
 import kr.wooco.woocobe.mysql.placereview.repository.PlaceOneLineReviewJpaRepository
 import kr.wooco.woocobe.mysql.placereview.repository.PlaceReviewImageJpaRepository
 import kr.wooco.woocobe.mysql.placereview.repository.PlaceReviewJpaRepository
@@ -39,49 +40,39 @@ internal class PlaceReviewPersistenceAdapter(
     }
 
     override fun getByPlaceReviewId(placeReviewId: Long): PlaceReview {
-        val placeReviewEntity = placeReviewJpaRepository.findByIdOrNull(placeReviewId)
+        val placeReviewJpaEntity = placeReviewJpaRepository.findByIdOrNull(placeReviewId)
             ?: throw NotExistsPlaceReviewException
-        val placeOneLineReviewEntities = placeOneLineReviewJpaRepository
-            .findAllByPlaceReviewId(placeReviewEntity.id)
-        val placeReviewImageEntities = placeReviewImageJpaRepository
-            .findAllByPlaceReviewId(placeReviewEntity.id)
+        val placeOneLineReviewJpaEntities = placeOneLineReviewJpaRepository
+            .findAllByPlaceReviewId(placeReviewJpaEntity.id)
+        val placeReviewImageJpaEntities = placeReviewImageJpaRepository
+            .findAllByPlaceReviewId(placeReviewJpaEntity.id)
         return PlaceReviewPersistenceMapper.toDomainEntity(
-            placeReviewEntity,
-            placeOneLineReviewEntities,
-            placeReviewImageEntities,
+            placeReviewJpaEntity,
+            placeOneLineReviewJpaEntities,
+            placeReviewImageJpaEntities,
         )
     }
 
     override fun getAllByPlaceId(placeId: Long): List<PlaceReview> {
-        val placeReviewEntities = placeReviewJpaRepository.findAllByPlaceId(placeId)
-        val placeOneLineReviewEntities = placeOneLineReviewJpaRepository
-            .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-        val placeReviewImageEntities = placeReviewImageJpaRepository
-            .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-        return placeReviewEntities.map { placeReviewEntity ->
-            PlaceReviewPersistenceMapper.toDomainEntity(
-                placeReviewJpaEntity = placeReviewEntity,
-                placeOneLineReviewJpaEntities = placeOneLineReviewEntities
-                    .filter { it.placeReviewId == placeReviewEntity.id },
-                placeReviewImageJpaEntities = placeReviewImageEntities
-                    .filter { it.placeReviewId == placeReviewEntity.id },
-            )
-        }
+        val placeReviewJpaEntities = placeReviewJpaRepository.findAllByPlaceId(placeId)
+        return convertPlaceReviews(placeReviewJpaEntities)
     }
 
     override fun getAllByUserId(userId: Long): List<PlaceReview> {
-        val placeReviewEntities = placeReviewJpaRepository.findAllByUserId(userId)
-        val placeOneLineReviewEntities = placeOneLineReviewJpaRepository
-            .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-        val placeReviewImageEntities = placeReviewImageJpaRepository
-            .findAllByPlaceReviewIdIn(placeReviewEntities.map { it.id })
-        return placeReviewEntities.map { placeReviewEntity ->
+        val placeReviewJpaEntities = placeReviewJpaRepository.findAllByUserId(userId)
+        return convertPlaceReviews(placeReviewJpaEntities)
+    }
+
+    private fun convertPlaceReviews(placeReviewJpaEntities: List<PlaceReviewJpaEntity>): List<PlaceReview> {
+        val placeReviewIds = placeReviewJpaEntities.map { it.id }
+        val placeOneLineReviewJpaEntities = placeOneLineReviewJpaRepository.findAllByPlaceReviewIdIn(placeReviewIds)
+        val placeReviewImageJpaEntities = placeReviewImageJpaRepository.findAllByPlaceReviewIdIn(placeReviewIds)
+
+        return placeReviewJpaEntities.map { placeReviewJpaEntity ->
             PlaceReviewPersistenceMapper.toDomainEntity(
-                placeReviewJpaEntity = placeReviewEntity,
-                placeOneLineReviewEntities
-                    .filter { it.placeReviewId == placeReviewEntity.id },
-                placeReviewImageJpaEntities = placeReviewImageEntities
-                    .filter { it.placeReviewId == placeReviewEntity.id },
+                placeReviewJpaEntity = placeReviewJpaEntity,
+                placeOneLineReviewJpaEntities = placeOneLineReviewJpaEntities.filter { it.placeReviewId == placeReviewJpaEntity.id },
+                placeReviewImageJpaEntities = placeReviewImageJpaEntities.filter { it.placeReviewId == placeReviewJpaEntity.id },
             )
         }
     }
@@ -100,8 +91,4 @@ internal class PlaceReviewPersistenceAdapter(
         placeOneLineReviewJpaRepository.findPlaceOneLineReviewStatsByPlaceId(placeId, PageRequest.of(0, 5))
 
     override fun countByUserId(userId: Long): Long = placeReviewJpaRepository.countByUserId(userId)
-
-    override fun deleteAllByPlaceReviewId(placeReviewId: Long) {
-        placeOneLineReviewJpaRepository.deleteAllByPlaceReviewId(placeReviewId)
-    }
 }
