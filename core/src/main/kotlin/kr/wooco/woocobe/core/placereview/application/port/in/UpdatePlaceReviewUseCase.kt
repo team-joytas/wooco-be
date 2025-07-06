@@ -1,8 +1,7 @@
 package kr.wooco.woocobe.core.placereview.application.port.`in`
 
 import kr.wooco.woocobe.core.placereview.domain.command.UpdatePlaceReviewCommand
-import kr.wooco.woocobe.core.placereview.domain.vo.PlaceOneLineReview
-import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewContent
+import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.vo.PlaceReviewRating
 
 fun interface UpdatePlaceReviewUseCase {
@@ -18,8 +17,8 @@ fun interface UpdatePlaceReviewUseCase {
             UpdatePlaceReviewCommand(
                 userId = userId,
                 rating = PlaceReviewRating(rating),
-                contents = PlaceReviewContent(contents),
-                oneLineReviews = oneLineReviews.map { PlaceOneLineReview(it) },
+                contents = PlaceReview.Contents(contents),
+                oneLineReviews = oneLineReviews.map { PlaceReview.OneLineReview(it) },
                 imageUrls = imageUrls,
             )
     }
