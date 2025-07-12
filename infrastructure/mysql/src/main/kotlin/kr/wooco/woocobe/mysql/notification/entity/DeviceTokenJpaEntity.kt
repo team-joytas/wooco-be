@@ -10,7 +10,7 @@ import kr.wooco.woocobe.mysql.common.utils.Tsid
 @Entity
 @Table(name = "device_tokens")
 class DeviceTokenJpaEntity(
-    @Column(name = "token", unique = true)
+    @Column(name = "token")
     val token: String,
     @Column(name = "user_id")
     val userId: Long,

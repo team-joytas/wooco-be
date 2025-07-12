@@ -32,9 +32,9 @@ internal class NotificationPersistenceAdapter(
             .findAllByUserIdAndStatus(userId, NotificationStatus.ACTIVE.name)
             .map { NotificationPersistenceMapper.toDomainEntity(it) }
 
-    override fun saveNotification(notification: Notification): Notification {
+    override fun saveNotification(notification: Notification): Long {
         val notificationJpaEntity = NotificationPersistenceMapper.toJpaEntity(notification)
         notificationJpaRepository.save(notificationJpaEntity)
-        return NotificationPersistenceMapper.toDomainEntity(notificationJpaEntity)
+        return notificationJpaEntity.id
     }
 }

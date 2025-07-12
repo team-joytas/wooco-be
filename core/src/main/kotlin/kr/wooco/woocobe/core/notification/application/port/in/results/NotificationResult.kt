@@ -19,7 +19,7 @@ data class NotificationResult(
                 targetId = notification.target.targetId,
                 targetName = notification.target.targetName,
                 userId = notification.userId,
-                type = notification.type.name,
+                type = notification.target.type.name,
                 createdAt = notification.createdAt,
                 readStatus = notification.readStatus.name,
             )

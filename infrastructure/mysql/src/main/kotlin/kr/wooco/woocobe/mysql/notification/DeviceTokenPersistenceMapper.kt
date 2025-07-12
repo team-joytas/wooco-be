@@ -1,8 +1,8 @@
 package kr.wooco.woocobe.mysql.notification
 
 import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken
+import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken.Token
 import kr.wooco.woocobe.core.notification.domain.vo.DeviceTokenStatus
-import kr.wooco.woocobe.core.notification.domain.vo.Token
 import kr.wooco.woocobe.mysql.notification.entity.DeviceTokenJpaEntity
 
 internal object DeviceTokenPersistenceMapper {
