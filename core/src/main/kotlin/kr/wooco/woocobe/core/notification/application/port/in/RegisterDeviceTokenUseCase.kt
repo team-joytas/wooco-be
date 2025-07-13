@@ -1,10 +1,19 @@
 package kr.wooco.woocobe.core.notification.application.port.`in`
 
+import kr.wooco.woocobe.core.notification.domain.command.RegisterDeviceTokenCommand
+import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken
+
 fun interface RegisterDeviceTokenUseCase {
     data class Command(
         val userId: Long,
         val token: String,
-    )
+    ) {
+        fun toRegisterDeviceTokenCommand(): RegisterDeviceTokenCommand =
+            RegisterDeviceTokenCommand(
+                userId = userId,
+                token = DeviceToken.Token(token),
+            )
+    }
 
     /**
      * FCM 토큰을 등록합니다.
@@ -13,5 +22,5 @@ fun interface RegisterDeviceTokenUseCase {
      *
      * @author Junseoparkk
      */
-    fun registerDeviceToken(command: Command)
+    fun registerDeviceToken(command: Command): Long
 }

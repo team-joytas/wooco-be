@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
 interface DeviceTokenJpaRepository : JpaRepository<DeviceTokenJpaEntity, Long> {
-    fun findByToken(token: String): DeviceTokenJpaEntity?
-
-    fun existsByToken(token: String): Boolean
+    fun findByUserIdAndToken(
+        userId: Long,
+        token: String,
+    ): DeviceTokenJpaEntity?
 
     @Query(
         """
