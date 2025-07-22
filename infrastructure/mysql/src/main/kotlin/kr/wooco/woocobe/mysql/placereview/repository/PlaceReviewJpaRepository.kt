@@ -65,7 +65,7 @@ interface PlaceReviewJpaRepository : JpaRepository<PlaceReviewJpaEntity, Long> {
               AND pr.status = 'ACTIVE'
         """,
     )
-    fun findTop2ByPlaceId(
+    fun findRecent2ByPlaceId(
         placeId: Long,
         pageable: Pageable,
     ): List<PlaceReviewJpaEntity>

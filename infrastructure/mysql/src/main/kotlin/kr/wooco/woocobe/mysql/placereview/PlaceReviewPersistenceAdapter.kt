@@ -92,8 +92,8 @@ internal class PlaceReviewPersistenceAdapter(
 
     override fun countByUserId(userId: Long): Long = placeReviewJpaRepository.countByUserId(userId)
 
-    override fun getTop2ByPlaceId(placeId: Long): List<PlaceReview> {
-        val placeReviewJpaEntities = placeReviewJpaRepository.findTop2ByPlaceId(placeId, PageRequest.of(0, 2))
+    override fun getRecent2ByPlaceId(placeId: Long): List<PlaceReview> {
+        val placeReviewJpaEntities = placeReviewJpaRepository.findRecent2ByPlaceId(placeId, PageRequest.of(0, 2))
         return convertPlaceReviews(placeReviewJpaEntities)
     }
 }

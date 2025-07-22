@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/places")
 class PlaceController(
-    private val createPlaceIfNotExistsUseCase: CreatePlaceIfNotExistsUseCase,
-    private val readPlaceUseCase: ReadPlaceUseCase,
     private val readPlaceWithPlaceReviewsUseCase: ReadPlaceWithPlaceReviewsUseCase,
+    private val readPlaceUseCase: ReadPlaceUseCase,
+    private val createPlaceIfNotExistsUseCase: CreatePlaceIfNotExistsUseCase,
 ) : PlaceApi {
     @GetMapping("/{placeId}")
     override fun getPlaceDetail(

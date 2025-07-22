@@ -36,7 +36,7 @@ internal class PlaceQueryService(
     override fun readPlaceWithPlaceReviews(query: ReadPlaceWithPlaceReviewsUseCase.Query): PlaceWithPlaceReviewsResult {
         val place = placeQueryPort.getByPlaceId(query.placeId)
         val placeOneLineReviewStats = placeReviewQueryPort.getAllPlaceOneLineReviewStatsByPlaceId(query.placeId)
-        val placeReviews = placeReviewQueryPort.getTop2ByPlaceId(query.placeId)
+        val placeReviews = placeReviewQueryPort.getRecent2ByPlaceId(query.placeId)
         val writerIds = placeReviews.map { it.userId }.distinct()
         val writers = userQueryPort.getAllByUserIds(writerIds)
         return PlaceWithPlaceReviewsResult.of(place, placeOneLineReviewStats, placeReviews, writers)

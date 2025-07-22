@@ -24,6 +24,5 @@ interface PlaceReviewQueryPort {
 
     fun countByUserId(userId: Long): Long
 
-    // 더 괜찮은 네이밍으로 수정 가능
-    fun getTop2ByPlaceId(placeId: Long): List<PlaceReview>
+    fun getRecent2ByPlaceId(placeId: Long): List<PlaceReview>
 }
