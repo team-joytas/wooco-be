@@ -3,7 +3,7 @@ package kr.wooco.woocobe.api.place.response
 import kr.wooco.woocobe.core.place.application.port.`in`.result.PlaceWithPlaceReviewsResult
 import java.time.LocalDateTime
 
-data class PlaceWithPlaceReviewsDetailResponse(
+data class PlaceDetailWithPlaceReviewsResponse(
     val place: PlaceDetailResponse,
     val placeReviews: List<PlaceReviewDetailResponse>,
 ) {
@@ -25,7 +25,7 @@ data class PlaceWithPlaceReviewsDetailResponse(
 
     companion object {
         fun from(placeWithPlaceReviewsResult: PlaceWithPlaceReviewsResult) =
-            PlaceWithPlaceReviewsDetailResponse(
+            PlaceDetailWithPlaceReviewsResponse(
                 place = PlaceDetailResponse.from(placeWithPlaceReviewsResult.place),
                 placeReviews = placeWithPlaceReviewsResult.placeReviews.map { placeReview ->
                     PlaceReviewDetailResponse(

@@ -3,7 +3,7 @@ package kr.wooco.woocobe.api.place
 import kr.wooco.woocobe.api.place.request.CreatePlaceRequest
 import kr.wooco.woocobe.api.place.response.CreatePlaceResponse
 import kr.wooco.woocobe.api.place.response.PlaceDetailResponse
-import kr.wooco.woocobe.api.place.response.PlaceWithPlaceReviewsDetailResponse
+import kr.wooco.woocobe.api.place.response.PlaceDetailWithPlaceReviewsResponse
 import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceIfNotExistsUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.ReadPlaceUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.ReadPlaceWithPlaceReviewsUseCase
@@ -46,9 +46,9 @@ class PlaceController(
     @GetMapping("/{placeId}/aggregation")
     override fun getPlaceDetailWithPlaceReview(
         @PathVariable placeId: Long,
-    ): ResponseEntity<PlaceWithPlaceReviewsDetailResponse> {
+    ): ResponseEntity<PlaceDetailWithPlaceReviewsResponse> {
         val query = ReadPlaceWithPlaceReviewsUseCase.Query(placeId)
         val results = readPlaceWithPlaceReviewsUseCase.readPlaceWithPlaceReviews(query)
-        return ResponseEntity.ok(PlaceWithPlaceReviewsDetailResponse.from(results))
+        return ResponseEntity.ok(PlaceDetailWithPlaceReviewsResponse.from(results))
     }
 }

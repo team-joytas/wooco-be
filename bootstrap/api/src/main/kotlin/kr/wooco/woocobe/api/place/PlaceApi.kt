@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import kr.wooco.woocobe.api.place.request.CreatePlaceRequest
 import kr.wooco.woocobe.api.place.response.CreatePlaceResponse
 import kr.wooco.woocobe.api.place.response.PlaceDetailResponse
-import kr.wooco.woocobe.api.place.response.PlaceWithPlaceReviewsDetailResponse
+import kr.wooco.woocobe.api.place.response.PlaceDetailWithPlaceReviewsResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PathVariable
@@ -25,5 +25,5 @@ interface PlaceApi {
 
     fun getPlaceDetailWithPlaceReview(
         @PathVariable placeId: Long,
-    ): ResponseEntity<PlaceWithPlaceReviewsDetailResponse>
+    ): ResponseEntity<PlaceDetailWithPlaceReviewsResponse>
 }
