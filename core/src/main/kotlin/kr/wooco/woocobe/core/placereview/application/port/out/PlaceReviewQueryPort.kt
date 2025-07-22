@@ -23,4 +23,6 @@ interface PlaceReviewQueryPort {
     fun getAllPlaceOneLineReviewStatsByPlaceId(placeId: Long): List<PlaceOneLineReviewStat>
 
     fun countByUserId(userId: Long): Long
+
+    fun getRecent2ByPlaceId(placeId: Long): List<PlaceReview>
 }

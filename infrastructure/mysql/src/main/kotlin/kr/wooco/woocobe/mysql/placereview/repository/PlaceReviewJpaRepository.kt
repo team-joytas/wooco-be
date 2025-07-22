@@ -2,6 +2,7 @@ package kr.wooco.woocobe.mysql.placereview.repository
 
 import kr.wooco.woocobe.core.placereview.application.service.dto.PlaceReviewStats
 import kr.wooco.woocobe.mysql.placereview.entity.PlaceReviewJpaEntity
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
@@ -55,4 +56,17 @@ interface PlaceReviewJpaRepository : JpaRepository<PlaceReviewJpaEntity, Long> {
     ): Boolean
 
     fun countByUserId(userId: Long): Long
+
+    @Query(
+        """
+            SELECT pr
+            FROM PlaceReviewJpaEntity pr
+            WHERE pr.placeId = :placeId
+              AND pr.status = 'ACTIVE'
+        """,
+    )
+    fun findRecent2ByPlaceId(
+        placeId: Long,
+        pageable: Pageable,
+    ): List<PlaceReviewJpaEntity>
 }
