@@ -3,8 +3,10 @@ package kr.wooco.woocobe.api.place
 import kr.wooco.woocobe.api.place.request.CreatePlaceRequest
 import kr.wooco.woocobe.api.place.response.CreatePlaceResponse
 import kr.wooco.woocobe.api.place.response.PlaceDetailResponse
+import kr.wooco.woocobe.api.place.response.PlaceWithPlaceReviewsDetailResponse
 import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceIfNotExistsUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.ReadPlaceUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.ReadPlaceWithPlaceReviewsUseCase
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 class PlaceController(
     private val createPlaceIfNotExistsUseCase: CreatePlaceIfNotExistsUseCase,
     private val readPlaceUseCase: ReadPlaceUseCase,
+    private val readPlaceWithPlaceReviewsUseCase: ReadPlaceWithPlaceReviewsUseCase,
 ) : PlaceApi {
     @GetMapping("/{placeId}")
     override fun getPlaceDetail(
@@ -38,5 +41,14 @@ class PlaceController(
         val command = request.toCommand()
         val result = createPlaceIfNotExistsUseCase.createPlaceIfNotExists(command)
         return ResponseEntity.status(HttpStatus.CREATED).body(CreatePlaceResponse(result))
+    }
+
+    @GetMapping("/{placeId}/aggregation")
+    override fun getPlaceDetailWithPlaceReview(
+        @PathVariable placeId: Long,
+    ): ResponseEntity<PlaceWithPlaceReviewsDetailResponse> {
+        val query = ReadPlaceWithPlaceReviewsUseCase.Query(placeId)
+        val results = readPlaceWithPlaceReviewsUseCase.readPlaceWithPlaceReviews(query)
+        return ResponseEntity.ok(PlaceWithPlaceReviewsDetailResponse.from(results))
     }
 }
