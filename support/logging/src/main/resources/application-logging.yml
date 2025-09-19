@@ -1,0 +1,5 @@
+logging:
+  async:
+    queue-size: ${LOGBACK_ASYNC_QUEUE_SIZE:2048}
+    never-block: ${LOGBACK_ASYNC_NEVER_BLOCK:true}
+    discarding-threshold: ${LOGBACK_ASYNC_DISCARDING_THRESHOLD:20}

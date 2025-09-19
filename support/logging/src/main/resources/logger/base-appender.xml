@@ -1,0 +1,10 @@
+<included>
+    <property name="BASE_LOG_PATTERN"
+              value="[%X{request_id:-application}] %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5.5level) ${PID:-} --- [%20thread] %-40.40logger{36} : %msg%n"/>
+
+    <appender name="BASE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${BASE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+</included>
