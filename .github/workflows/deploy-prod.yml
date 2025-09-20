@@ -2,9 +2,8 @@ name: Deploy PROD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  release:
+    types: [ published ]
 
 jobs:
   docker-build-and-push:
@@ -55,25 +54,36 @@ jobs:
           file: ./Dockerfile-api
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKER_HUB_REPOSITORY }}:${{ secrets.IMAGE_TAG }}
+          tags: ${{ secrets.DOCKER_HUB_REPOSITORY }}:${{ github.event.release.tag_name }}
 
-  docker-pull-and-run:
-    runs-on: [ self-hosted, Linux, X64, prod ]
-    environment: prod
+  # argocd image updater 도입시 제거될 예정
+  update-deployment:
+    runs-on: ubuntu-latest
     needs: docker-build-and-push
     if: success()
 
     steps:
-      - name: 배포 이미지 가져오기
-        run: |
-          sudo docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-          sudo docker pull ${{ secrets.DOCKER_HUB_REPOSITORY }}:${{ secrets.IMAGE_TAG }}
+      - name: 리포지토리 체크아웃
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ vars.ORG_GITOPS_REPOSITORY }} # team-joytas/wooco-gitops
+          token: ${{ secrets.ORG_GITOPS_PAT }}
 
-      - name: blue green 배포 스크립트 실행
-        run: |
-          sudo chmod +x deploy.sh
-          sudo ./deploy.sh
+      - name: 이미지 버전 변경 # kustomize cli 대신 yq 사용
+        uses: mikefarah/yq@v4.44.3
+        with:
+          cmd: >
+            yq -i
+            '.spec.template.spec.containers[0].image =
+            "${{ secrets.DOCKER_HUB_REPOSITORY }}:${{ github.event.release.tag_name }}"'
+            ./${{ vars.ORG_GITOPS_PROD_DEPLOYMENT_PATH }}
 
-      - name: 사용하지 않는 도커 이미지 정리
+      # https://github.com/simonw/simonw/issues/11
+      - name: 커밋 & 푸시
         run: |
-          sudo docker image prune --all --force
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "release: Deploy ${{ github.event.release.tag_name }} wooco spring app"
+          git remote set-url origin https://${{ secrets.ORG_GITOPS_PAT }}@github.com/${{ vars.ORG_GITOPS_REPOSITORY }}
+          git push --set-upstream origin HEAD
