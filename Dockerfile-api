@@ -1,8 +1,64 @@
-FROM amazoncorretto:21-alpine-jdk
+# Distroless 기반 이미지로 마이그레이션 검토
+#============================ STAGE: JDEPS 의존성 분석 ============================
+FROM amazoncorretto:21-alpine3.21 AS deps
+
+COPY ./build/libs/api-*.jar /app/app.jar
+
+RUN mkdir /app/unpacked \
+    && cd /app/unpacked \
+    && unzip ../app.jar \
+    && cd .. \
+    && $JAVA_HOME/bin/jdeps \
+    --ignore-missing-deps \
+    --print-module-deps \
+    --recursive -q \
+    --multi-release 21 \
+    --class-path="./unpacked/BOOT-INF/lib/*" \
+    --module-path="./unpacked/BOOT-INF/lib/*" \
+    ./app.jar > /deps.info
+
+
+#============================ STAGE: JRE 생성 ============================
+FROM amazoncorretto:21-alpine3.21 AS jre-builder
+
+RUN apk add --no-cache binutils
+
+COPY --from=deps /deps.info /deps.info
+
+# crypto 모듈: SSLHandshakeException 오류 해결용
+# jcmd 모듈: jvm 디버깅용
+ENV EXTRA_MODULES="jdk.crypto.ec,jdk.jcmd"
+RUN $JAVA_HOME/bin/jlink \
+    --verbose \
+    --add-modules "$(cat /deps.info),${EXTRA_MODULES}" \
+    --strip-debug \
+    --no-man-pages \
+    --no-header-files \
+    --compress=2 \
+    --output /opt/jre-min
+
+
+#============================ STAGE:3 alpine3.21 기반 런타임 이미지 ============================
+FROM alpine:3.21
+
+RUN addgroup -g 1000 appuser \
+    && adduser -D -u 1000 -G appuser -H -s /sbin/nologin appuser
+
+COPY --from=jre-builder /opt/jre-min /opt/jre
 
 WORKDIR /app
-COPY ./build/libs/api-*.jar /app/wooco-be.jar
+COPY --chown=appuser:appuser ./build/libs/api-*.jar /app/app.jar
 
+USER appuser:appuser
+
+ENV JAVA_HOME=/opt/jre
+ENV PATH="$JAVA_HOME/bin:${PATH}"
 ENV TZ=Asia/Seoul
+ENV JAVA_TOOL_OPTIONS="\
+  -Duser.timezone=Asia/Seoul \
+  -Djava.io.tmpdir=/tmp \
+  -Djava.net.preferIPv4Stack=true"
 
-CMD ["java", "-jar", "-Djava.net.preferIPv4Stack=true", "wooco-be.jar"]
+COPY --chown=appuser:appuser --chmod=0755 ./scripts/run.sh /app/run.sh
+
+ENTRYPOINT ["/app/run.sh"]
