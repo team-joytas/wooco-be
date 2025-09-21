@@ -1,0 +1,36 @@
+<included>
+    <appender name="JSON_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <immediateFlush>true</immediateFlush>
+
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>
+                <logLevel/>
+                <loggerName/>
+                <threadName/>
+                <message/>
+                <mdc>
+                    <includeMdcKeyName>request_id</includeMdcKeyName>
+                </mdc>
+
+                <stackTrace>
+                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <maxDepthPerThrowable>50</maxDepthPerThrowable>
+                        <maxLength>4096</maxLength>
+                        <shortenedClassNameLength>20</shortenedClassNameLength>
+                        <rootCauseFirst>true</rootCauseFirst>
+                        <inlineHash>true</inlineHash>
+                        <exclude>^sun\.reflect\..*</exclude>
+                        <exclude>^jdk\.internal\.reflect\..*</exclude>
+                        <exclude>^org\.slf4j\..*</exclude>
+                        <exclude>^ch\.qos\.logback\..*</exclude>
+                        <exclude>^net\.logstash\.logback\..*</exclude>
+                        <exclude>^org\.apache\.commons\.logging\..*</exclude>
+                        <exclude>^java\.util\.logging\..*</exclude>
+                        <exclude>^org\.apache\.logging\..*</exclude>
+                    </throwableConverter>
+                </stackTrace>
+            </providers>
+        </encoder>
+    </appender>
+</included>

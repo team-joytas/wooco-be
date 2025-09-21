@@ -1,0 +1,15 @@
+<!-- wrapper 용도 ROOT_DELEGATE 필수 적용해야함 -->
+<included>
+    <springProperty scope="context" name="ASYNC_QUEUE_SIZE" source="logging.async.queue-size"/>
+    <springProperty scope="context" name="ASYNC_NEVER_BLOCK" source="logging.async.never-block"/>
+    <springProperty scope="context" name="ASYNC_DISCARDING_THRESHOLD" source="logging.async.discarding-threshold"/>
+
+    <appender name="ASYNC_WRAPPER" class="ch.qos.logback.classic.AsyncAppender">
+        <includeCallerData>false</includeCallerData>
+        <queueSize>${ASYNC_QUEUE_SIZE}</queueSize>
+        <neverBlock>${ASYNC_NEVER_BLOCK}</neverBlock>
+        <discardingThreshold>${ASYNC_DISCARDING_THRESHOLD}</discardingThreshold>
+
+        <appender-ref ref="${ROOT_DELEGATE}"/>
+    </appender>
+</included>
