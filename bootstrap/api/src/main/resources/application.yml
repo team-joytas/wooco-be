@@ -1,6 +1,3 @@
-server.shutdown: graceful
-server.forward-headers-strategy: native
-
 spring.application.name: wooco-be-api
 spring.config.import: optional:classpath:.env[.properties]
 spring.profiles.active: ${PROFILE:local}
@@ -12,8 +9,16 @@ spring.profiles.include:
   - rest
   - metric
   - fcm
+  - logging
+
+server:
+  http2.enabled: true # upstream 통신 h2c 지원
+  shutdown: graceful
+  forward-headers-strategy: native
 
 spring:
+  main:
+    banner-mode: off
   lifecycle:
     timeout-per-shutdown-phase: ${SHUTDOWN_PHASE_TIMEOUT:20s}
 

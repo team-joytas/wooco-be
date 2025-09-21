@@ -3,4 +3,9 @@ management:
   endpoints:
     web:
       exposure:
-        include: ${ACTUATOR_INCLUDE:health,prometheus}
+        include: ${ACTUATOR_INCLUDE:health,info,prometheus}
+  endpoint:
+    health:
+      show-details: never # TODO: 인증쪽 개선전까진 `when_authorized` 대신 `never` 로 진행
+      probes:
+        enabled: true

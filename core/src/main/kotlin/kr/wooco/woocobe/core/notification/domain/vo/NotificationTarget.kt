@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.core.notification.domain.vo
 
-data class Target(
+data class NotificationTarget(
     val targetId: Long,
     val targetName: String,
+    val type: NotificationType,
 )
