@@ -4,6 +4,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.OrRequestMatcher
 
+// TODO [HONG]: 커스텀 어노테이션 관리 고려
 object SecurityIgnorePath {
     val ignoreRequestMatcher: OrRequestMatcher = initIgnorePaths()
 
@@ -23,6 +24,7 @@ object SecurityIgnorePath {
             append(path = "/api/v1/reviews/{placeReviewId:[0-9]+}", method = HttpMethod.GET),
             append(path = "/api/v1/reviews/places/{placeId:[0-9]+}", method = HttpMethod.GET),
             append(path = "/api/v1/reviews/places/users/{userId:[0-9]+}", method = HttpMethod.GET),
+            append(path = "/api/v1/places/{placeId[0-9]+}/aggregation", method = HttpMethod.GET),
             // auth
             append(path = "/api/v1/auth/reissue", method = HttpMethod.POST),
             append(path = "/api/v1/auth/{provider}/social-login", method = HttpMethod.POST),
