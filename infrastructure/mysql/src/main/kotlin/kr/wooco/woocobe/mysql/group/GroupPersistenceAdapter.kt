@@ -15,7 +15,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-class GroupPersistenceAdapter(
+internal class GroupPersistenceAdapter(
     private val groupJpaRepository: GroupJpaRepository,
     private val groupUserJpaRepository: GroupUserJpaRepository,
 ) : GroupCommandPort,
@@ -54,17 +54,15 @@ class GroupPersistenceAdapter(
             status = GroupUser.Status.ACTIVE.name,
         )
         val groupIds = groupUserJpaEntities.map { it.groupId }
-        if (groupIds.isEmpty()) return emptyList()
-
         val groupJpaEntities = groupJpaRepository.findAllByIdInAndStatus(
             groupIds = groupIds,
             status = Status.ACTIVE.name
         )
-        val allGroupUsers = groupUserJpaRepository.findAllByGroupIdIn(groupIds).groupBy { it.groupId }
-        return groupJpaEntities.map { groupJpaEntity ->
-            val groupUsers = allGroupUsers[groupJpaEntity.id].orEmpty()
-            GroupPersistenceMapper.toReadModel(groupJpaEntity, groupUsers)
-        }
+        val allGroupUsers = groupUserJpaRepository.findAllByGroupIdIn(groupIds)
+        return GroupPersistenceMapper.toReadModels(
+            groupJpaEntities = groupJpaEntities,
+            groupUserJpaEntities = allGroupUsers,
+        )
     }
 
     private fun findAllGroupUserActiveByGroupId(groupId: Long): List<GroupUserJpaEntity> =

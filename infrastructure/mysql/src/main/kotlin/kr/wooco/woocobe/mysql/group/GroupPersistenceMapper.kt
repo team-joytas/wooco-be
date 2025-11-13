@@ -46,4 +46,15 @@ internal object GroupPersistenceMapper {
             },
             groupSize = groupUserJpaEntities.size,
         )
+
+    fun toReadModels(
+        groupJpaEntities: List<GroupJpaEntity>,
+        groupUserJpaEntities: List<GroupUserJpaEntity>,
+    ): List<GroupView> {
+        val groupedUsers = groupUserJpaEntities.groupBy { it.userId }
+        return groupJpaEntities.map { groupJpaEntity ->
+            val groupUsers = groupedUsers[groupJpaEntity.id].orEmpty()
+            toReadModel(groupJpaEntity, groupUsers)
+        }
+    }
 }
