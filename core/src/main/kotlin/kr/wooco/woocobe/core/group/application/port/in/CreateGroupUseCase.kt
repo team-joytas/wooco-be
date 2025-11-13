@@ -7,13 +7,11 @@ fun interface CreateGroupUseCase {
     data class Command(
         val userId: Long,
         val name: String,
-        val type: String,
     ) {
         fun toCreateCommand(): CreateGroupCommand =
             CreateGroupCommand(
                 userId = userId,
                 name = Group.Name(name),
-                type = Group.Type.valueOf(type),
             )
     }
 

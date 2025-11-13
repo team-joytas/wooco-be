@@ -21,7 +21,6 @@ data class Group(
     override val id: Long,
     val ownerId: Long,
     val name: Name,
-    val type: Type,
     val inviteCode: GroupInviteCode,
     val users: List<GroupUser>,
     val status: Status,
@@ -37,7 +36,6 @@ data class Group(
         }
     }
 
-    enum class Type { PERSONAL, TEAM }
     enum class Status { ACTIVE, DELETED }
 
     fun updateInfo(command: UpdateGroupInfoCommand): Group {
@@ -69,7 +67,6 @@ data class Group(
         requireActive()
         if (users.any { it.userId == command.userId }) throw AlreadyGroupMemberException
         if (users.size >= MAX_USERS_SIZE) throw GroupUserLimitExceededException
-        if (type == Type.PERSONAL) throw InvalidGroupOperationException
         return copy(
             users = users + GroupUser.createMember(groupId = this.id, userId = command.userId)
         )
@@ -123,7 +120,6 @@ data class Group(
                 id = 0L,
                 ownerId = command.userId,
                 name = command.name,
-                type = command.type,
                 inviteCode = GroupInviteCode.generate(),
                 users = listOf(GroupUser.createOwner(0L, command.userId)),
                 status = Status.ACTIVE,

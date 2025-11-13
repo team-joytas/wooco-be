@@ -9,7 +9,6 @@ data class GroupView(
     val id: Long,
     val ownerId: Long,
     val name: String,
-    val type: String,
     val inviteCode: String,
     val users: List<GroupUserView>,
     val groupSize: Int,

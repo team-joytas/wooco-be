@@ -15,7 +15,6 @@ internal object GroupPersistenceMapper {
             id = groupJpaEntity.id,
             ownerId = groupJpaEntity.ownerId,
             name = Group.Name(groupJpaEntity.name),
-            type = Group.Type.valueOf(groupJpaEntity.type),
             inviteCode = GroupInviteCode(groupJpaEntity.inviteCode),
             users = groupUserJpaEntities.map(GroupUserPersistenceMapper::toDomainEntity),
             status = Group.Status.valueOf(groupJpaEntity.status),
@@ -26,7 +25,6 @@ internal object GroupPersistenceMapper {
             id = group.id,
             ownerId = group.ownerId,
             name = group.name.value,
-            type = group.type.name,
             inviteCode = group.inviteCode.value,
             status = group.status.name,
         )
@@ -39,7 +37,6 @@ internal object GroupPersistenceMapper {
             id = groupJpaEntity.id,
             ownerId = groupJpaEntity.ownerId,
             name = groupJpaEntity.name,
-            type = groupJpaEntity.type,
             inviteCode = groupJpaEntity.inviteCode,
             users = groupUserJpaEntities.map {
                 GroupView.GroupUserView(

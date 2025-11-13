@@ -14,8 +14,6 @@ data class GroupJpaEntity(
     val status: String,
     @Column(name = "invite_code")
     val inviteCode: String,
-    @Column(name = "type")
-    val type: String,
     @Column(name = "name")
     val name: String,
     @Column(name = "owner_id")

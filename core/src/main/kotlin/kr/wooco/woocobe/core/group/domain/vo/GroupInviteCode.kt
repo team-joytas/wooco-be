@@ -2,7 +2,6 @@ package kr.wooco.woocobe.core.group.domain.vo
 
 import java.util.UUID
 
-// TODO: 암호화 로직 필요
 data class GroupInviteCode(
     val value: String,
 ) {

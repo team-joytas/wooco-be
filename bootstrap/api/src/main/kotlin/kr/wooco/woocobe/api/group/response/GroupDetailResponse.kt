@@ -6,7 +6,6 @@ data class GroupDetailResponse(
     val id: Long,
     val ownerId: Long,
     val name: String,
-    val type: String,
     val inviteCode: String,
     val groupSize: Int,
     val users: List<GroupUserResponse>,
@@ -25,7 +24,6 @@ data class GroupDetailResponse(
                 id = result.id,
                 ownerId = result.ownerId,
                 name = result.name,
-                type = result.type,
                 inviteCode = result.inviteCode,
                 users = result.users.map { user ->
                     GroupUserResponse(

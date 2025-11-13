@@ -5,7 +5,6 @@ CREATE TABLE `groups`
     group_id     BIGINT PRIMARY KEY,
     owner_id     BIGINT      NOT NULL,
     name         VARCHAR(50) NOT NULL,
-    type         VARCHAR(20) NOT NULL,
     invite_code        VARCHAR(50) NOT NULL,
     group_status VARCHAR(20) NOT NULL,
     created_at   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -7,7 +7,6 @@ data class GroupResult(
     val id: Long,
     val ownerId: Long,
     val name: String,
-    val type: String,
     val inviteCode: String,
     val users: List<GroupUserResult>,
     val groupSize: Int,
@@ -29,7 +28,6 @@ data class GroupResult(
                 id = groupView.id,
                 ownerId = groupView.ownerId,
                 name = groupView.name,
-                type = groupView.type,
                 inviteCode = groupView.inviteCode,
                 users = groupView.users.map { groupUser ->
                     val user = requireNotNull(userMap[groupUser.userId])
