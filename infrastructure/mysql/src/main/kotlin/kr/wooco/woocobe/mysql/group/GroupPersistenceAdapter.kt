@@ -4,7 +4,8 @@ import kr.wooco.woocobe.core.group.application.port.out.GroupCommandPort
 import kr.wooco.woocobe.core.group.application.port.out.GroupQueryPort
 import kr.wooco.woocobe.core.group.application.port.out.dto.GroupView
 import kr.wooco.woocobe.core.group.domain.entity.Group
-import kr.wooco.woocobe.core.group.domain.entity.GroupUser.Status
+import kr.wooco.woocobe.core.group.domain.entity.Group.Status
+import kr.wooco.woocobe.core.group.domain.entity.GroupUser
 import kr.wooco.woocobe.core.group.domain.exception.InvalidInviteCodeException
 import kr.wooco.woocobe.core.group.domain.exception.NotExistsGroupException
 import kr.wooco.woocobe.mysql.group.entity.GroupUserJpaEntity
@@ -40,25 +41,26 @@ class GroupPersistenceAdapter(
         return GroupPersistenceMapper.toDomainEntity(groupJpaEntity, groupUserJpaEntities)
     }
 
-    override fun getViewByIdAndStatus(groupId: Long, status: Group.Status): GroupView {
-        val groupJpaEntity = groupJpaRepository.findByIdAndStatus(id = groupId, status = status.name)
+    override fun getViewByIdWithActive(groupId: Long): GroupView {
+        val groupJpaEntity = groupJpaRepository.findByIdAndStatus(id = groupId, status = Status.ACTIVE.name)
             ?: throw NotExistsGroupException
         val groupUserJpaEntities = findAllGroupUserActiveByGroupId(groupId)
         return GroupPersistenceMapper.toReadModel(groupJpaEntity, groupUserJpaEntities)
     }
 
-    override fun getViewAllByUserIdAndStatus(userId: Long, status: Group.Status): List<GroupView> {
+    override fun getViewAllByUserIdWithActive(userId: Long): List<GroupView> {
         val groupUserJpaEntities = groupUserJpaRepository.findAllByUserIdAndStatus(
             userId = userId,
-            status = status.name,
+            status = GroupUser.Status.ACTIVE.name,
         )
         val groupIds = groupUserJpaEntities.map { it.groupId }
-
         if (groupIds.isEmpty()) return emptyList()
 
-        val groupJpaEntities = groupJpaRepository.findAllByIdInAndStatus(groupIds = groupIds, status = status.name)
+        val groupJpaEntities = groupJpaRepository.findAllByIdInAndStatus(
+            groupIds = groupIds,
+            status = Status.ACTIVE.name
+        )
         val allGroupUsers = groupUserJpaRepository.findAllByGroupIdIn(groupIds).groupBy { it.groupId }
-
         return groupJpaEntities.map { groupJpaEntity ->
             val groupUsers = allGroupUsers[groupJpaEntity.id].orEmpty()
             GroupPersistenceMapper.toReadModel(groupJpaEntity, groupUsers)
