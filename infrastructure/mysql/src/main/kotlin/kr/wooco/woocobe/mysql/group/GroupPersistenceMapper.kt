@@ -51,7 +51,7 @@ internal object GroupPersistenceMapper {
         groupJpaEntities: List<GroupJpaEntity>,
         groupUserJpaEntities: List<GroupUserJpaEntity>,
     ): List<GroupView> {
-        val groupedUsers = groupUserJpaEntities.groupBy { it.userId }
+        val groupedUsers = groupUserJpaEntities.groupBy { it.groupId }
         return groupJpaEntities.map { groupJpaEntity ->
             val groupUsers = groupedUsers[groupJpaEntity.id].orEmpty()
             toReadModel(groupJpaEntity, groupUsers)
