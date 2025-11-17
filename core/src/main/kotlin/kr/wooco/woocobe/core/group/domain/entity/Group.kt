@@ -65,7 +65,7 @@ data class Group(
 
     fun join(command: JoinGroupCommand): Group {
         requireActive()
-        if (users.any { it.userId == command.userId }) throw AlreadyGroupMemberException
+        if (hasMember(command.userId)) throw AlreadyGroupMemberException
         if (users.size >= MAX_USERS_SIZE) throw GroupUserLimitExceededException
         return copy(
             users = users + GroupUser.createMember(groupId = this.id, userId = command.userId)
@@ -90,12 +90,15 @@ data class Group(
         )
     }
 
+    private fun hasMember(userId: Long): Boolean =
+        users.any { it.userId == userId }
+
     private fun requireActive() {
         if (status != Status.ACTIVE) throw GroupAlreadyDeletedException
     }
 
     private fun requireMember(userId: Long) {
-        if (users.none { it.userId == userId }) throw NotGroupMemberException
+        if (!hasMember(userId)) throw NotGroupMemberException
     }
 
     private fun requireOwner(userId: Long) {
