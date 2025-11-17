@@ -40,7 +40,7 @@ data class Group(
 
     fun updateInfo(command: UpdateGroupInfoCommand): Group {
         requireActive()
-        requireMember(command.userId)
+        if (!hasMember(command.userId)) throw NotGroupMemberException
         return copy(
             name = command.name
         )
@@ -57,7 +57,7 @@ data class Group(
 
     fun generateInviteCode(command: GenerateInviteCodeCommand): Group {
         requireActive()
-        requireMember(command.userId)
+        if (!hasMember(command.userId)) throw NotGroupMemberException
         return copy(
             inviteCode = GroupInviteCode.generate()
         )
@@ -74,7 +74,7 @@ data class Group(
 
     fun leave(command: LeaveGroupCommand): Group {
         requireActive()
-        requireMember(command.userId)
+        if (!hasMember(command.userId)) throw NotGroupMemberException
         if (command.userId == ownerId && users.size > 1) throw InvalidGroupOperationException
         return copy(
             users = users.filterNot { it.userId == command.userId }
@@ -95,10 +95,6 @@ data class Group(
 
     private fun requireActive() {
         if (status != Status.ACTIVE) throw GroupAlreadyDeletedException
-    }
-
-    private fun requireMember(userId: Long) {
-        if (!hasMember(userId)) throw NotGroupMemberException
     }
 
     private fun requireOwner(userId: Long) {
