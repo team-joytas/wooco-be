@@ -18,7 +18,7 @@ CREATE TABLE group_users
     user_id       BIGINT      NOT NULL,
     role          VARCHAR(20) NOT NULL,
     status        VARCHAR(20) NOT NULL,
-    joined_at     TIMESTAMP   NOT NULL,
+    joined_at     DATE   NOT NULL,
     created_at    TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

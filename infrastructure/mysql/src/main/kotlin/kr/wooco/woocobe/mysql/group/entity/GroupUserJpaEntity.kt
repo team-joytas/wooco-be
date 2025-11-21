@@ -7,7 +7,7 @@ import jakarta.persistence.Table
 import kr.wooco.woocobe.core.group.domain.entity.Group
 import kr.wooco.woocobe.mysql.common.entity.BaseTimeEntity
 import kr.wooco.woocobe.mysql.common.utils.Tsid
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 @Entity
 @Table(name = "group_users")
@@ -15,7 +15,7 @@ data class GroupUserJpaEntity(
     @Column(name = "status")
     val status: String,
     @Column(name = "joined_at")
-    val joinedAt: LocalDateTime,
+    val joinedAt: LocalDate,
     @Column(name = "role")
     val role: String,
     @Column(name = "user_id")

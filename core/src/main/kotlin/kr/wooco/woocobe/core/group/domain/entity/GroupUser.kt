@@ -1,7 +1,7 @@
 package kr.wooco.woocobe.core.group.domain.entity
 
 import kr.wooco.woocobe.core.common.domain.entity.DomainEntity
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 data class GroupUser(
     override val id: Long,
@@ -14,7 +14,7 @@ data class GroupUser(
 
     @JvmInline
     value class JoinedAt(
-        val value: LocalDateTime,
+        val value: LocalDate,
     )
 
     enum class Role { OWNER, MEMBER }
@@ -38,7 +38,7 @@ data class GroupUser(
                 groupId = groupId,
                 userId = userId,
                 role = role,
-                joinedAt = JoinedAt(LocalDateTime.now()),
+                joinedAt = JoinedAt(LocalDate.now()),
                 status = Status.ACTIVE,
             )
     }
