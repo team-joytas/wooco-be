@@ -13,6 +13,7 @@ import kr.wooco.woocobe.mysql.group.repository.GroupJpaRepository
 import kr.wooco.woocobe.mysql.group.repository.GroupUserJpaRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 internal class GroupPersistenceAdapter(
@@ -20,6 +21,7 @@ internal class GroupPersistenceAdapter(
     private val groupUserJpaRepository: GroupUserJpaRepository,
 ) : GroupCommandPort,
     GroupQueryPort {
+    @Transactional
     override fun save(group: Group): Long {
         val groupJpaEntity = groupJpaRepository.save(GroupPersistenceMapper.toJpaEntity(group))
         groupUserJpaRepository.deleteAllInBatchByGroupId(groupJpaEntity.id)

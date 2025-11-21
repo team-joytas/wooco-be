@@ -22,7 +22,6 @@ class GroupCommandService(
     UpdateGroupInfoUseCase,
     ExpelGroupUserUseCase,
     GenerateInviteCodeUseCase {
-    @Transactional
     override fun createGroup(command: CreateGroupUseCase.Command): Long {
         val group = Group.create(command.toCreateCommand()) { groupCommandPort.save(it) }
         return group.id
