@@ -172,7 +172,7 @@ class PlaceCommandServiceTest {
      * createPlaceIfNotExists 성공 – 동일 kakaoPlaceId가 이미 있으면 기존 placeId를 반환하고 새로 생성하지 않는다.
      */
     @Test
-    @DisplayName("성공: 이미 존재하면 기존 placeId를 반환하고 새로 생성하지 않는다")
+    @DisplayName("성공: 이미 장소가 존재하면 기존 placeId를 반환하고 새로 생성하지 않는다")
     fun createExists() {
         // given
         val kakaoPlaceId = "kakao-123"
@@ -203,8 +203,8 @@ class PlaceCommandServiceTest {
      * createPlaceIfNotExists 성공 – 장소가 없으면 새 Place를 생성하고  ID 반환
      */
     @Test
-    @DisplayName("성공: 존재하지 않으면 Place를 생성하고 savePlace가 반환한 ID를 돌려준다")
-    fun create() {
+    @DisplayName("성공: 존재하지 않으면 Place를 생성하고 placeId를 반환한다")
+    fun createPlace() {
         // given
         val kakaoPlaceId = "kakao-999"
 

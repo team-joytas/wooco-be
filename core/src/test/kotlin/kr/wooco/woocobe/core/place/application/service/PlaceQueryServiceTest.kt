@@ -174,7 +174,7 @@ class PlaceQueryServiceTest {
      */
     @Test
     @DisplayName("성공: 단일 장소 조회 시 Place와 한줄평 통계를 합쳐 반환한다")
-    fun readPlaceSuccess() {
+    fun readPlace() {
         // given
         val placeId = 1L
         val place = place(id = placeId)
@@ -216,7 +216,7 @@ class PlaceQueryServiceTest {
      */
     @Test
     @DisplayName("성공: 장소와 리뷰 목록 조회 시 최근 리뷰와 작성자 정보를 함께 반환한다")
-    fun readPlaceWithReviewsSuccessWithReviews() {
+    fun readPlaceWithReviews() {
         // given
         val placeId = 1L
         val place = place(id = placeId)
@@ -263,7 +263,7 @@ class PlaceQueryServiceTest {
      */
     @Test
     @DisplayName("성공: 장소와 리뷰 목록 조회 시 리뷰가 없으면 빈 리스트를 반환한다")
-    fun readPlaceWithPlaceReviewsSuccessWithoutReviews() {
+    fun readPlaceWithEmptyReviews() {
         // given
         val placeId = 1L
         val place = place(id = placeId)
