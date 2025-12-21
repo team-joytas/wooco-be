@@ -40,7 +40,7 @@ data class Group(
 
     fun updateInfo(command: UpdateGroupInfoCommand): Group {
         requireActive()
-        if (!hasMember(command.userId)) throw NotGroupMemberException
+        if (!isMember(command.userId)) throw NotGroupMemberException
         return copy(
             name = command.name
         )
@@ -57,7 +57,7 @@ data class Group(
 
     fun generateInviteCode(command: GenerateInviteCodeCommand): Group {
         requireActive()
-        if (!hasMember(command.userId)) throw NotGroupMemberException
+        if (!isMember(command.userId)) throw NotGroupMemberException
         return copy(
             inviteCode = GroupInviteCode.generate()
         )
@@ -65,7 +65,7 @@ data class Group(
 
     fun join(command: JoinGroupCommand): Group {
         requireActive()
-        if (hasMember(command.userId)) throw AlreadyGroupMemberException
+        if (isMember(command.userId)) throw AlreadyGroupMemberException
         if (users.size >= MAX_USERS_SIZE) throw GroupUserLimitExceededException
         return copy(
             users = users + GroupUser.createMember(groupId = this.id, userId = command.userId)
@@ -74,7 +74,7 @@ data class Group(
 
     fun leave(command: LeaveGroupCommand): Group {
         requireActive()
-        if (!hasMember(command.userId)) throw NotGroupMemberException
+        if (!isMember(command.userId)) throw NotGroupMemberException
         if (command.userId == ownerId && users.size > 1) throw InvalidGroupOperationException
         return copy(
             users = users.filterNot { it.userId == command.userId }
@@ -90,7 +90,7 @@ data class Group(
         )
     }
 
-    private fun hasMember(userId: Long): Boolean =
+    fun isMember(userId: Long): Boolean =
         users.any { it.userId == userId }
 
     private fun requireActive() {
