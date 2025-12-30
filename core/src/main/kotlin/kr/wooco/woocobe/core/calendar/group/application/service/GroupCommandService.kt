@@ -10,6 +10,7 @@ import kr.wooco.woocobe.core.calendar.group.application.port.`in`.UpdateGroupInf
 import kr.wooco.woocobe.core.calendar.group.application.port.out.GroupCommandPort
 import kr.wooco.woocobe.core.calendar.group.domain.entity.Group
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class GroupCommandService(
@@ -26,6 +27,7 @@ class GroupCommandService(
         return group.id
     }
 
+    @Transactional
     override fun deleteGroup(command: DeleteGroupUseCase.Command): Long {
         val group = groupCommandPort.getById(command.groupId)
         val deleted = group.delete(command.toDeleteCommand())
@@ -33,6 +35,7 @@ class GroupCommandService(
         return deleted.id
     }
 
+    @Transactional
     override fun updateGroupInfo(command: UpdateGroupInfoUseCase.Command): Long {
         val group = groupCommandPort.getById(command.groupId)
         val updated = group.updateInfo(command.toUpdateGroupInfoCommand())
@@ -40,6 +43,7 @@ class GroupCommandService(
         return updated.id
     }
 
+    @Transactional
     override fun joinGroup(command: JoinGroupUseCase.Command): Long {
         val group = groupCommandPort.getByInviteCode(command.inviteCode)
         val updated = group.join(command.toJoinCommand())
@@ -47,6 +51,7 @@ class GroupCommandService(
         return updated.id
     }
 
+    @Transactional
     override fun leaveGroup(command: LeaveGroupUseCase.Command): Long {
         val group = groupCommandPort.getById(command.groupId)
         val updated = group.leave(command.toLeaveCommand())
@@ -54,6 +59,7 @@ class GroupCommandService(
         return updated.id
     }
 
+    @Transactional
     override fun expelGroupUser(command: ExpelGroupUserUseCase.Command): Long {
         val group = groupCommandPort.getById(command.groupId)
         val updated = group.expel(command.toExpelGroupUserCommand())

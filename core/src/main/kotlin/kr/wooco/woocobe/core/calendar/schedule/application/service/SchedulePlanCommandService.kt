@@ -8,6 +8,7 @@ import kr.wooco.woocobe.core.calendar.schedule.application.port.out.SchedulePlan
 import kr.wooco.woocobe.core.calendar.schedule.domain.entity.Plan
 import kr.wooco.woocobe.core.calendar.schedule.domain.exception.PlanAccessDeniedException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class SchedulePlanCommandService(
@@ -22,6 +23,7 @@ class SchedulePlanCommandService(
         return plan.id
     }
 
+    @Transactional
     override fun updatePlanInfo(command: UpdatePlanInfoUseCase.Command): Long {
         val plan = schedulePlanCommandPort.getById(command.planId)
         validateGroupMember(groupId = plan.groupId, userId = command.userId)
@@ -31,6 +33,7 @@ class SchedulePlanCommandService(
         return updated.id
     }
 
+    @Transactional
     override fun deletePlan(command: DeletePlanUseCase.Command): Long {
         val plan = schedulePlanCommandPort.getById(command.planId)
         validateGroupMember(groupId = plan.groupId, userId = command.userId)
