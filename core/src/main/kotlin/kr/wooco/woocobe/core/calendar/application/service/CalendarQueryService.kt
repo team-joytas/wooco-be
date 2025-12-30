@@ -4,11 +4,12 @@ import kr.wooco.woocobe.core.calendar.application.port.`in`.ReadDailyCalendarUse
 import kr.wooco.woocobe.core.calendar.application.port.`in`.ReadMonthlyCalendarUseCase
 import kr.wooco.woocobe.core.calendar.application.port.`in`.ReadWeeklyCalendarUseCase
 import kr.wooco.woocobe.core.calendar.application.port.out.dto.CalendarView
-import kr.wooco.woocobe.core.group.application.port.out.GroupQueryPort
+import kr.wooco.woocobe.core.calendar.group.application.port.out.GroupQueryPort
+import kr.wooco.woocobe.core.calendar.schedule.application.port.out.SchedulePlanQueryPort
+import kr.wooco.woocobe.core.calendar.schedule.application.port.out.dto.PlanView
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
-import kr.wooco.woocobe.core.schedule.application.port.out.SchedulePlanQueryPort
-import kr.wooco.woocobe.core.schedule.application.port.out.dto.PlanView
 import org.springframework.stereotype.Service
+import java.time.DayOfWeek
 import java.time.LocalDate
 
 @Service
@@ -101,7 +102,7 @@ class CalendarQueryService(
 
     private fun dateRangeOfWeek(year: Int, month: Int, week: Int): Pair<LocalDate, LocalDate> {
         val firstDay = LocalDate.of(year, month, 1)
-        val firstWeekStart = firstDay.with(java.time.DayOfWeek.MONDAY)
+        val firstWeekStart = firstDay.with(DayOfWeek.MONDAY)
 
         val startDate = firstWeekStart.plusWeeks((week - 1).toLong())
         val endDate = startDate.plusDays(6)
