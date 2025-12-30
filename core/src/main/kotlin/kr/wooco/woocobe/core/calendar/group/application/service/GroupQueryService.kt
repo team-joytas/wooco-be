@@ -16,7 +16,7 @@ class GroupQueryService(
     ReadAllGroupUseCase {
     @Transactional(readOnly = true)
     override fun readGroup(query: ReadGroupUseCase.Query): GroupResult {
-        val group = groupQueryPort.getViewByIdWithActive(query.groupId)
+        val group = groupQueryPort.getViewById(query.groupId)
         val userIds = group.users.map { it.userId }
         val users = userQueryPort.getAllByUserIds(userIds)
         return GroupResult.Companion.of(groupView = group, users = users)
@@ -24,7 +24,7 @@ class GroupQueryService(
 
     @Transactional(readOnly = true)
     override fun readAllGroup(query: ReadAllGroupUseCase.Query): List<GroupResult> {
-        val groups = groupQueryPort.getViewAllByUserIdWithActive(query.userId)
+        val groups = groupQueryPort.getViewAllByUserId(query.userId)
         val userIds = groups
             .flatMap { it.users.map { u -> u.userId } }
             .distinct()

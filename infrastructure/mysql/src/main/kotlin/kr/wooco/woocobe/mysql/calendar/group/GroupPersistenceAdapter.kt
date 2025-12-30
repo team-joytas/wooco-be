@@ -43,23 +43,23 @@ internal class GroupPersistenceAdapter(
         return GroupPersistenceMapper.toDomainEntity(groupJpaEntity, groupUserJpaEntities)
     }
 
-    override fun getViewByIdWithActive(groupId: Long): GroupView {
+    override fun getViewById(groupId: Long): GroupView {
         val groupJpaEntity = groupJpaRepository.findByIdAndStatus(id = groupId, status = Status.ACTIVE.name)
             ?: throw NotExistsGroupException
         val groupUserJpaEntities = findAllGroupUserActiveByGroupId(groupId)
         return GroupPersistenceMapper.toReadModel(groupJpaEntity, groupUserJpaEntities)
     }
 
-    override fun getViewAllByUserIdWithActive(userId: Long): List<GroupView> {
+    override fun getViewAllByUserId(userId: Long): List<GroupView> {
         val groupUserJpaEntities = groupUserJpaRepository.findAllByUserIdAndStatus(
             userId = userId,
             status = GroupUser.Status.ACTIVE.name,
         )
         val groupIds = groupUserJpaEntities.map { it.groupId }
-        return getViewAllByIdsWithActive(groupIds)
+        return getViewAllByIds(groupIds)
     }
 
-    override fun getViewAllByIdsWithActive(groupIds: List<Long>): List<GroupView> {
+    override fun getViewAllByIds(groupIds: List<Long>): List<GroupView> {
         val groupJpaEntities = groupJpaRepository.findAllByIdInAndStatus(
             groupIds = groupIds,
             status = GroupUser.Status.ACTIVE.name

@@ -25,8 +25,8 @@ class SchedulePlanQueryService(
     ReadAllPlanByDateUseCase {
     @Transactional(readOnly = true)
     override fun readPlan(query: ReadPlanUseCase.Query): PlanResult {
-        val planView = schedulePlanQueryPort.getViewByIdWithActive(query.planId)
-        val groupView = groupQueryPort.getViewByIdWithActive(planView.groupId)
+        val planView = schedulePlanQueryPort.getViewById(query.planId)
+        val groupView = groupQueryPort.getViewById(planView.groupId)
         val users = userQueryPort.getAllByUserIds(groupView.users.map { it.userId })
         val places = placeQueryPort.getAllByPlaceIds(planView.places.map { it.placeId })
             .associateBy { it.id }
@@ -46,9 +46,9 @@ class SchedulePlanQueryService(
     }
 
     override fun readAllPlanByDate(query: ReadAllPlanByDateUseCase.Query): List<PlanResult> {
-        val groups = groupQueryPort.getViewAllByUserIdWithActive(query.userId)
+        val groups = groupQueryPort.getViewAllByUserId(query.userId)
 
-        val planViews = schedulePlanQueryPort.getViewAllByGroupIdInAndVisitDateWithActive(
+        val planViews = schedulePlanQueryPort.getViewAllByGroupIdInAndVisitDate(
             groupIds = groups.map { it.id },
             visitDate = query.date
         )

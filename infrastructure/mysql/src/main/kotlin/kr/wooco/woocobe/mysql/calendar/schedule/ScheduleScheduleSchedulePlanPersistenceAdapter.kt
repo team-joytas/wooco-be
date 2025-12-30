@@ -35,7 +35,7 @@ internal class ScheduleScheduleSchedulePlanPersistenceAdapter(
         return SchedulePlanPersistenceMapper.toDomainEntity(planJpaEntity, planPlaceJpaEntities)
     }
 
-    override fun getViewByIdWithActive(planId: Long): PlanView {
+    override fun getViewById(planId: Long): PlanView {
         val planJpaEntity = schedulePlanJpaRepository.findByIdAndStatus(id = planId, status = Plan.Status.ACTIVE.name)
             ?: throw NotExistsPlanException
         val planPlaceJpaEntities = schedulePlanPlaceJpaRepository.findAllByPlanId(planId)
@@ -43,7 +43,7 @@ internal class ScheduleScheduleSchedulePlanPersistenceAdapter(
     }
 
     // 일간 조회
-    override fun getViewAllByGroupIdInAndVisitDateWithActive(
+    override fun getViewAllByGroupIdInAndVisitDate(
         groupIds: List<Long>,
         visitDate: LocalDate
     ): List<PlanView> {
@@ -60,7 +60,7 @@ internal class ScheduleScheduleSchedulePlanPersistenceAdapter(
     }
 
     // 날짜 범위 기반 조회
-    override fun getViewAllByGroupIdInAndVisitDateBetweenWithActive(
+    override fun getViewAllByGroupIdInAndVisitDateBetween(
         groupIds: List<Long>,
         startDate: LocalDate,
         endDate: LocalDate

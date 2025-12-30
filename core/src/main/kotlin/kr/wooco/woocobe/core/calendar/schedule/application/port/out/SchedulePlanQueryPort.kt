@@ -5,11 +5,11 @@ import java.time.LocalDate
 
 interface SchedulePlanQueryPort {
 
-    fun getViewByIdWithActive(planId: Long): PlanView
+    fun getViewById(planId: Long): PlanView
 
-    fun getViewAllByGroupIdInAndVisitDateWithActive(groupIds: List<Long>, visitDate: LocalDate): List<PlanView>
+    fun getViewAllByGroupIdInAndVisitDate(groupIds: List<Long>, visitDate: LocalDate): List<PlanView>
 
-    fun getViewAllByGroupIdInAndVisitDateBetweenWithActive(
+    fun getViewAllByGroupIdInAndVisitDateBetween(
         groupIds: List<Long>,
         startDate: LocalDate,
         endDate: LocalDate,

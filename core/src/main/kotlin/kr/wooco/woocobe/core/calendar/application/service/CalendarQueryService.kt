@@ -26,7 +26,7 @@ class CalendarQueryService(
             groupIds = query.groupIds ?: emptyList()
         )
 
-        val plans = schedulePlanQueryPort.getViewAllByGroupIdInAndVisitDateWithActive(
+        val plans = schedulePlanQueryPort.getViewAllByGroupIdInAndVisitDate(
             groupIds = groupIds,
             visitDate = query.date
         )
@@ -40,7 +40,7 @@ class CalendarQueryService(
         val (startDate, endDate) = dateRangeOfWeek(year = query.year, month = query.month, week = query.week)
 
         val groupIds = resolveGroupIds(userId = query.userId, groupIds = query.groupIds ?: emptyList())
-        val plans = schedulePlanQueryPort.getViewAllByGroupIdInAndVisitDateBetweenWithActive(
+        val plans = schedulePlanQueryPort.getViewAllByGroupIdInAndVisitDateBetween(
             groupIds = groupIds,
             startDate = startDate,
             endDate = endDate
@@ -53,14 +53,14 @@ class CalendarQueryService(
         val (startDate, endDate) = dateRangeOfMonth(year = query.year, month = query.month)
 
         val groupIds = resolveGroupIds(userId = query.userId, groupIds = query.groupIds ?: emptyList())
-        val plans = schedulePlanQueryPort.getViewAllByGroupIdInAndVisitDateBetweenWithActive(groupIds, startDate, endDate)
+        val plans = schedulePlanQueryPort.getViewAllByGroupIdInAndVisitDateBetween(groupIds, startDate, endDate)
 
         return buildCalendarViews(plans)
     }
 
     private fun buildCalendarViews(planViews: List<PlanView>): List<CalendarView> {
         val groupIds = planViews.map { it.groupId }.distinct()
-        val groups = groupQueryPort.getViewAllByIdsWithActive(groupIds).associateBy { it.id }
+        val groups = groupQueryPort.getViewAllByIds(groupIds).associateBy { it.id }
         val placeIds = planViews.flatMap { p -> p.places.map { it.placeId } }.distinct()
         val places = placeQueryPort.getAllByPlaceIds(placeIds).associateBy { it.id }
 
@@ -87,7 +87,7 @@ class CalendarQueryService(
     }
 
     private fun resolveGroupIds(userId: Long, groupIds: List<Long>): List<Long> {
-        val groups = groupQueryPort.getViewAllByUserIdWithActive(userId)
+        val groups = groupQueryPort.getViewAllByUserId(userId)
         if (groupIds.isEmpty()) {
             return groups.map { it.id }
         }
