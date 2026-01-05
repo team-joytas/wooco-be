@@ -1,8 +1,8 @@
 package kr.wooco.woocobe.core.calendar.schedule.application.port.`in`.results
 
 import kr.wooco.woocobe.core.calendar.group.application.port.`in`.results.GroupResult
-import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.core.calendar.schedule.application.port.out.dto.PlanView
+import kr.wooco.woocobe.core.place.domain.entity.Place
 import java.time.LocalDate
 
 data class PlanResult(
@@ -54,8 +54,8 @@ data class PlanResult(
             planViews: List<PlanView>,
             placeMap: Map<Long, Place>,
         ): List<PlanResult> {
-            return planViews.map { planView ->
-                val group = requireNotNull(groups[planView.groupId])
+            return planViews.mapNotNull { planView ->
+                val group = groups[planView.groupId] ?: return@mapNotNull null
                 of(group, planView, placeMap)
             }
         }
@@ -64,8 +64,8 @@ data class PlanResult(
             planView: PlanView,
             placeMap: Map<Long, Place>,
         ): List<PlanPlaceResult> {
-            return planView.places.map { planPlace ->
-                val place = requireNotNull(placeMap[planPlace.placeId])
+            return planView.places.mapNotNull { planPlace ->
+                val place = placeMap[planPlace.placeId] ?: return@mapNotNull null
 
                 PlanPlaceResult(
                     order = planPlace.order,
