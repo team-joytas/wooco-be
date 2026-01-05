@@ -73,8 +73,10 @@ internal class ScheduleScheduleSchedulePlanPersistenceAdapter(
         )
 
         val planPlaceJpaEntities = schedulePlanPlaceJpaRepository.findAllByPlanIdIn(plans.map { it.id })
-        return plans.map {
-            SchedulePlanPersistenceMapper.toReadModel(it, planPlaceJpaEntities)
+        val planPlacesByPlanId = planPlaceJpaEntities.groupBy { it.planId }
+        return plans.map { plan ->
+            val placesOfPlan = planPlacesByPlanId[plan.id].orEmpty()
+            SchedulePlanPersistenceMapper.toReadModel(plan, placesOfPlan)
         }
     }
 
