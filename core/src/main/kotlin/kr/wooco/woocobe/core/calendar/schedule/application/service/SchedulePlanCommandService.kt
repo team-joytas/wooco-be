@@ -6,7 +6,6 @@ import kr.wooco.woocobe.core.calendar.schedule.application.port.`in`.DeletePlanU
 import kr.wooco.woocobe.core.calendar.schedule.application.port.`in`.UpdatePlanInfoUseCase
 import kr.wooco.woocobe.core.calendar.schedule.application.port.out.SchedulePlanCommandPort
 import kr.wooco.woocobe.core.calendar.schedule.domain.entity.Plan
-import kr.wooco.woocobe.core.calendar.schedule.domain.exception.PlanAccessDeniedException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,15 +17,18 @@ class SchedulePlanCommandService(
     UpdatePlanInfoUseCase,
     DeletePlanUseCase {
     override fun createPlan(command: CreatePlanUseCase.Command): Long {
-        validateGroupMember(groupId = command.groupId, userId = command.userId)
-        val plan = Plan.Companion.create(command.toCreateCommand()) { schedulePlanCommandPort.save(it) }
+        val group = groupCommandPort.getById(command.groupId)
+        group.requireMember(command.userId)
+
+        val plan = Plan.create(command.toCreateCommand()) { schedulePlanCommandPort.save(it) }
         return plan.id
     }
 
     @Transactional
     override fun updatePlanInfo(command: UpdatePlanInfoUseCase.Command): Long {
         val plan = schedulePlanCommandPort.getById(command.planId)
-        validateGroupMember(groupId = plan.groupId, userId = command.userId)
+        val group = groupCommandPort.getById(plan.groupId)
+        group.requireMember(command.userId)
 
         val updated = plan.updateInfo(command.toUpdateCommand())
         schedulePlanCommandPort.save(updated)
@@ -36,17 +38,11 @@ class SchedulePlanCommandService(
     @Transactional
     override fun deletePlan(command: DeletePlanUseCase.Command): Long {
         val plan = schedulePlanCommandPort.getById(command.planId)
-        validateGroupMember(groupId = plan.groupId, userId = command.userId)
+        val group = groupCommandPort.getById(plan.groupId)
+        group.requireMember(command.userId)
 
         val deleted = plan.delete()
         schedulePlanCommandPort.save(deleted)
         return deleted.id
-    }
-
-    private fun validateGroupMember(groupId: Long, userId: Long) {
-        val group = groupCommandPort.getById(groupId)
-        if (!group.isMember(userId)) {
-            throw PlanAccessDeniedException
-        }
     }
 }

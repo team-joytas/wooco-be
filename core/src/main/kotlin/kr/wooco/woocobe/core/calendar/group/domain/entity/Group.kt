@@ -93,6 +93,10 @@ data class Group(
     fun isMember(userId: Long): Boolean =
         users.any { it.userId == userId }
 
+    fun requireMember(userId: Long) {
+        if (!isMember(userId)) throw NotGroupMemberException
+    }
+
     private fun requireActive() {
         if (status != Status.ACTIVE) throw GroupAlreadyDeletedException
     }
