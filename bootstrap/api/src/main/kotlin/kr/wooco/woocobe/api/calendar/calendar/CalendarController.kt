@@ -1,52 +1,35 @@
 package kr.wooco.woocobe.api.calendar.calendar
 
-import kr.wooco.woocobe.api.calendar.calendar.request.DailyCalendarQueryRequest
-import kr.wooco.woocobe.api.calendar.calendar.request.MonthlyCalendarQueryRequest
-import kr.wooco.woocobe.api.calendar.calendar.request.WeeklyCalendarQueryRequest
 import kr.wooco.woocobe.api.calendar.calendar.response.CalendarDetailResponse
-import kr.wooco.woocobe.core.calendar.application.port.`in`.ReadDailyCalendarUseCase
-import kr.wooco.woocobe.core.calendar.application.port.`in`.ReadMonthlyCalendarUseCase
-import kr.wooco.woocobe.core.calendar.application.port.`in`.ReadWeeklyCalendarUseCase
+import kr.wooco.woocobe.core.calendar.application.port.`in`.ReadCalendarUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
 
-// TODO: API 스펙 협의 필요 (groupIds 등 복잡한 검색 조건 -> GET vs POST)
 @RestController
 @RequestMapping("/api/v1/calendars")
 class CalendarController(
-    private val readDailyCalendarUseCase: ReadDailyCalendarUseCase,
-    private val readWeeklyCalendarUseCase: ReadWeeklyCalendarUseCase,
-    private val readMonthlyCalendarUseCase: ReadMonthlyCalendarUseCase,
+    private val readCalendarUseCase: ReadCalendarUseCase,
 ) : CalendarApi {
-
-    @PostMapping("/monthly")
-    override fun readMonthlyCalendar(
+    @GetMapping
+    override fun readCalendar(
         @AuthenticationPrincipal userId: Long,
-        @RequestBody request: MonthlyCalendarQueryRequest,
+        @RequestParam startDate: LocalDate,
+        @RequestParam endDate: LocalDate,
+        @RequestParam(required = false) groupIds: List<Long>?,
     ): ResponseEntity<List<CalendarDetailResponse>> {
-        val results = readMonthlyCalendarUseCase.readMonthlyCalendar(request.toQuery(userId))
-        return ResponseEntity.ok(CalendarDetailResponse.Companion.listFrom(results))
-    }
-
-    @PostMapping("/weekly")
-    override fun readWeeklyCalendar(
-        @AuthenticationPrincipal userId: Long,
-        @RequestBody request: WeeklyCalendarQueryRequest
-    ): ResponseEntity<List<CalendarDetailResponse>> {
-        val results = readWeeklyCalendarUseCase.readWeeklyCalendar(request.toQuery(userId))
-        return ResponseEntity.ok(CalendarDetailResponse.Companion.listFrom(results))
-    }
-
-    @PostMapping("/daily")
-    override fun readDailyCalendar(
-        @AuthenticationPrincipal userId: Long,
-        @RequestBody request: DailyCalendarQueryRequest,
-    ): ResponseEntity<List<CalendarDetailResponse>> {
-        val results = readDailyCalendarUseCase.readDailyCalendar(request.toQuery(userId))
-        return ResponseEntity.ok(CalendarDetailResponse.Companion.listFrom(results))
+        val results = readCalendarUseCase.readCalendar(
+            ReadCalendarUseCase.Query(
+                userId = userId,
+                startDate = startDate,
+                endDate = endDate,
+                groupIds = groupIds,
+            )
+        )
+        return ResponseEntity.ok(CalendarDetailResponse.listFrom(results))
     }
 }

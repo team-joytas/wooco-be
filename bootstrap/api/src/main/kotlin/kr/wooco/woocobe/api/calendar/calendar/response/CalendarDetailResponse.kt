@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.api.calendar.calendar.response
 
-import kr.wooco.woocobe.core.calendar.application.port.out.dto.CalendarView
+import kr.wooco.woocobe.core.calendar.application.port.`in`.results.CalendarResult
 import java.time.LocalDate
 
 data class CalendarDetailResponse(
@@ -17,34 +17,36 @@ data class CalendarDetailResponse(
         val name: String,
         val address: String,
         val thumbnailUrl: String,
+        val order: Int,
     ) {
         companion object {
-            fun from(view: CalendarView.CalendarPlaceView): CalendarPlaceResponse =
+            fun from(result: CalendarResult.CalendarPlaceResult): CalendarPlaceResponse =
                 CalendarPlaceResponse(
-                    id = view.id,
-                    name = view.name,
-                    address = view.address,
-                    thumbnailUrl = view.thumbnailUrl,
+                    id = result.id,
+                    name = result.name,
+                    address = result.address,
+                    thumbnailUrl = result.thumbnailUrl,
+                    order = result.order,
                 )
 
-            fun listFrom(views: List<CalendarView.CalendarPlaceView>): List<CalendarPlaceResponse> =
-                views.map { from(it) }
+            fun listFrom(results: List<CalendarResult.CalendarPlaceResult>): List<CalendarPlaceResponse> =
+                results.map { from(it) }
         }
     }
 
     companion object {
-        fun from(view: CalendarView): CalendarDetailResponse =
+        fun from(result: CalendarResult): CalendarDetailResponse =
             CalendarDetailResponse(
-                planId = view.planId,
-                groupId = view.groupId,
-                groupName = view.groupName,
-                groupSize = view.groupSize,
-                title = view.title,
-                visitDate = view.visitDate,
-                places = CalendarPlaceResponse.listFrom(view.places),
+                planId = result.planId,
+                groupId = result.groupId,
+                groupName = result.groupName,
+                groupSize = result.groupSize,
+                title = result.title,
+                visitDate = result.visitDate,
+                places = CalendarPlaceResponse.listFrom(result.places),
             )
 
-        fun listFrom(views: List<CalendarView>): List<CalendarDetailResponse> =
+        fun listFrom(views: List<CalendarResult>): List<CalendarDetailResponse> =
             views.map { from(it) }
     }
 }
