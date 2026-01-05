@@ -7,14 +7,13 @@ import kr.wooco.woocobe.core.calendar.schedule.application.port.`in`.ReadAllPlan
 import kr.wooco.woocobe.core.calendar.schedule.application.port.`in`.ReadPlanUseCase
 import kr.wooco.woocobe.core.calendar.schedule.application.port.`in`.results.PlanResult
 import kr.wooco.woocobe.core.calendar.schedule.application.port.out.SchedulePlanQueryPort
+import kr.wooco.woocobe.core.calendar.schedule.application.port.out.dto.PlanView
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.place.domain.entity.Place
-import kr.wooco.woocobe.core.calendar.schedule.application.port.out.dto.PlanView
 import kr.wooco.woocobe.core.user.application.port.out.UserQueryPort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-// TODO:
 @Service
 class SchedulePlanQueryService(
     private val userQueryPort: UserQueryPort,
@@ -38,7 +37,7 @@ class SchedulePlanQueryService(
             users = users,
         )
 
-        return PlanResult.Companion.of(
+        return PlanResult.of(
             group = groupResult,
             planView = planView,
             places = places,
