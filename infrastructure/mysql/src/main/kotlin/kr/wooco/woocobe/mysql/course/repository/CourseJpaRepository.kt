@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query
 
 @Suppress("ktlint")
 interface CourseJpaRepository : JpaRepository<CourseJpaEntity, Long>, CourseCustomRepository {
+    @Query("SELECT c FROM CourseJpaEntity c WHERE c.status = 'ACTIVE' AND c.id = :courseId")
+    fun findByCourseIdWithActiveOrNull(courseId: Long): CourseJpaEntity?
+
     fun countByUserId(userId: Long): Long
 
     @Modifying
