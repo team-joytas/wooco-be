@@ -33,7 +33,7 @@ internal class CoursePersistenceAdapter(
     }
 
     override fun getViewByCourseId(courseId: Long): CourseView {
-        val courseJpaEntity = courseJpaRepository.findByIdOrNull(courseId)
+        val courseJpaEntity = courseJpaRepository.findByCourseIdWithActiveOrNull(courseId)
             ?: throw NotExistsCourseException
         val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseId(courseJpaEntity.id)
         val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseId(courseJpaEntity.id)

@@ -8,6 +8,7 @@ import kr.wooco.woocobe.mysql.course.entity.CourseJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CourseLikeJpaEntity
 import org.springframework.stereotype.Repository
 
+// TODO: 영속성 상태 관리 고민해봐할듯 (ACTIVE, DELETED)
 @Repository
 class CourseCustomRepositoryImpl(
     private val executor: KotlinJdslJpqlExecutor,
@@ -25,6 +26,7 @@ class CourseCustomRepositoryImpl(
                         )
                     },
                 ).whereAnd(
+                    path(CourseJpaEntity::status).eq("ACTIVE"),
                     condition.writerId?.let {
                         path(CourseJpaEntity::userId).eq(it)
                     },
@@ -61,6 +63,8 @@ class CourseCustomRepositoryImpl(
                         )
                     },
                 ).whereAnd(
+                    path(CourseJpaEntity::status).eq("ACTIVE"),
+                    path(CourseLikeJpaEntity::status).eq("ACTIVE"),
                     condition.targetUserId?.let {
                         path(CourseLikeJpaEntity::userId).eq(it)
                     },
