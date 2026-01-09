@@ -373,11 +373,10 @@ class PlaceReviewQueryServiceTest {
     }
 
     /**
-     * existsPlaceReviewWriter 성공
-     * - QueryService는 판단하지 않고 QueryPort에 위임
+     * existsPlaceReviewWriter 성공  - 특정 유저가 특정 장소에 리뷰를 작성했는지 여부를 반환
      */
     @Test
-    @DisplayName("성공: 리뷰 작성자 존재 여부 조회는 QueryPort에 위임한다")
+    @DisplayName("성공: 특정 유저가 해당 장소에 리뷰를 작성했는지 여부를 반환한다")
     fun existsPlaceReviewWriterSuccess() {
         // given
         val placeId = PlaceReviewFixtures.DEFAULT_PLACE_ID
