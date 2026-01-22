@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 @Component
-internal class ScheduleScheduleSchedulePlanPersistenceAdapter(
+internal class SchedulePlanPersistenceAdapter(
     private val schedulePlanJpaRepository: SchedulePlanJpaRepository,
     private val schedulePlanPlaceJpaRepository: SchedulePlanPlaceJpaRepository,
 ) : SchedulePlanCommandPort,
