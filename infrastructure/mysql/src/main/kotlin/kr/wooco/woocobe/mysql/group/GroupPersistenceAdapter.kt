@@ -58,7 +58,7 @@ internal class GroupPersistenceAdapter(
         val groupIds = groupUserJpaEntities.map { it.groupId }
         val groupJpaEntities = groupJpaRepository.findAllByIdInAndStatus(
             groupIds = groupIds,
-            status = Status.ACTIVE.name
+            status = Status.ACTIVE.name,
         )
         val allGroupUsers = groupUserJpaRepository.findAllByGroupIdIn(groupIds)
         return GroupPersistenceMapper.toReadModels(

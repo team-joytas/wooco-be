@@ -25,7 +25,6 @@ data class Group(
     val users: List<GroupUser>,
     val status: Status,
 ) : AggregateRoot() {
-
     @JvmInline
     value class Name(
         val value: String,
@@ -42,7 +41,7 @@ data class Group(
         requireActive()
         if (!hasMember(command.userId)) throw NotGroupMemberException
         return copy(
-            name = command.name
+            name = command.name,
         )
     }
 
@@ -51,7 +50,7 @@ data class Group(
         requireOwner(command.userId)
         if (users.size > 1) throw GroupHasUserException
         return copy(
-            status = Status.DELETED
+            status = Status.DELETED,
         )
     }
 
@@ -59,7 +58,7 @@ data class Group(
         requireActive()
         if (!hasMember(command.userId)) throw NotGroupMemberException
         return copy(
-            inviteCode = GroupInviteCode.generate()
+            inviteCode = GroupInviteCode.generate(),
         )
     }
 
@@ -68,7 +67,7 @@ data class Group(
         if (hasMember(command.userId)) throw AlreadyGroupMemberException
         if (users.size >= MAX_USERS_SIZE) throw GroupUserLimitExceededException
         return copy(
-            users = users + GroupUser.createMember(groupId = this.id, userId = command.userId)
+            users = users + GroupUser.createMember(groupId = this.id, userId = command.userId),
         )
     }
 
@@ -77,7 +76,7 @@ data class Group(
         if (!hasMember(command.userId)) throw NotGroupMemberException
         if (command.userId == ownerId && users.size > 1) throw InvalidGroupOperationException
         return copy(
-            users = users.filterNot { it.userId == command.userId }
+            users = users.filterNot { it.userId == command.userId },
         )
     }
 
@@ -86,12 +85,11 @@ data class Group(
         requireOwner(command.userId)
         if (command.targetId == command.userId) throw InvalidGroupOperationException
         return copy(
-            users = users.filterNot { it.userId == command.targetId }
+            users = users.filterNot { it.userId == command.targetId },
         )
     }
 
-    private fun hasMember(userId: Long): Boolean =
-        users.any { it.userId == userId }
+    private fun hasMember(userId: Long): Boolean = users.any { it.userId == userId }
 
     private fun requireActive() {
         if (status != Status.ACTIVE) throw GroupAlreadyDeletedException
@@ -129,7 +127,7 @@ data class Group(
             )
             return group.copy(
                 id = id,
-                users = listOf(owner)
+                users = listOf(owner),
             )
         }
     }

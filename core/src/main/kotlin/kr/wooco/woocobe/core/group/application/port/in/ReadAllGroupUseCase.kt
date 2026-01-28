@@ -14,5 +14,4 @@ interface ReadAllGroupUseCase {
     }
 
     fun readAllGroup(query: ReadAllGroupUseCase.Query): List<GroupResult>
-
 }

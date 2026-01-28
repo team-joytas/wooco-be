@@ -10,7 +10,6 @@ data class GroupDetailResponse(
     val groupSize: Int,
     val users: List<GroupUserResponse>,
 ) {
-
     data class GroupUserResponse(
         val userId: Long,
         val name: String,

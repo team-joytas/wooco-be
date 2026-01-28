@@ -5,7 +5,10 @@ import kr.wooco.woocobe.core.group.application.port.`in`.UpdateGroupInfoUseCase
 data class UpdateGroupInfoRequest(
     val name: String,
 ) {
-    fun toCommand(userId: Long, groupId: Long): UpdateGroupInfoUseCase.Command =
+    fun toCommand(
+        userId: Long,
+        groupId: Long,
+    ): UpdateGroupInfoUseCase.Command =
         UpdateGroupInfoUseCase.Command(
             userId = userId,
             groupId = groupId,

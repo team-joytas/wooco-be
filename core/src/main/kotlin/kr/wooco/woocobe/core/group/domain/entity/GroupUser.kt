@@ -11,7 +11,6 @@ data class GroupUser(
     val joinedAt: JoinedAt,
     val status: Status,
 ) : DomainEntity() {
-
     @JvmInline
     value class JoinedAt(
         val value: LocalDate,
@@ -22,11 +21,15 @@ data class GroupUser(
     enum class Status { ACTIVE, DELETED }
 
     companion object {
-        fun createOwner(groupId: Long, userId: Long): GroupUser =
-            create(groupId, userId, Role.OWNER)
+        fun createOwner(
+            groupId: Long,
+            userId: Long,
+        ): GroupUser = create(groupId, userId, Role.OWNER)
 
-        fun createMember(groupId: Long, userId: Long): GroupUser =
-            create(groupId, userId, Role.MEMBER)
+        fun createMember(
+            groupId: Long,
+            userId: Long,
+        ): GroupUser = create(groupId, userId, Role.MEMBER)
 
         private fun create(
             groupId: Long,

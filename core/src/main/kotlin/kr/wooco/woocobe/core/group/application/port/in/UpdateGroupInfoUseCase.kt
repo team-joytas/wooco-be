@@ -14,9 +14,8 @@ interface UpdateGroupInfoUseCase {
                 userId = userId,
                 groupId = groupId,
                 name = Name(name),
-        )
+            )
     }
 
     fun updateGroupInfo(command: UpdateGroupInfoUseCase.Command): Long
-
 }
