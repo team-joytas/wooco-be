@@ -52,9 +52,10 @@ class ReqResLoggingFilter : OncePerRequestFilter() {
             responseBody?.let { append("\n| >> RESPONSE_BODY: $it") }
         }
 
-        when (status < 500) {
-            true -> log.info { loggingMessage }
-            else -> log.error { loggingMessage }
+        when {
+            (status >= 500) -> log.error { loggingMessage }
+            (status >= 400) -> log.warn { loggingMessage }
+            else -> log.debug { loggingMessage }
         }
     }
 
