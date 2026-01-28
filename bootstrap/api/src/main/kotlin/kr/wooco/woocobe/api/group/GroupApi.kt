@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody
 
 @Tag(name = "그룹 API")
 interface GroupApi {
-
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "그룹 생성", description = "새로운 그룹을 생성합니다.")
     fun createGroup(

@@ -1,5 +1,8 @@
-// package kr.wooco.woocobe.api.support
-//
+package kr.wooco.woocobe.api.support
+
+// kotest 전용
+class MysqlCleaner
+
 // import io.kotest.core.listeners.TestListener
 // import io.kotest.core.test.TestCase
 // import io.kotest.core.test.TestResult

@@ -15,5 +15,4 @@ interface LeaveGroupUseCase {
     }
 
     fun leaveGroup(command: LeaveGroupUseCase.Command): Long
-
 }

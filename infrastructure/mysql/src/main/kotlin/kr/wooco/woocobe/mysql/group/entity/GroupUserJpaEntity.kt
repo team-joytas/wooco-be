@@ -40,6 +40,6 @@ data class GroupUserJpaEntity(
                     joinedAt = user.joinedAt.value,
                     status = user.status.name,
                 )
-        }
+            }
     }
 }

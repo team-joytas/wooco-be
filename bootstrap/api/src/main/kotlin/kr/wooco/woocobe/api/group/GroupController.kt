@@ -40,7 +40,6 @@ class GroupController(
     private val readGroupUseCase: ReadGroupUseCase,
     private val readAllGroupUseCase: ReadAllGroupUseCase,
 ) : GroupApi {
-
     @PostMapping
     override fun createGroup(
         @AuthenticationPrincipal userId: Long,
@@ -48,7 +47,8 @@ class GroupController(
     ): ResponseEntity<CreateGroupResponse> {
         val command = request.toCommand(userId)
         val results = createGroupUseCase.createGroup(command)
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
             .body(CreateGroupResponse(results))
     }
 
@@ -56,7 +56,7 @@ class GroupController(
     override fun updateGroupInfo(
         @AuthenticationPrincipal userId: Long,
         @PathVariable groupId: Long,
-        @RequestBody request: UpdateGroupInfoRequest
+        @RequestBody request: UpdateGroupInfoRequest,
     ): ResponseEntity<Unit> {
         val command = request.toCommand(userId = userId, groupId = groupId)
         updateGroupInfoUseCase.updateGroupInfo(command)
@@ -66,7 +66,7 @@ class GroupController(
     @DeleteMapping("/{groupId}")
     override fun deleteGroup(
         @AuthenticationPrincipal userId: Long,
-        @PathVariable groupId: Long
+        @PathVariable groupId: Long,
     ): ResponseEntity<Unit> {
         val command = DeleteGroupUseCase.Command(userId = userId, groupId = groupId)
         deleteGroupUseCase.deleteGroup(command)
@@ -76,7 +76,7 @@ class GroupController(
     @PostMapping("/{groupId}/invite-code")
     override fun generateInviteCode(
         @AuthenticationPrincipal userId: Long,
-        @PathVariable groupId: Long
+        @PathVariable groupId: Long,
     ): ResponseEntity<GenerateInviteCodeResponse> {
         val command = GenerateInviteCodeUseCase.Command(userId = userId, groupId = groupId)
         val results = generateInviteCodeUseCase.generateInviteCode(command)
@@ -96,7 +96,7 @@ class GroupController(
     @DeleteMapping("/{groupId}/users/me")
     override fun leaveGroup(
         @AuthenticationPrincipal userId: Long,
-        @PathVariable groupId: Long
+        @PathVariable groupId: Long,
     ): ResponseEntity<Unit> {
         val command = LeaveGroupUseCase.Command(userId = userId, groupId = groupId)
         leaveGroupUseCase.leaveGroup(command)
@@ -107,7 +107,7 @@ class GroupController(
     override fun expelGroupUser(
         @AuthenticationPrincipal userId: Long,
         @PathVariable groupId: Long,
-        @PathVariable targetId: Long
+        @PathVariable targetId: Long,
     ): ResponseEntity<Unit> {
         val command = ExpelGroupUserUseCase.Command(userId = userId, groupId = groupId, targetId = targetId)
         expelGroupUserUseCase.expelGroupUser(command)
@@ -117,7 +117,7 @@ class GroupController(
     @GetMapping("/{groupId}")
     override fun readGroup(
         @AuthenticationPrincipal userId: Long,
-        @PathVariable groupId: Long
+        @PathVariable groupId: Long,
     ): ResponseEntity<GroupDetailResponse> {
         val query = ReadGroupUseCase.Query(userId = userId, groupId = groupId)
         val result = readGroupUseCase.readGroup(query)

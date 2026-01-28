@@ -45,8 +45,9 @@ data class GroupResult(
         fun listOf(
             groupViews: List<GroupView>,
             users: List<User>,
-        ): List<GroupResult> = groupViews.map { groupView ->
-            of(groupView, users)
-        }
+        ): List<GroupResult> =
+            groupViews.map { groupView ->
+                of(groupView, users)
+            }
     }
 }

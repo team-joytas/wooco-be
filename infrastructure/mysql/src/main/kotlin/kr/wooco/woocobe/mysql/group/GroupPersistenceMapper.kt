@@ -9,7 +9,7 @@ import kr.wooco.woocobe.mysql.group.entity.GroupUserJpaEntity
 internal object GroupPersistenceMapper {
     fun toDomainEntity(
         groupJpaEntity: GroupJpaEntity,
-        groupUserJpaEntities: List<GroupUserJpaEntity>
+        groupUserJpaEntities: List<GroupUserJpaEntity>,
     ): Group =
         Group(
             id = groupJpaEntity.id,

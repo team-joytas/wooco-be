@@ -16,5 +16,4 @@ interface ReadGroupUseCase {
     }
 
     fun readGroup(query: ReadGroupUseCase.Query): GroupResult
-
 }

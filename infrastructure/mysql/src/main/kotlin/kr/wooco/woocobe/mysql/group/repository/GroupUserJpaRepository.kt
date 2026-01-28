@@ -4,10 +4,15 @@ import kr.wooco.woocobe.mysql.group.entity.GroupUserJpaEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface GroupUserJpaRepository : JpaRepository<GroupUserJpaEntity, Long> {
+    fun findAllByGroupIdAndStatus(
+        groupId: Long,
+        status: String,
+    ): List<GroupUserJpaEntity>
 
-    fun findAllByGroupIdAndStatus(groupId: Long, status: String): List<GroupUserJpaEntity>
-
-    fun findAllByUserIdAndStatus(userId: Long, status: String): List<GroupUserJpaEntity>
+    fun findAllByUserIdAndStatus(
+        userId: Long,
+        status: String,
+    ): List<GroupUserJpaEntity>
 
     fun deleteAllInBatchByGroupId(groupId: Long)
 
