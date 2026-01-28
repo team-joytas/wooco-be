@@ -60,6 +60,10 @@ subprojects {
     }
 }
 
+ktlint {
+    version.set("${property("ktlintRulesetVersion")}")
+}
+
 tasks.register<Copy>("addGitHooks") {
     from(file("${rootProject.rootDir}/scripts/commit-msg"))
     into(file("${rootProject.rootDir}/.git/hooks"))
