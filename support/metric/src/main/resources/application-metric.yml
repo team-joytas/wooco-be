@@ -6,6 +6,18 @@ management:
         include: ${ACTUATOR_INCLUDE:health,info,prometheus}
   endpoint:
     health:
-      show-details: never # TODO: 인증쪽 개선전까진 `when_authorized` 대신 `never` 로 진행
+      show-details: when_authorized
       probes:
         enabled: true
+      group:
+        readiness:
+          show-components: always
+        liveness:
+          show-components: always
+          include: livenessState
+
+# Warmup 전역 설정 (모듈별 설정은 각 모듈의 yml에서 관리)
+warmup:
+  enabled: ${WARMUP_ENABLED:false}
+  max-pool-size: ${WARMUP_WORKER_POOL_SIZE:5}
+  await-duration: ${WARMUP_WORKER_AWAIT_DURATION:20s} # warmup 최대 허용 딜레이

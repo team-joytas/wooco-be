@@ -13,6 +13,7 @@ object SecurityIgnorePath {
             append(path = "/api-docs/**", method = HttpMethod.GET),
             append(path = "/actuator/**", method = HttpMethod.GET),
             append(path = "/swagger-ui/**", method = HttpMethod.GET),
+            append(path = "/internal/warmup", method = HttpMethod.GET),
             // course
             append(path = "/api/v1/courses", method = HttpMethod.GET),
             append(path = "/api/v1/courses/{courseId:[0-9]+}", method = HttpMethod.GET),

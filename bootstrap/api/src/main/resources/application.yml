@@ -76,3 +76,8 @@ app:
     refresh-expire-in: ${REFRESH_TOKEN_EXP:987654321}
 
 logging.level.root: info
+
+warmup:
+  filter-chain:
+    enabled: ${WARMUP_FILTER_CHAIN_ENABLED:true}
+    iterations: ${WARMUP_FILTER_CHAIN_ITERATIONS:1000}
