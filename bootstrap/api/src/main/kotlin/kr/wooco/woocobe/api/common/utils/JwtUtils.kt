@@ -109,7 +109,7 @@ object JwtUtils {
         }
 
     @ConfigurationProperties(prefix = "app.jwt")
-    private data class JwtProperties(
+    internal data class JwtProperties(
         val signingKey: String,
         val accessExpireIn: Long,
         val refreshExpireIn: Long,

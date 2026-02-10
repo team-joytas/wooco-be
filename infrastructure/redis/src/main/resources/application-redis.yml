@@ -4,3 +4,8 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD}
+
+warmup:
+  redis:
+    enabled: ${WARMUP_REDIS_ENABLED:true}
+    iterations: ${WARMUP_REDIS_ITERATIONS:100}

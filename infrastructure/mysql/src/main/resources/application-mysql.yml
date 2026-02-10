@@ -24,3 +24,8 @@ spring:
         serverTimezone: Asia/Seoul
         characterEncoding: UTF-8
         rewriteBatchedStatements: true
+
+warmup:
+  mysql:
+    enabled: ${WARMUP_MYSQL_ENABLED:true}
+    iterations: ${WARMUP_MYSQL_ITERATIONS:100}

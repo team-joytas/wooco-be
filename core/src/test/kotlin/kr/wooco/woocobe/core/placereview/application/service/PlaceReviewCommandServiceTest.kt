@@ -1,9 +1,8 @@
-package kr.wooco.woocobe.core.placeReview.aplication.service
+package kr.wooco.woocobe.core.placereview.application.service
 
 import kr.wooco.woocobe.core.common.fixtures.PlaceReviewFixtures
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewCommandPort
 import kr.wooco.woocobe.core.placereview.application.port.out.PlaceReviewQueryPort
-import kr.wooco.woocobe.core.placereview.application.service.PlaceReviewCommandService
 import kr.wooco.woocobe.core.placereview.domain.entity.PlaceReview
 import kr.wooco.woocobe.core.placereview.domain.exception.InvalidPlaceReviewWriterException
 import kr.wooco.woocobe.core.placereview.domain.exception.NotExistsPlaceReviewException
