@@ -1,4 +1,4 @@
-apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
+apply(plugin = libs.plugins.kotlin.jpa.get().pluginId)
 
 dependencies {
     implementation(project(":core"))

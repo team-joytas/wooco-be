@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.aot.ProcessTestAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-apply(plugin = "org.springframework.boot.aot")
+apply(plugin = libs.plugins.spring.aot.get().pluginId)
 
 dependencies {
     implementation(project(":core"))

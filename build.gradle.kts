@@ -1,9 +1,11 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.jpa) apply false
     alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.spring.boot) apply false
-    alias(libs.plugins.spring.boot.aot) apply false
+    alias(libs.plugins.spring.aot) apply false
     alias(libs.plugins.spring.dependency.management)
     alias(libs.plugins.ktlint)
 }
@@ -18,17 +20,17 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
-    apply(plugin = "org.springframework.boot")
-    apply(plugin = "io.spring.dependency-management")
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = rootProject.libs.plugins.kotlin.jvm.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.kotlin.spring.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.spring.boot.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.spring.dependency.management.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.ktlint.get().pluginId)
 
     tasks.named<Jar>("jar") {
         enabled = true
     }
 
-    tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    tasks.named<BootJar>("bootJar") {
         enabled = false
     }
 
