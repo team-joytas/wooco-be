@@ -43,7 +43,6 @@ subprojects {
 
         testRuntimeOnly(rootProject.libs.junit.platform.launcher)
         testImplementation(rootProject.libs.spring.boot.starter.test)
-        testImplementation(rootProject.libs.spring.security.test)
         testImplementation(rootProject.libs.kotlin.test.junit5)
         testImplementation(rootProject.libs.bundles.kotest)
         testImplementation(rootProject.libs.mockk)

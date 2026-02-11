@@ -24,6 +24,8 @@ dependencies {
     implementation(libs.jjwt.api)
 
     implementation(libs.springdoc.openapi)
+
+    testImplementation(libs.spring.security.test)
 }
 
 // AOT 설정 적용
