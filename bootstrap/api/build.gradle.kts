@@ -15,20 +15,20 @@ dependencies {
     implementation(project(":infrastructure:redis"))
     implementation(project(":infrastructure:fcm"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.validation)
+    implementation(libs.spring.boot.starter.oauth2.client)
 
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:${property("jjwtVersion")}")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${property("jjwtVersion")}")
-    implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
+    runtimeOnly(libs.bundles.jjwt.runtime)
+    implementation(libs.jjwt.api)
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springDocVersion")}")
+    implementation(libs.springdoc.openapi)
 }
 
 // AOT 설정 적용
 tasks.named<BootJar>("bootJar") {
+    enabled = true
     dependsOn("processAot")
 
     layered {
@@ -46,8 +46,6 @@ tasks.named<ProcessAot>("processAot") {
 tasks.named<ProcessTestAot>("processTestAot") {
     enabled = false
 }
-
-// TODO-HONG: Convention plugin 고려해야함
 
 val dockerImageName: String = project.findProperty("imageName")?.toString()
     ?: project.name.toString()

@@ -1,6 +1,6 @@
 dependencies {
     implementation(project(":support:common"))
 
-    implementation("org.springframework:spring-tx")
-    implementation("org.springframework:spring-aspects")
+    implementation(libs.spring.tx)
+    implementation(libs.spring.aspects)
 }

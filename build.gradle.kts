@@ -1,11 +1,11 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.jpa") apply false
-    kotlin("plugin.spring")
-    id("org.springframework.boot") apply false
-    id("org.springframework.boot.aot") apply false
-    id("io.spring.dependency-management")
-    id("org.jlleitschuh.gradle.ktlint")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.jpa) apply false
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.spring.boot) apply false
+    alias(libs.plugins.spring.boot.aot) apply false
+    alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.ktlint)
 }
 
 allprojects {
@@ -33,23 +33,20 @@ subprojects {
     }
 
     dependencies {
-        implementation("org.jetbrains.kotlin:kotlin-reflect")
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-        implementation("io.github.oshai:kotlin-logging-jvm:${property("kotlinLoggingVersion")}")
+        implementation(rootProject.libs.kotlin.reflect)
+        implementation(rootProject.libs.jackson.module.kotlin)
+        implementation(rootProject.libs.kotlin.logging)
 
-        implementation("org.springframework:spring-context")
-        implementation("org.springframework.boot:spring-boot-autoconfigure")
-        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+        implementation(rootProject.libs.spring.context)
+        implementation(rootProject.libs.spring.boot.autoconfigure)
+        annotationProcessor(rootProject.libs.spring.boot.configuration.processor)
 
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("org.springframework.security:spring-security-test")
-        testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-        testImplementation("io.kotest:kotest-runner-junit5-jvm:${property("kotestVersion")}")
-        testImplementation("io.kotest:kotest-framework-datatest:${property("kotestVersion")}")
-        testImplementation("io.kotest:kotest-assertions-core:${property("kotestVersion")}")
-        testImplementation("io.kotest.extensions:kotest-extensions-spring:${property("kotestExtensionsVersion")}")
-        testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+        testRuntimeOnly(rootProject.libs.junit.platform.launcher)
+        testImplementation(rootProject.libs.spring.boot.starter.test)
+        testImplementation(rootProject.libs.spring.security.test)
+        testImplementation(rootProject.libs.kotlin.test.junit5)
+        testImplementation(rootProject.libs.bundles.kotest)
+        testImplementation(rootProject.libs.mockk)
     }
 
     java {
@@ -70,7 +67,7 @@ subprojects {
 }
 
 ktlint {
-    version.set("${property("ktlintRulesetVersion")}")
+    version.set(libs.versions.ktlint.ruleset.get())
 }
 
 tasks.register<Copy>("addGitHooks") {
