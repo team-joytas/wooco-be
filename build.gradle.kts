@@ -24,6 +24,14 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
+    tasks.named<Jar>("jar") {
+        enabled = true
+    }
+
+    tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+        enabled = false
+    }
+
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

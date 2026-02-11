@@ -2,16 +2,9 @@ import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.aot.ProcessTestAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-val jar: Jar by tasks
-val bootJar: BootJar by tasks
-
-jar.enabled = true
-bootJar.enabled = true
+apply(plugin = "org.springframework.boot.aot")
 
 dependencies {
-    apply(plugin = "org.springframework.boot")
-    apply(plugin = "org.springframework.boot.aot")
-
     implementation(project(":core"))
     implementation(project(":support:metric"))
     implementation(project(":support:common"))

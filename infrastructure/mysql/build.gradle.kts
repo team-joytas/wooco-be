@@ -1,14 +1,6 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
-val jar: Jar by tasks
-val bootJar: BootJar by tasks
-
-jar.enabled = true
-bootJar.enabled = false
+apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
 
 dependencies {
-    apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
-
     implementation(project(":core"))
     implementation(project(":support:common"))
 
