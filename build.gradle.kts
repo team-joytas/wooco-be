@@ -1,9 +1,9 @@
 plugins {
     kotlin("jvm")
-    kotlin("plugin.jpa")
+    kotlin("plugin.jpa") apply false
     kotlin("plugin.spring")
-    id("org.springframework.boot")
-    id("org.springframework.boot.aot")
+    id("org.springframework.boot") apply false
+    id("org.springframework.boot.aot") apply false
     id("io.spring.dependency-management")
     id("org.jlleitschuh.gradle.ktlint")
 }
