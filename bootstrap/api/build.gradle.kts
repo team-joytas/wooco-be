@@ -41,8 +41,10 @@ tasks.named<BootJar>("bootJar") {
 }
 
 tasks.named<ProcessAot>("processAot") {
-    enabled = true
     dependsOn("classes")
+    onlyIf {
+        gradle.taskGraph.hasTask("${project.path}:bootJar")
+    }
 }
 
 tasks.named<ProcessTestAot>("processTestAot") {
