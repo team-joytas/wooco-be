@@ -41,5 +41,7 @@ out/
 .kotlin
 
 ### Local ###
+.gradle-local/
 .DS_Store
-.omc
+.omc/
+.omx/
