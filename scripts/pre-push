@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo "🔍 Running ktlint format before push..."
+
+./gradlew ktlintFormat --no-daemon
+
+if [ $? -ne 0 ]; then
+  echo "🚨 ktlint format 실행에 실패했습니다. 🚨"
+  exit 1
+fi
+
+# ktlint format으로 변경된 파일이 있으면 알림
+if ! git diff --quiet; then
+  echo "⚠️ ktlint format으로 수정된 파일이 있습니다. 변경사항을 확인하고 커밋해주세요."
+  git diff --name-only
+  exit 1
+fi
+
+echo "✅ ktlint format 완료. Push를 진행합니다."

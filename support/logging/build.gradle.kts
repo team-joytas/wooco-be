@@ -1,12 +1,4 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
-val jar: Jar by tasks
-val bootJar: BootJar by tasks
-
-jar.enabled = true
-bootJar.enabled = false
-
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-logging")
-    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+    implementation(libs.spring.boot.starter.logging)
+    implementation(libs.logstash.logback)
 }

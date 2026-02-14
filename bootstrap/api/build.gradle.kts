@@ -2,16 +2,9 @@ import org.springframework.boot.gradle.tasks.aot.ProcessAot
 import org.springframework.boot.gradle.tasks.aot.ProcessTestAot
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-val jar: Jar by tasks
-val bootJar: BootJar by tasks
-
-jar.enabled = true
-bootJar.enabled = true
+apply(plugin = libs.plugins.spring.aot.get().pluginId)
 
 dependencies {
-    apply(plugin = "org.springframework.boot")
-    apply(plugin = "org.springframework.boot.aot")
-
     implementation(project(":core"))
     implementation(project(":support:metric"))
     implementation(project(":support:common"))
@@ -22,20 +15,22 @@ dependencies {
     implementation(project(":infrastructure:redis"))
     implementation(project(":infrastructure:fcm"))
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.validation)
+    implementation(libs.spring.boot.starter.oauth2.client)
 
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:${property("jjwtVersion")}")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${property("jjwtVersion")}")
-    implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
+    runtimeOnly(libs.bundles.jjwt.runtime)
+    implementation(libs.jjwt.api)
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springDocVersion")}")
+    implementation(libs.springdoc.openapi)
+
+    testImplementation(libs.spring.security.test)
 }
 
 // AOT 설정 적용
 tasks.named<BootJar>("bootJar") {
+    enabled = true
     dependsOn("processAot")
 
     layered {
@@ -46,15 +41,15 @@ tasks.named<BootJar>("bootJar") {
 }
 
 tasks.named<ProcessAot>("processAot") {
-    enabled = true
     dependsOn("classes")
+    onlyIf {
+        gradle.taskGraph.hasTask("${project.path}:bootJar")
+    }
 }
 
 tasks.named<ProcessTestAot>("processTestAot") {
     enabled = false
 }
-
-// TODO-HONG: Convention plugin 고려해야함
 
 val dockerImageName: String = project.findProperty("imageName")?.toString()
     ?: project.name.toString()
@@ -68,15 +63,7 @@ tasks.register<Exec>("buildImage") {
 
     workingDir(projectDir)
 
-    commandLine(
-        "docker",
-        "build",
-        "-t",
-        "$dockerImageName:$dockerImageVersion",
-        "-f",
-        "Dockerfile",
-        ".",
-    )
+    commandLine("docker", "build", "-t", "$dockerImageName:$dockerImageVersion", "-f", "Dockerfile", ".")
 
     doFirst {
         println("Building Docker image: $dockerImageName:$dockerImageVersion")

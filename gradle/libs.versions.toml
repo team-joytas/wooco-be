@@ -1,0 +1,86 @@
+[versions]
+kotlin = "1.9.25"
+kotlin-logging = "7.0.0"
+spring-boot = "3.3.11"
+spring-dependency-management = "1.1.7"
+ktlint-plugin = "14.0.1"
+ktlint-ruleset = "1.7.2"
+aws-s3 = "3.2.1"
+springdoc = "2.6.0"
+jdsl = "3.5.4"
+jjwt = "0.11.4"
+tsid-creator = "5.2.6"
+kotest = "5.8.1"
+kotest-extensions = "1.3.0"
+mockk = "1.13.13"
+firebase-admin = "9.2.0"
+logstash-logback = "7.4"
+
+[libraries]
+# Kotlin
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+
+# Spring
+spring-context = { module = "org.springframework:spring-context" }
+spring-tx = { module = "org.springframework:spring-tx" }
+spring-web = { module = "org.springframework:spring-web" }
+spring-aspects = { module = "org.springframework:spring-aspects" }
+spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-oauth2-client = { module = "org.springframework.boot:spring-boot-starter-oauth2-client" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-logging = { module = "org.springframework.boot:spring-boot-starter-logging" }
+spring-security-test = { module = "org.springframework.security:spring-security-test" }
+
+# Database
+mysql-connector = { module = "com.mysql:mysql-connector-j" }
+flyway-core = { module = "org.flywaydb:flyway-core" }
+flyway-mysql = { module = "org.flywaydb:flyway-mysql" }
+jdsl-dsl = { module = "com.linecorp.kotlin-jdsl:jpql-dsl", version.ref = "jdsl" }
+jdsl-render = { module = "com.linecorp.kotlin-jdsl:jpql-render", version.ref = "jdsl" }
+jdsl-spring-data-jpa = { module = "com.linecorp.kotlin-jdsl:spring-data-jpa-support", version.ref = "jdsl" }
+
+# JWT
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+
+# Infrastructure
+tsid-creator = { module = "com.github.f4b6a3:tsid-creator", version.ref = "tsid-creator" }
+aws-s3 = { module = "io.awspring.cloud:spring-cloud-aws-starter-s3", version.ref = "aws-s3" }
+firebase-admin = { module = "com.google.firebase:firebase-admin", version.ref = "firebase-admin" }
+micrometer-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
+springdoc-openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
+logstash-logback = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logstash-logback" }
+
+# Test
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+kotest-runner = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotest-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-extensions-spring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotest-extensions" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
+[bundles]
+kotest = ["kotest-runner", "kotest-datatest", "kotest-assertions", "kotest-extensions-spring"]
+jdsl = ["jdsl-dsl", "jdsl-render", "jdsl-spring-data-jpa"]
+jjwt-runtime = ["jjwt-impl", "jjwt-jackson"]
+flyway = ["flyway-core", "flyway-mysql"]
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-aot = { id = "org.springframework.boot.aot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-plugin" }
