@@ -61,15 +61,7 @@ tasks.register<Exec>("buildImage") {
 
     workingDir(projectDir)
 
-    commandLine(
-        "docker",
-        "build",
-        "-t",
-        "$dockerImageName:$dockerImageVersion",
-        "-f",
-        "Dockerfile",
-        ".",
-    )
+    commandLine("docker", "build", "-t", "$dockerImageName:$dockerImageVersion", "-f", "Dockerfile", ".")
 
     doFirst {
         println("Building Docker image: $dockerImageName:$dockerImageVersion")

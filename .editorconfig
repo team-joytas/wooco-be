@@ -12,6 +12,9 @@ ktlint_standard_package-name = disabled
 ktlint_standard_string-template-indent = disabled
 ktlint_standard_multiline-expression-wrapping = disabled
 
-[src/test/kotlin/**.{kt,kts}]
+[*.gradle.kts]
+ktlint_standard_parameter-list-wrapping = disabled
+ktlint_standard_chain-method-continuation = disabled
+
+[src/test/kotlin/**.kt]
 ktlint_standard_indent = disabled
-ktlint_standard_string-template-indent = disabled
