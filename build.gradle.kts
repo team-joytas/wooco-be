@@ -72,15 +72,15 @@ ktlint {
 }
 
 tasks.register<Copy>("addGitHooks") {
-    from(file("${rootProject.rootDir}/scripts/commit-msg"))
+    from(file("${rootProject.rootDir}/scripts/pre-push"))
     into(file("${rootProject.rootDir}/.git/hooks"))
 }
 
 tasks.register<Exec>("installGitHooks") {
-    commandLine("chmod", "+x", "${project.rootDir}/.git/hooks/commit-msg")
+    commandLine("chmod", "+x", "${project.rootDir}/.git/hooks/pre-push")
     dependsOn("addGitHooks")
 }
 
 tasks.register<Exec>("uninstallGitHooks") {
-    commandLine("rm", "-f", "${project.rootDir}/.git/hooks/commit-msg")
+    commandLine("rm", "-f", "${project.rootDir}/.git/hooks/pre-push")
 }
