@@ -1,8 +1,9 @@
 package kr.wooco.woocobe.core.course.application.port.out
 
-import kr.wooco.woocobe.core.course.application.port.out.dto.CourseSearchCondition
-import kr.wooco.woocobe.core.course.application.port.out.dto.CourseView
-import kr.wooco.woocobe.core.course.application.port.out.dto.InterestCourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseCommentTarget
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseView
+import kr.wooco.woocobe.core.course.application.port.out.query.InterestCourseSearchCondition
 
 // TODO: 네이밍 변경(View prefix 제거) & adapter 분리(command 와 query) 해야할듯?
 interface CourseQueryPort {
@@ -16,12 +17,7 @@ interface CourseQueryPort {
 
     fun existsByCourseId(courseId: Long): Boolean
 
-    // Projection 전용
-    fun increaseComments(courseId: Long)
+    fun existsActiveByCourseId(courseId: Long): Boolean
 
-    fun decreaseComments(courseId: Long)
-
-    fun increaseLikes(courseId: Long)
-
-    fun decreaseLikes(courseId: Long)
+    fun getActiveCommentTargetByCourseId(courseId: Long): CourseCommentTarget
 }

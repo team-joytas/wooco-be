@@ -15,9 +15,11 @@ interface CourseLikeJpaRepository : JpaRepository<CourseLikeJpaEntity, Long> {
             SELECT CASE WHEN EXISTS (
                 SELECT 1
                 FROM CourseLikeJpaEntity cl
+                JOIN CourseJpaEntity c ON c.id = cl.courseId
                 WHERE cl.courseId = :courseId
                     AND cl.userId = :userId
                     AND cl.status = 'ACTIVE'
+                    AND c.status = 'ACTIVE'
             ) THEN true ELSE false END
         """,
     )
@@ -30,9 +32,11 @@ interface CourseLikeJpaRepository : JpaRepository<CourseLikeJpaEntity, Long> {
         """
             SELECT cl.courseId
             FROM CourseLikeJpaEntity cl
+            JOIN CourseJpaEntity c ON c.id = cl.courseId
             WHERE cl.userId = :userId
                 AND cl.status = 'ACTIVE'
                 AND cl.courseId IN :courseIds
+                AND c.status = 'ACTIVE'
         """,
     )
     fun findCourseIdsByUserIdAndCourseIdsAndActive(
@@ -44,8 +48,10 @@ interface CourseLikeJpaRepository : JpaRepository<CourseLikeJpaEntity, Long> {
         """
             SELECT COUNT (cl.id)
             FROM CourseLikeJpaEntity cl
+            JOIN CourseJpaEntity c ON c.id = cl.courseId
             WHERE cl.userId = :userId
                 AND cl.status = 'ACTIVE'
+                AND c.status = 'ACTIVE'
         """,
     )
     fun countByUserIdAndActive(userId: Long): Long

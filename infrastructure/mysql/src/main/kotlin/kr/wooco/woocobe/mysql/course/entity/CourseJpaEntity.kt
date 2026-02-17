@@ -14,10 +14,6 @@ import java.time.LocalDate
 data class CourseJpaEntity(
     @Column(name = "course_status")
     val status: String,
-    @Column(name = "comment_count")
-    val commentCount: Long,
-    @Column(name = "like_count")
-    val likeCount: Long,
     @Column(name = "visit_date")
     val visitDate: LocalDate,
     @Column(columnDefinition = "text")
@@ -54,8 +50,6 @@ data class CourseJpaEntity(
                 secondaryRegion = course.region.secondaryRegion,
                 visitDate = course.visitDate.value,
                 status = course.status.name,
-                likeCount = 0,
-                commentCount = 0,
             )
     }
 }

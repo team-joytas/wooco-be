@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.mysql.course
 
-import kr.wooco.woocobe.core.course.application.port.out.dto.CourseView
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseView
 import kr.wooco.woocobe.core.course.domain.entity.Course
 import kr.wooco.woocobe.core.course.domain.entity.CoursePlace
 import kr.wooco.woocobe.core.course.domain.vo.CourseCategory
@@ -8,6 +8,7 @@ import kr.wooco.woocobe.core.course.domain.vo.CourseContent
 import kr.wooco.woocobe.core.course.domain.vo.CourseRegion
 import kr.wooco.woocobe.mysql.course.entity.CourseCategoryJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CourseJpaEntity
+import kr.wooco.woocobe.mysql.course.entity.CourseMetaJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CoursePlaceJpaEntity
 
 internal object CoursePersistenceMapper {
@@ -41,6 +42,7 @@ internal object CoursePersistenceMapper {
 
     fun toReadModel(
         courseJpaEntity: CourseJpaEntity,
+        courseMetaJpaEntity: CourseMetaJpaEntity,
         coursePlaceJpaEntities: List<CoursePlaceJpaEntity>,
         courseCategoryJpaEntities: List<CourseCategoryJpaEntity>,
     ): CourseView =
@@ -53,8 +55,8 @@ internal object CoursePersistenceMapper {
             secondaryRegion = courseJpaEntity.secondaryRegion,
             categories = courseCategoryJpaEntities.map { it.name },
             visitDate = courseJpaEntity.visitDate,
-            comments = courseJpaEntity.commentCount,
-            likes = courseJpaEntity.likeCount,
+            comments = courseMetaJpaEntity.commentCount,
+            likes = courseMetaJpaEntity.likeCount,
             createdAt = courseJpaEntity.createdAt,
             coursePlaces = coursePlaceJpaEntities.map {
                 CourseView.CoursePlaceView(

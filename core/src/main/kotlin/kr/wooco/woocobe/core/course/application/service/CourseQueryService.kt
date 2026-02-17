@@ -6,9 +6,9 @@ import kr.wooco.woocobe.core.course.application.port.`in`.ReadCourseUseCase
 import kr.wooco.woocobe.core.course.application.port.`in`.results.CourseResult
 import kr.wooco.woocobe.core.course.application.port.out.CourseLikeQueryPort
 import kr.wooco.woocobe.core.course.application.port.out.CourseQueryPort
-import kr.wooco.woocobe.core.course.application.port.out.dto.CourseSearchCondition
-import kr.wooco.woocobe.core.course.application.port.out.dto.CourseView
-import kr.wooco.woocobe.core.course.application.port.out.dto.InterestCourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseView
+import kr.wooco.woocobe.core.course.application.port.out.query.InterestCourseSearchCondition
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
 import kr.wooco.woocobe.core.user.application.port.out.UserQueryPort
 import org.springframework.stereotype.Service

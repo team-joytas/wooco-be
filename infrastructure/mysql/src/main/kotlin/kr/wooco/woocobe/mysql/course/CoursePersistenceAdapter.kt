@@ -2,9 +2,10 @@ package kr.wooco.woocobe.mysql.course
 
 import kr.wooco.woocobe.core.course.application.port.out.CourseCommandPort
 import kr.wooco.woocobe.core.course.application.port.out.CourseQueryPort
-import kr.wooco.woocobe.core.course.application.port.out.dto.CourseSearchCondition
-import kr.wooco.woocobe.core.course.application.port.out.dto.CourseView
-import kr.wooco.woocobe.core.course.application.port.out.dto.InterestCourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseCommentTarget
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseView
+import kr.wooco.woocobe.core.course.application.port.out.query.InterestCourseSearchCondition
 import kr.wooco.woocobe.core.course.domain.entity.Course
 import kr.wooco.woocobe.core.course.domain.exception.NotExistsCourseException
 import kr.wooco.woocobe.mysql.course.entity.CourseCategoryJpaEntity
@@ -12,6 +13,7 @@ import kr.wooco.woocobe.mysql.course.entity.CourseJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CoursePlaceJpaEntity
 import kr.wooco.woocobe.mysql.course.repository.CourseCategoryJpaRepository
 import kr.wooco.woocobe.mysql.course.repository.CourseJpaRepository
+import kr.wooco.woocobe.mysql.course.repository.CourseMetaJpaRepository
 import kr.wooco.woocobe.mysql.course.repository.CoursePlaceJpaRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 internal class CoursePersistenceAdapter(
     private val courseJpaRepository: CourseJpaRepository,
+    private val courseMetaJpaRepository: CourseMetaJpaRepository,
     private val coursePlaceJpaRepository: CoursePlaceJpaRepository,
     private val courseCategoryJpaRepository: CourseCategoryJpaRepository,
 ) : CourseQueryPort,
@@ -35,9 +38,11 @@ internal class CoursePersistenceAdapter(
     override fun getViewByCourseId(courseId: Long): CourseView {
         val courseJpaEntity = courseJpaRepository.findByCourseIdWithActiveOrNull(courseId)
             ?: throw NotExistsCourseException
+        val courseMetaJpaEntity = courseMetaJpaRepository.findByIdOrNull(courseId)
+            ?: throw NotExistsCourseException
         val courseCategoryEntities = courseCategoryJpaRepository.findAllByCourseId(courseJpaEntity.id)
         val coursePlaceEntities = coursePlaceJpaRepository.findAllByCourseId(courseJpaEntity.id)
-        return CoursePersistenceMapper.toReadModel(courseJpaEntity, coursePlaceEntities, courseCategoryEntities)
+        return CoursePersistenceMapper.toReadModel(courseJpaEntity, courseMetaJpaEntity, coursePlaceEntities, courseCategoryEntities)
     }
 
     override fun getViewAllCourseByCondition(condition: CourseSearchCondition): List<CourseView> {
@@ -54,34 +59,28 @@ internal class CoursePersistenceAdapter(
 
     override fun existsByCourseId(courseId: Long): Boolean = courseJpaRepository.existsById(courseId)
 
-    @Transactional
-    override fun increaseComments(courseId: Long) {
-        courseJpaRepository.increaseComments(courseId)
-    }
+    override fun existsActiveByCourseId(courseId: Long): Boolean = courseJpaRepository.existsByCourseIdAndActive(courseId)
 
-    @Transactional
-    override fun decreaseComments(courseId: Long) {
-        courseJpaRepository.decreaseComments(courseId)
-    }
-
-    @Transactional
-    override fun increaseLikes(courseId: Long) {
-        courseJpaRepository.increaseLikes(courseId)
-    }
-
-    @Transactional
-    override fun decreaseLikes(courseId: Long) {
-        courseJpaRepository.decreaseLikes(courseId)
+    override fun getActiveCommentTargetByCourseId(courseId: Long): CourseCommentTarget {
+        val courseJpaEntity = courseJpaRepository.findByCourseIdWithActiveOrNull(courseId)
+            ?: throw NotExistsCourseException
+        return CourseCommentTarget(
+            title = courseJpaEntity.title,
+            writerId = courseJpaEntity.userId,
+        )
     }
 
     private fun convertCourses(courseJpaEntities: List<CourseJpaEntity>): List<CourseView> {
         val courseIds = courseJpaEntities.map { it.id }
+        val courseMetaJpaEntities = courseMetaJpaRepository.findAllByIdIn(courseIds)
+        val courseMetaJpaEntityMap = courseMetaJpaEntities.associateBy { it.id }
         val coursePlaceJpaEntities = coursePlaceJpaRepository.findAllByCourseIdIn(courseIds)
         val courseCategoryJpaEntities = courseCategoryJpaRepository.findAllByCourseIdIn(courseIds)
 
         return courseJpaEntities.map { courseJpaEntity ->
             CoursePersistenceMapper.toReadModel(
                 courseJpaEntity = courseJpaEntity,
+                courseMetaJpaEntity = courseMetaJpaEntityMap[courseJpaEntity.id] ?: throw NotExistsCourseException,
                 coursePlaceJpaEntities = coursePlaceJpaEntities.filter { it.courseId == courseJpaEntity.id },
                 courseCategoryJpaEntities = courseCategoryJpaEntities.filter { it.courseId == courseJpaEntity.id },
             )

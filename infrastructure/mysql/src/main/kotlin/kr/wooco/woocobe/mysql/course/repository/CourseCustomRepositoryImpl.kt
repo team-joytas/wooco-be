@@ -1,11 +1,12 @@
 package kr.wooco.woocobe.mysql.course.repository
 
 import com.linecorp.kotlinjdsl.support.spring.data.jpa.repository.KotlinJdslJpqlExecutor
-import kr.wooco.woocobe.core.course.application.port.out.dto.CourseSearchCondition
-import kr.wooco.woocobe.core.course.application.port.out.dto.InterestCourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseSearchCondition
+import kr.wooco.woocobe.core.course.application.port.out.query.InterestCourseSearchCondition
 import kr.wooco.woocobe.mysql.course.entity.CourseCategoryJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CourseJpaEntity
 import kr.wooco.woocobe.mysql.course.entity.CourseLikeJpaEntity
+import kr.wooco.woocobe.mysql.course.entity.CourseMetaJpaEntity
 import org.springframework.stereotype.Repository
 
 // TODO: 영속성 상태 관리 고민해봐할듯 (ACTIVE, DELETED)
@@ -20,6 +21,9 @@ class CourseCustomRepositoryImpl(
                     entity(CourseJpaEntity::class),
                 ).from(
                     entity(CourseJpaEntity::class),
+                    leftJoin(CourseMetaJpaEntity::class).on(
+                        path(CourseJpaEntity::id).eq(path(CourseMetaJpaEntity::id)),
+                    ),
                     condition.category?.let {
                         leftJoin(CourseCategoryJpaEntity::class).on(
                             path(CourseJpaEntity::id).eq(path(CourseCategoryJpaEntity::courseId)),
@@ -41,7 +45,7 @@ class CourseCustomRepositoryImpl(
                     },
                 ).orderBy(
                     when (condition.sort) {
-                        "POPULAR" -> path(CourseJpaEntity::likeCount).desc()
+                        "POPULAR" -> path(CourseMetaJpaEntity::popularityScore).desc()
                         else -> path(CourseJpaEntity::createdAt).desc()
                     },
                 )
@@ -54,6 +58,9 @@ class CourseCustomRepositoryImpl(
                     entity(CourseJpaEntity::class),
                 ).from(
                     entity(CourseJpaEntity::class),
+                    leftJoin(CourseMetaJpaEntity::class).on(
+                        path(CourseJpaEntity::id).eq(path(CourseMetaJpaEntity::id)),
+                    ),
                     leftJoin(CourseLikeJpaEntity::class).on(
                         path(CourseJpaEntity::id).eq(path(CourseLikeJpaEntity::courseId)),
                     ),
@@ -79,7 +86,7 @@ class CourseCustomRepositoryImpl(
                     },
                 ).orderBy(
                     when (condition.sort) {
-                        "POPULAR" -> path(CourseJpaEntity::likeCount).desc()
+                        "POPULAR" -> path(CourseMetaJpaEntity::popularityScore).desc()
                         else -> path(CourseJpaEntity::createdAt).desc()
                     },
                 )

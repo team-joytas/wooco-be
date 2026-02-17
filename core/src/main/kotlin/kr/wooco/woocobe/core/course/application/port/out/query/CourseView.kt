@@ -1,4 +1,4 @@
-package kr.wooco.woocobe.core.course.application.port.out.dto
+package kr.wooco.woocobe.core.course.application.port.out.query
 
 import java.time.LocalDate
 import java.time.LocalDateTime

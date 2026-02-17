@@ -4,6 +4,7 @@ import kr.wooco.woocobe.core.common.domain.entity.AggregateRoot
 import kr.wooco.woocobe.core.course.domain.command.CreateCourseCommand
 import kr.wooco.woocobe.core.course.domain.command.DeleteCourseCommand
 import kr.wooco.woocobe.core.course.domain.command.UpdateCourseInfoCommand
+import kr.wooco.woocobe.core.course.domain.event.CourseCreatedEvent
 import kr.wooco.woocobe.core.course.domain.exception.InvalidCourseWriterException
 import kr.wooco.woocobe.core.course.domain.exception.NotExistsCourseException
 import kr.wooco.woocobe.core.course.domain.vo.CourseCategory
@@ -100,6 +101,8 @@ data class Course(
                 status = Status.ACTIVE,
             ).let {
                 it.copy(id = identifier.invoke(it))
+            }.also {
+                it.registerEvent(CourseCreatedEvent.of(it))
             }
 
         private fun orderingPlaces(placeIds: List<Long>): List<CoursePlace> =

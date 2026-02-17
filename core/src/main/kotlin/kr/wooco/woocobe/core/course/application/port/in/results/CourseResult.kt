@@ -1,6 +1,6 @@
 package kr.wooco.woocobe.core.course.application.port.`in`.results
 
-import kr.wooco.woocobe.core.course.application.port.out.dto.CourseView
+import kr.wooco.woocobe.core.course.application.port.out.query.CourseView
 import kr.wooco.woocobe.core.place.domain.entity.Place
 import kr.wooco.woocobe.core.user.domain.entity.User
 import java.time.LocalDate
