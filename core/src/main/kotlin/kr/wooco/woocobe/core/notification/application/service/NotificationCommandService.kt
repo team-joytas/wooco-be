@@ -14,8 +14,6 @@ import kr.wooco.woocobe.core.notification.domain.entity.Notification
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-// TODO: 디바이스 토큰 조회 조건 변경 (id 기반 조회)
-
 @Service
 class NotificationCommandService(
     private val notificationQueryPort: NotificationQueryPort,
@@ -44,6 +42,13 @@ class NotificationCommandService(
 
     @Transactional
     override fun registerDeviceToken(command: RegisterDeviceTokenUseCase.Command): Long {
+        val existing = deviceTokenQueryPort.findByUserIdWithActive(command.userId)
+        if (existing != null) {
+            val updated = existing.update(command.toUpdateExistingCommand())
+            deviceTokenCommandPort.saveDeviceToken(updated)
+            return existing.id
+        }
+
         val deviceToken = DeviceToken.create(command.toRegisterDeviceTokenCommand()) { deviceToken ->
             deviceTokenCommandPort.saveDeviceToken(deviceToken)
         }

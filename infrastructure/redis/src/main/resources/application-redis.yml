@@ -9,3 +9,12 @@ warmup:
   redis:
     enabled: ${WARMUP_REDIS_ENABLED:true}
     iterations: ${WARMUP_REDIS_ITERATIONS:100}
+
+notification:
+  stream:
+    name: ${NOTIFICATION_STREAM_NAME:notification:send}
+    group: ${NOTIFICATION_STREAM_GROUP:notification-sender-group}
+    consumer: ${NOTIFICATION_STREAM_CONSUMER:consumer-1}
+    max-len: ${NOTIFICATION_STREAM_MAX_LEN:100000}
+  device-token-cache:
+    ttl-minutes: ${NOTIFICATION_DEVICE_TOKEN_CACHE_TTL:30}

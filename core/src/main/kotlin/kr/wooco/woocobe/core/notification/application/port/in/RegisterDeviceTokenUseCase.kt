@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.core.notification.application.port.`in`
 
 import kr.wooco.woocobe.core.notification.domain.command.RegisterDeviceTokenCommand
+import kr.wooco.woocobe.core.notification.domain.command.UpdateDeviceTokenCommand
 import kr.wooco.woocobe.core.notification.domain.entity.DeviceToken
 
 fun interface RegisterDeviceTokenUseCase {
@@ -11,6 +12,13 @@ fun interface RegisterDeviceTokenUseCase {
         fun toRegisterDeviceTokenCommand(): RegisterDeviceTokenCommand =
             RegisterDeviceTokenCommand(
                 userId = userId,
+                token = DeviceToken.Token(token),
+            )
+
+        fun toUpdateExistingCommand(): UpdateDeviceTokenCommand =
+            UpdateDeviceTokenCommand(
+                userId = userId,
+                tokenId = 0L,
                 token = DeviceToken.Token(token),
             )
     }

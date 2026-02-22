@@ -11,5 +11,7 @@ interface DeviceTokenQueryPort {
         token: Token,
     ): DeviceToken
 
+    fun findByUserIdWithActive(userId: Long): DeviceToken?
+
     fun getAllByUserIdWithActive(userId: Long): List<DeviceToken>
 }

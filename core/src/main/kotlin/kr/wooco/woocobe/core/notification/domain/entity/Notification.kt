@@ -4,6 +4,7 @@ import kr.wooco.woocobe.core.common.domain.entity.AggregateRoot
 import kr.wooco.woocobe.core.notification.domain.command.CreateNotificationCommand
 import kr.wooco.woocobe.core.notification.domain.command.DeleteNotificationCommand
 import kr.wooco.woocobe.core.notification.domain.command.MarkAsReadNotificationCommand
+import kr.wooco.woocobe.core.notification.domain.event.NotificationCreatedEvent
 import kr.wooco.woocobe.core.notification.domain.exception.AlreadyDeletedNotificationException
 import kr.wooco.woocobe.core.notification.domain.exception.InvalidNotificationOwnerException
 import kr.wooco.woocobe.core.notification.domain.exception.NotExistsNotificationException
@@ -11,8 +12,6 @@ import kr.wooco.woocobe.core.notification.domain.vo.NotificationReadStatus
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationStatus
 import kr.wooco.woocobe.core.notification.domain.vo.NotificationTarget
 import java.time.LocalDateTime
-
-// TODO: View Model 분리
 
 data class Notification(
     override val id: Long,
@@ -44,7 +43,6 @@ data class Notification(
          *
          * @param command Notification 엔티티 생성을 위한 Command 객체
          * @param identifier 생성된 Notification 엔티티의 새로운 ID를 할당하는 메서드
-         * @author Junseoparkk
          */
         fun create(
             command: CreateNotificationCommand,
@@ -59,6 +57,8 @@ data class Notification(
                 readStatus = NotificationReadStatus.UNREAD,
             ).let {
                 it.copy(id = identifier.invoke(it))
+            }.also {
+                it.registerEvent(NotificationCreatedEvent.from(it))
             }
     }
 }
