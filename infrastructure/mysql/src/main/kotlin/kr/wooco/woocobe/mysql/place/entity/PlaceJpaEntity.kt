@@ -6,6 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import kr.wooco.woocobe.mysql.common.entity.BaseTimeEntity
 import kr.wooco.woocobe.mysql.common.utils.Tsid
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "places")
@@ -14,6 +15,10 @@ class PlaceJpaEntity(
     val phoneNumber: String,
     @Column(name = "thumbnail_url")
     val thumbnailUrl: String,
+    @Column(name = "thumbnail_fetched_at")
+    var thumbnailFetchedAt: LocalDateTime? = null,
+    @Column(name = "thumbnail_refresh_fail_count")
+    var thumbnailRefreshFailCount: Int = 0,
     @Column(name = "review_count")
     val reviewCount: Long,
     @Column(name = "average_rating")

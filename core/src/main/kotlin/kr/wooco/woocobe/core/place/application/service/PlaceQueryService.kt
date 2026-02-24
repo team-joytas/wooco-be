@@ -3,6 +3,7 @@ package kr.wooco.woocobe.core.place.application.service
 import kr.wooco.woocobe.core.place.application.port.`in`.ReadAllPlaceUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.ReadPlaceUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.ReadPlaceWithPlaceReviewsUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.ReadPlacesNeedingThumbnailRefreshUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.result.PlaceResult
 import kr.wooco.woocobe.core.place.application.port.`in`.result.PlaceWithPlaceReviewsResult
 import kr.wooco.woocobe.core.place.application.port.out.PlaceQueryPort
@@ -18,7 +19,8 @@ internal class PlaceQueryService(
     private val userQueryPort: UserQueryPort,
 ) : ReadAllPlaceUseCase,
     ReadPlaceUseCase,
-    ReadPlaceWithPlaceReviewsUseCase {
+    ReadPlaceWithPlaceReviewsUseCase,
+    ReadPlacesNeedingThumbnailRefreshUseCase {
     @Transactional(readOnly = true)
     override fun readAllPlace(query: ReadAllPlaceUseCase.Query): List<PlaceResult> {
         val places = placeQueryPort.getAllByPlaceIds(query.placeIds)
@@ -41,4 +43,9 @@ internal class PlaceQueryService(
         val writers = userQueryPort.getAllByUserIds(writerIds)
         return PlaceWithPlaceReviewsResult.of(place, placeOneLineReviewStats, placeReviews, writers)
     }
+
+    @Transactional(readOnly = true)
+    override fun readPlacesNeedingThumbnailRefresh(
+        query: ReadPlacesNeedingThumbnailRefreshUseCase.Query,
+    ): List<Long> = placeQueryPort.getPlaceIdsNeedingThumbnailRefresh(query.limit)
 }

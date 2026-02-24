@@ -1,7 +1,9 @@
 package kr.wooco.woocobe.core.place.application.service
 
 import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceIfNotExistsUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.RefreshPlaceThumbnailUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdateAverageRatingUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.UpdatePlaceImageUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdateReviewStatsUseCase
 import kr.wooco.woocobe.core.place.application.port.out.PlaceClientPort
 import kr.wooco.woocobe.core.place.application.port.out.PlaceCommandPort
@@ -336,5 +338,77 @@ class PlaceCommandServiceTest {
         val saved = requireNotNull(savedPlace)
         assertThat(saved.averageRating).isEqualTo(3.8)
         assertThat(saved.reviewCount).isEqualTo(10L)
+    }
+
+    /**
+     * refreshPlaceThumbnail 성공 – 이미지 갱신 후 markThumbnailRefreshed 호출
+     */
+    @Test
+    @DisplayName("성공: 썸네일 갱신 성공 시 markThumbnailRefreshed를 호출한다")
+    fun refreshThumbnailSuccess() {
+        // given
+        val placeId = 1L
+        val existingPlace = place(id = placeId, thumbnailUrl = "old-url")
+
+        given(placeQueryPort.getByPlaceId(placeId))
+            .willReturn(existingPlace)
+        given(placeClientPort.fetchPlaceThumbnailUrl(existingPlace.name, existingPlace.address))
+            .willReturn("new-url")
+        given(placeCommandPort.savePlace(any()))
+            .willReturn(placeId)
+
+        // when
+        placeCommandService.refreshPlaceThumbnail(RefreshPlaceThumbnailUseCase.Command(placeId))
+
+        // then
+        verify(placeCommandPort).markThumbnailRefreshed(placeId)
+        verify(placeCommandPort, never()).markThumbnailRefreshFailed(placeId)
+    }
+
+    /**
+     * refreshPlaceThumbnail 실패 – Google API 예외 시 markThumbnailRefreshFailed 호출 후 rethrow
+     */
+    @Test
+    @DisplayName("실패: 썸네일 갱신 중 예외 발생 시 markThumbnailRefreshFailed 후 예외를 전파한다")
+    fun refreshThumbnailFail() {
+        // given
+        val placeId = 1L
+        val existingPlace = place(id = placeId)
+
+        given(placeQueryPort.getByPlaceId(placeId))
+            .willReturn(existingPlace)
+        given(placeClientPort.fetchPlaceThumbnailUrl(existingPlace.name, existingPlace.address))
+            .willThrow(RuntimeException("Google API error"))
+
+        // when & then
+        assertThrows<RuntimeException> {
+            placeCommandService.refreshPlaceThumbnail(RefreshPlaceThumbnailUseCase.Command(placeId))
+        }
+
+        verify(placeCommandPort).markThumbnailRefreshFailed(placeId)
+        verify(placeCommandPort, never()).markThumbnailRefreshed(placeId)
+    }
+
+    /**
+     * refreshPlaceThumbnail 성공 – URL이 null이면 이미지 갱신 없이 markThumbnailRefreshed 호출
+     */
+    @Test
+    @DisplayName("성공: Google API가 null 반환해도 markThumbnailRefreshed를 호출한다")
+    fun refreshThumbnailNullUrl() {
+        // given
+        val placeId = 1L
+        val existingPlace = place(id = placeId)
+
+        given(placeQueryPort.getByPlaceId(placeId))
+            .willReturn(existingPlace)
+        given(placeClientPort.fetchPlaceThumbnailUrl(existingPlace.name, existingPlace.address))
+            .willReturn(null)
+
+        // when
+        placeCommandService.refreshPlaceThumbnail(RefreshPlaceThumbnailUseCase.Command(placeId))
+
+        // then
+        verify(placeCommandPort).markThumbnailRefreshed(placeId)
+        verify(placeCommandPort, never()).savePlace(any())
     }
 }

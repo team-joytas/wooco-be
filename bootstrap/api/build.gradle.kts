@@ -25,6 +25,10 @@ dependencies {
 
     implementation(libs.springdoc.openapi)
 
+    implementation(libs.shedlock.spring)
+    implementation(libs.shedlock.provider.jdbc.template)
+    implementation(libs.spring.boot.starter.actuator)
+
     testImplementation(libs.spring.security.test)
 }
 

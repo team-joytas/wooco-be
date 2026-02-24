@@ -8,4 +8,6 @@ interface PlaceQueryPort {
     fun getOrNullByKakaoPlaceId(kakaoPlaceId: String): Place?
 
     fun getAllByPlaceIds(placeIds: List<Long>): List<Place>
+
+    fun getPlaceIdsNeedingThumbnailRefresh(limit: Int): List<Long>
 }

@@ -1,6 +1,7 @@
 package kr.wooco.woocobe.core.place.application.service
 
 import kr.wooco.woocobe.core.place.application.port.`in`.CreatePlaceIfNotExistsUseCase
+import kr.wooco.woocobe.core.place.application.port.`in`.RefreshPlaceThumbnailUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdateAverageRatingUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdatePlaceImageUseCase
 import kr.wooco.woocobe.core.place.application.port.`in`.UpdateReviewStatsUseCase
@@ -21,7 +22,8 @@ internal class PlaceCommandService(
 ) : CreatePlaceIfNotExistsUseCase,
     UpdatePlaceImageUseCase,
     UpdateReviewStatsUseCase,
-    UpdateAverageRatingUseCase {
+    UpdateAverageRatingUseCase,
+    RefreshPlaceThumbnailUseCase {
     @Transactional
     override fun createPlaceIfNotExists(command: CreatePlaceIfNotExistsUseCase.Command): Long =
         placeQueryPort.getOrNullByKakaoPlaceId(command.kakaoPlaceId)?.id
@@ -57,5 +59,15 @@ internal class PlaceCommandService(
             .getByPlaceId(command.placeId)
             .updateAverageRating(averageRating)
         placeCommandPort.savePlace(place)
+    }
+
+    override fun refreshPlaceThumbnail(command: RefreshPlaceThumbnailUseCase.Command) {
+        try {
+            updatePlaceImage(UpdatePlaceImageUseCase.Command(command.placeId))
+            placeCommandPort.markThumbnailRefreshed(command.placeId)
+        } catch (e: Exception) {
+            placeCommandPort.markThumbnailRefreshFailed(command.placeId)
+            throw e
+        }
     }
 }
